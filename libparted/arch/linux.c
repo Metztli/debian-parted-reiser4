@@ -2492,6 +2492,53 @@ _blkpg_remove_partition (PedDisk* disk, int n)
                                     BLKPG_DEL_PARTITION);
 }
 
+#ifdef BLKPG_RESIZE_PARTITION
+static int _blkpg_resize_partition (PedDisk* disk, const PedPartition *part)
+{
+        struct blkpg_partition  linux_part;
+        const char*             vol_name;
+        char*                   dev_name;
+
+        PED_ASSERT (disk != NULL);
+        PED_ASSERT (disk->dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0);
+
+        dev_name = _device_get_part_path (disk->dev, part->num);
+        if (!dev_name)
+                return 0;
+        memset (&linux_part, 0, sizeof (linux_part));
+        linux_part.start = part->geom.start * disk->dev->sector_size;
+        /* see fs/partitions/msdos.c:msdos_partition(): "leave room for LILO" */
+        if (part->type & PED_PARTITION_EXTENDED)
+                linux_part.length = part->geom.length == 1 ? 512 : 1024;
+        else
+                linux_part.length = part->geom.length * disk->dev->sector_size;
+        linux_part.pno = part->num;
+        strncpy (linux_part.devname, dev_name, BLKPG_DEVNAMELTH);
+        if (vol_name)
+                strncpy (linux_part.volname, vol_name, BLKPG_VOLNAMELTH);
+
+        free (dev_name);
+
+        if (!_blkpg_part_command (disk->dev, &linux_part,
+                                  BLKPG_RESIZE_PARTITION)) {
+                return ped_exception_throw (
+                        PED_EXCEPTION_ERROR,
+                        PED_EXCEPTION_IGNORE_CANCEL,
+                        _("Error informing the kernel about modifications to "
+                          "partition %s -- %s.  This means Linux won't know "
+                          "about any changes you made to %s until you reboot "
+                          "-- so you shouldn't mount it or use it in any way "
+                          "before rebooting."),
+                        linux_part.devname,
+                        strerror (errno),
+                        linux_part.devname)
+                                == PED_EXCEPTION_IGNORE;
+        }
+
+        return 1;
+}
+#endif
+
 /* Read the integer from /sys/block/DEV_BASE/ENTRY and set *VAL
    to that value, where DEV_BASE is the last component of DEV->path.
    Upon success, return true.  Otherwise, return false. */
@@ -2719,6 +2766,15 @@ _disk_sync_part_table (PedDisk* disk)
                                 if (start == part->geom.start
 				    && length == part->geom.length)
                                         ok[i - 1] = 1;
+#ifdef BLKPG_RESIZE_PARTITION
+                                if (start == part->geom.start
+                                    && length != part->geom.length)
+                                {
+                                        /* try to resize */
+                                        if (_blkpg_resize_partition (disk, part))
+                                                ok[i - 1] = 1;
+                                }
+#endif
                                 /* If the new partition is unchanged and the
 				   existing one was not removed because it was
 				   in use, then reset the error flag and do not
