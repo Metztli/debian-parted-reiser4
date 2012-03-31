@@ -1,6 +1,10 @@
 parted (2.3-9) UNRELEASED; urgency=low
 
+  [ Colin Watson ]
   * Add build-arch and build-indep targets to debian/rules.
+
+  [ Svante Signell ]
+  * Avoid building debian/rules targets more than once (closes: #649741).
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 30 Oct 2011 19:14:01 +0000
 

@@ -168,8 +168,10 @@ echo-vars:
 	@echo "SUBSTLIST:	$(SUBSTLIST)"
 
 packaging-files: $(GENFILES)
+	touch $@
 
-build-deb/config.status: patch
+#debian/stamp-patch is created by patching source files!
+build-deb/config.status: debian/stamp-patched
 	dh_testdir
 	[ -d build-deb ] || mkdir build-deb
 
@@ -185,8 +187,9 @@ endif
 	    --build=$(DEB_BUILD_GNU_TYPE) --host=$(DEB_HOST_GNU_TYPE) \
 		$(CONFDEVMAPPER) \
 	    $(CONFFLAGS)
+	touch $@
 
-build-udeb/config.status: patch
+build-udeb/config.status: debian/stamp-patched
 	dh_testdir
 	[ -d build-udeb ] || mkdir build-udeb
 
@@ -196,8 +199,9 @@ build-udeb/config.status: patch
 	    --build=$(DEB_BUILD_GNU_TYPE) --host=$(DEB_HOST_GNU_TYPE) \
 	    --without-readline $(CONFDEVMAPPER) \
 		$(CONFFLAGS)
+	touch $@
 
-build-dbg/config.status: patch
+build-dbg/config.status: debian/stamp-patched
 	dh_testdir
 	[ -d build-dbg ] || mkdir build-dbg
 
@@ -258,7 +262,9 @@ clean: unpatch packaging-files
 	dh_testroot
 
 #	 Add here commands to clean up after the build process
-	rm -rf build-deb build-udeb build-dbg
+	rm -rf packaging-files
+	rm -rf install install-deb install-udeb install-dbg
+	rm -rf build build-deb build-udeb build-dbg
 
 #	 Remove all debian/libparted*.* except for libparted.*,
 #	 libparted-dev.*, and libparted-i18n.*
@@ -275,8 +281,11 @@ clean: unpatch packaging-files
 
 	dh_clean
 
-install: DH_OPTIONS=-Nparted$(BINPKGVER)-udeb -Nlibparted$(LIBSONAME)-udeb -Nlibparted$(LIBSONAME)debian1-dbg
-install: build packaging-files
+install: install-deb install-udeb install-dbg
+	touch $@
+
+install-deb: DH_OPTIONS=-Nparted$(BINPKGVER)-udeb -Nlibparted$(LIBSONAME)-udeb -Nlibparted$(LIBSONAME)debian1-dbg
+install-deb: build-deb packaging-files
 	dh_testdir
 	dh_testroot
 	dh_prep
@@ -325,6 +334,7 @@ install: build packaging-files
 	        "dh_movefiles!!!" >&2; \
 	   echo " *** Maybe the debian/*.files files need updating ..." >&2; \
 	 fi
+	touch $@
 
 install-udeb: DH_OPTIONS=-pparted$(BINPKGVER)-udeb -plibparted$(LIBSONAME)-udeb
 install-udeb: LIBPARTED_UDEB=$(shell dh_listpackages | grep -E '^libparted$(LIBSONAME)-udeb$$')
@@ -345,6 +355,7 @@ install-udeb: build-udeb
 
 	[ -z "$(PARTED_UDEB)" ] || $(MAKE) -C build-udeb/parted install \
 			DESTDIR=$(CURDIR)/debian/parted$(BINPKGVER)-udeb
+	touch $@
 
 install-dbg: DH_OPTIONS=-plibparted$(LIBSONAME)debian1-dbg
 install-dbg: build-dbg
@@ -354,6 +365,7 @@ install-dbg: build-dbg
 
 	install -D -m644 build-dbg/libparted/.libs/libparted.a \
 	   debian/libparted$(LIBSONAME)debian1-dbg/usr/lib/libparted_g.a
+	touch $@
 
 # This single target is used to build all the packages, all at once, or
 # one at a time. So keep in mind: any options passed to commands here will
@@ -386,14 +398,16 @@ binary-common:
 # Build architecture independant packages using the common target.
 # Unfortunately, we still need to build since the info file has to be
 # re-generated before installation and the locales need to be installed :-(
-binary-indep: build install
+
+binary-indep: build-deb install-deb
 # (Uncomment this next line if you have such packages.)
 	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
 
 # Build architecture dependant packages using the common target.
 # FIXME: this is an ugly hack :-( Work out a better way to build the
 # separate debug package ...
-binary-arch: build install install-udeb
+
+binary-arch: build install
 	$(MAKE) -f debian/rules DH_OPTIONS="-a -Nlibparted$(LIBSONAME)debian1-dbg" binary-common
 	$(MAKE) -f debian/rules binary-libparted$(LIBSONAME)debian1-dbg
 
@@ -401,16 +415,12 @@ binary-arch: build install install-udeb
 binary-%-dbg: build-dbg install-dbg
 	$(MAKE) -f debian/rules DH_OPTIONS="-p$(*)-dbg" binary-common
 
-binary-%: build install
-	$(MAKE) -f debian/rules DH_OPTIONS=-p$* binary-common
-
 binary: binary-arch binary-indep
 
 include /usr/share/quilt/quilt.make
 
-.PHONY: configure configure-udeb configure-dbg
-.PHONY: build build-udeb build-dbg
-.PHONY: install install-udeb install-dbg
-.PHONY: clean binary-indep binary-arch binary
-.PHONY: binary-%-dbg binary-%-udeb binary-%
-.PHONY: packaging-files
+.PHONY: build-deb build-udeb build-dbg build
+.PHONY: install-deb install-udeb install-dbg install
+.PHONY: binary-indep binary-arch binary
+.PHONY: binary-arch binary-indep binary-%-dbg binary
+.PHONY: packaging-files clean
