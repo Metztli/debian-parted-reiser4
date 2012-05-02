@@ -1,3 +1,14 @@
+parted (2.3-9.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * kfreebsd_lvm.patch: Support LVM on GNU/kFreeBSD.  (Closes: #644825)
+  * hurd-partition-path.patch: Fix wrong path for GNU/Hurd partitions,
+    patch from Jeremie Koenig.  (Closes: #586696)
+  * non-registered-device.diff: Fix NULL dereference condition, patch
+    from Jeremie Koenig.  (Closes: #586682)
+
+ -- Robert Millan <rmh@debian.org>  Mon, 09 Apr 2012 09:46:19 +0000
+
 parted (2.3-9) unstable; urgency=low
 
   [ Colin Watson ]

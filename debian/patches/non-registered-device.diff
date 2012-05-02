@@ -1,0 +1,13 @@
+--- a/libparted/device.c
++++ b/libparted/device.c
+@@ -83,6 +83,10 @@
+ 	if (walk == NULL)
+ 		return;
+ 
++	/* non-registered device */
++	if (walk == NULL)
++		return;
++
+ 	if (last)
+ 		last->next = dev->next;
+ 	else
