@@ -13,6 +13,8 @@ zfs.patch
 zero-length-devices.patch
 freebsd-zvol.patch
 freebsd-geli.patch
+kfreebsd_lvm.patch
+hurd-partition-path.patch
 
 # Backported
 sun-revert-disk-flag.patch
@@ -23,5 +25,3 @@ linux-two-component.patch
 
 # Symbols for this ABI (amd64 as reference)
 update-abi-symbols.patch
-kfreebsd_lvm.patch
-hurd-partition-path.patch
