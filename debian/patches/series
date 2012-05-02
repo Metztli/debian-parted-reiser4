@@ -25,4 +25,3 @@ linux-two-component.patch
 update-abi-symbols.patch
 kfreebsd_lvm.patch
 hurd-partition-path.patch
-non-registered-device.diff
