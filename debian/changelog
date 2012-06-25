@@ -1,5 +1,6 @@
 parted (2.3-10) UNRELEASED; urgency=low
 
+  * Acknowledge NMUs with thanks (closes: #676593).
   * Back out non-registered-device.diff, which had already been applied
     upstream in 2.3.
   * Rearrange patch ordering slightly.
