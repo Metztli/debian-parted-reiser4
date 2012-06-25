@@ -23,6 +23,9 @@ linux-two-component.patch
 
 # Symbols for this ABI (amd64 as reference)
 update-abi-symbols.patch
+
 kfreebsd_lvm.patch
 hurd-partition-path.patch
 non-registered-device.diff
+hurd-reread.patch
+gnulib.patch

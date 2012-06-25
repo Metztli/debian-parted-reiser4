@@ -1,3 +1,12 @@
+parted (2.3-9.2) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Add partition table re-read on hurd-i386 (Closes: #669936).
+  * Backport gnulib fix for set but not used variables (Closes: #676590).
+  * Update ABI symbol list (Closes: #676591).
+
+ -- Samuel Thibault <sthibault@debian.org>  Fri, 08 Jun 2012 02:04:11 +0200
+
 parted (2.3-9.1) unstable; urgency=low
 
   * Non-maintainer upload.
