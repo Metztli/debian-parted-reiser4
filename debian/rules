@@ -99,6 +99,9 @@ buildflags := CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)"
 udeb_buildflags := CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(UDEB_CFLAGS)" \
 		   LDFLAGS="$(LDFLAGS)"
 
+# Tell automake to produce verbose build logs.
+export V := 1
+
 # This is a workaround for a m68k compiler bug ...
 ifeq (m68k, $(DEB_BUILD_ARCH))
   CONFFLAGS += --disable-Werror
