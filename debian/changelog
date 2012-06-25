@@ -4,6 +4,7 @@ parted (2.3-10) UNRELEASED; urgency=low
     upstream in 2.3.
   * Rearrange patch ordering slightly.
   * Update debian/watch for upstream switch to .tar.xz.
+  * Use dpkg-buildflags to enable hardening options.
 
  -- Colin Watson <cjwatson@debian.org>  Wed, 02 May 2012 12:41:52 +0100
 
