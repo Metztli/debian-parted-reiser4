@@ -1,4 +1,4 @@
-parted (2.3-10) UNRELEASED; urgency=low
+parted (2.3-10) unstable; urgency=low
 
   * Acknowledge NMUs with thanks (closes: #676593).
   * Back out non-registered-device.diff, which had already been applied
@@ -13,7 +13,7 @@ parted (2.3-10) UNRELEASED; urgency=low
   * Revert ABI symbols change from 2.3-9.2, since whatever prompted that
     change seems to have changed back (closes: #678788).
 
- -- Colin Watson <cjwatson@debian.org>  Wed, 02 May 2012 12:41:52 +0100
+ -- Colin Watson <cjwatson@debian.org>  Wed, 27 Jun 2012 00:01:04 +0100
 
 parted (2.3-9.2) unstable; urgency=low
 
