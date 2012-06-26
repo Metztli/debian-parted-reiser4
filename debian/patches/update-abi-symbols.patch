@@ -200,7 +200,7 @@ Index: b/scripts/data/abi/baseline_symbols.txt
  FUNC:ped_round_down_to
  FUNC:ped_round_to_nearest
  FUNC:ped_round_up_to
-@@ -406,45 +449,116 @@
+@@ -406,45 +449,112 @@
  FUNC:ped_unit_parse
  FUNC:ped_unit_parse_custom
  FUNC:ped_unit_set_default
@@ -258,15 +258,11 @@ Index: b/scripts/data/abi/baseline_symbols.txt
 +FUNC:version_etc_ar
 +FUNC:version_etc_arn
 +FUNC:version_etc_va
-+FUNC:x2nrealloc
 +FUNC:x2realloc
 +FUNC:xalloc_die
 +FUNC:xcalloc
-+FUNC:xcharalloc
 +FUNC:xmalloc
 +FUNC:xmemdup
-+FUNC:xnmalloc
-+FUNC:xnrealloc
 +FUNC:xrealloc
 +FUNC:xstrdup
 +FUNC:xstrndup

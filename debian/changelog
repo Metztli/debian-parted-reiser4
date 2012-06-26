@@ -10,6 +10,8 @@ parted (2.3-10) UNRELEASED; urgency=low
     missing build flags.
   * Remove Sven Luther from Uploaders with thanks for his past contributions
     (closes: #677756).
+  * Revert ABI symbols change from 2.3-9.2, since whatever prompted that
+    change seems to have changed back (closes: #678788).
 
  -- Colin Watson <cjwatson@debian.org>  Wed, 02 May 2012 12:41:52 +0100
 
