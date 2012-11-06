@@ -1,3 +1,12 @@
+parted (2.3-11) unstable; urgency=medium
+
+  * Non-maintainer upload to fix partitioned md devices (bug #684713)
+  * backport md-partitions.patch: libparted/arch/linux.c
+    (_device_get_partition_range): Use /sys/block/DEV/ext_range instead
+    of range sysfs file.
+
+ -- Miquel van Smoorenburg <miquels@debian.org>  Thu, 13 Sep 2012 15:35:00 +0200
+
 parted (2.3-10) unstable; urgency=low
 
   * Acknowledge NMUs with thanks (closes: #676593).
