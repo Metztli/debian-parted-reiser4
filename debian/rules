@@ -169,8 +169,11 @@ echo-vars:
 packaging-files: $(GENFILES)
 	touch $@
 
-#debian/stamp-patch is created by patching source files!
-build-deb/config.status: debian/stamp-patched
+debian/stamp-autoreconf: debian/stamp-patched
+	dh_autoreconf
+	touch $@
+
+build-deb/config.status: debian/stamp-autoreconf
 	dh_testdir
 	[ -d build-deb ] || mkdir build-deb
 
@@ -188,7 +191,7 @@ endif
 	    $(CONFFLAGS)
 	touch $@
 
-build-udeb/config.status: debian/stamp-patched
+build-udeb/config.status: debian/stamp-autoreconf
 	dh_testdir
 	[ -d build-udeb ] || mkdir build-udeb
 
@@ -200,7 +203,7 @@ build-udeb/config.status: debian/stamp-patched
 		$(CONFFLAGS)
 	touch $@
 
-build-dbg/config.status: debian/stamp-patched
+build-dbg/config.status: debian/stamp-autoreconf
 	dh_testdir
 	[ -d build-dbg ] || mkdir build-dbg
 
@@ -214,10 +217,6 @@ build-dbg/config.status: debian/stamp-patched
 
 build build-arch: build-deb build-udeb build-dbg
 build-indep: build-deb
-
-# Avoid confusion from automatic autotools rebuild rules following patches
-# that touch configure.ac and Makefile.am files.
-MAKEFLAGS += ACLOCAL=true AUTOCONF=true AUTOHEADER=true AUTOMAKE=true
 
 build-deb: build-deb/build-stamp
 build-deb/build-stamp: build-deb/config.status
@@ -278,6 +277,8 @@ clean: unpatch packaging-files
 	   esac; \
 	done
 
+	dh_autoreconf_clean
+	rm -f debian/stamp-autoreconf
 	dh_clean
 
 install: install-deb install-udeb install-dbg

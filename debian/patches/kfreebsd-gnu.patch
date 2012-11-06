@@ -4,7 +4,7 @@ Author: Robert Millan <rmh@aybabtu.com>
 Author: Colin Watson <cjwatson@debian.org>
 Bug-Debian: http://bugs.debian.org/363381
 Forwarded: no
-Last-Update: 2010-04-09
+Last-Update: 2012-11-06
 
 Index: b/configure.ac
 ===================================================================
@@ -46,107 +46,6 @@ Index: b/configure.ac
  AC_CHECK_FUNCS([getuid])
  
  dnl NOTE: We need to remove the gl_cv_ignore_unused_libraries flag if we
-Index: b/configure
-===================================================================
---- a/configure
-+++ b/configure
-@@ -3766,6 +3766,7 @@
- 	linux*) OS=linux ;;
- 	gnu*)	OS=gnu ;;
- 	beos*)	OS=beos ;;
-+	freebsd* | kfreebsd*-gnu)	OS=freebsd ;;
- 	*)	as_fn_error $? "Unknown or unsupported OS \"$host_os\".  Only \"linux\", \"gnu\" and \"beos\" are supported in this version of GNU Parted." "$LINENO" 5 ;;
- esac
- 
-@@ -22042,6 +22043,17 @@
- _ACEOF
- 
- 
-+ac_fn_c_check_type "$LINENO" "loff_t" "ac_cv_type_loff_t" "$ac_includes_default"
-+if test "x$ac_cv_type_loff_t" = x""yes; then :
-+
-+else
-+
-+cat >>confdefs.h <<_ACEOF
-+#define loff_t long long
-+_ACEOF
-+
-+fi
-+
- 
- # Check whether --enable-shared was given.
- if test "${enable_shared+set}" = set; then :
-@@ -31169,12 +31181,14 @@
- 
- 
- 
--for ac_header in getopt.h
-+for ac_header in getopt.h endian.h sys/endian.h
- do :
--  ac_fn_c_check_header_mongrel "$LINENO" "getopt.h" "ac_cv_header_getopt_h" "$ac_includes_default"
--if test "x$ac_cv_header_getopt_h" = x""yes; then :
-+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-+eval as_val=\$$as_ac_Header
-+   if test "x$as_val" = x""yes; then :
-   cat >>confdefs.h <<_ACEOF
--#define HAVE_GETOPT_H 1
-+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
- _ACEOF
- 
- fi
-@@ -32022,7 +32036,8 @@
-  esac
- 
- 
--for ac_func in sigaction
-+if test "$OS" != freebsd; then
-+	for ac_func in sigaction
- do :
-   ac_fn_c_check_func "$LINENO" "sigaction" "ac_cv_func_sigaction"
- if test "x$ac_cv_func_sigaction" = x""yes; then :
-@@ -32033,6 +32048,7 @@
- fi
- done
- 
-+fi
- for ac_func in getuid
- do :
-   ac_fn_c_check_func "$LINENO" "getuid" "ac_cv_func_getuid"
-Index: b/lib/config.h.in
-===================================================================
---- a/lib/config.h.in
-+++ b/lib/config.h.in
-@@ -347,6 +347,9 @@
- /* Define to 1 if you have the `dup2' function. */
- #undef HAVE_DUP2
- 
-+/* Define to 1 if you have the <endian.h> header file. */
-+#undef HAVE_ENDIAN_H
-+
- /* Define if you have the declaration of environ. */
- #undef HAVE_ENVIRON_DECL
- 
-@@ -935,6 +938,9 @@
- /* Define to 1 if you have the <sys/bitypes.h> header file. */
- #undef HAVE_SYS_BITYPES_H
- 
-+/* Define to 1 if you have the <sys/endian.h> header file. */
-+#undef HAVE_SYS_ENDIAN_H
-+
- /* Define to 1 if you have the <sys/inttypes.h> header file. */
- #undef HAVE_SYS_INTTYPES_H
- 
-@@ -1287,6 +1293,9 @@
- /* Define to rpl_localtime if the replacement function should be used. */
- #undef localtime
- 
-+/* Define to `long long' if <sys/types.h> does not define. */
-+#undef loff_t
-+
- /* Define to rpl_malloc if the replacement function should be used. */
- #undef malloc
- 
 Index: b/libparted/Makefile.am
 ===================================================================
 --- a/libparted/Makefile.am
@@ -161,42 +60,6 @@ Index: b/libparted/Makefile.am
  
  libparted_la_LIBADD =	\
    fs/libfs.la		\
-Index: b/libparted/Makefile.in
-===================================================================
---- a/libparted/Makefile.in
-+++ b/libparted/Makefile.in
-@@ -931,7 +931,8 @@
- EXTRA_libparted_la_SOURCES = arch/linux.c	\
- 				arch/linux.h	\
- 				arch/gnu.c	\
--				arch/beos.c
-+				arch/beos.c	\
-+				arch/freebsd.c
- 
- libparted_la_LIBADD = \
-   fs/libfs.la		\
-@@ -1030,6 +1031,7 @@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/disk.Plo@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exception.Plo@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filesys.Plo@am__quote@
-+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freebsd.Plo@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/geom.Plo@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnu.Plo@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libparted.Plo@am__quote@
-@@ -1108,6 +1110,13 @@
- @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
- @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o beos.lo `test -f 'arch/beos.c' || echo '$(srcdir)/'`arch/beos.c
- 
-+freebsd.lo: arch/freebsd.c
-+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT freebsd.lo -MD -MP -MF $(DEPDIR)/freebsd.Tpo -c -o freebsd.lo `test -f 'arch/freebsd.c' || echo '$(srcdir)/'`arch/freebsd.c
-+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/freebsd.Tpo $(DEPDIR)/freebsd.Plo
-+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='arch/freebsd.c' object='freebsd.lo' libtool=yes @AMDEPBACKSLASH@
-+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o freebsd.lo `test -f 'arch/freebsd.c' || echo '$(srcdir)/'`arch/freebsd.c
-+
- mostlyclean-libtool:
- 	-rm -f *.lo
- 
 Index: b/libparted/arch/freebsd.c
 ===================================================================
 --- /dev/null

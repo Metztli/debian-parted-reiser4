@@ -21,7 +21,9 @@ Build-Depends:
  libblkid-dev,
  po4a,
  pkg-config,
- check
+ check,
+ dh-autoreconf,
+ autopoint
 
 Package: parted@BINPKGVER@
 Architecture: any
