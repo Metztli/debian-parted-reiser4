@@ -1,9 +1,9 @@
-parted (2.3-12) UNRELEASED; urgency=low
+parted (2.3-12) unstable; urgency=low
 
   * Breaks: python-parted (<< 3.6-5); previous versions were broken by the
     PED_PARTITION_LAST_FLAG change in 2.3-11.1 (closes: #697588).
 
- -- Colin Watson <cjwatson@debian.org>  Mon, 07 Jan 2013 12:10:06 +0000
+ -- Colin Watson <cjwatson@debian.org>  Mon, 07 Jan 2013 12:13:14 +0000
 
 parted (2.3-11.1) unstable; urgency=low
 
