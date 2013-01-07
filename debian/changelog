@@ -1,9 +1,27 @@
-parted (2.3-12) UNRELEASED; urgency=low
+parted (2.3-13) UNRELEASED; urgency=low
 
   * Use dh-autoreconf.
   * Avoid assuming that gets is declared.
 
- -- Colin Watson <cjwatson@ubuntu.com>  Tue, 06 Nov 2012 23:40:05 +0000
+ -- Colin Watson <cjwatson@debian.org>  Tue, 06 Nov 2012 23:40:05 +0000
+
+parted (2.3-12) unstable; urgency=low
+
+  * Breaks: python-parted (<< 3.6-5); previous versions were broken by the
+    PED_PARTITION_LAST_FLAG change in 2.3-11.1 (closes: #697588).
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 07 Jan 2013 12:13:14 +0000
+
+parted (2.3-11.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Cherry-pick upstream patches to fix the handling of GPT partition
+    flags when modifying a GPT. This, most particularly fixes the
+    handling of 'legagy BIOS bootable'. 
+    Thanks to Jérémy Bobbio for providing the patch and analysis.
+    Closes: #673042
+
+ -- Christian Perrier <bubulle@debian.org>  Tue, 01 Jan 2013 14:44:03 +0100
 
 parted (2.3-11) unstable; urgency=medium
 

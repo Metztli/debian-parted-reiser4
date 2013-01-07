@@ -23,6 +23,9 @@ sun-revert-disk-flag.patch
 sun-raid-type-test-fix.patch
 tiny-disk-constraint.patch
 dasd-sync.patch
+gpt-add-partition-attribute-bits.patch
+gpt-add-legacy_boot-partition-flag.patch
+libparted-gpt-copy-flags.patch
 linux-two-component.patch
 md-partitions.patch
 gnulib-gets.patch
