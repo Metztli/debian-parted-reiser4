@@ -79,6 +79,7 @@ Suggests: parted | nparted, libparted@LIBSONAME@-dev, libparted@LIBSONAME@-i18n 
 Conflicts: parted (<< 1.4.13+14pre1), libparted1 (<< 2.2), libparted2 (<< 2.2)
 Replaces: libparted0 (<< 2.2-4), libparted1 (<< 2.2), libparted2 (<< 2.2), libparted1.4 (<< 1.4.24-2)
 Provides: libparted
+Breaks: python-parted (<< 3.6-5)
 Multi-Arch: same
 Description: disk partition manipulator - shared library
  GNU Parted is a program that allows you to create, destroy, resize,
