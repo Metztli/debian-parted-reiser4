@@ -1,7 +1,7 @@
 parted (2.3-13) UNRELEASED; urgency=low
 
   * Use dh-autoreconf.
-  * Avoid assuming that gets is declared.
+  * Avoid assuming that gets is declared (closes: #699653).
 
  -- Colin Watson <cjwatson@debian.org>  Tue, 06 Nov 2012 23:40:05 +0000
 
