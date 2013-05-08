@@ -5,11 +5,9 @@ Forwarded: not-needed
 Author: Jim Meyering <meyering@redhat.com>
 Last-Update: 2010-11-19
 
-Index: b/libparted/labels/dos.c
-===================================================================
 --- a/libparted/labels/dos.c
 +++ b/libparted/labels/dos.c
-@@ -1646,13 +1646,13 @@
+@@ -1656,13 +1656,13 @@
  			       		dev->length - min_geom->end))
  			return NULL;
  	} else {

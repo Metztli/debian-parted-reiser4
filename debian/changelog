@@ -1,3 +1,11 @@
+parted (2.3-14) unstable; urgency=low
+
+  * Merge fix-head-size-assertion.patch from Ubuntu: change an
+    assert so it correctly recovers instead of aborting the program
+    (closes: #620273).
+
+ -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
+
 parted (2.3-13) unstable; urgency=low
 
   * Use dh-autoreconf.

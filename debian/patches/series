@@ -17,6 +17,7 @@ kfreebsd_lvm.patch
 hurd-partition-path.patch
 hurd-reread.patch
 gnulib.patch
+fix-head-size-assertion.patch
 
 # Backported
 sun-revert-disk-flag.patch
