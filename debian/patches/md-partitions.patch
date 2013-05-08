@@ -19,10 +19,9 @@ Date:   Sat Nov 26 15:45:08 2011 +0100
 
     Addresses: http://bugzilla.novell.com/567652
 
-diff -u a/libparted/arch/linux.c b/libparted/arch/linux.c
---- a/libparted/arch/linux.c	2012-08-24 12:06:18.000000000 +0000
-+++ b/libparted/arch/linux.c	2012-08-24 12:10:31.176877539 +0000
-@@ -2403,7 +2403,7 @@
+--- a/libparted/arch/linux.c
++++ b/libparted/arch/linux.c
+@@ -2402,7 +2402,7 @@
  
  /*
   * The number of partitions that a device can have depends on the kernel.
@@ -31,7 +30,7 @@ diff -u a/libparted/arch/linux.c b/libparted/arch/linux.c
   * value.
   */
  static unsigned int
-@@ -2414,7 +2414,7 @@
+@@ -2413,7 +2413,7 @@
          FILE*       fp;
          bool        ok;
  

@@ -18,6 +18,7 @@ hurd-partition-path.patch
 hurd-reread.patch
 gnulib.patch
 fix-head-size-assertion.patch
+dm_p_separator.patch
 
 # Backported
 sun-revert-disk-flag.patch
