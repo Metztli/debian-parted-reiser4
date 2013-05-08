@@ -10,11 +10,9 @@ Attributes entry.
  libparted/labels/gpt.c |    8 ++++++--
  1 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
-index e927b5b..321a240 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
-@@ -167,12 +167,16 @@ struct __attribute__ ((packed)) _GuidPartitionEntryAttributes_t
+@@ -174,12 +174,16 @@
  {
  #ifdef __GNUC__			/* XXX narrow this down to !TinyCC */
    uint64_t RequiredToFunction:1;
@@ -33,4 +31,3 @@ index e927b5b..321a240 100644
    uint32_t LOST:5;
    uint32_t GuidSpecific:16;
  #endif
--- 

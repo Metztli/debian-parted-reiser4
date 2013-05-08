@@ -13,11 +13,9 @@ Reported by Chris Murphy in https://bugzilla.redhat.com/747497.
  libparted/labels/gpt.c |    4 +---
  1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
-index 8c895c4..dc3e8b4 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
-@@ -1348,9 +1348,7 @@ gpt_partition_duplicate (const PedPartition *part)
+@@ -1743,9 +1743,7 @@
    if (!result_data)
      goto error_free_part;
  
@@ -28,4 +26,3 @@ index 8c895c4..dc3e8b4 100644
    return result;
  
  error_free_part:
--- 

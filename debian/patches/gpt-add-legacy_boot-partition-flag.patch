@@ -26,11 +26,9 @@ See Page 105, Table 19 Bit 2 of the UEFI Spec 2.3 book.
  libparted/labels/gpt.c |   15 ++++++++++++++-
  5 files changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/doc/C/parted.8 b/doc/C/parted.8
-index 4c6b6ee..b8032ed 100644
 --- a/doc/C/parted.8
 +++ b/doc/C/parted.8
-@@ -132,7 +132,7 @@ or an LVM logical volume if necessary.
+@@ -132,7 +132,7 @@
  .B set \fIpartition\fP \fIflag\fP \fIstate\fP
  Change the state of the \fIflag\fP on \fIpartition\fP to \fIstate\fP.
  Supported flags are: "boot", "root", "swap", "hidden", "raid", "lvm", "lba",
@@ -39,11 +37,9 @@ index 4c6b6ee..b8032ed 100644
  \fIstate\fP should be either "on" or "off".
  .TP
  .B unit \fIunit\fP
-diff --git a/doc/parted.texi b/doc/parted.texi
-index 4e0fec9..5a2f38f 100644
 --- a/doc/parted.texi
 +++ b/doc/parted.texi
-@@ -1049,6 +1049,10 @@ depending on what disk label you are using:
+@@ -1049,6 +1049,10 @@
  (GPT) - Enable this to record that the selected partition is a
  GRUB BIOS partition.
  
@@ -54,11 +50,9 @@ index 4e0fec9..5a2f38f 100644
  @item boot
  (Mac, MS-DOS, PC98) - should be enabled if you want to boot off the
  partition.  The semantics vary between disk labels.  For MS-DOS disk
-diff --git a/include/parted/disk.h b/include/parted/disk.h
-index f11e393..ddd3c86 100644
 --- a/include/parted/disk.h
 +++ b/include/parted/disk.h
-@@ -69,10 +69,11 @@ enum _PedPartitionFlag {
+@@ -69,10 +69,11 @@
          PED_PARTITION_MSFT_RESERVED=11,
          PED_PARTITION_BIOS_GRUB=12,
          PED_PARTITION_APPLE_TV_RECOVERY=13,
@@ -72,11 +66,9 @@ index f11e393..ddd3c86 100644
  
  enum _PedDiskTypeFeature {
          PED_DISK_TYPE_EXTENDED=1,       /**< supports extended partitions */
-diff --git a/libparted/disk.c b/libparted/disk.c
-index 7a60a09..6fb9eb9 100644
 --- a/libparted/disk.c
 +++ b/libparted/disk.c
-@@ -2443,6 +2443,8 @@ ped_partition_flag_get_name (PedPartitionFlag flag)
+@@ -2443,6 +2443,8 @@
                  return N_("atvrecv");
          case PED_PARTITION_DIAG:
                  return N_("diag");
@@ -85,8 +77,6 @@ index 7a60a09..6fb9eb9 100644
  
  	default:
  		ped_exception_throw (
-diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
-index 321a240..8c895c4 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
 @@ -4,7 +4,7 @@
@@ -98,7 +88,7 @@ index 321a240..8c895c4 100644
  
      EFI GUID Partition Table handling
      Per Intel EFI Specification v1.02
-@@ -282,6 +282,7 @@ typedef struct _GPTPartitionData
+@@ -289,6 +289,7 @@
    int msftres;
    int atvrecv;
    int msftrecv;
@@ -106,7 +96,7 @@ index 321a240..8c895c4 100644
  } GPTPartitionData;
  
  static PedDiskType gpt_disk_type;
-@@ -787,10 +788,13 @@ _parse_part_entry (PedDisk *disk, GuidPartitionEntry_t *pte)
+@@ -1049,10 +1050,13 @@
      = gpt_part_data->boot = gpt_part_data->hp_service
      = gpt_part_data->hidden = gpt_part_data->msftres
      = gpt_part_data->msftrecv
@@ -120,7 +110,7 @@ index 321a240..8c895c4 100644
  
    if (!guid_cmp (gpt_part_data->type, PARTITION_SYSTEM_GUID))
      gpt_part_data->boot = 1;
-@@ -1167,6 +1171,8 @@ _partition_generate_part_entry (PedPartition *part, GuidPartitionEntry_t *pte)
+@@ -1556,6 +1560,8 @@
  
    if (gpt_part_data->hidden)
      pte->Attributes.RequiredToFunction = 1;
@@ -129,7 +119,7 @@ index 321a240..8c895c4 100644
  
    for (i = 0; i < 72 / sizeof (efi_char16_t); i++)
      pte->PartitionName[i]
-@@ -1309,6 +1315,7 @@ gpt_partition_new (const PedDisk *disk,
+@@ -1704,6 +1710,7 @@
    gpt_part_data->msftres = 0;
    gpt_part_data->msftrecv = 0;
    gpt_part_data->atvrecv = 0;
@@ -137,7 +127,7 @@ index 321a240..8c895c4 100644
    uuid_generate ((unsigned char *) &gpt_part_data->uuid);
    swap_uuid_and_efi_guid ((unsigned char *) (&gpt_part_data->uuid));
    memset (gpt_part_data->name, 0, sizeof gpt_part_data->name);
-@@ -1601,6 +1608,9 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+@@ -1996,6 +2003,9 @@
      case PED_PARTITION_HIDDEN:
        gpt_part_data->hidden = state;
        return 1;
@@ -147,7 +137,7 @@ index 321a240..8c895c4 100644
      case PED_PARTITION_SWAP:
      case PED_PARTITION_ROOT:
      case PED_PARTITION_LBA:
-@@ -1637,6 +1647,8 @@ gpt_partition_get_flag (const PedPartition *part, PedPartitionFlag flag)
+@@ -2032,6 +2042,8 @@
        return gpt_part_data->atvrecv;
      case PED_PARTITION_HIDDEN:
        return gpt_part_data->hidden;
@@ -156,7 +146,7 @@ index 321a240..8c895c4 100644
      case PED_PARTITION_SWAP:
      case PED_PARTITION_LBA:
      case PED_PARTITION_ROOT:
-@@ -1661,6 +1673,7 @@ gpt_partition_is_flag_available (const PedPartition *part,
+@@ -2056,6 +2068,7 @@
      case PED_PARTITION_DIAG:
      case PED_PARTITION_APPLE_TV_RECOVERY:
      case PED_PARTITION_HIDDEN:
@@ -164,4 +154,3 @@ index 321a240..8c895c4 100644
        return 1;
      case PED_PARTITION_SWAP:
      case PED_PARTITION_ROOT:
--- 
