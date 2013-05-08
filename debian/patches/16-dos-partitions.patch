@@ -1,0 +1,55 @@
+From: Phillip Susi <psusi@ubuntu.com>
+Subject: Fix > 16 dos partitions
+Description: The msdos partition table claimed a maximum partition
+ count of 16 but would allow you to go beyond that.  This resulted
+ in the kernel not being informed of those partitions.  Corrected
+ to enforce the limit and raise the limit to 64 partitions.
+Forwarded: Yes
+
+--- a/libparted/labels/dos.c
++++ b/libparted/labels/dos.c
+@@ -104,7 +104,7 @@ static const char MBR_BOOT_CODE[] = {
+  * (i.e. 1022 is sometimes used to indicate "use LBA").
+  */
+ #define MAX_CHS_CYLINDER	1021
+-#define MAX_TOTAL_PART		16
++#define MAX_TOTAL_PART		64
+ 
+ typedef struct _DosRawPartition		DosRawPartition;
+ typedef struct _DosRawTable		DosRawTable;
+@@ -2332,17 +2332,23 @@ next_primary (const PedDisk* disk)
+ 		if (!ped_disk_get_partition (disk, i))
+ 			return i;
+ 	}
+-	return 0;
++	return -1;
+ }
+ 
+ static int
+ next_logical (const PedDisk* disk)
+ {
+ 	int	i;
+-	for (i=5; 1; i++) {
++	for (i=5; i<=MAX_TOTAL_PART; i++) {
+ 		if (!ped_disk_get_partition (disk, i))
+ 			return i;
+ 	}
++	ped_exception_throw (
++		PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
++		_("Can not create any more partitions"),
++		disk->dev->path);
++	return -1;
++
+ }
+ 
+ static int
+@@ -2361,7 +2367,8 @@ msdos_partition_enumerate (PedPartition*
+ 		part->num = next_logical (part->disk);
+ 	else
+ 		part->num = next_primary (part->disk);
+-
++	if (part->num == -1)
++		return 0;
+ 	return 1;
+ }
+ 

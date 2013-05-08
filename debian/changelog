@@ -27,6 +27,9 @@ parted (2.3-14) unstable; urgency=low
     are mounted.
   * Merge udevadm-settle.patch from Ubuntu: Run udevadm settle around
     partition table rereads, to avoid races.
+  * Merge 16-dos-partitions.patch from Ubuntu: the kernel was not
+    being informed of partitions above #16 on dos partition tables
+    (closes: #667638).
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 
