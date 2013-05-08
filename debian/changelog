@@ -30,6 +30,8 @@ parted (2.3-14) unstable; urgency=low
   * Merge 16-dos-partitions.patch from Ubuntu: the kernel was not
     being informed of partitions above #16 on dos partition tables
     (closes: #667638).
+  * Merge hfs-probe-corrupt.patch from Ubuntu: don't let a corrupt
+    FS evoke failed assertion.
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 

@@ -1,0 +1,58 @@
+Description: HFS/HFS+ probe: don't let a corrupt FS evoke failed assertion
+Author: Brian C. Lane <bcl@redhat.com>
+Origin: upstream, http://git.debian.org/?p=parted/parted.git;a=commitdiff;h=6bc7e1965078579e9855f851254d67b3d8165784
+Bug-Fedora: http://bugzilla.redhat.com/714758
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/796891
+Forwarded: not-needed
+Last-Update: 2012-03-20
+
+Index: b/libparted/fs/hfs/probe.c
+===================================================================
+--- a/libparted/fs/hfs/probe.c
++++ b/libparted/fs/hfs/probe.c
+@@ -83,7 +83,8 @@
+ 		  + ((PedSector) PED_BE16_TO_CPU (mdb->total_blocks)
+ 		     * (PED_BE32_TO_CPU (mdb->block_size) / PED_SECTOR_SIZE_DEFAULT )));
+ 	max = search + (PED_BE32_TO_CPU (mdb->block_size) / PED_SECTOR_SIZE_DEFAULT);
+-	if (!(geom_ret = ped_geometry_new (geom->dev, geom->start, search + 2)))
++	if ((search < 0)
++	    || !(geom_ret = ped_geometry_new (geom->dev, geom->start, search + 2)))
+ 		return NULL;
+ 
+ 	for (; search < max; search++) {
+@@ -142,8 +143,9 @@
+ 		      - 2;
+ 		search = max - 2 * ( PED_BE32_TO_CPU (vh->block_size)
+ 				     / PED_SECTOR_SIZE_DEFAULT ) + 2;
+-		if (!(geom_ret = ped_geometry_new (geom->dev, geom->start,
+-						   search + 2)))
++		if ((search < 0)
++		    || !(geom_ret = ped_geometry_new (geom->dev, geom->start,
++						      search + 2)))
+ 			return NULL;
+ 
+ 		for (; search < max; search++) {
+@@ -157,8 +159,9 @@
+ 		search = ((PedSector) PED_BE32_TO_CPU (vh->total_blocks) - 1)
+ 		      * ( PED_BE32_TO_CPU (vh->block_size) / PED_SECTOR_SIZE_DEFAULT )
+ 		      - 1;
+-		if (!ped_geometry_set (geom_ret, geom_ret->start,
+-					       search + 2)
++		if ((search < 0)
++		    || !ped_geometry_set (geom_ret, geom_ret->start,
++					  search + 2)
+ 		    || !ped_geometry_read (geom_ret, buf, search, 1)
+ 		    || vh->signature != PED_CPU_TO_BE16 (HFSP_SIGNATURE)) {
+ 		    	ped_geometry_destroy (geom_ret);
+@@ -214,8 +217,9 @@
+ 		      * ( PED_BE32_TO_CPU (vh->block_size) / PED_SECTOR_SIZE_DEFAULT )
+ 		      - 2;
+ 	search = max - ( PED_BE32_TO_CPU (vh->block_size) / PED_SECTOR_SIZE_DEFAULT );
+-	if (!(geom_ret = ped_geometry_new (geom->dev, geom->start,
+-					   search + 2)))
++	if ((search < 0)
++	    || !(geom_ret = ped_geometry_new (geom->dev, geom->start,
++					      search + 2)))
+ 		return NULL;
+ 	for (; search < max; search++) {
+ 		if (!ped_geometry_set (geom_ret, geom_ret->start,

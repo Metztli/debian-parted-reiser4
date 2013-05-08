@@ -40,6 +40,7 @@ gnulib-gets.patch
 
 udevadm-settle.patch
 16-dos-partitions.patch
+hfs-probe-corrupt.patch
 
 # Symbols for this ABI (amd64 as reference)
 update-abi-symbols.patch
