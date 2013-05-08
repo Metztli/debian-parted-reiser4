@@ -7,6 +7,10 @@ parted (2.3-14) unstable; urgency=low
     'p' between the base device name and the partition number for
     all device-mapper devices instead of only if the base name
     ended in a digit.
+  * Merge remove-dev_t-dep.patch from Ubuntu: parted was making
+    bad assumptions about the meaning of the values of dev_t,
+    causing it to fail to detect in-use partitions on all dmraid
+    disks, and regular disk partitions > #16.
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 
