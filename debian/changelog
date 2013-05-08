@@ -17,6 +17,9 @@ parted (2.3-14) unstable; urgency=low
     and touching it causes hangs.
   * Merge gptsync.patch from Ubuntu: On Intel Mac systems, write a
     synced MBR rather than a protective MBR.
+  * Merge loop-partitions.patch from Ubuntu: backport some changes
+    to allow the use of partitions on loop devices.  This also
+    allows more than 16 partitions.
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 

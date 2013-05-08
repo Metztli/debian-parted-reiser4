@@ -22,6 +22,7 @@ dm_p_separator.patch
 remove-dev_t-dep.patch
 skip-floppy.patch
 gptsync.patch
+loop-partitions.patch
 
 # Backported
 sun-revert-disk-flag.patch
