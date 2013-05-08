@@ -38,5 +38,7 @@ linux-two-component.patch
 md-partitions.patch
 gnulib-gets.patch
 
+udevadm-settle.patch
+
 # Symbols for this ABI (amd64 as reference)
 update-abi-symbols.patch

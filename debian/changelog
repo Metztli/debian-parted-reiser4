@@ -25,6 +25,8 @@ parted (2.3-14) unstable; urgency=low
   * Merge dm-part-sync.patch from Ubuntu: refactor device-mapper
     partition sync code so it does not fail when unmodified partitions
     are mounted.
+  * Merge udevadm-settle.patch from Ubuntu: Run udevadm settle around
+    partition table rereads, to avoid races.
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 
