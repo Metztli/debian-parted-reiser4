@@ -11,6 +11,10 @@ parted (2.3-14) unstable; urgency=low
     bad assumptions about the meaning of the values of dev_t,
     causing it to fail to detect in-use partitions on all dmraid
     disks, and regular disk partitions > #16.
+  * Merge skip-floppy.patch from Ubuntu: add floppies to the list
+    of ignored devices since they can not be partitioned anyhow,
+    and often people have no floppy though their bios thinks they do,
+    and touching it causes hangs.
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 

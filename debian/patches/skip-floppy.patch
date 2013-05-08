@@ -1,0 +1,17 @@
+From: Phillip Susi <psusi@cfl.rr.com>
+Forwarded: yes
+Subject: Skip floppies when probing all devices
+Description: Floppies can't be partitioned anyhow, and some people
+ have misconfigured bios that thinks there is a floppy when there
+ actually isn't, and trying to scan it causes hanging.
+
+--- a/libparted/arch/linux.c
++++ b/libparted/arch/linux.c
+@@ -2089,6 +2089,7 @@
+ 		{ "dm-",	sizeof ("dm-") - 1	},
+ 		{ "loop",	sizeof ("loop") - 1	},
+ 		{ "ram",	sizeof ("ram") - 1	},
++		{ "fd",		sizeof ("fd") - 1	},
+ 		{ 0, 0 },
+ 	};
+ 
