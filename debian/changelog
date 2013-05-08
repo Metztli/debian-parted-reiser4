@@ -20,6 +20,8 @@ parted (2.3-14) unstable; urgency=low
   * Merge loop-partitions.patch from Ubuntu: backport some changes
     to allow the use of partitions on loop devices.  This also
     allows more than 16 partitions.
+  * Merge dmraid.patch from Ubuntu: Don't probe dmraid partition
+    devices.  Also set UUID of newly created dmraid partition devices.
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 
