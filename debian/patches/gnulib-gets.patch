@@ -3,8 +3,6 @@ Origin: backport, http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;
 Forwarded: no
 Last-Update: 2012-11-06
 
-Index: b/lib/stdio.in.h
-===================================================================
 --- a/lib/stdio.in.h
 +++ b/lib/stdio.in.h
 @@ -140,10 +140,12 @@
@@ -22,8 +20,6 @@ Index: b/lib/stdio.in.h
  
  #if @GNULIB_FOPEN@
  # if @REPLACE_FOPEN@
-Index: b/m4/stdio_h.m4
-===================================================================
 --- a/m4/stdio_h.m4
 +++ b/m4/stdio_h.m4
 @@ -35,9 +35,9 @@

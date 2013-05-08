@@ -21,7 +21,7 @@ Date:   Sat Nov 26 15:45:08 2011 +0100
 
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -2531,7 +2531,7 @@
+@@ -2571,7 +2571,7 @@
  
  /*
   * The number of partitions that a device can have depends on the kernel.
@@ -30,9 +30,9 @@ Date:   Sat Nov 26 15:45:08 2011 +0100
   * value.
   */
  static unsigned int
-@@ -2542,7 +2542,7 @@
-         FILE*       fp;
-         bool        ok;
+@@ -2585,7 +2585,7 @@
+         if (dev->type == PED_DEVICE_DM)
+                 return MAX_NUM_PARTS;
  
 -        r = snprintf(path, sizeof(path), "/sys/block/%s/range",
 +        r = snprintf(path, sizeof(path), "/sys/block/%s/ext_range",

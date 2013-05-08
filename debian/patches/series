@@ -24,6 +24,7 @@ skip-floppy.patch
 gptsync.patch
 loop-partitions.patch
 dmraid.patch
+dm-part-sync.patch
 
 # Backported
 sun-revert-disk-flag.patch

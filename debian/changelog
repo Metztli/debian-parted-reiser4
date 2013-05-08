@@ -22,6 +22,9 @@ parted (2.3-14) unstable; urgency=low
     allows more than 16 partitions.
   * Merge dmraid.patch from Ubuntu: Don't probe dmraid partition
     devices.  Also set UUID of newly created dmraid partition devices.
+  * Merge dm-part-sync.patch from Ubuntu: refactor device-mapper
+    partition sync code so it does not fail when unmodified partitions
+    are mounted.
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 
