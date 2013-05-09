@@ -1,0 +1,45 @@
+From 7ef73999b35294a8fd30f5af4eb6221a0ce62802 Mon Sep 17 00:00:00 2001
+From: Phillip Susi <psusi@ubuntu.com>
+Date: Wed, 30 Nov 2011 13:13:58 -0500
+Subject: [PATCH 4/6] parted: make _partition_warn_busy actually a warning
+ instead of an error
+
+This function was throwing a PED_EXCEPTION_ERROR with only the
+PED_EXCEPTION_CANCEL option.  Converted to a PED_EXCEPTION_WARNING
+with the option to continue anyhow.
+---
+ parted/parted.c                                 |   19 +++++++++++--------
+ tests/t1101-busy-partition.sh                   |    2 +-
+ tests/t9041-undetected-in-use-16th-partition.sh |    4 ++--
+ 3 files changed, 14 insertions(+), 11 deletions(-)
+
+Index: b/parted/parted.c
+===================================================================
+--- a/parted/parted.c
++++ b/parted/parted.c
+@@ -224,14 +224,17 @@
+ 
+         if (ped_partition_is_busy (part)) {
+                 path = ped_partition_get_path (part);
+-                ped_exception_throw (
+-                        PED_EXCEPTION_ERROR,
+-                        PED_EXCEPTION_CANCEL,
+-                        _("Partition %s is being used. You must unmount it "
+-                          "before you modify it with Parted."),
+-                        path);
+-                free (path);
+-                return 0;
++                if (ped_exception_throw (
++                            PED_EXCEPTION_WARNING,
++                            PED_EXCEPTION_YES_NO,
++                            _("Partition %s is being used. Are you sure you " \
++                              "want to continue?"),
++                            path) != PED_EXCEPTION_YES)
++                {
++                        free (path);
++                        return 0;
++                }
++		free (path);
+         }
+         return 1;
+ }
