@@ -1,9 +1,9 @@
-parted (2.3-13) UNRELEASED; urgency=low
+parted (2.3-13) unstable; urgency=low
 
   * Use dh-autoreconf.
   * Avoid assuming that gets is declared (closes: #699653).
 
- -- Colin Watson <cjwatson@debian.org>  Tue, 06 Nov 2012 23:40:05 +0000
+ -- Colin Watson <cjwatson@debian.org>  Thu, 09 May 2013 10:48:00 +0100
 
 parted (2.3-12) unstable; urgency=low
 
