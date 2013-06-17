@@ -35,6 +35,8 @@ parted (2.3-14) unstable; urgency=low
   * Backport online resize patches: 0001-parted-resizepart-command.patch,
     0003-libparted-Add-support-for-BLKPG-ioctl-partition-resi.patch,
     and 0004-parted-make-_partition_warn_busy-actually-a-warning.patch
+  * Merge fewer-gpt-entries.patch: Backport upstream patches to handle
+    GPT labels with fewer than 128 partition entries (LP: #1187560).
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 
