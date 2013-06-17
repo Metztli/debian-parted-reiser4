@@ -37,6 +37,8 @@ parted (2.3-14) unstable; urgency=low
     and 0004-parted-make-_partition_warn_busy-actually-a-warning.patch
   * Merge fewer-gpt-entries.patch: Backport upstream patches to handle
     GPT labels with fewer than 128 partition entries (LP: #1187560).
+  * debian/patches/avoid-disturbing-partitions.patch: Don't remove and
+    re-add unmodified partitions (LP: #1060484).
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 

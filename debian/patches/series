@@ -45,6 +45,7 @@ hfs-probe-corrupt.patch
 0003-libparted-Add-support-for-BLKPG-ioctl-partition-resi.patch
 0004-parted-make-_partition_warn_busy-actually-a-warning-.patch
 fewer-gpt-entries.patch
+avoid-disturbing-partitions.patch
 
 # Symbols for this ABI (amd64 as reference)
 update-abi-symbols.patch
