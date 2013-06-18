@@ -39,6 +39,9 @@ parted (2.3-14) unstable; urgency=low
     GPT labels with fewer than 128 partition entries (LP: #1187560).
   * debian/patches/avoid-disturbing-partitions.patch: Don't remove and
     re-add unmodified partitions (LP: #1060484).
+  * debian/patches/linux-specific-gpt-type.patch: Backport upstream
+    changes to use a linux specific partition type code instead of
+    Microsoft's, which causes Windows to offer to format the partition.
 
  -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
 
