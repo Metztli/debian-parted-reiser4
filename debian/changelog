@@ -1,4 +1,4 @@
-parted (2.3-14) unstable; urgency=low
+parted (2.3-14) UNRELEASED; urgency=low
 
   * Merge fix-head-size-assertion.patch from Ubuntu: change an
     assert so it correctly recovers instead of aborting the program
