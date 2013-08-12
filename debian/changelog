@@ -1,4 +1,4 @@
-parted (2.3-14) UNRELEASED; urgency=low
+parted (2.3-14) unstable; urgency=low
 
   * Merge fix-head-size-assertion.patch from Ubuntu: change an
     assert so it correctly recovers instead of aborting the program
@@ -43,7 +43,7 @@ parted (2.3-14) UNRELEASED; urgency=low
     changes to use a linux specific partition type code instead of
     Microsoft's, which causes Windows to offer to format the partition.
 
- -- Phillip Susi <psusi@ubuntu.com>  Wed, 08 May 2013 14:17:09 -0400
+ -- Phillip Susi <psusi@ubuntu.com>  Mon, 12 Aug 2013 10:11:10 +0100
 
 parted (2.3-13) unstable; urgency=low
 
