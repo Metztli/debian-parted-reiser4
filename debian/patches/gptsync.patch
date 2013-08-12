@@ -1,7 +1,7 @@
 From: Matthew Garrett <mjg59@srcf.ucam.org>
 From: Colin Watson <cjwatson@ubuntu.com>
 Forwarded: no
-Last-Update: 2012-03-08
+Last-Update: 2013-06-06
 Description: GPT syncing for Intel Macs
  On Intel Mac systems, write a synced MBR rather than a protective MBR.
 
@@ -667,22 +667,3 @@ Description: GPT syncing for Intel Macs
    t0300-dos-on-gpt.sh \
    t0400-loop-clobber-infloop.sh \
    t0500-dup-clobber.sh \
---- a/tests/Makefile.in
-+++ b/tests/Makefile.in
-@@ -927,6 +927,7 @@
-   t0220-gpt-msftres.sh \
-   t0250-gpt.sh \
-   t0280-gpt-corrupt.sh \
-+  t0290-gptsync.sh \
-   t0300-dos-on-gpt.sh \
-   t0400-loop-clobber-infloop.sh \
-   t0500-dup-clobber.sh \
-@@ -1352,6 +1353,8 @@
- 	@p='t0250-gpt.sh'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
- t0280-gpt-corrupt.sh.log: t0280-gpt-corrupt.sh
- 	@p='t0280-gpt-corrupt.sh'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
-+t0290-gptsync.sh.log: t0290-gptsync.sh
-+	@p='t0290-gptsync.sh'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
- t0300-dos-on-gpt.sh.log: t0300-dos-on-gpt.sh
- 	@p='t0300-dos-on-gpt.sh'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
- t0400-loop-clobber-infloop.sh.log: t0400-loop-clobber-infloop.sh
