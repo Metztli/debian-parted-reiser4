@@ -1,7 +1,7 @@
 From: Matthew Garrett <mjg59@srcf.ucam.org>
 From: Colin Watson <cjwatson@ubuntu.com>
 Forwarded: no
-Last-Update: 2013-06-06
+Last-Update: 2013-08-13
 Description: GPT syncing for Intel Macs
  On Intel Mac systems, write a synced MBR rather than a protective MBR.
 
@@ -33,7 +33,7 @@ Description: GPT syncing for Intel Macs
  static PedDiskType gpt_disk_type;
  
 +
-+#if defined(__i386__) || defined(__x86_64__)
++#if (defined(__i386__) || defined(__x86_64__)) && !defined(__GNU__)
 +# define USE_DMI
 +#endif
 +
