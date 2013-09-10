@@ -1,4 +1,4 @@
-parted (2.3-16) UNRELEASED; urgency=low
+parted (2.3-16) unstable; urgency=low
 
   * Convert libparted0debian1-dbg to a normal separated-debug-symbols
     package rather than shipping a rather odd /usr/lib/libparted_g.a file,
@@ -6,7 +6,7 @@ parted (2.3-16) UNRELEASED; urgency=low
     involves enabling mtrace on all build passes, which should be fine since
     it only does anything if MALLOC_TRACE is set in the environment.
 
- -- Colin Watson <cjwatson@debian.org>  Tue, 10 Sep 2013 16:42:12 +0100
+ -- Colin Watson <cjwatson@debian.org>  Tue, 10 Sep 2013 17:29:34 +0100
 
 parted (2.3-15) unstable; urgency=low
 
