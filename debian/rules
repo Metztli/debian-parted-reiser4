@@ -185,7 +185,8 @@ endif
 #	 Install the `parted' executable to /sbin ...
 	cd build-deb && $(buildflags) ../configure --prefix=/usr \
 	    --sbindir=/sbin --mandir=\$${prefix}/share/man \
-	    --infodir=\$${prefix}/share/info --enable-shared \
+	    --infodir=\$${prefix}/share/info --enable-mtrace \
+	    --enable-shared \
 	    --build=$(DEB_BUILD_GNU_TYPE) --host=$(DEB_HOST_GNU_TYPE) \
 		$(CONFDEVMAPPER) \
 	    $(CONFFLAGS)
@@ -197,25 +198,14 @@ build-udeb/config.status: debian/stamp-autoreconf
 
 	cd build-udeb && $(udeb_buildflags) ac_cv_header_execinfo_h=no ../configure --prefix=/usr \
 	    --sbindir=/sbin --libdir=/lib --mandir=\$${prefix}/share/man \
-	    --infodir=\$${prefix}/share/info --enable-shared --disable-static \
+	    --infodir=\$${prefix}/share/info --enable-mtrace \
+	    --enable-shared --disable-static \
 	    --build=$(DEB_BUILD_GNU_TYPE) --host=$(DEB_HOST_GNU_TYPE) \
 	    --without-readline $(CONFDEVMAPPER) \
 		$(CONFFLAGS)
 	touch $@
 
-build-dbg/config.status: debian/stamp-autoreconf
-	dh_testdir
-	[ -d build-dbg ] || mkdir build-dbg
-
-#	 Add here commands to configure the package.
-	cd build-dbg && $(buildflags) ../configure --prefix=/usr \
-	    --enable-mtrace --disable-shared $(CONFFLAGS) \
-	    --build=$(DEB_BUILD_GNU_TYPE) --host=$(DEB_HOST_GNU_TYPE) \
-	    $(CONFDEVMAPPER)
-
-	touch $@
-
-build build-arch: build-deb build-udeb build-dbg
+build build-arch: build-deb build-udeb
 build-indep: build-deb
 
 build-deb: build-deb/build-stamp
@@ -242,27 +232,14 @@ build-udeb/build-stamp: build-udeb/config.status
 
 	touch $@
 
-build-dbg: build-dbg/build-stamp
-build-dbg/build-stamp: build-dbg/config.status
-	dh_testdir
-
-#	 Add here commands to compile the package.
-#	 Don't need to build headers or doco rubbish, just the library ...
-#	 Note: this assumes that the library source code is in the
-#	 libparted directory, change this if it isn't ...
-	$(MAKE) -C build-dbg/lib
-	$(MAKE) -C build-dbg/libparted
-
-	touch $@
-
 clean: unpatch packaging-files
 	dh_testdir
 	dh_testroot
 
 #	 Add here commands to clean up after the build process
 	rm -rf packaging-files
-	rm -rf install install-deb install-udeb install-dbg
-	rm -rf build build-deb build-udeb build-dbg
+	rm -rf install install-deb install-udeb
+	rm -rf build build-deb build-udeb
 
 #	 Remove all debian/libparted*.* except for libparted.*,
 #	 libparted-dev.*, and libparted-i18n.*
@@ -281,10 +258,10 @@ clean: unpatch packaging-files
 	rm -f debian/stamp-autoreconf
 	dh_clean
 
-install: install-deb install-udeb install-dbg
+install: install-deb install-udeb
 	touch $@
 
-install-deb: DH_OPTIONS=-Nparted$(BINPKGVER)-udeb -Nlibparted$(LIBSONAME)-udeb -Nlibparted$(LIBSONAME)debian1-dbg
+install-deb: DH_OPTIONS=-Nparted$(BINPKGVER)-udeb -Nlibparted$(LIBSONAME)-udeb
 install-deb: build-deb packaging-files
 	dh_testdir
 	dh_testroot
@@ -357,21 +334,11 @@ install-udeb: build-udeb
 			DESTDIR=$(CURDIR)/debian/parted$(BINPKGVER)-udeb
 	touch $@
 
-install-dbg: DH_OPTIONS=-plibparted$(LIBSONAME)debian1-dbg
-install-dbg: build-dbg
-	dh_testdir
-	dh_testroot
-	dh_prep -plibparted$(LIBSONAME)debian1-dbg
-
-	install -D -m644 build-dbg/libparted/.libs/libparted.a \
-	   debian/libparted$(LIBSONAME)debian1-dbg/usr/lib/libparted_g.a
-	touch $@
-
-# This single target is used to build all the packages, all at once, or
-# one at a time. So keep in mind: any options passed to commands here will
-# affect _all_ packages. Anything you want to only affect one package
-# should be put in another target, such as the install target.
-binary-common:
+# Build architecture-independent packages.
+# Unfortunately, we still need to build since the info file has to be
+# re-generated before installation and the locales need to be installed :-(
+binary-indep: DH_OPTIONS=-i
+binary-indep: build-deb install-deb
 	dh_testdir
 	dh_testroot
 	dh_installdocs
@@ -382,7 +349,30 @@ binary-common:
 	dh_installman
 	dh_installinfo
 	dh_lintian
-	dh_strip
+	dh_link
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+# Build architecture-dependent packages.
+binary-arch: DH_OPTIONS=-a
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installchangelogs
+	dh_installexamples
+	dh_installmenu
+	dh_installcron
+	dh_installman
+	dh_installinfo
+	dh_lintian
+	dh_strip -plibparted$(LIBSONAME)debian1 \
+		--dbg-package=libparted$(LIBSONAME)debian1-dbg
+	dh_strip -Nlibparted$(LIBSONAME)debian1
 	dh_link
 	dh_compress
 	dh_fixperms
@@ -395,32 +385,12 @@ binary-common:
 	dh_md5sums
 	dh_builddeb
 
-# Build architecture independant packages using the common target.
-# Unfortunately, we still need to build since the info file has to be
-# re-generated before installation and the locales need to be installed :-(
-
-binary-indep: build-deb install-deb
-# (Uncomment this next line if you have such packages.)
-	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
-
-# Build architecture dependant packages using the common target.
-# FIXME: this is an ugly hack :-( Work out a better way to build the
-# separate debug package ...
-
-binary-arch: build install
-	$(MAKE) -f debian/rules DH_OPTIONS="-a -Nlibparted$(LIBSONAME)debian1-dbg" binary-common
-	$(MAKE) -f debian/rules binary-libparted$(LIBSONAME)debian1-dbg
-
-# Any other binary targets build just one binary package at a time.
-binary-%-dbg: build-dbg install-dbg
-	$(MAKE) -f debian/rules DH_OPTIONS="-p$(*)-dbg" binary-common
-
 binary: binary-arch binary-indep
 
 include /usr/share/quilt/quilt.make
 
-.PHONY: build-deb build-udeb build-dbg build
-.PHONY: install-deb install-udeb install-dbg install
+.PHONY: build-deb build-udeb build
+.PHONY: install-deb install-udeb install
 .PHONY: binary-indep binary-arch binary
-.PHONY: binary-arch binary-indep binary-%-dbg binary
+.PHONY: binary-arch binary-indep binary
 .PHONY: packaging-files clean

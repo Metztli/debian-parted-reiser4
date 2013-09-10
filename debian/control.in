@@ -141,7 +141,7 @@ Package: libparted@LIBSONAME@debian1-dbg
 Architecture: any
 Section: debug
 Priority: extra
-Depends: libparted@LIBSONAME@debian1 (= ${binary:Version}), libparted@LIBSONAME@-dev (= ${binary:Version}), ${misc:Depends}
+Depends: libparted@LIBSONAME@debian1 (= ${binary:Version}), ${misc:Depends}
 Conflicts: libparted-dbg
 Replaces: libparted-dbg, libparted0-dbg (<< 2.2-4)
 Provides: libparted-dbg
@@ -151,12 +151,8 @@ Description: disk partition manipulator - debugging symbols
  for new operating systems, reorganizing disk usage, and copying data
  to new hard disks.
  .
- This package contains the debugging static library for libparted,
- which is really only of interest to parted developers who need to
- debug their programs.
- .
- The debugging libraries are installed as /usr/lib/libparted_g.a
- Link specifically with them if you want to debug.
+ This package contains debugging symbols for libparted, which are really
+ only of interest to parted developers who need to debug their programs.
 
 Package: parted@BINPKGVER@-doc
 Architecture: all
