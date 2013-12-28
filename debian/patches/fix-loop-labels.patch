@@ -1,0 +1,350 @@
+From: Phillip Susi <psusi@ubuntu.com>
+Subject: Fix loop labels
+Description: Loop labels were incorrectly identifying the device
+ for the fictional partition as $dev1 instead of just $dev.
+ This caused other programs like gparted to be confused,
+ and caused parted to fail to identify the partition as busy
+ due to the fact that it was looking for the wrong device.
+ Parted also actually created the partition device so your
+ raw fs on $dev gained an alias as $dev1.  Finally, writing
+ the label back to the disk clobbered the filesystem there if
+ it used the first sector.  Several filesystems end up using
+ the first sector for 2048/4096 byte sectors even though they
+ don't for 512/1024 byte sectors.
+Forwarded: yes
+
+---
+ NEWS                       |  2 +
+ include/parted/device.in.h |  1 +
+ libparted/arch/linux.c     | 17 ++++++--
+ libparted/disk.c           |  2 +
+ libparted/labels/loop.c    |  4 +-
+ partprobe/partprobe.c      |  4 +-
+ tests/Makefile.am          |  1 +
+ tests/t1102-loop-label.sh  | 96 ++++++++++++++++++++++++++++++++++++++++++++++
+ 8 files changed, 120 insertions(+), 7 deletions(-)
+ create mode 100644 tests/t1102-loop-label.sh
+
+Index: b/libparted/arch/linux.c
+===================================================================
+--- a/libparted/arch/linux.c
++++ b/libparted/arch/linux.c
+@@ -48,6 +48,7 @@
+ 
+ #include "../architecture.h"
+ #include "dirname.h"
++#include "xalloc.h"
+ 
+ #if ENABLE_NLS
+ #  include <libintl.h>
+@@ -2280,11 +2281,14 @@
+         result = (char*) ped_malloc (result_len);
+         if (!result)
+                 return NULL;
++        /* bare device, no partitions */
++        if (dev->loop)
++                strcpy(result, devpath);
+ 
+         /* Check for devfs-style /disc => /partN transformation
+            unconditionally; the system might be using udev with devfs rules,
+            and if not the test is harmless. */
+-        if (!strcmp (devpath + path_len - 5, "/disc")) {
++        else if (!strcmp (devpath + path_len - 5, "/disc")) {
+                 /* replace /disc with /path%d */
+                 strcpy (result, devpath);
+                 snprintf (result + path_len - 5, 16, "/part%d", num);
+@@ -2367,18 +2371,6 @@
+ }
+ 
+ static int
+-_has_partitions (const PedDisk* disk)
+-{
+-        PED_ASSERT(disk != NULL, return 0);
+-
+-        /* Some devices can't be partitioned. */
+-        if (!strcmp (disk->type->name, "loop"))
+-                return 0;
+-
+-        return 1;
+-}
+-
+-static int
+ linux_partition_is_busy (const PedPartition* part)
+ {
+         PedPartition*   walk;
+@@ -2421,9 +2413,6 @@
+         PED_ASSERT(disk->dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0,
+                    return 0);
+ 
+-        if (!_has_partitions (disk))
+-                return 0;
+-
+         if (ped_disk_type_check_feature (disk->type,
+                                          PED_DISK_TYPE_PARTITION_NAME))
+                 vol_name = ped_partition_get_name (part);
+@@ -2472,9 +2461,6 @@
+ {
+         struct blkpg_partition  linux_part;
+ 
+-        if (!_has_partitions (disk))
+-                return 0;
+-
+         memset (&linux_part, 0, sizeof (linux_part));
+         linux_part.pno = n;
+         return _blkpg_part_command (disk->dev, &linux_part,
+@@ -2708,7 +2694,10 @@
+         int i;
+         /* remove old partitions first */
+         for (i = 1; i <= lpn; i++) {
+-                PedPartition *part = ped_disk_get_partition (disk, i);
++                PedPartition *part;
++                if (disk->dev->loop)
++                        part = 0;
++                else part = ped_disk_get_partition (disk, i);
+                 if (part) {
+                         unsigned long long length;
+                         unsigned long long start;
+@@ -2739,7 +2728,10 @@
+                         ok[i-1] = 1; /* it already doesn't exist */
+         }
+         for (i = 1; i <= lpn; i++) {
+-                PedPartition *part = ped_disk_get_partition (disk, i);
++                PedPartition *part;
++                if (disk->dev->loop)
++                        part = 0;
++                else part = ped_disk_get_partition (disk, i);
+                 if (part) {
+                         unsigned long long length;
+                         unsigned long long start;
+@@ -2933,9 +2925,6 @@
+         char*           params = NULL;
+         LinuxSpecific*  arch_specific = LINUX_SPECIFIC (disk->dev);
+ 
+-        if (!_has_partitions(disk))
+-                return 0;
+-
+         /* Get map name from devicemapper */
+         struct dm_task *task = dm_task_create (DM_DEVICE_INFO);
+         if (!task)
+@@ -3037,9 +3026,6 @@
+ {
+         int ret = 1;
+ 
+-        if (!_has_partitions (disk))
+-                return 1;
+-
+         /* Modern versions of udev may notice the write activity on
+          * partition devices caused by _flush_cache, and may decide to
+          * synthesise some change events as a result. These may in turn run
+Index: b/libparted/disk.c
+===================================================================
+--- a/libparted/disk.c
++++ b/libparted/disk.c
+@@ -197,6 +197,7 @@
+ 	disk = ped_disk_new_fresh (dev, type);
+ 	if (!disk)
+ 		goto error_close_dev;
++	dev->loop = 0;
+ 	if (!type->ops->read (disk))
+ 		goto error_destroy_disk;
+ 	disk->needs_clobber = 0;
+@@ -497,6 +498,7 @@
+ 			goto error_close_dev;
+ 		disk->needs_clobber = 0;
+ 	}
++	disk->dev->loop = 0;
+ 	if (!disk->type->ops->write (disk))
+ 		goto error_close_dev;
+ 	ped_device_close (disk->dev);
+Index: b/libparted/labels/loop.c
+===================================================================
+--- a/libparted/labels/loop.c
++++ b/libparted/labels/loop.c
+@@ -80,7 +80,10 @@
+ 
+ 	if (dev->length < 256)
+ 		return NULL;
+-	return _ped_disk_alloc ((PedDevice*)dev, &loop_disk_type);
++	PedDisk *disk = _ped_disk_alloc ((PedDevice*)dev, &loop_disk_type);
++	if (disk)
++		disk->disk_specific = (void *)0;
++	return disk;
+ }
+ 
+ static PedDisk*
+@@ -118,18 +121,12 @@
+ 
+         int found_sig = !strncmp (buf, LOOP_SIGNATURE, strlen (LOOP_SIGNATURE));
+         free (buf);
+-
+-        if (found_sig) {
+-		ped_constraint_destroy (constraint_any);
+-		return 1;
+-        }
+-
+ 	geom = ped_geometry_new (dev, 0, dev->length);
+ 	if (!geom)
+ 		goto error;
+ 
+ 	fs_type = ped_file_system_probe (geom);
+-	if (!fs_type)
++	if (!fs_type && !found_sig)
+ 		goto error_free_geom;
+ 
+ 	part = ped_partition_new (disk, PED_PARTITION_NORMAL,
+@@ -142,6 +139,8 @@
+ 	if (!ped_disk_add_partition (disk, part, constraint_any))
+ 		goto error;
+ 	ped_constraint_destroy (constraint_any);
++	dev->loop = 1;
++	disk->disk_specific = (void *)1; /* don't rewrite label */
+ 	return 1;
+ 
+ error_free_geom:
+@@ -156,29 +155,17 @@
+ loop_write (const PedDisk* disk)
+ {
+ 	size_t buflen = disk->dev->sector_size;
+-	char *buf = ped_malloc (buflen);
+-	if (buf == NULL)
+-		return 0;
+-
+-	if (ped_disk_get_partition (disk, 1)) {
+-		if (!ped_device_read (disk->dev, buf, 0, 1)) {
+-			free (buf);
+-			return 0;
+-		}
+-		if (strncmp (buf, LOOP_SIGNATURE, strlen (LOOP_SIGNATURE)) != 0) {
+-			free (buf);
+-			return 1;
+-                }
+-		memset (buf, 0, strlen (LOOP_SIGNATURE));
+-		return ped_device_write (disk->dev, buf, 0, 1);
+-	}
++	char *buf = alloca (buflen);
++	disk->dev->loop = 1;
++	/* only write label after creating it new */
++	if (disk->disk_specific)
++ 		return 1;
+ 
+ 	memset (buf, 0, buflen);
+ 	strcpy (buf, LOOP_SIGNATURE);
+-
+-        int write_ok = ped_device_write (disk->dev, buf, 0, 1);
+-        free (buf);
+-	return write_ok;
++        if (!ped_device_write (disk->dev, buf, 0, 1))
++		return 0;
++	return 1;
+ }
+ #endif /* !DISCOVER_ONLY */
+ 
+Index: b/partprobe/partprobe.c
+===================================================================
+--- a/partprobe/partprobe.c
++++ b/partprobe/partprobe.c
+@@ -109,8 +109,6 @@
+ 	PedDisk*	disk;
+ 
+ 	disk_type = ped_disk_probe (dev);
+-	if (!disk_type || !strcmp (disk_type->name, "loop"))
+-		return 1;
+ 
+ 	disk = ped_disk_new (dev);
+ 	if (!disk)
+Index: b/include/parted/device.h
+===================================================================
+--- a/include/parted/device.h
++++ b/include/parted/device.h
+@@ -93,6 +93,7 @@
+         short           host, did;
+ 
+         void*           arch_specific;
++        int             loop;           /* using "loop" partition table */
+ };
+ 
+ #include <parted/natmath.h>
+Index: b/libparted/labels/dos.c
+===================================================================
+--- a/libparted/labels/dos.c
++++ b/libparted/labels/dos.c
+@@ -165,12 +165,23 @@
+ 
+ static PedDiskType msdos_disk_type;
+ 
++PedGeometry*
++fat_probe_fat16 (PedGeometry* geom);
++
++PedGeometry*
++fat_probe_fat32 (PedGeometry* geom);
++
++PedGeometry*
++ntfs_probe (PedGeometry* geom);
++
+ static int
+ msdos_probe (const PedDevice *dev)
+ {
+ 	PedDiskType*	disk_type;
+ 	DosRawTable*	part_table;
+ 	int		i;
++	PedGeometry *geom = NULL;
++	PedGeometry *fsgeom = NULL;
+ 
+ 	PED_ASSERT (dev != NULL, return 0);
+ 
+@@ -187,6 +198,19 @@
+ 	if (PED_LE16_TO_CPU (part_table->magic) != MSDOS_MAGIC)
+ 		goto probe_fail;
+ 
++	geom = ped_geometry_new (dev, 0, dev->length);
++	PED_ASSERT (geom, return 0);
++	fsgeom = fat_probe_fat16 (geom);
++	if (fsgeom)
++		goto probe_fail; /* fat fs looks like dos mbr */
++	fsgeom = fat_probe_fat32 (geom);
++	if (fsgeom)
++		goto probe_fail; /* fat fs looks like dos mbr */
++	fsgeom = ntfs_probe (geom);
++	if (fsgeom)
++		goto probe_fail; /* ntfs fs looks like dos mbr */
++	ped_geometry_destroy (geom);
++	geom = NULL;
+ 	/* If this is a FAT fs, fail here.  Checking for the FAT signature
+ 	 * has some false positives; instead, do what the Linux kernel does
+ 	 * and ensure that each partition has a boot indicator that is
+@@ -225,6 +249,10 @@
+ 	return 1;
+ 
+  probe_fail:
++	if (geom)
++		ped_geometry_destroy (geom);
++	if (fsgeom)
++		ped_geometry_destroy (fsgeom);
+ 	free (label);
+ 	return 0;
+ }
+Index: b/libparted/fs/ntfs/ntfs.c
+===================================================================
+--- a/libparted/fs/ntfs/ntfs.c
++++ b/libparted/fs/ntfs/ntfs.c
+@@ -34,7 +34,7 @@
+ 
+ #define NTFS_SIGNATURE	"NTFS"
+ 
+-static PedGeometry*
++PedGeometry*
+ ntfs_probe (PedGeometry* geom)
+ {
+ 	char	buf[512];
+Index: b/scripts/data/abi/baseline_symbols.txt
+===================================================================
+--- a/scripts/data/abi/baseline_symbols.txt
++++ b/scripts/data/abi/baseline_symbols.txt
+@@ -226,6 +226,7 @@
+ FUNC:locale_charset
+ FUNC:mdir_name
+ FUNC:mmalloca
++FUNC:ntfs_probe
+ FUNC:parse_long_options
+ FUNC:ped_alignment_align_down
+ FUNC:ped_alignment_align_nearest

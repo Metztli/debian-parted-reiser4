@@ -51,3 +51,4 @@ linux-specific-gpt-type.patch
 # Symbols for this ABI (amd64 as reference)
 update-abi-symbols.patch
 
+fix-loop-labels.patch
