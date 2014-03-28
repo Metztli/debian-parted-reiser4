@@ -1,4 +1,4 @@
-parted (2.3-17) unstable; urgency=low
+parted (2.3-17) UNRELEASED; urgency=low
 
   [ Phillip Susi ]
   * avoid-disturbing-partitions.patch: remove all old partitions (that are
