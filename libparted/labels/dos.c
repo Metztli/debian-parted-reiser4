@@ -1185,13 +1185,18 @@ msdos_write (const PedDisk* disk)
 	if (!table->mbr_signature)
 		table->mbr_signature = generate_random_id();
 
-	memset (table->partitions, 0, sizeof (table->partitions));
-	table->magic = PED_CPU_TO_LE16 (MSDOS_MAGIC);
+	if (table->magic != PED_CPU_TO_LE16 (MSDOS_MAGIC)) {
+		memset (table->partitions, 0, sizeof (table->partitions));
+		table->magic = PED_CPU_TO_LE16 (MSDOS_MAGIC);
+	}
 
 	for (i=1; i<=DOS_N_PRI_PARTITIONS; i++) {
 		part = ped_disk_get_partition (disk, i);
-		if (!part)
+		if (!part) {
+			if (table->partitions [i - 1].type != PARTITION_EMPTY)
+				memset (&table->partitions [i - 1], 0, sizeof (DosRawPartition));
 			continue;
+		}
 
 		if (!fill_raw_part (&table->partitions [i - 1], part, 0))
 			goto write_fail;
