@@ -1398,7 +1398,7 @@ do_print (PedDevice** dev)
                                          "cpqarray", "file", "ataraid", "i2o",
                                          "ubd", "dasd", "viodasd", "sx8", "dm",
                                          "xvd", "sd/mmc", "virtblk", "aoe",
-                                         "md"};
+                                         "md", "loop"};
         char*           peek_word;
         char*           start;
         char*           end;
