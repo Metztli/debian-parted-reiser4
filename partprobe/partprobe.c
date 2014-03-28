@@ -109,8 +109,6 @@ process_dev (PedDevice* dev)
 	PedDisk*	disk;
 
 	disk_type = ped_disk_probe (dev);
-	if (!disk_type || !strcmp (disk_type->name, "loop"))
-		return 1;
 
 	disk = ped_disk_new (dev);
 	if (!disk)

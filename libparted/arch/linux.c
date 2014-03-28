@@ -48,6 +48,7 @@
 
 #include "../architecture.h"
 #include "dirname.h"
+#include "xalloc.h"
 
 #if ENABLE_NLS
 #  include <libintl.h>
@@ -2280,11 +2281,14 @@ _device_get_part_path (PedDevice* dev, int num)
         result = (char*) ped_malloc (result_len);
         if (!result)
                 return NULL;
+        /* bare device, no partitions */
+        if (dev->loop)
+                strcpy(result, devpath);
 
         /* Check for devfs-style /disc => /partN transformation
            unconditionally; the system might be using udev with devfs rules,
            and if not the test is harmless. */
-        if (!strcmp (devpath + path_len - 5, "/disc")) {
+        else if (!strcmp (devpath + path_len - 5, "/disc")) {
                 /* replace /disc with /path%d */
                 strcpy (result, devpath);
                 snprintf (result + path_len - 5, 16, "/part%d", num);
@@ -2367,18 +2371,6 @@ _partition_is_mounted (const PedPartition *part)
 }
 
 static int
-_has_partitions (const PedDisk* disk)
-{
-        PED_ASSERT(disk != NULL, return 0);
-
-        /* Some devices can't be partitioned. */
-        if (!strcmp (disk->type->name, "loop"))
-                return 0;
-
-        return 1;
-}
-
-static int
 linux_partition_is_busy (const PedPartition* part)
 {
         PedPartition*   walk;
@@ -2420,9 +2412,6 @@ _blkpg_add_partition (PedDisk* disk, const PedPartition *part)
         PED_ASSERT(disk != NULL, return 0);
         PED_ASSERT(disk->dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0,
                    return 0);
-
-        if (!_has_partitions (disk))
-                return 0;
 
         if (ped_disk_type_check_feature (disk->type,
                                          PED_DISK_TYPE_PARTITION_NAME))
@@ -2471,9 +2460,6 @@ static int
 _blkpg_remove_partition (PedDisk* disk, int n)
 {
         struct blkpg_partition  linux_part;
-
-        if (!_has_partitions (disk))
-                return 0;
 
         memset (&linux_part, 0, sizeof (linux_part));
         linux_part.pno = n;
@@ -2708,7 +2694,10 @@ _disk_sync_part_table (PedDisk* disk)
         int i;
         /* remove old partitions first */
         for (i = 1; i <= lpn; i++) {
-                PedPartition *part = ped_disk_get_partition (disk, i);
+                PedPartition *part;
+                if (disk->dev->loop)
+                        part = 0;
+                else part = ped_disk_get_partition (disk, i);
                 if (part) {
                         unsigned long long length;
                         unsigned long long start;
@@ -2729,7 +2718,10 @@ _disk_sync_part_table (PedDisk* disk)
                 unsigned int n_sleep = (max_sleep_seconds
                                         * 1000000 / sleep_microseconds);
                 do {
+                        int loop = disk->dev->loop;
+                        disk->dev->loop = 0; /* disable so we can remove non loop partitions */
                         ok[i-1] = remove_partition (disk, i);
+                        disk->dev->loop = loop;
                         errnums[i-1] = errno;
                         if (ok[i-1] || errnums[i-1] != EBUSY)
                                 break;
@@ -2739,7 +2731,10 @@ _disk_sync_part_table (PedDisk* disk)
                         ok[i-1] = 1; /* it already doesn't exist */
         }
         for (i = 1; i <= lpn; i++) {
-                PedPartition *part = ped_disk_get_partition (disk, i);
+                PedPartition *part;
+                if (disk->dev->loop)
+                        part = 0;
+                else part = ped_disk_get_partition (disk, i);
                 if (part) {
                         unsigned long long length;
                         unsigned long long start;
@@ -2933,9 +2928,6 @@ _dm_add_partition (PedDisk* disk, const PedPartition* part)
         char*           params = NULL;
         LinuxSpecific*  arch_specific = LINUX_SPECIFIC (disk->dev);
 
-        if (!_has_partitions(disk))
-                return 0;
-
         /* Get map name from devicemapper */
         struct dm_task *task = dm_task_create (DM_DEVICE_INFO);
         if (!task)
@@ -3036,9 +3028,6 @@ static int
 linux_disk_commit (PedDisk* disk)
 {
         int ret = 1;
-
-        if (!_has_partitions (disk))
-                return 1;
 
         /* Modern versions of udev may notice the write activity on
          * partition devices caused by _flush_cache, and may decide to
