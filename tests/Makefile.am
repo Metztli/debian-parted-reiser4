@@ -27,6 +27,7 @@ TESTS = \
   t0220-gpt-msftres.sh \
   t0250-gpt.sh \
   t0280-gpt-corrupt.sh \
+  t0290-gptsync.sh \
   t0300-dos-on-gpt.sh \
   t0400-loop-clobber-infloop.sh \
   t0500-dup-clobber.sh \
