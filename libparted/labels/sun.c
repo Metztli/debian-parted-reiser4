@@ -25,6 +25,7 @@
 #include <parted/debug.h>
 #include <parted/endian.h>
 #include <stdbool.h>
+#include <sys/types.h>
 
 #if ENABLE_NLS
 #  include <libintl.h>
