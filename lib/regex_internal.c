@@ -738,16 +738,18 @@ re_string_reconstruct (re_string_t *pstr, Idx idx, int eflags)
 			  unsigned char buf[6];
 			  size_t mbclen;
 
+			  const unsigned char *pp = p;
 			  if (BE (pstr->trans != NULL, 0))
 			    {
 			      int i = mlen < 6 ? mlen : 6;
 			      while (--i >= 0)
 				buf[i] = pstr->trans[p[i]];
+			      pp = buf;
 			    }
 			  /* XXX Don't use mbrtowc, we know which conversion
 			     to use (UTF-8 -> UCS4).  */
 			  memset (&cur_state, 0, sizeof (cur_state));
-			  mbclen = __mbrtowc (&wc2, (const char *) p, mlen,
+			  mbclen = __mbrtowc (&wc2, (const char *) pp, mlen,
 					      &cur_state);
 			  if (raw + offset - p <= mbclen
 			      && mbclen < (size_t) -2)
