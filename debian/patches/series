@@ -43,3 +43,4 @@ linux-specific-gpt-type.patch
 update-abi-symbols.patch
 fix-loop-labels.patch
 gpt-prep.patch
+new-style-readline-typedef.patch
