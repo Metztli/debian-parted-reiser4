@@ -226,6 +226,7 @@ FUNC:last_component
 FUNC:locale_charset
 FUNC:mdir_name
 FUNC:mmalloca
+FUNC:ntfs_probe
 FUNC:parse_long_options
 FUNC:ped_alignment_align_down
 FUNC:ped_alignment_align_nearest

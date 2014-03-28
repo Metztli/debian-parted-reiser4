@@ -80,7 +80,10 @@ loop_alloc (const PedDevice* dev)
 
 	if (dev->length < 256)
 		return NULL;
-	return _ped_disk_alloc ((PedDevice*)dev, &loop_disk_type);
+	PedDisk *disk = _ped_disk_alloc ((PedDevice*)dev, &loop_disk_type);
+	if (disk)
+		disk->disk_specific = (void *)0;
+	return disk;
 }
 
 static PedDisk*
@@ -118,18 +121,12 @@ loop_read (PedDisk* disk)
 
         int found_sig = !strncmp (buf, LOOP_SIGNATURE, strlen (LOOP_SIGNATURE));
         free (buf);
-
-        if (found_sig) {
-		ped_constraint_destroy (constraint_any);
-		return 1;
-        }
-
 	geom = ped_geometry_new (dev, 0, dev->length);
 	if (!geom)
 		goto error;
 
 	fs_type = ped_file_system_probe (geom);
-	if (!fs_type)
+	if (!fs_type && !found_sig)
 		goto error_free_geom;
 
 	part = ped_partition_new (disk, PED_PARTITION_NORMAL,
@@ -142,6 +139,8 @@ loop_read (PedDisk* disk)
 	if (!ped_disk_add_partition (disk, part, constraint_any))
 		goto error;
 	ped_constraint_destroy (constraint_any);
+	dev->loop = 1;
+	disk->disk_specific = (void *)1; /* don't rewrite label */
 	return 1;
 
 error_free_geom:
@@ -156,29 +155,17 @@ static int
 loop_write (const PedDisk* disk)
 {
 	size_t buflen = disk->dev->sector_size;
-	char *buf = ped_malloc (buflen);
-	if (buf == NULL)
-		return 0;
-
-	if (ped_disk_get_partition (disk, 1)) {
-		if (!ped_device_read (disk->dev, buf, 0, 1)) {
-			free (buf);
-			return 0;
-		}
-		if (strncmp (buf, LOOP_SIGNATURE, strlen (LOOP_SIGNATURE)) != 0) {
-			free (buf);
-			return 1;
-                }
-		memset (buf, 0, strlen (LOOP_SIGNATURE));
-		return ped_device_write (disk->dev, buf, 0, 1);
-	}
+	char *buf = alloca (buflen);
+	disk->dev->loop = 1;
+	/* only write label after creating it new */
+	if (disk->disk_specific)
+		return 1;
 
 	memset (buf, 0, buflen);
 	strcpy (buf, LOOP_SIGNATURE);
-
-        int write_ok = ped_device_write (disk->dev, buf, 0, 1);
-        free (buf);
-	return write_ok;
+        if (!ped_device_write (disk->dev, buf, 0, 1))
+		return 0;
+	return 1;
 }
 #endif /* !DISCOVER_ONLY */
 

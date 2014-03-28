@@ -34,7 +34,7 @@
 
 #define NTFS_SIGNATURE	"NTFS"
 
-static PedGeometry*
+PedGeometry*
 ntfs_probe (PedGeometry* geom)
 {
 	char	buf[512];
