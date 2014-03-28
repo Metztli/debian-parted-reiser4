@@ -2705,68 +2705,74 @@ _disk_sync_part_table (PedDisk* disk)
         int *errnums = ped_malloc(sizeof(int) * lpn);
         if (!errnums)
                 goto cleanup;
-
-        /* Attempt to remove each and every partition, retrying for
-           up to max_sleep_seconds upon any failure due to EBUSY. */
-        unsigned int sleep_microseconds = 10000;
-        unsigned int max_sleep_seconds = 1;
-        unsigned int n_sleep = (max_sleep_seconds
-                                * 1000000 / sleep_microseconds);
         int i;
-        for (i = 0; i < n_sleep; i++) {
-	    if (i)
-		usleep (sleep_microseconds);
-            bool busy = false;
-            int j;
-            for (j = 0; j < lpn; j++) {
-                if (!ok[j]) {
-                    ok[j] = remove_partition (disk, j + 1);
-                    errnums[j] = errno;
-                    if (!ok[j] && errnums[j] == EBUSY)
-                        busy = true;
-                }
-            }
-            if (!busy)
-                break;
-        }
-
+        /* remove old partitions first */
         for (i = 1; i <= lpn; i++) {
                 PedPartition *part = ped_disk_get_partition (disk, i);
                 if (part) {
-                        if (!ok[i - 1] && errnums[i - 1] == EBUSY) {
-                                unsigned long long length;
-                                unsigned long long start;
-                                /* get start and length of existing partition */
-                                if (!get_partition_start_and_length(part,
-                                                                    &start, &length))
-                                          goto cleanup;
-                                if (start == part->geom.start
-				    && length == part->geom.length)
-                                        ok[i - 1] = 1;
-#ifdef BLKPG_RESIZE_PARTITION
-                                if (start == part->geom.start
-                                    && length != part->geom.length)
-                                {
-                                        /* try to resize */
-                                        if (_blkpg_resize_partition (disk, part))
-                                                ok[i - 1] = 1;
-                                }
-#endif
-                                /* If the new partition is unchanged and the
-				   existing one was not removed because it was
-				   in use, then reset the error flag and do not
-				   try to add it since it is already there.  */
+                        unsigned long long length;
+                        unsigned long long start;
+                        /* get start and length of existing partition */
+                        if (get_partition_start_and_length(part,
+                                                            &start, &length)
+                            && start == part->geom.start
+                            && length == part->geom.length)
+                        {
+                                ok[i - 1] = 1;
                                 continue;
                         }
-
-                        /* add the (possibly modified or new) partition */
-                        if (!add_partition (disk, part)) {
-                                ped_exception_throw (
-                                        PED_EXCEPTION_ERROR,
-                                        PED_EXCEPTION_RETRY_CANCEL,
-                                        _("Failed to add partition %d (%s)"),
-                                        i, strerror (errno));
-                                goto cleanup;
+                }
+                /* Attempt to remove the partition, retrying for
+                   up to max_sleep_seconds upon any failure due to EBUSY. */
+                unsigned int sleep_microseconds = 10000;
+                unsigned int max_sleep_seconds = 1;
+                unsigned int n_sleep = (max_sleep_seconds
+                                        * 1000000 / sleep_microseconds);
+                do {
+                        ok[i-1] = remove_partition (disk, i);
+                        errnums[i-1] = errno;
+                        if (ok[i-1] || errnums[i-1] != EBUSY)
+                                break;
+                        usleep (sleep_microseconds);
+                } while (n_sleep--);
+                if (!ok[i-1] && errnums[i-1] == ENXIO)
+                        ok[i-1] = 1; /* it already doesn't exist */
+        }
+        for (i = 1; i <= lpn; i++) {
+                PedPartition *part = ped_disk_get_partition (disk, i);
+                if (part) {
+                        unsigned long long length;
+                        unsigned long long start;
+                        /* get start and length of existing partition */
+                        if (get_partition_start_and_length(part,
+                                                           &start, &length)
+                            && start == part->geom.start)
+                        {
+                                if (length == part->geom.length)
+                                {
+                                        ok[i - 1] = 1;
+                                        continue;
+                                }
+#ifdef BLKPG_RESIZE_PARTITION
+                                /* try to resize */
+                                if (_blkpg_resize_partition (disk, part))
+                                {
+                                        ok[i - 1] = 1;
+                                        continue;
+                                }
+#endif
+                        }
+                        if (ok[i-1]) {
+                                /* add the (possibly modified or new) partition */
+                                if (!add_partition (disk, part)) {
+                                        ped_exception_throw (
+                                                PED_EXCEPTION_ERROR,
+                                                PED_EXCEPTION_RETRY_CANCEL,
+                                                _("Failed to add partition %d (%s)"),
+                                                i, strerror (errno));
+                                        goto cleanup;
+                                }
+                                ok[i-1] = 1;
                         }
                 }
         }
