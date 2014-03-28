@@ -2198,7 +2198,6 @@ _device_get_part_path (PedDevice* dev, int num)
         } else if (dev->type == PED_DEVICE_DAC960
                         || dev->type == PED_DEVICE_CPQARRAY
                         || dev->type == PED_DEVICE_ATARAID
-                        || dev->type == PED_DEVICE_DM
                         || isdigit (dev->path[path_len - 1]))
                 snprintf (result, result_len, "%sp%d", dev->path, num);
         else
@@ -2716,7 +2715,10 @@ _dm_add_partition (PedDisk* disk, PedPartition* part)
 
         dev_name = dm_task_get_name (task);
 
-        if (asprintf (&vol_name, "%sp%d", dev_name, part->num) == -1)
+        if (isdigit (dev_name[strlen (dev_name) - 1])) {
+                if (asprintf (&vol_name, "%sp%d", dev_name, part->num) == -1)
+                        goto err;
+        } else if (asprintf (&vol_name, "%s%d", dev_name, part->num) == -1)
                 goto err;
 
         /* Caution: dm_task_destroy frees dev_name.  */
