@@ -287,6 +287,9 @@ struct blkdev_ioctl_param {
 
 static char* _device_get_part_path (PedDevice* dev, int num);
 static int _partition_is_mounted_by_path (const char* path);
+static int
+_dm_is_part (const char *path);
+
 
 static int
 _read_fd (int fd, char **buf)
@@ -504,12 +507,51 @@ _probe_dm_devices ()
                if (stat (buf, &st) != 0)
                        continue;
 
-               if (_is_dm_major(major(st.st_rdev)))
+               if (_is_dm_major(major(st.st_rdev)) &&
+		   (!_is_dmraid_device (buf) || !_dm_is_part(buf)))
                        _ped_device_probe (buf);
        }
        closedir (mapper_dir);
 
        return 1;
+}
+
+/* Checks whether the given device-mapper device is part of a dmraid array,
+ * by checking for the string "DMRAID-" at the start of the UUID.
+ */
+static int
+_is_dmraid_device (char* devpath)
+{
+        struct dm_task* task = NULL;
+        int             rc = 0;
+        const char*     dmraid_uuid;
+        char*           dm_name = NULL;
+
+        dm_name = strrchr (devpath, '/');
+        if (dm_name && *dm_name && *(++dm_name))
+                dm_name = strdup (dm_name);
+        else
+                dm_name = strdup (devpath);
+        if (!dm_name)
+                return 0;
+
+        task = dm_task_create (DM_DEVICE_DEPS);
+        if (!task)
+                return 0;
+
+        dm_task_set_name (task, dm_name);
+        if (!dm_task_run (task))
+                goto err;
+
+        dmraid_uuid = dm_task_get_uuid (task);
+        if (strncmp (dmraid_uuid, "DMRAID-", 7) == 0) {
+                rc = 1;
+        }
+
+err:
+        free (dm_name);
+        dm_task_destroy (task);
+        return rc;
 }
 #endif
 
@@ -2693,20 +2735,26 @@ _dm_remove_map_name(char *name)
         return 0;
 }
 
+/* We consider a dm device that is a linear mapping with a  *
+ * single target that also is a dm device to be a partition */
+
 static int
-_dm_is_part (struct dm_info *this, char *name)
+_dm_is_part (const char *path)
 {
         struct dm_task* task = NULL;
         struct dm_info* info = alloca(sizeof *info);
         struct dm_deps* deps = NULL;
         int             rc = 0;
         unsigned int    i;
+        char *target_type = NULL;
+        uint64_t start, length;
+        char *params;
 
         task = dm_task_create(DM_DEVICE_DEPS);
         if (!task)
                 return 0;
 
-        dm_task_set_name(task, name);
+        dm_task_set_name(task, path);
         if (!dm_task_run(task))
                 goto err;
 
@@ -2719,14 +2767,20 @@ _dm_is_part (struct dm_info *this, char *name)
         if (!deps)
                 goto err;
 
-        for (i = 0; i < deps->count; i++) {
-                unsigned int ma = major(deps->device[i]),
-                             mi = minor(deps->device[i]);
-
-                if (ma == this->major && mi == this->minor)
-                        rc = 1;
-        }
-
+        if (deps->count != 1)
+                goto err;
+        if (!_is_dm_major(major(deps->device[0])))
+                goto err;
+        dm_task_destroy(task);
+        if (!(task = dm_task_create(DM_DEVICE_TABLE)))
+                return 0;
+        dm_task_set_name(task, path);
+        if (!dm_task_run(task))
+                goto err;
+        dm_get_next_target(task, NULL, &start, &length, &target_type, &params);
+        if (strcmp (target_type, "linear"))
+                goto err;
+        rc = 1;
 err:
         dm_task_destroy(task);
         return rc;
