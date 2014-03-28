@@ -48,6 +48,7 @@ TESTS = \
   t2300-dos-label-extended-bootcode.sh \
   t2310-dos-extended-2-sector-min-offset.sh \
   t2400-dos-hfs-partition-type.sh \
+  t2500-freebsd-ufs.sh \
   t2500-probe-corrupt-hfs.sh \
   t3000-resize-fs.sh \
   t3200-resize-partition.sh \
