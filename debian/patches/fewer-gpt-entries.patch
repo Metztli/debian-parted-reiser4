@@ -32,7 +32,7 @@ Index: b/libparted/labels/gpt.c
 -        * sizeof (GuidPartitionEntry_t) / disk->dev->sector_size;
 +      size_t ss = disk->dev->sector_size;
 +      PedSector ptes_bytes = (gpt_disk_data->entry_count
-+      		 	          * sizeof (GuidPartitionEntry_t));
++                              * sizeof (GuidPartitionEntry_t));
 +      PedSector ptes_sectors = (ptes_bytes + ss - 1) / ss;
  
        gpt->MyLBA = PED_CPU_TO_LE64 (disk->dev->length - 1);
@@ -63,7 +63,7 @@ Index: b/libparted/labels/gpt.c
 -  ptes_size = sizeof (GuidPartitionEntry_t) * gpt_disk_data->entry_count;
 -  ptes = (GuidPartitionEntry_t *) ped_malloc (ptes_size);
 +  size_t ptes_bytes = (gpt_disk_data->entry_count
-+  	  	     * sizeof (GuidPartitionEntry_t));
++                       * sizeof (GuidPartitionEntry_t));
 +  GuidPartitionEntry_t *ptes = malloc (ptes_bytes);
    if (!ptes)
      goto error;

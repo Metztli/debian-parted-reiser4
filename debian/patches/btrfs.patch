@@ -58,7 +58,7 @@ Index: b/libparted/fs/btrfs/btrfs.c
 ===================================================================
 --- /dev/null
 +++ b/libparted/fs/btrfs/btrfs.c
-@@ -0,0 +1,102 @@
+@@ -0,0 +1,100 @@
 +/*
 +    libparted - a library for manipulating disk partitions
 +    Copyright (C) 2000, 2009 Free Software Foundation, Inc.
@@ -159,8 +159,6 @@ Index: b/libparted/fs/btrfs/btrfs.c
 +{
 +	ped_file_system_type_unregister (&btrfs_type);
 +}
-+
-+
 Index: b/libparted/libparted.c
 ===================================================================
 --- a/libparted/libparted.c

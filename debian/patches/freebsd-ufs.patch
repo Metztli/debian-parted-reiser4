@@ -97,7 +97,7 @@ Index: b/libparted/fs/ufs/ufs.c
 +
 +	if (geom->length < 5)
 +		return 0;
-+	
++
 +	/* The UFS superblock could be on four different positions */
 +	for (i = 0; i < 4; i++) {
 +		if (!ped_geometry_read (geom, buf, offsets[i], 3))

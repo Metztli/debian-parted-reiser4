@@ -225,7 +225,7 @@ Index: b/libparted/labels/loop.c
 +	disk->dev->loop = 1;
 +	/* only write label after creating it new */
 +	if (disk->disk_specific)
-+ 		return 1;
++		return 1;
  
  	memset (buf, 0, buflen);
  	strcpy (buf, LOOP_SIGNATURE);

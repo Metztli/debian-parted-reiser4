@@ -84,7 +84,7 @@ diff -Nurp a/libparted/fs/zfs/zfs.c b/libparted/fs/zfs/zfs.c
 +#define ZFS_SIGNATURE		0x00bab10c
 +
 +struct zfs_uberblock
-+{ 
++{
 +  uint64_t signature;
 +  uint64_t version;
 +};
