@@ -185,8 +185,8 @@ int ext2_set_block_state(struct ext2_fs *fs, blk_t block, int state, int updatem
 
 		fs->gd[group].bg_free_blocks_count = PED_CPU_TO_LE16
 			(EXT2_GROUP_FREE_BLOCKS_COUNT(fs->gd[group]) + diff);
-		fs->sb.s_free_blocks_count = PED_CPU_TO_LE32
-			(EXT2_SUPER_FREE_BLOCKS_COUNT(fs->sb) + diff);
+		ext2_super_free_blocks_count_set(&fs->sb,
+			EXT2_SUPER_FREE_BLOCKS_COUNT(fs->sb) + diff);
 		fs->metadirty |= EXT2_META_SB | EXT2_META_GD;
 	}
 	return 1;
@@ -606,7 +606,7 @@ int ext2_commit_metadata(struct ext2_fs *fs, int copies)
 	if (wmeta == EXT2_META_CLEAN)
 		return 1;
 
-	fs->sb.s_r_blocks_count = PED_CPU_TO_LE32 (
+	ext2_super_r_blocks_count_set(&fs->sb,
 		fs->r_frac * (loff_t)EXT2_SUPER_BLOCKS_COUNT(fs->sb)
 				  / 100);
 
@@ -722,7 +722,8 @@ struct ext2_fs *ext2_open(struct ext2_dev_handle *handle, int state)
 			    EXT2_FEATURE_COMPAT_HAS_DIR_INDEX)) ||
 	    (EXT2_SUPER_FEATURE_INCOMPAT(fs->sb)
 	    		& ~(EXT2_FEATURE_INCOMPAT_FILETYPE |
-			    EXT3_FEATURE_INCOMPAT_RECOVER)) ||
+			    EXT3_FEATURE_INCOMPAT_RECOVER |
+			    EXT4_FEATURE_INCOMPAT_64BIT)) ||
 	    (EXT2_SUPER_FEATURE_RO_COMPAT(fs->sb)
 			& ~(EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER |
 			    EXT2_FEATURE_RO_COMPAT_LARGE_FILE)))

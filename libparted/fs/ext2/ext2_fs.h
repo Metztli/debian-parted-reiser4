@@ -176,9 +176,9 @@ struct ext2_inode
 struct ext2_super_block
 {
 	uint32_t	s_inodes_count;		/* Inodes count */
-	uint32_t	s_blocks_count;		/* Blocks count */
-	uint32_t	s_r_blocks_count;	/* Reserved blocks count */
-	uint32_t	s_free_blocks_count;	/* Free blocks count */
+	uint32_t	s_blocks_count_lo;	/* Blocks count */
+	uint32_t	s_r_blocks_count_lo;	/* Reserved blocks count */
+	uint32_t	s_free_blocks_count_lo;	/* Free blocks count */
 	uint32_t	s_free_inodes_count;	/* Free inodes count */
 	uint32_t	s_first_data_block;	/* First Data Block */
 	uint32_t	s_log_block_size;	/* Block size */
@@ -237,9 +237,37 @@ struct ext2_super_block
 	uint32_t	s_journal_inum;		/* inode number of journal file */
 	uint32_t	s_journal_dev;		/* device number of journal file */
 	uint32_t	s_last_orphan;		/* start of list of inodes to delete */
+	uint32_t	s_hash_seed[4];		/* HTREE hash seed */
+	uint8_t		s_def_hash_version;	/* Default hash version to use */
+	uint8_t		s_reserved_char_pad;
+	uint16_t	s_desc_size;		/* size of group descriptor */
+	uint32_t	s_default_mount_opts;
+	uint32_t	s_first_meta_bg;	/* First metablock block group */
+	uint32_t	s_mkfs_time;		/* When the filesystem was created */
+	uint32_t	s_jnl_blocks[17];	/* Backup of the journal inode */
+	/* 64bit support valid if EXT4_FEATURE_INCOMPAT_64BIT */
+	uint32_t	s_blocks_count_hi;	/* Blocks count */
+	uint32_t	s_r_blocks_count_hi;	/* Reserved blocks count */
+	uint32_t	s_free_blocks_count_hi;	/* Free blocks count */
+	uint16_t	s_min_extra_isize;	/* All inodes have at least # bytes */
+	uint16_t	s_want_extra_isize;	/* New inodes should reserve # bytes */
+	uint32_t	s_flags;		/* Miscellaneous flags */
+	uint16_t	s_raid_stride;		/* RAID stride */
+	uint16_t	s_mmp_interval;		/* # seconds to wait in MMP checking */
+	uint64_t	s_mmp_block;		/* Block for multi-mount protection */
+	uint32_t	s_raid_stripe_width;	/* blocks on all data disks (N*stride) */
+	uint8_t		s_log_groups_per_flex;	/* FLEX_BG group size */
+	uint8_t		s_reserved_char_pad2;
+	uint16_t	s_reserved_pad;
 
-	uint32_t	s_reserved[197];	/* Padding to the end of the block */
+	uint32_t	s_reserved[162];	/* Padding to the end of the block */
 };
+
+#define EXT2_SUPER_FEATURE_COMPAT(sb)	(PED_LE32_TO_CPU((sb).s_feature_compat))
+#define EXT2_SUPER_FEATURE_INCOMPAT(sb) \
+		(PED_LE32_TO_CPU((sb).s_feature_incompat))
+#define EXT2_SUPER_FEATURE_RO_COMPAT(sb) \
+		(PED_LE32_TO_CPU((sb).s_feature_ro_compat))
 
 #define EXT2_DIRENT_INODE(dir_ent)	(PED_LE32_TO_CPU((dir_ent).inode))
 #define EXT2_DIRENT_REC_LEN(dir_ent)	(PED_LE16_TO_CPU((dir_ent).rec_len))
@@ -273,10 +301,45 @@ struct ext2_super_block
 #define EXT2_INODE_BLOCK(inode, blk)	(PED_LE32_TO_CPU((inode).i_block[blk]))
 
 #define EXT2_SUPER_INODES_COUNT(sb)	(PED_LE32_TO_CPU((sb).s_inodes_count))
-#define EXT2_SUPER_BLOCKS_COUNT(sb)	(PED_LE32_TO_CPU((sb).s_blocks_count))
-#define EXT2_SUPER_R_BLOCKS_COUNT(sb)	(PED_LE32_TO_CPU((sb).s_r_blocks_count))
+
+#define EXT2_SUPER_BLOCKS_COUNT(sb) \
+		((EXT2_SUPER_FEATURE_INCOMPAT((sb)) & EXT4_FEATURE_INCOMPAT_64BIT) \
+		 ? (((uint64_t) PED_LE32_TO_CPU((sb).s_blocks_count_hi) << 32) \
+		    | PED_LE32_TO_CPU((sb).s_blocks_count_lo)) \
+		 : PED_LE32_TO_CPU((sb).s_blocks_count_lo))
+#define EXT2_SUPER_R_BLOCKS_COUNT(sb) \
+		((EXT2_SUPER_FEATURE_INCOMPAT((sb)) & EXT4_FEATURE_INCOMPAT_64BIT) \
+		 ? (((uint64_t) PED_LE32_TO_CPU((sb).s_r_blocks_count_hi) << 32) \
+		    | PED_LE32_TO_CPU((sb).s_r_blocks_count_lo)) \
+		 : PED_LE32_TO_CPU((sb).s_r_blocks_count_lo))
+
 #define EXT2_SUPER_FREE_BLOCKS_COUNT(sb) \
-		(PED_LE32_TO_CPU((sb).s_free_blocks_count))
+		((EXT2_SUPER_FEATURE_INCOMPAT((sb)) & EXT4_FEATURE_INCOMPAT_64BIT) \
+		 ? (((uint64_t) PED_LE32_TO_CPU((sb).s_free_blocks_count_hi) << 32) \
+		    | PED_LE32_TO_CPU((sb).s_free_blocks_count_lo)) \
+		 : PED_LE32_TO_CPU((sb).s_free_blocks_count_lo))
+
+static inline void ext2_super_blocks_count_set(struct ext2_super_block *sb, uint64_t blk)
+{
+	sb->s_blocks_count_lo = PED_CPU_TO_LE32((uint32_t) blk);
+	if (EXT2_SUPER_FEATURE_INCOMPAT(*sb) & EXT4_FEATURE_INCOMPAT_64BIT)
+		sb->s_blocks_count_hi = PED_CPU_TO_LE32(blk >> 32);
+}
+
+static inline void ext2_super_free_blocks_count_set(struct ext2_super_block *sb, uint64_t blk)
+{
+	sb->s_free_blocks_count_lo = PED_CPU_TO_LE32((uint32_t) blk);
+	if (EXT2_SUPER_FEATURE_INCOMPAT(*sb) & EXT4_FEATURE_INCOMPAT_64BIT)
+		sb->s_free_blocks_count_hi = PED_CPU_TO_LE32(blk >> 32);
+}
+
+static inline void ext2_super_r_blocks_count_set(struct ext2_super_block *sb, uint64_t blk)
+{
+	sb->s_r_blocks_count_lo = PED_CPU_TO_LE32((uint32_t) blk);
+	if (EXT2_SUPER_FEATURE_INCOMPAT(*sb) & EXT4_FEATURE_INCOMPAT_64BIT)
+		sb->s_r_blocks_count_hi = PED_CPU_TO_LE32(blk >> 32);
+}
+
 #define EXT2_SUPER_FREE_INODES_COUNT(sb) \
 		(PED_LE32_TO_CPU((sb).s_free_inodes_count))
 #define EXT2_SUPER_FIRST_DATA_BLOCK(sb) \
@@ -310,11 +373,6 @@ struct ext2_super_block
 #define EXT2_SUPER_FIRST_INO(sb)	(PED_LE32_TO_CPU((sb).s_first_ino))
 #define EXT2_SUPER_INODE_SIZE(sb)	(PED_LE16_TO_CPU((sb).s_inode_size))
 #define EXT2_SUPER_BLOCK_GROUP_NR(sb)	(PED_LE16_TO_CPU((sb).s_block_group_nr))
-#define EXT2_SUPER_FEATURE_COMPAT(sb)	(PED_LE32_TO_CPU((sb).s_feature_compat))
-#define EXT2_SUPER_FEATURE_INCOMPAT(sb) \
-		(PED_LE32_TO_CPU((sb).s_feature_incompat))
-#define EXT2_SUPER_FEATURE_RO_COMPAT(sb) \
-		(PED_LE32_TO_CPU((sb).s_feature_ro_compat))
 #define EXT2_SUPER_UUID(sb)		((sb).s_uuid)
 #define EXT2_SUPER_VOLUME_NAME(sb)	((sb).s_volume_name)
 #define EXT2_SUPER_LAST_MOUNTED(sb)	((sb).s_last_mounted)

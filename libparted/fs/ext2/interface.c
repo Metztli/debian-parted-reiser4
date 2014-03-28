@@ -28,6 +28,7 @@
 
 static PedFileSystemType _ext2_type;
 static PedFileSystemType _ext3_type;
+static PedFileSystemType _ext4_type;
 
 struct ext2_dev_handle* ext2_make_dev_handle_from_parted_geometry(PedGeometry* geom);
 
@@ -51,29 +52,25 @@ _ext2_generic_probe (PedGeometry* geom, int expect_ext_ver)
 
 		is_ext3 = (EXT2_SUPER_FEATURE_COMPAT (*sb)
 			   & EXT3_FEATURE_COMPAT_HAS_JOURNAL) != 0;
-		if (is_ext3) {
-			is_ext4 = ((EXT2_SUPER_FEATURE_RO_COMPAT (*sb)
-				    & EXT4_FEATURE_RO_COMPAT_HUGE_FILE)
-				   || (EXT2_SUPER_FEATURE_RO_COMPAT (*sb)
-				       & EXT4_FEATURE_RO_COMPAT_GDT_CSUM)
-				   || (EXT2_SUPER_FEATURE_RO_COMPAT (*sb)
-				       & EXT4_FEATURE_RO_COMPAT_DIR_NLINK)
-				   || (EXT2_SUPER_FEATURE_INCOMPAT (*sb)
-				       & EXT4_FEATURE_INCOMPAT_EXTENTS)
-				   || (EXT2_SUPER_FEATURE_INCOMPAT (*sb)
-				       & EXT4_FEATURE_INCOMPAT_64BIT)
-				   || (EXT2_SUPER_FEATURE_INCOMPAT (*sb)
-				       & EXT4_FEATURE_INCOMPAT_FLEX_BG));
-			if (is_ext4)
-				is_ext3 = 0;
-		}
+		is_ext4 = ((EXT2_SUPER_FEATURE_RO_COMPAT (*sb)
+			    & EXT4_FEATURE_RO_COMPAT_HUGE_FILE)
+			   || (EXT2_SUPER_FEATURE_RO_COMPAT (*sb)
+			       & EXT4_FEATURE_RO_COMPAT_GDT_CSUM)
+			   || (EXT2_SUPER_FEATURE_RO_COMPAT (*sb)
+			       & EXT4_FEATURE_RO_COMPAT_DIR_NLINK)
+			   || (EXT2_SUPER_FEATURE_INCOMPAT (*sb)
+			       & EXT4_FEATURE_INCOMPAT_EXTENTS)
+			   || (EXT2_SUPER_FEATURE_INCOMPAT (*sb)
+			       & EXT4_FEATURE_INCOMPAT_64BIT)
+			   || (EXT2_SUPER_FEATURE_INCOMPAT (*sb)
+			       & EXT4_FEATURE_INCOMPAT_FLEX_BG));
 		free (sb);
 
 		if (expect_ext_ver == 2 && (is_ext3 || is_ext4))
 			return NULL;
-		if (expect_ext_ver == 3 && !is_ext3)
+		if (expect_ext_ver == 3 && (!is_ext3 || is_ext4))
 			return NULL;
-		else if (expect_ext_ver == 4 && !is_ext4)
+		if (expect_ext_ver == 4 && !is_ext4)
 			return NULL;
 
 		if (version > 0 && group_nr > 0) {
@@ -366,6 +363,18 @@ static PedFileSystemOps _ext3_ops = {
 
 static PedFileSystemOps _ext4_ops = {
 	probe:		_ext4_probe,
+#ifndef DISCOVER_ONLY
+	clobber:	_ext2_clobber,
+	open:		_ext2_open,
+	create:         NULL,
+	close:		_ext2_close,
+	check:          _ext2_check,
+	resize:		_ext2_resize,
+	copy:           NULL,
+	get_create_constraint:	_ext2_get_create_constraint,
+	get_copy_constraint:	NULL,
+	get_resize_constraint:	_ext2_get_resize_constraint
+#else /* !DISCOVER_ONLY */
 	clobber:	NULL,
 	open:		NULL,
 	create:         NULL,
@@ -376,6 +385,7 @@ static PedFileSystemOps _ext4_ops = {
 	get_create_constraint:	NULL,
 	get_copy_constraint:	NULL,
 	get_resize_constraint:	NULL
+#endif /* !DISCOVER_ONLY */
 };
 
 #define EXT23_BLOCK_SIZES ((int[6]){512, 1024, 2048, 4096, 8192, 0})

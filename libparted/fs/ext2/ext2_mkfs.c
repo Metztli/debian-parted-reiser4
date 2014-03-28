@@ -240,7 +240,7 @@ static int ext2_mkfs_write_meta(struct ext2_dev_handle *handle,
 		gd[i].bg_reserved[1] = 0;
 		gd[i].bg_reserved[2] = 0;
 
-		sb->s_free_blocks_count = PED_CPU_TO_LE32 (
+		ext2_super_free_blocks_count_set(sb,
 			EXT2_SUPER_FREE_BLOCKS_COUNT(*sb)
 			+ EXT2_GROUP_FREE_BLOCKS_COUNT(gd[i]));
 	}
@@ -425,14 +425,14 @@ static int ext2_mkfs_init_sb (struct ext2_super_block *sb, blk_t numblocks,
 	memset(sb, 0, 1024);
 
 	sb->s_inodes_count = PED_CPU_TO_LE32(numgroups * inodes_per_group);
-	sb->s_blocks_count = PED_CPU_TO_LE32(numblocks);
-	sb->s_r_blocks_count = PED_CPU_TO_LE32(((uint64_t)numblocks
+	ext2_super_blocks_count_set(sb, numblocks);
+	ext2_super_r_blocks_count_set(sb, ((uint64_t)numblocks
 				* reserved_block_percentage) / 100);
 
 	/* hack: this get's inc'd as we go through each group in
 	 * ext2_mkfs_write_meta()
 	 */
-	sb->s_free_blocks_count = 0;
+	ext2_super_free_blocks_count_set(sb, 0);
 	sb->s_free_inodes_count = PED_CPU_TO_LE32 (numgroups
 							* inodes_per_group);
 	sb->s_first_data_block = PED_CPU_TO_LE32(first_block);
