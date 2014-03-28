@@ -4,7 +4,7 @@ parted (2.3-17) UNRELEASED; urgency=low
   * avoid-disturbing-partitions.patch: remove all old partitions (that are
     not unchanged) first, then add new ones.  This avoids an EBUSY trying to
     add new partitions that overlap with old ones that have a higher number
-    (LP: #1220165).
+    (closes: #742847, LP: #1220165).
   * fix-loop-labels.patch: Fix loop labels (filesystem on whole disk
     device).
 
