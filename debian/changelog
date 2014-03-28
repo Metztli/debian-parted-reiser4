@@ -1,23 +1,18 @@
 parted (2.3-17) unstable; urgency=low
 
-  * Merge avoid-disturbing-partitions.patch from Ubuntu
-  * fix-loop-labels.patch: fix loop labels ( fs on whole disk device )
-
- -- Phillip Susi <psusi@ubuntu.com>  Fri, 27 Dec 2013 21:53:28 -0500
-
-parted (2.3-16ubuntu1) saucy; urgency=low
-
   [ Phillip Susi ]
-  * debian/patches/avoid-disturbing-partitions.patch: remove all old
-    partitions (that are not unchanged) first, then add new ones.  This
-    avoids an EBUSY trying to add new partitions that overlap with old ones
-    that have a higher number (LP: #1220165).
+  * avoid-disturbing-partitions.patch: remove all old partitions (that are
+    not unchanged) first, then add new ones.  This avoids an EBUSY trying to
+    add new partitions that overlap with old ones that have a higher number
+    (LP: #1220165).
+  * fix-loop-labels.patch: Fix loop labels (filesystem on whole disk
+    device).
 
   [ Colin Watson ]
-  * Slight tweak to the above to continue to handle entirely unchanged
-    partitions properly.
+  * Slight tweak to avoid-disturbing-partitions.patch to continue to handle
+    entirely unchanged partitions properly.
 
- -- Colin Watson <cjwatson@ubuntu.com>  Mon, 14 Oct 2013 22:03:35 +0100
+ -- Phillip Susi <psusi@ubuntu.com>  Fri, 27 Dec 2013 21:53:28 -0500
 
 parted (2.3-16) unstable; urgency=low
 
