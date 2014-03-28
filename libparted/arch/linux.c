@@ -2571,7 +2571,7 @@ _kernel_get_partition_start_and_length(PedPartition const *part,
 
 /*
  * The number of partitions that a device can have depends on the kernel.
- * If we don't find this value in /sys/block/DEV/range, we will use our own
+ * If we don't find this value in /sys/block/DEV/ext_range, we will use our own
  * value.
  */
 static unsigned int
@@ -2585,7 +2585,7 @@ _device_get_partition_range(PedDevice* dev)
         if (dev->type == PED_DEVICE_DM)
                 return MAX_NUM_PARTS;
 
-        r = snprintf(path, sizeof(path), "/sys/block/%s/range",
+        r = snprintf(path, sizeof(path), "/sys/block/%s/ext_range",
                      last_component(dev->path));
         if (r < 0 || r >= sizeof(path))
                 return MAX_NUM_PARTS;
