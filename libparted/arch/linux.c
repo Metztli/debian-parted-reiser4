@@ -26,6 +26,7 @@
 #include <parted/fdasd.h>
 #endif
 
+#include <stdlib.h>
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -2941,12 +2942,54 @@ _have_blkpg ()
         return have_blkpg = kver >= KERNEL_VERSION (2,4,0) ? 1 : 0;
 }
 
+static int
+_chrooted ()
+{
+        static int cached = -1;
+        struct stat root, init_root;
+
+        if (cached != -1)
+                return cached;
+
+        if (stat ("/", &root) || stat ("/proc/1/root", &init_root))
+                /* We can't tell, but are unlikely to be able to tell in the
+                 * future either.
+                 */
+                cached = 0;
+        else if (root.st_dev == init_root.st_dev &&
+                 root.st_ino == init_root.st_ino)
+                /* / has the same dev/ino as /sbin/init's root, so we're not
+                 * in a chroot.
+                 */
+                cached = 0;
+        else
+                /* We must be in a chroot. */
+                cached = 1;
+
+        return cached;
+}
+
 /* Return nonzero upon success, 0 if something fails.  */
 static int
 linux_disk_commit (PedDisk* disk)
 {
+        int ret = 1;
+
         if (!_has_partitions (disk))
                 return 1;
+
+        /* Modern versions of udev may notice the write activity on
+         * partition devices caused by _flush_cache, and may decide to
+         * synthesise some change events as a result. These may in turn run
+         * programs that open partition devices, which will race with us
+         * trying to remove those devices. To avoid this, we need to wait
+         * until udevd has finished processing its event queue.
+         * TODO: for upstream submission, this should check whether udevadm
+         * exists on $PATH.
+         */
+        if (!_chrooted () && system ("udevadm settle") != 0) {
+                /* ignore failures */
+        }
 
         if (disk->dev->type != PED_DEVICE_FILE) {
 
@@ -2957,10 +3000,20 @@ linux_disk_commit (PedDisk* disk)
 		assert (_have_blkpg ());
 
 		if (!_disk_sync_part_table (disk))
-			return 0;
+			ret = 0;
         }
 
-        return 1;
+out:
+        /* Now we wait for udevd to finish creating device nodes based on
+         * the above activity, so that callers can reliably use them.
+         * TODO: for upstream submission, this should check whether udevadm
+         * exists on $PATH.
+         */
+        if (!_chrooted () && system ("udevadm settle") != 0) {
+                /* ignore failures */
+        }
+
+        return ret;
 }
 
 #if USE_BLKID
