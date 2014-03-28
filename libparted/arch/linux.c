@@ -2212,19 +2212,6 @@ linux_partition_get_path (const PedPartition* part)
         return _device_get_part_path (part->disk->dev, part->num);
 }
 
-static dev_t
-_partition_get_part_dev (const PedPartition* part)
-{
-        struct stat dev_stat;
-        int dev_major, dev_minor;
-
-        if (stat (part->disk->dev->path, &dev_stat))
-                return (dev_t)0;
-        dev_major = major (dev_stat.st_rdev);
-        dev_minor = minor (dev_stat.st_rdev);
-        return (dev_t)makedev (dev_major, dev_minor + part->num);
-}
-
 static int
 _mount_table_search (const char* file_name, dev_t dev)
 {
@@ -2271,13 +2258,18 @@ _partition_is_mounted_by_path (const char *path)
 static int
 _partition_is_mounted (const PedPartition *part)
 {
-        dev_t dev;
+	char *part_name;
+	int status;
         if (!ped_partition_is_active (part))
                 return 0;
-        dev = _partition_get_part_dev (part);
-        if (!dev)
-                return 0;
-        return _partition_is_mounted_by_dev (dev);
+	part_name = _device_get_part_path (part->disk->dev, part->num);
+	if (!part_name)
+		return 1;
+        status = _partition_is_mounted_by_path (part_name);
+	free (part_name);
+	if (status)
+		return 1;
+	return 0;
 }
 
 static int
