@@ -197,6 +197,7 @@ ped_disk_new (PedDevice* dev)
 	disk = ped_disk_new_fresh (dev, type);
 	if (!disk)
 		goto error_close_dev;
+	dev->loop = 0;
 	if (!type->ops->read (disk))
 		goto error_destroy_disk;
 	disk->needs_clobber = 0;
@@ -497,6 +498,7 @@ ped_disk_commit_to_dev (PedDisk* disk)
 			goto error_close_dev;
 		disk->needs_clobber = 0;
 	}
+	disk->dev->loop = 0;
 	if (!disk->type->ops->write (disk))
 		goto error_close_dev;
 	ped_device_close (disk->dev);

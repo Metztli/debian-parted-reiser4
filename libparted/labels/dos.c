@@ -165,12 +165,23 @@ typedef struct {
 
 static PedDiskType msdos_disk_type;
 
+PedGeometry*
+fat_probe_fat16 (PedGeometry* geom);
+
+PedGeometry*
+fat_probe_fat32 (PedGeometry* geom);
+
+PedGeometry*
+ntfs_probe (PedGeometry* geom);
+
 static int
 msdos_probe (const PedDevice *dev)
 {
 	PedDiskType*	disk_type;
 	DosRawTable*	part_table;
 	int		i;
+	PedGeometry *geom = NULL;
+	PedGeometry *fsgeom = NULL;
 
 	PED_ASSERT (dev != NULL, return 0);
 
@@ -187,6 +198,19 @@ msdos_probe (const PedDevice *dev)
 	if (PED_LE16_TO_CPU (part_table->magic) != MSDOS_MAGIC)
 		goto probe_fail;
 
+	geom = ped_geometry_new (dev, 0, dev->length);
+	PED_ASSERT (geom, return 0);
+	fsgeom = fat_probe_fat16 (geom);
+	if (fsgeom)
+		goto probe_fail; /* fat fs looks like dos mbr */
+	fsgeom = fat_probe_fat32 (geom);
+	if (fsgeom)
+		goto probe_fail; /* fat fs looks like dos mbr */
+	fsgeom = ntfs_probe (geom);
+	if (fsgeom)
+		goto probe_fail; /* ntfs fs looks like dos mbr */
+	ped_geometry_destroy (geom);
+	geom = NULL;
 	/* If this is a FAT fs, fail here.  Checking for the FAT signature
 	 * has some false positives; instead, do what the Linux kernel does
 	 * and ensure that each partition has a boot indicator that is
@@ -225,6 +249,10 @@ msdos_probe (const PedDevice *dev)
 	return 1;
 
  probe_fail:
+	if (geom)
+		ped_geometry_destroy (geom);
+	if (fsgeom)
+		ped_geometry_destroy (fsgeom);
 	free (label);
 	return 0;
 }
