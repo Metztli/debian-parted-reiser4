@@ -2313,10 +2313,15 @@ _device_get_part_path (PedDevice *dev, int num)
         size_t path_len = strlen (devpath);
 
         char *result;
+
+        /* bare device, no partitions */
+        if (dev->loop)
+                result = strdup (devpath);
+
         /* Check for devfs-style /disc => /partN transformation
            unconditionally; the system might be using udev with devfs rules,
            and if not the test is harmless. */
-        if (5 < path_len && !strcmp (devpath + path_len - 5, "/disc")) {
+        else if (5 < path_len && !strcmp (devpath + path_len - 5, "/disc")) {
                 /* replace /disc with /part%d */
                 result = zasprintf ("%.*s/part%d",
                                     (int) (path_len - 5), devpath, num);
@@ -2731,7 +2736,10 @@ _disk_sync_part_table (PedDisk* disk)
         int i;
         /* remove old partitions first */
         for (i = 1; i <= lpn; i++) {
-                PedPartition *part = ped_disk_get_partition (disk, i);
+                PedPartition *part;
+                if (disk->dev->loop)
+                        part = 0;
+                else part = ped_disk_get_partition (disk, i);
                 if (part) {
                         unsigned long long length;
                         unsigned long long start;
@@ -2752,7 +2760,10 @@ _disk_sync_part_table (PedDisk* disk)
                 unsigned int n_sleep = (max_sleep_seconds
                                         * 1000000 / sleep_microseconds);
                 do {
+                        int loop = disk->dev->loop;
+                        disk->dev->loop = 0; /* disable so we can remove non loop partitions */
                         ok[i-1] = remove_partition (disk, i);
+                        disk->dev->loop = loop;
                         errnums[i-1] = errno;
                         if (ok[i-1] || errnums[i-1] != EBUSY)
                                 break;
@@ -2762,7 +2773,10 @@ _disk_sync_part_table (PedDisk* disk)
                         ok[i-1] = 1; /* it already doesn't exist */
         }
         for (i = 1; i <= lpn; i++) {
-                PedPartition *part = ped_disk_get_partition (disk, i);
+                PedPartition *part;
+                if (disk->dev->loop)
+                        part = 0;
+                else part = ped_disk_get_partition (disk, i);
                 if (part) {
                         unsigned long long length;
                         unsigned long long start;

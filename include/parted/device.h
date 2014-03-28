@@ -92,6 +92,7 @@ struct _PedDevice {
         short           host, did;
 
         void*           arch_specific;
+        int             loop;           /* using "loop" partition table */
 };
 
 #include <parted/natmath.h>

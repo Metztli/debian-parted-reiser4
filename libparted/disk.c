@@ -383,6 +383,7 @@ ped_disk_new_fresh (PedDevice* dev, const PedDiskType* type)
 	PED_ASSERT (disk->update_mode == 0);
 
 	disk->needs_clobber = 1;
+	dev->loop = 0;
 	return disk;
 
 error_destroy_disk:
@@ -495,6 +496,7 @@ ped_disk_commit_to_dev (PedDisk* disk)
 			goto error_close_dev;
 		disk->needs_clobber = 0;
 	}
+	disk->dev->loop = 0;
 	if (!disk->type->ops->write (disk))
 		goto error_close_dev;
 	ped_device_close (disk->dev);
