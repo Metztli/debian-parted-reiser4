@@ -1,11 +1,23 @@
-Description: Avoid assuming that gets is declared
+From a21d1dc4bd4d6f01ca11fd26a4ec24ccea9ed570 Mon Sep 17 00:00:00 2001
+From: Colin Watson <cjwatson@ubuntu.com>
+Date: Fri, 28 Mar 2014 17:10:15 +0000
+Subject: Avoid assuming that gets is declared
+
 Origin: backport, http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=66712c23388e93e5c518ebc8515140fa0c807348
 Forwarded: no
 Last-Update: 2012-11-06
 
+Patch-Name: gnulib-gets.patch
+---
+ lib/stdio.in.h | 6 ++++--
+ m4/stdio_h.m4  | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/lib/stdio.in.h b/lib/stdio.in.h
+index 79dda5f..6fb7681 100644
 --- a/lib/stdio.in.h
 +++ b/lib/stdio.in.h
-@@ -140,10 +140,12 @@
+@@ -140,10 +140,12 @@ _GL_WARN_ON_USE (fflush, "fflush is not always POSIX compliant - "
  #endif
  
  /* It is very rare that the developer ever has full control of stdin,
@@ -20,9 +32,11 @@ Last-Update: 2012-11-06
  
  #if @GNULIB_FOPEN@
  # if @REPLACE_FOPEN@
+diff --git a/m4/stdio_h.m4 b/m4/stdio_h.m4
+index f5650cd..d3edb42 100644
 --- a/m4/stdio_h.m4
 +++ b/m4/stdio_h.m4
-@@ -35,9 +35,9 @@
+@@ -35,9 +35,9 @@ AC_DEFUN([gl_STDIO_H],
  
    dnl Check for declarations of anything we want to poison if the
    dnl corresponding gnulib module is not in use, and which is not

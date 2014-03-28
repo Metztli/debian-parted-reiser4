@@ -1,8 +1,10 @@
+From c3e11a7f7bcd93ecc7b9511467909654ee88d86e Mon Sep 17 00:00:00 2001
 From: Aurelien Jarno <aurelien@aurel32.net>
-Subject: [PATCH] Add FreeBSD UFS support
+Date: Fri, 28 Mar 2014 17:09:46 +0000
+Subject: Add FreeBSD UFS support
 
 This patch adds support for detection of FreeBSD UFS file systems and
-creation of the partition on DOS and GPT labels. It doesn't use the 
+creation of the partition on DOS and GPT labels. It doesn't use the
 system of slices used by default on FreeBSD and places the partition
 directly in the dos label. This is something supported by the FreeBSD
 kernel, and the default on Debian GNU/kFreeBSD. Even on plain FreeBSD,
@@ -11,8 +13,18 @@ some persons prefer to not use slices.
 This patch is used by debian-installer on Debian GNU/kFreeBSD for some
 months already.
 
-Index: b/libparted/fs/ufs/ufs.c
-===================================================================
+Patch-Name: freebsd-ufs.patch
+---
+ libparted/fs/ufs/ufs.c     | 117 ++++++++++++++++++++++++++++++++++++++++++---
+ libparted/labels/dos.c     |   3 ++
+ libparted/labels/gpt.c     |   9 ++++
+ tests/Makefile.am          |   1 +
+ tests/t2500-freebsd-ufs.sh |  44 +++++++++++++++++
+ 5 files changed, 167 insertions(+), 7 deletions(-)
+ create mode 100644 tests/t2500-freebsd-ufs.sh
+
+diff --git a/libparted/fs/ufs/ufs.c b/libparted/fs/ufs/ufs.c
+index 04b4617..63d6af5 100644
 --- a/libparted/fs/ufs/ufs.c
 +++ b/libparted/fs/ufs/ufs.c
 @@ -48,6 +48,7 @@
@@ -23,7 +35,7 @@ Index: b/libparted/fs/ufs/ufs.c
  
  struct ufs_csum {
  	uint32_t	cs_ndir;	/* number of directories */
-@@ -132,13 +133,50 @@
+@@ -132,13 +133,50 @@ struct ufs_super_block {
  	int8_t		fs_clean;	/* file system is clean flag */
  	int8_t		fs_ronly;	/* mounted read-only flag */
  	int8_t		fs_flags;	/* currently unused flag */
@@ -81,7 +93,7 @@ Index: b/libparted/fs/ufs/ufs.c
  	union {
  		struct {
  			int32_t		fs_sparecon[53];/* reserved for future constants */
-@@ -242,6 +280,45 @@
+@@ -242,6 +280,45 @@ ufs_probe_hp (PedGeometry* geom)
  	return NULL;
  }
  
@@ -127,7 +139,7 @@ Index: b/libparted/fs/ufs/ufs.c
  #ifndef DISCOVER_ONLY
  static int
  ufs_clobber (PedGeometry* geom)
-@@ -293,6 +370,24 @@
+@@ -293,6 +370,24 @@ static PedFileSystemOps ufs_ops_hp = {
  	get_copy_constraint:	NULL
  };
  
@@ -152,7 +164,7 @@ Index: b/libparted/fs/ufs/ufs.c
  static PedFileSystemType ufs_type_sun = {
  	next:	NULL,
  	ops:	&ufs_ops_sun,
-@@ -307,6 +402,12 @@
+@@ -307,6 +402,12 @@ static PedFileSystemType ufs_type_hp = {
  	block_sizes: HP_UFS_BLOCK_SIZES
  };
  
@@ -165,7 +177,7 @@ Index: b/libparted/fs/ufs/ufs.c
  void
  ped_file_system_ufs_init ()
  {
-@@ -314,11 +415,13 @@
+@@ -314,11 +415,13 @@ ped_file_system_ufs_init ()
  
  	ped_file_system_type_register (&ufs_type_sun);
  	ped_file_system_type_register (&ufs_type_hp);
@@ -179,11 +191,11 @@ Index: b/libparted/fs/ufs/ufs.c
  	ped_file_system_type_unregister (&ufs_type_hp);
  	ped_file_system_type_unregister (&ufs_type_sun);
  }
-Index: b/libparted/labels/dos.c
-===================================================================
+diff --git a/libparted/labels/dos.c b/libparted/labels/dos.c
+index 47502bf..06466aa 100644
 --- a/libparted/labels/dos.c
 +++ b/libparted/labels/dos.c
-@@ -87,6 +87,7 @@
+@@ -87,6 +87,7 @@ static const char MBR_BOOT_CODE[] = {
  #define PARTITION_LINUX		0x83
  #define PARTITION_LINUX_EXT	0x85
  #define PARTITION_LINUX_LVM	0x8e
@@ -191,7 +203,7 @@ Index: b/libparted/labels/dos.c
  #define PARTITION_HFS		0xaf
  #define PARTITION_SUN_UFS	0xbf
  #define PARTITION_DELL_DIAG	0xde
-@@ -1382,6 +1383,8 @@
+@@ -1382,6 +1383,8 @@ msdos_partition_set_system (PedPartition* part,
  		dos_data->system = PARTITION_HFS;
  	else if (!strcmp (fs_type->name, "sun-ufs"))
  		dos_data->system = PARTITION_SUN_UFS;
@@ -200,11 +212,11 @@ Index: b/libparted/labels/dos.c
  	else if (is_linux_swap (fs_type->name))
  		dos_data->system = PARTITION_LINUX_SWAP;
  	else
-Index: b/libparted/labels/gpt.c
-===================================================================
+diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
+index 4aedd6d..e927b5b 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
-@@ -139,6 +139,10 @@
+@@ -139,6 +139,10 @@ typedef struct
      ((efi_guid_t) { PED_CPU_TO_LE32 (0x5265636F), PED_CPU_TO_LE16 (0x7665), \
                      PED_CPU_TO_LE16 (0x11AA), 0xaa, 0x11, \
                      { 0x00, 0x30, 0x65, 0x43, 0xEC, 0xAC }})
@@ -215,7 +227,7 @@ Index: b/libparted/labels/gpt.c
  
  struct __attribute__ ((packed)) _GuidPartitionTableHeader_t
  {
-@@ -1425,6 +1429,11 @@
+@@ -1425,6 +1429,11 @@ gpt_partition_set_system (PedPartition *part,
            gpt_part_data->type = PARTITION_SWAP_GUID;
            return 1;
          }
@@ -227,11 +239,11 @@ Index: b/libparted/labels/gpt.c
      }
  
    gpt_part_data->type = PARTITION_BASIC_DATA_GUID;
-Index: b/tests/Makefile.am
-===================================================================
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index aa67f99..ddd942e 100644
 --- a/tests/Makefile.am
 +++ b/tests/Makefile.am
-@@ -25,6 +25,7 @@
+@@ -25,6 +25,7 @@ TESTS = \
    t2300-dos-label-extended-bootcode.sh \
    t2310-dos-extended-2-sector-min-offset.sh \
    t2400-dos-hfs-partition-type.sh \
@@ -239,8 +251,9 @@ Index: b/tests/Makefile.am
    t3000-resize-fs.sh \
    t3200-type-change.sh \
    t3300-palo-prep.sh \
-Index: b/tests/t2500-freebsd-ufs.sh
-===================================================================
+diff --git a/tests/t2500-freebsd-ufs.sh b/tests/t2500-freebsd-ufs.sh
+new file mode 100644
+index 0000000..5a46263
 --- /dev/null
 +++ b/tests/t2500-freebsd-ufs.sh
 @@ -0,0 +1,44 @@

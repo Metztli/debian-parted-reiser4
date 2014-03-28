@@ -1,13 +1,23 @@
-Description: Accommodate two-component Linux version numbers like 3.0
+From df27b50c683e82fb9aea2f88c1538b9f5a58c1d3 Mon Sep 17 00:00:00 2001
+From: Jim Meyering <meyering@redhat.com>
+Date: Fri, 28 Mar 2014 17:10:12 +0000
+Subject: Accommodate two-component Linux version numbers like 3.0
+
 Origin: upstream, http://git.debian.org/?p=parted/parted.git;a=commitdiff;h=bb4fbe2130cd85727bbaf6c71b2d27b6769aa4aa
-Author: Jim Meyering <meyering@redhat.com>
 Bug-Ubuntu: https://bugs.launchpad.net/bugs/796865
 Forwarded: not-needed
 Last-Update: 2011-06-15
 
+Patch-Name: linux-two-component.patch
+---
+ libparted/arch/linux.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
+index 69088f9..ade2240 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -652,7 +652,11 @@
+@@ -652,7 +652,11 @@ _get_linux_version ()
  
          if (uname (&uts))
                  return kver = 0;

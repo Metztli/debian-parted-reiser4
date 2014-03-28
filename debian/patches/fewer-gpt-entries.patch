@@ -1,5 +1,8 @@
-Description: Handle GPT labels with fewer than 128 partition entries
-Author: Robert Herndon <Robert.Herndon@quantum.com>
+From 1c7611ffb53a7c32bdcb4dd44c599cc21017273e Mon Sep 17 00:00:00 2001
+From: Robert Herndon <Robert.Herndon@quantum.com>
+Date: Fri, 28 Mar 2014 17:10:22 +0000
+Subject: Handle GPT labels with fewer than 128 partition entries
+
 Author: Jim Meyering <meyering@redhat.com>
 Origin: upstream, http://git.savannah.gnu.org/cgit/parted.git/commit?id=bb4e43862127054f2b8744b9d8812cba78912bbb
 Origin: upstream, http://git.savannah.gnu.org/cgit/parted.git/commit?id=ce85c5145ed5e267eacee338204cc777377e6b02
@@ -9,11 +12,16 @@ Bug-Ubuntu: https://bugs.launchpad.net/bugs/1187560
 Forwarded: not-needed
 Last-Update: 2013-06-17
 
-Index: b/libparted/labels/gpt.c
-===================================================================
+Patch-Name: fewer-gpt-entries.patch
+---
+ libparted/labels/gpt.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
+
+diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
+index 03154d2..40c83f7 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
-@@ -838,9 +838,8 @@
+@@ -838,9 +838,8 @@ static void *
  gpt_read_PE_array (PedDisk const *disk, GuidPartitionTableHeader_t const *gpt,
                     size_t *ptes_bytes)
  {
@@ -24,7 +32,7 @@ Index: b/libparted/labels/gpt.c
    size_t ptes_sectors = ped_div_round_up (*ptes_bytes,
                                            disk->dev->sector_size);
  
-@@ -1513,13 +1512,15 @@
+@@ -1513,13 +1512,15 @@ _generate_header (const PedDisk *disk, int alternate, uint32_t ptes_crc,
  
    if (alternate)
      {
@@ -43,7 +51,7 @@ Index: b/libparted/labels/gpt.c
      }
    else
      {
-@@ -1572,12 +1573,10 @@
+@@ -1572,12 +1573,10 @@ static int
  gpt_write (const PedDisk *disk)
  {
    GPTDiskData *gpt_disk_data;
@@ -56,7 +64,7 @@ Index: b/libparted/labels/gpt.c
  
    PED_ASSERT (disk != NULL, goto error);
    PED_ASSERT (disk->dev != NULL, goto error);
-@@ -1585,11 +1584,12 @@
+@@ -1585,11 +1584,12 @@ gpt_write (const PedDisk *disk)
  
    gpt_disk_data = disk->disk_specific;
  
@@ -72,7 +80,7 @@ Index: b/libparted/labels/gpt.c
    for (part = ped_disk_next_partition (disk, NULL); part;
         part = ped_disk_next_partition (disk, part))
      {
-@@ -1598,7 +1598,7 @@
+@@ -1598,7 +1598,7 @@ gpt_write (const PedDisk *disk)
        _partition_generate_part_entry (part, &ptes[part->num - 1]);
      }
  
@@ -81,7 +89,7 @@ Index: b/libparted/labels/gpt.c
  
    if (is_apple) {
      /* Write synced MBR */
-@@ -1622,8 +1622,9 @@
+@@ -1622,8 +1622,9 @@ gpt_write (const PedDisk *disk)
    free (pth_raw);
    if (!write_ok)
      goto error_free_ptes;
@@ -93,7 +101,7 @@ Index: b/libparted/labels/gpt.c
      goto error_free_ptes;
  
    /* Write Alternate PTH & PTEs */
-@@ -1639,9 +1640,7 @@
+@@ -1639,9 +1640,7 @@ gpt_write (const PedDisk *disk)
    if (!write_ok)
      goto error_free_ptes;
    if (!ped_device_write (disk->dev, ptes,

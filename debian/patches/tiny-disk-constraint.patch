@@ -1,13 +1,23 @@
-Description: Fix constraint for very small devices (smaller than 1 cylinder)
+From 7f2a9b572ca3627abf0d1fc8d77156c427ce7269 Mon Sep 17 00:00:00 2001
+From: Jim Meyering <meyering@redhat.com>
+Date: Fri, 28 Mar 2014 17:10:07 +0000
+Subject: Fix constraint for very small devices (smaller than 1 cylinder)
+
 Origin: upstream, http://git.debian.org/?p=parted/parted.git;a=commitdiff;h=9f5b0608611eed40ef33be2096f5d482710602e5
 Bug-Debian: http://bugs.debian.org/602568
 Forwarded: not-needed
-Author: Jim Meyering <meyering@redhat.com>
 Last-Update: 2010-11-19
 
+Patch-Name: tiny-disk-constraint.patch
+---
+ libparted/labels/dos.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/libparted/labels/dos.c b/libparted/labels/dos.c
+index bd6cb79..ef8c837 100644
 --- a/libparted/labels/dos.c
 +++ b/libparted/labels/dos.c
-@@ -1656,13 +1656,13 @@
+@@ -1656,13 +1656,13 @@ _primary_constraint (const PedDisk* disk, const PedCHSGeometry* bios_geom,
  			       		dev->length - min_geom->end))
  			return NULL;
  	} else {

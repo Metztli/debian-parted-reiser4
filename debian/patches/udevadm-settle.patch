@@ -1,12 +1,23 @@
+From 957457e5f726e7f44e49893d854583cbd03fc0b5 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
+Date: Fri, 28 Mar 2014 17:10:16 +0000
+Subject: udev handling
+
+Run udevadm settle around partition table rereads, to avoid races.
+
+This should be replaced by a proper completion-notification mechanism
+between the kernel and udev.
+
 Forwarded: no
 Last-Update: 2010-02-22
-Description: udev handling
- Run udevadm settle around partition table rereads, to avoid races.
- .
- This should be replaced by a proper completion-notification mechanism
- between the kernel and udev.
 
+Patch-Name: udevadm-settle.patch
+---
+ libparted/arch/linux.c | 57 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 55 insertions(+), 2 deletions(-)
+
+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
+index 89ce095..4032efb 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
 @@ -26,6 +26,7 @@
@@ -17,7 +28,7 @@ Description: udev handling
  #include <ctype.h>
  #include <errno.h>
  #include <fcntl.h>
-@@ -2941,13 +2942,55 @@
+@@ -2941,13 +2942,55 @@ _have_blkpg ()
          return have_blkpg = kver >= KERNEL_VERSION (2,4,0) ? 1 : 0;
  }
  
@@ -73,7 +84,7 @@ Description: udev handling
          if (disk->dev->type != PED_DEVICE_FILE) {
  
  		/* We now require BLKPG support.  If this assertion fails,
-@@ -2957,10 +3000,20 @@
+@@ -2957,10 +3000,20 @@ linux_disk_commit (PedDisk* disk)
  		assert (_have_blkpg ());
  
  		if (!_disk_sync_part_table (disk))

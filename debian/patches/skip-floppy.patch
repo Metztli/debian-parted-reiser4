@@ -1,13 +1,24 @@
+From 001d8b54665e51f5acd1b3430c4d2e948789da91 Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@cfl.rr.com>
-Forwarded: yes
+Date: Fri, 28 Mar 2014 17:10:00 +0000
 Subject: Skip floppies when probing all devices
-Description: Floppies can't be partitioned anyhow, and some people
- have misconfigured bios that thinks there is a floppy when there
- actually isn't, and trying to scan it causes hanging.
 
+Floppies can't be partitioned anyhow, and some people have misconfigured
+bios that thinks there is a floppy when there actually isn't, and trying
+to scan it causes hanging.
+
+Forwarded: yes
+
+Patch-Name: skip-floppy.patch
+---
+ libparted/arch/linux.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
+index c3495c5..be7e95d 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -2089,6 +2089,7 @@
+@@ -2089,6 +2089,7 @@ _skip_entry (const char *name)
  		{ "dm-",	sizeof ("dm-") - 1	},
  		{ "loop",	sizeof ("loop") - 1	},
  		{ "ram",	sizeof ("ram") - 1	},

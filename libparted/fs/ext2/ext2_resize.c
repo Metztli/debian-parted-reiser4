@@ -105,9 +105,9 @@ static int ext2_add_group(struct ext2_fs *fs, blk_t groupsize)
 	fs->sb.s_inodes_count = PED_CPU_TO_LE32(
 		EXT2_SUPER_INODES_COUNT(fs->sb)
 		+ EXT2_SUPER_INODES_PER_GROUP(fs->sb));
-	fs->sb.s_blocks_count = PED_CPU_TO_LE32(
+	ext2_super_blocks_count_set(&fs->sb,
 		EXT2_SUPER_BLOCKS_COUNT(fs->sb) + groupsize);
-	fs->sb.s_free_blocks_count = PED_CPU_TO_LE32(
+	ext2_super_free_blocks_count_set(&fs->sb,
 		EXT2_SUPER_FREE_BLOCKS_COUNT(fs->sb) + groupsize - admin);
 	fs->sb.s_free_inodes_count = PED_CPU_TO_LE32(
 		EXT2_SUPER_FREE_INODES_COUNT(fs->sb)
@@ -304,9 +304,9 @@ static int ext2_del_group(struct ext2_fs *fs)
 	fs->sb.s_inodes_count = PED_CPU_TO_LE32(
 		EXT2_SUPER_INODES_COUNT(fs->sb)
 		- EXT2_SUPER_INODES_PER_GROUP(fs->sb));
-	fs->sb.s_blocks_count = PED_CPU_TO_LE32(
+	ext2_super_blocks_count_set(&fs->sb,
 		EXT2_SUPER_BLOCKS_COUNT(fs->sb) - groupsize);
-	fs->sb.s_free_blocks_count = PED_CPU_TO_LE32(
+	ext2_super_free_blocks_count_set(&fs->sb,
 		EXT2_SUPER_FREE_BLOCKS_COUNT(fs->sb) - (groupsize - admin));
 	fs->sb.s_free_inodes_count = PED_CPU_TO_LE32(
 		EXT2_SUPER_FREE_INODES_COUNT(fs->sb)
@@ -358,7 +358,7 @@ static int ext2_grow_group(struct ext2_fs *fs, blk_t newsize)
 	for (i=gblocks;i<newsize;i++)
 		ext2_set_block_state(fs, groupoff + i, 0, 1);
 
-	fs->sb.s_blocks_count = PED_CPU_TO_LE32(
+	ext2_super_blocks_count_set(&fs->sb,
 		EXT2_SUPER_BLOCKS_COUNT(fs->sb) + newsize - gblocks);
 	fs->metadirty |= EXT2_META_SB;
 
@@ -433,9 +433,9 @@ static int ext2_shrink_group(struct ext2_fs *fs, blk_t newsize)
 	}
 
 	i = gblocks - newsize;
-	fs->sb.s_blocks_count = PED_CPU_TO_LE32(
+	ext2_super_blocks_count_set(&fs->sb,
 		EXT2_SUPER_BLOCKS_COUNT(fs->sb) - i);
-	fs->sb.s_free_blocks_count = PED_CPU_TO_LE32(
+	ext2_super_free_blocks_count_set(&fs->sb,
 		EXT2_SUPER_FREE_BLOCKS_COUNT(fs->sb) - i);
 	fs->gd[group].bg_free_blocks_count = PED_CPU_TO_LE16(
 		EXT2_GROUP_FREE_BLOCKS_COUNT(fs->gd[group]) - i);
@@ -683,6 +683,14 @@ int ext2_resize_fs(struct ext2_fs *fs, blk_t newsize, PedTimer* timer)
 			= PED_CPU_TO_LE32(EXT2_SUPER_FEATURE_COMPAT(fs->sb)
 					  & ~EXT2_FEATURE_COMPAT_HAS_DIR_INDEX);
 		fs->metadirty |= EXT2_META_SB;
+	}
+
+	if (EXT2_SUPER_FEATURE_INCOMPAT(fs->sb)
+			& EXT4_FEATURE_INCOMPAT_EXTENTS) {
+		ped_exception_throw (
+			PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+			_("Parted cannot resize ext4 file systems yet."));
+		return 0;
 	}
 
 	if (!ext2_determine_itoffset(fs) && ped_exception_throw (

@@ -1,27 +1,33 @@
+From d393962d246271c482660cf410c0bb3de66b5045 Mon Sep 17 00:00:00 2001
+From: Colin Watson <cjwatson@ubuntu.com>
+Date: Fri, 28 Mar 2014 17:10:14 +0000
+Subject: libparted: use ext_range to find out largest possible partition
 
-    http://anonscm.debian.org/gitweb/?p=parted/parted.git;a=commitdiff;h=ca97da905bd21f2a4371f4717f7c46a936af6b2c
+http://anonscm.debian.org/gitweb/?p=parted/parted.git;a=commitdiff;h=ca97da905bd21f2a4371f4717f7c46a936af6b2c
 
-commit ca97da905bd21f2a4371f4717f7c46a936af6b2c
+Parted uses /sys/block/DEV/range file to find out how many partitions
+can the blockdevice hold and uses this number in its algorithm
+for informing the kernel about modified partitions. This works
+fine for most devices, however, it fails on partitionable MD arrays,
+because these have 1 in range file. Using ext_range should be safer
+and work for all devices.
+
+* libparted/arch/linux.c (_device_get_partition_range): Use
+/sys/block/DEV/ext_range instead of range sysfs file
+
 Author: Petr Uzel <petr.uzel@suse.cz>
-Date:   Sat Nov 26 15:45:08 2011 +0100
+Bug-openSUSE: http://bugzilla.novell.com/567652
 
-    libparted: use ext_range to find out largest possible partition
+Patch-Name: md-partitions.patch
+---
+ libparted/arch/linux.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-    Parted uses /sys/block/DEV/range file to find out how many partitions
-    can the blockdevice hold and uses this number in its algorithm
-    for informing the kernel about modified partitions. This works
-    fine for most devices, however, it fails on partitionable MD arrays,
-    because these have 1 in range file. Using ext_range should be safer
-    and work for all devices.
-
-    * libparted/arch/linux.c (_device_get_partition_range): Use
-    /sys/block/DEV/ext_range instead of range sysfs file
-
-    Addresses: http://bugzilla.novell.com/567652
-
+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
+index ade2240..89ce095 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -2571,7 +2571,7 @@
+@@ -2571,7 +2571,7 @@ _kernel_get_partition_start_and_length(PedPartition const *part,
  
  /*
   * The number of partitions that a device can have depends on the kernel.
@@ -30,7 +36,7 @@ Date:   Sat Nov 26 15:45:08 2011 +0100
   * value.
   */
  static unsigned int
-@@ -2585,7 +2585,7 @@
+@@ -2585,7 +2585,7 @@ _device_get_partition_range(PedDevice* dev)
          if (dev->type == PED_DEVICE_DM)
                  return MAX_NUM_PARTS;
  

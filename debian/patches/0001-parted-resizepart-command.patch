@@ -1,18 +1,20 @@
-From be7c4b8da40aca5296f96d09ae73fbb7f5250b99 Mon Sep 17 00:00:00 2001
+From 72b981e7e5a0eeee9b05f66eb63af9e5e57358dd Mon Sep 17 00:00:00 2001
 From: Petr Uzel <petr.uzel@suse.cz>
 Date: Mon, 26 Sep 2011 17:21:01 +0200
-Subject: [PATCH 1/6] parted: resizepart command
+Subject: parted: resizepart command
 
 TODO
----
- parted/parted.c |   89 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
 
-Index: b/parted/parted.c
-===================================================================
+Patch-Name: 0001-parted-resizepart-command.patch
+---
+ parted/parted.c | 89 +++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 87 insertions(+), 2 deletions(-)
+
+diff --git a/parted/parted.c b/parted/parted.c
+index a5e2870..492796b 100644
 --- a/parted/parted.c
 +++ b/parted/parted.c
-@@ -150,6 +150,9 @@
+@@ -150,6 +150,9 @@ static const char* fs_type_msg_start = N_("FS-TYPE is one of: ");
  static const char* start_end_msg =    N_("START and END are disk locations, such as "
                  "4GB or 10%.  Negative values count from the end of the disk.  "
                  "For example, -1s specifies exactly the last sector.\n");
@@ -22,7 +24,7 @@ Index: b/parted/parted.c
  static const char* state_msg =        N_("STATE is one of: on, off\n");
  static const char* device_msg =       N_("DEVICE is usually /dev/hda or /dev/sda\n");
  static const char* name_msg =         N_("NAME is any word you want\n");
-@@ -466,6 +469,21 @@
+@@ -466,6 +469,21 @@ constraint_intersect_and_destroy (PedConstraint* a, PedConstraint* b)
          return result;
  }
  
@@ -44,7 +46,7 @@ Index: b/parted/parted.c
  void
  help_on (char* topic)
  {
-@@ -2004,11 +2022,69 @@
+@@ -2004,11 +2022,69 @@ error:
  }
  
  static int
@@ -116,7 +118,7 @@ Index: b/parted/parted.c
          disk = ped_disk_new (*dev);
          if (!disk)
                  goto error;
-@@ -2423,6 +2499,15 @@
+@@ -2423,6 +2499,15 @@ _("mkpartfs PART-TYPE FS-TYPE START END     make a partition with a "
  NULL),
          str_list_create (_(part_type_msg), _(start_end_msg), NULL), 1));
  

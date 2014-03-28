@@ -1,23 +1,23 @@
-From 7ef73999b35294a8fd30f5af4eb6221a0ce62802 Mon Sep 17 00:00:00 2001
+From 98b73a746d9f835df8b12a2bc251c91a5c2625cc Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
 Date: Wed, 30 Nov 2011 13:13:58 -0500
-Subject: [PATCH 4/6] parted: make _partition_warn_busy actually a warning
- instead of an error
+Subject: parted: make _partition_warn_busy actually a warning instead of an
+ error
 
 This function was throwing a PED_EXCEPTION_ERROR with only the
-PED_EXCEPTION_CANCEL option.  Converted to a PED_EXCEPTION_WARNING
-with the option to continue anyhow.
----
- parted/parted.c                                 |   19 +++++++++++--------
- tests/t1101-busy-partition.sh                   |    2 +-
- tests/t9041-undetected-in-use-16th-partition.sh |    4 ++--
- 3 files changed, 14 insertions(+), 11 deletions(-)
+PED_EXCEPTION_CANCEL option.  Converted to a PED_EXCEPTION_WARNING with
+the option to continue anyhow.
 
-Index: b/parted/parted.c
-===================================================================
+Patch-Name: 0004-parted-make-_partition_warn_busy-actually-a-warning-.patch
+---
+ parted/parted.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/parted/parted.c b/parted/parted.c
+index 492796b..16c7752 100644
 --- a/parted/parted.c
 +++ b/parted/parted.c
-@@ -224,14 +224,17 @@
+@@ -224,14 +224,17 @@ _partition_warn_busy (PedPartition* part)
  
          if (ped_partition_is_busy (part)) {
                  path = ped_partition_get_path (part);

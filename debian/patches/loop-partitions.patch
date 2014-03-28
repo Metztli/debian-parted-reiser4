@@ -1,16 +1,43 @@
+From 261305840904f1dea49b83b9170b14f0b049f317 Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
-Forwarded: no
+Date: Fri, 28 Mar 2014 17:10:02 +0000
 Subject: Backport some changes to allow use of partitionable loop devices
-Description: Upstream has switched to using the newer sysfs attribute
- "ext_range" instead of "range" to read the maximum supported partitions
- of a device.  This allows loop devices to be partitioned even without
- using the kernel max_part argument, as well as support for more than
- 16 partitions.  Also added new PED_DEVICE_LOOP device type instead of
- pretending loop devices are files.
 
+Upstream has switched to using the newer sysfs attribute "ext_range"
+instead of "range" to read the maximum supported partitions of a device.
+This allows loop devices to be partitioned even without using the kernel
+max_part argument, as well as support for more than 16 partitions.  Also
+added new PED_DEVICE_LOOP device type instead of pretending loop devices
+are files.
+
+Forwarded: no
+
+Patch-Name: loop-partitions.patch
+---
+ include/parted/device.h |   3 +-
+ libparted/arch/linux.c  | 125 ++++++++++++++++++++++++++++++++++++++----------
+ parted/parted.c         |   2 +-
+ 3 files changed, 104 insertions(+), 26 deletions(-)
+
+diff --git a/include/parted/device.h b/include/parted/device.h
+index 0634465..b94765c 100644
+--- a/include/parted/device.h
++++ b/include/parted/device.h
+@@ -48,7 +48,8 @@ typedef enum {
+         PED_DEVICE_SDMMC        = 14,
+         PED_DEVICE_VIRTBLK      = 15,
+         PED_DEVICE_AOE          = 16,
+-        PED_DEVICE_MD           = 17
++        PED_DEVICE_MD           = 17,
++        PED_DEVICE_LOOP         = 18
+ } PedDeviceType;
+ 
+ typedef struct _PedDevice PedDevice;
+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
+index be7e95d..ecd0139 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -574,7 +574,7 @@
+@@ -574,7 +574,7 @@ _device_probe_type (PedDevice* dev)
          } else if (_is_virtblk_major(dev_major)) {
                  dev->type = PED_DEVICE_VIRTBLK;
          } else if (dev_major == LOOP_MAJOR) {
@@ -19,7 +46,7 @@ Description: Upstream has switched to using the newer sysfs attribute
          } else if (dev_major == MD_MAJOR) {
                  dev->type = PED_DEVICE_MD;
          } else {
-@@ -1395,6 +1395,11 @@
+@@ -1395,6 +1395,11 @@ linux_new (const char* path)
                          goto error_free_arch_specific;
                  break;
  
@@ -31,7 +58,7 @@ Description: Upstream has switched to using the newer sysfs attribute
          default:
                  ped_exception_throw (PED_EXCEPTION_NO_FEATURE,
                                  PED_EXCEPTION_CANCEL,
-@@ -2388,6 +2393,95 @@
+@@ -2388,6 +2393,95 @@ _blkpg_remove_partition (PedDisk* disk, int n)
                                      BLKPG_DEL_PARTITION);
  }
  
@@ -127,7 +154,7 @@ Description: Upstream has switched to using the newer sysfs attribute
  /*
   * The number of partitions that a device can have depends on the kernel.
   * If we don't find this value in /sys/block/DEV/range, we will use our own
-@@ -2482,33 +2576,16 @@
+@@ -2482,33 +2576,16 @@ _disk_sync_part_table (PedDisk* disk)
          }
  
          for (i = 1; i <= lpn; i++) {
@@ -167,21 +194,11 @@ Description: Upstream has switched to using the newer sysfs attribute
  				    && length == part->geom.length)
                                          ok[i - 1] = 1;
                                  /* If the new partition is unchanged and the
---- a/include/parted/device.h
-+++ b/include/parted/device.h
-@@ -48,7 +48,8 @@
-         PED_DEVICE_SDMMC        = 14,
-         PED_DEVICE_VIRTBLK      = 15,
-         PED_DEVICE_AOE          = 16,
--        PED_DEVICE_MD           = 17
-+        PED_DEVICE_MD           = 17,
-+        PED_DEVICE_LOOP         = 18
- } PedDeviceType;
- 
- typedef struct _PedDevice PedDevice;
+diff --git a/parted/parted.c b/parted/parted.c
+index 265282a..a5e2870 100644
 --- a/parted/parted.c
 +++ b/parted/parted.c
-@@ -1398,7 +1398,7 @@
+@@ -1398,7 +1398,7 @@ do_print (PedDevice** dev)
                                           "cpqarray", "file", "ataraid", "i2o",
                                           "ubd", "dasd", "viodasd", "sx8", "dm",
                                           "xvd", "sd/mmc", "virtblk", "aoe",

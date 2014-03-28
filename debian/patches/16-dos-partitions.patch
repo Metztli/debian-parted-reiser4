@@ -1,11 +1,22 @@
+From 57a02a0eda8968a25661a408b3f5ab967f600d4f Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
+Date: Fri, 28 Mar 2014 17:10:17 +0000
 Subject: Fix > 16 dos partitions
-Description: The msdos partition table claimed a maximum partition
- count of 16 but would allow you to go beyond that.  This resulted
- in the kernel not being informed of those partitions.  Corrected
- to enforce the limit and raise the limit to 64 partitions.
-Forwarded: Yes
 
+The msdos partition table claimed a maximum partition count of 16 but
+would allow you to go beyond that.  This resulted in the kernel not
+being informed of those partitions.  Corrected to enforce the limit and
+raise the limit to 64 partitions.
+
+Forwarded: yes
+
+Patch-Name: 16-dos-partitions.patch
+---
+ libparted/labels/dos.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/libparted/labels/dos.c b/libparted/labels/dos.c
+index ef8c837..c69548d 100644
 --- a/libparted/labels/dos.c
 +++ b/libparted/labels/dos.c
 @@ -104,7 +104,7 @@ static const char MBR_BOOT_CODE[] = {
@@ -43,7 +54,7 @@ Forwarded: Yes
  }
  
  static int
-@@ -2361,7 +2367,8 @@ msdos_partition_enumerate (PedPartition*
+@@ -2361,7 +2367,8 @@ msdos_partition_enumerate (PedPartition* part)
  		part->num = next_logical (part->disk);
  	else
  		part->num = next_primary (part->disk);

@@ -1,16 +1,32 @@
-Description: Initial btrfs support, only recognize it for now
- Add initial btrfs support to libparted; just discovering the declared magic
- entry at the right place to recognize filesystem type, for the moment.
-Author: Luca Bruno <lucab@debian.org>
+From f7d1768b7d6c2ee2067b31acd0d527f6bc5103c4 Mon Sep 17 00:00:00 2001
+From: Luca Bruno <lucab@debian.org>
+Date: Fri, 28 Mar 2014 17:09:44 +0000
+Subject: Initial btrfs support, only recognize it for now
+
+Add initial btrfs support to libparted; just discovering the declared
+magic entry at the right place to recognize filesystem type, for the
+moment.
+
 Origin: http://lists.alioth.debian.org/pipermail/parted-devel/2009-February/002585.html
 Bug-Debian: http://bugs.debian.org/567176
 Last-Update: 2012-11-06
 
-Index: b/configure.ac
-===================================================================
+Patch-Name: btrfs.patch
+---
+ configure.ac                   |   1 +
+ libparted/fs/Makefile.am       |   5 ++-
+ libparted/fs/btrfs/Makefile.am |   8 ++++
+ libparted/fs/btrfs/btrfs.c     | 100 +++++++++++++++++++++++++++++++++++++++++
+ libparted/libparted.c          |   4 ++
+ 5 files changed, 116 insertions(+), 2 deletions(-)
+ create mode 100644 libparted/fs/btrfs/Makefile.am
+ create mode 100644 libparted/fs/btrfs/btrfs.c
+
+diff --git a/configure.ac b/configure.ac
+index 7f6e827..2384542 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -629,6 +629,7 @@
+@@ -629,6 +629,7 @@ libparted/Makefile
  libparted/labels/Makefile
  libparted/fs/Makefile
  libparted/fs/amiga/Makefile
@@ -18,8 +34,8 @@ Index: b/configure.ac
  libparted/fs/ext2/Makefile
  libparted/fs/fat/Makefile
  libparted/fs/hfs/Makefile
-Index: b/libparted/fs/Makefile.am
-===================================================================
+diff --git a/libparted/fs/Makefile.am b/libparted/fs/Makefile.am
+index 97fe32e..9e3fc2b 100644
 --- a/libparted/fs/Makefile.am
 +++ b/libparted/fs/Makefile.am
 @@ -4,7 +4,7 @@
@@ -31,7 +47,7 @@ Index: b/libparted/fs/Makefile.am
  
  partedincludedir      =	-I$(top_srcdir)/include
  noinst_LTLIBRARIES    =	libfs.la
-@@ -24,7 +24,8 @@
+@@ -24,7 +24,8 @@ libfs_la_LIBADD   = $(UUID_LIBS)		\
  		    linux_swap/liblinuxswap.la	\
  		    xfs/libxfs.la		\
  		    jfs/libjfs.la		\
@@ -41,8 +57,9 @@ Index: b/libparted/fs/Makefile.am
  #		    bfs/libbfs.la
  
  libfs_la_SOURCES   =
-Index: b/libparted/fs/btrfs/Makefile.am
-===================================================================
+diff --git a/libparted/fs/btrfs/Makefile.am b/libparted/fs/btrfs/Makefile.am
+new file mode 100644
+index 0000000..a9428da
 --- /dev/null
 +++ b/libparted/fs/btrfs/Makefile.am
 @@ -0,0 +1,8 @@
@@ -54,8 +71,9 @@ Index: b/libparted/fs/btrfs/Makefile.am
 +INCLUDES = $(partedincludedir) $(INTLINCS)
 +
 +MAINTAINERCLEANFILES = Makefile.in
-Index: b/libparted/fs/btrfs/btrfs.c
-===================================================================
+diff --git a/libparted/fs/btrfs/btrfs.c b/libparted/fs/btrfs/btrfs.c
+new file mode 100644
+index 0000000..5cbf1f9
 --- /dev/null
 +++ b/libparted/fs/btrfs/btrfs.c
 @@ -0,0 +1,100 @@
@@ -159,11 +177,11 @@ Index: b/libparted/fs/btrfs/btrfs.c
 +{
 +	ped_file_system_type_unregister (&btrfs_type);
 +}
-Index: b/libparted/libparted.c
-===================================================================
+diff --git a/libparted/libparted.c b/libparted/libparted.c
+index 1cb085c..39aa5fd 100644
 --- a/libparted/libparted.c
 +++ b/libparted/libparted.c
-@@ -109,6 +109,7 @@
+@@ -109,6 +109,7 @@ extern void ped_file_system_jfs_init (void);
  extern void ped_file_system_hfs_init (void);
  extern void ped_file_system_fat_init (void);
  extern void ped_file_system_ext2_init (void);
@@ -171,7 +189,7 @@ Index: b/libparted/libparted.c
  
  static void
  init_file_system_types ()
-@@ -123,6 +124,7 @@
+@@ -123,6 +124,7 @@ init_file_system_types ()
  	ped_file_system_hfs_init ();
  	ped_file_system_fat_init ();
  	ped_file_system_ext2_init ();
@@ -179,7 +197,7 @@ Index: b/libparted/libparted.c
  }
  #endif /* ENABLE_FS */
  
-@@ -188,6 +190,7 @@
+@@ -188,6 +190,7 @@ extern void ped_file_system_ntfs_done (void);
  extern void ped_file_system_reiserfs_done (void);
  extern void ped_file_system_ufs_done (void);
  extern void ped_file_system_xfs_done (void);
@@ -187,7 +205,7 @@ Index: b/libparted/libparted.c
  extern void ped_file_system_amiga_done (void);
  
  static void
-@@ -202,6 +205,7 @@
+@@ -202,6 +205,7 @@ done_file_system_types ()
  	ped_file_system_reiserfs_done ();
  	ped_file_system_ufs_done ();
  	ped_file_system_xfs_done ();

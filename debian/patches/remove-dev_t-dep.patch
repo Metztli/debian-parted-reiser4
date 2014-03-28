@@ -1,20 +1,29 @@
+From 8fbaaaba8721b7de1075a79060d273289a8d9174 Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@cfl.rr.com>
-Description: All partitions on dmraid disks and partition numbers
- >= 16 on regular scsi disks were not being detected as in use.
- This was because assumptions were being made about the dev node
- major/minor numbers and how they relate to the partition number.
- These assumptions break entirely on dmraid devices, and on normal
- disks with >= 16 partitions.  Removed _partition_get_part_dev()
- and rewrote _partition_is_mounted() to use
- _partition_is_mounted_by_path() instead of _by_dev.
+Date: Fri, 28 Mar 2014 17:09:59 +0000
+Subject: Remove dev_t dependency
+
+All partitions on dmraid disks and partition numbers >= 16 on regular
+scsi disks were not being detected as in use.  This was because
+assumptions were being made about the dev node major/minor numbers and
+how they relate to the partition number.  These assumptions break
+entirely on dmraid devices, and on normal disks with >= 16 partitions.
+Removed _partition_get_part_dev() and rewrote _partition_is_mounted() to
+use _partition_is_mounted_by_path() instead of _by_dev.
+
 Forwarded: yes
 Last-Update: 2011-05-04
 
-Index: b/libparted/arch/linux.c
-===================================================================
+Patch-Name: remove-dev_t-dep.patch
+---
+ libparted/arch/linux.c | 28 ++++++++++------------------
+ 1 file changed, 10 insertions(+), 18 deletions(-)
+
+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
+index 44c5e9e..c3495c5 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -2212,19 +2212,6 @@
+@@ -2212,19 +2212,6 @@ linux_partition_get_path (const PedPartition* part)
          return _device_get_part_path (part->disk->dev, part->num);
  }
  
@@ -34,7 +43,7 @@ Index: b/libparted/arch/linux.c
  static int
  _mount_table_search (const char* file_name, dev_t dev)
  {
-@@ -2271,13 +2258,18 @@
+@@ -2271,13 +2258,18 @@ _partition_is_mounted_by_path (const char *path)
  static int
  _partition_is_mounted (const PedPartition *part)
  {

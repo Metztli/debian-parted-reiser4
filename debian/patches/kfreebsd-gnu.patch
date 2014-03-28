@@ -1,16 +1,31 @@
-Description: Add GNU/kFreeBSD support
-Author: Viktor Vasilev
+From 26536e60834d60ca18833d24c126bc318f013a8b Mon Sep 17 00:00:00 2001
+From: Viktor Vasilev <Viktor Vasilev>
+Date: Fri, 28 Mar 2014 17:09:42 +0000
+Subject: Add GNU/kFreeBSD support
+
 Author: Robert Millan <rmh@aybabtu.com>
 Author: Colin Watson <cjwatson@debian.org>
 Bug-Debian: http://bugs.debian.org/363381
 Forwarded: no
 Last-Update: 2012-11-06
 
-Index: b/configure.ac
-===================================================================
+Patch-Name: kfreebsd-gnu.patch
+---
+ configure.ac                     |    8 +-
+ libparted/Makefile.am            |    3 +-
+ libparted/arch/freebsd.c         | 1254 ++++++++++++++++++++++++++++++++++++++
+ libparted/architecture.c         |    3 +
+ libparted/fs/xfs/platform_defs.h |    6 +-
+ libparted/labels/bsd.c           |    1 +
+ libparted/labels/sun.c           |    1 +
+ 7 files changed, 1272 insertions(+), 4 deletions(-)
+ create mode 100644 libparted/arch/freebsd.c
+
+diff --git a/configure.ac b/configure.ac
+index 9ae5783..7f6e827 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -60,6 +60,7 @@
+@@ -60,6 +60,7 @@ case "$host_os" in
  	linux*) OS=linux ;;
  	gnu*)	OS=gnu ;;
  	beos*)	OS=beos ;;
@@ -18,7 +33,7 @@ Index: b/configure.ac
  	*)	AC_MSG_ERROR([Unknown or unsupported OS "$host_os".  Only "linux", "gnu" and "beos" are supported in this version of GNU Parted.]) ;;
  esac
  AC_SUBST([OS])
-@@ -281,6 +282,7 @@
+@@ -281,6 +282,7 @@ AC_CHECK_SIZEOF([off_t], [64], [
  	#include <sys/types.h>
  	#include <unistd.h>
  ])
@@ -26,7 +41,7 @@ Index: b/configure.ac
  
  AM_ENABLE_SHARED
  if test "$OS" = linux && test $ac_cv_sizeof_off_t -lt 8; then
-@@ -518,7 +520,7 @@
+@@ -518,7 +520,7 @@ If you can't find one try:
          http://web.mit.edu/tytso/www/linux/e2fsprogs.html])]
  )
  
@@ -35,7 +50,7 @@ Index: b/configure.ac
  
  dnl required for libparted/llseek.c  (TODO: make linux-x86 only)
  if test "$OS" = linux; then
-@@ -577,7 +579,9 @@
+@@ -577,7 +579,9 @@ AC_C_CONST
  AC_C_RESTRICT
  
  dnl Checks for library functions.
@@ -46,11 +61,11 @@ Index: b/configure.ac
  AC_CHECK_FUNCS([getuid])
  
  dnl NOTE: We need to remove the gl_cv_ignore_unused_libraries flag if we
-Index: b/libparted/Makefile.am
-===================================================================
+diff --git a/libparted/Makefile.am b/libparted/Makefile.am
+index fb8351e..995ff91 100644
 --- a/libparted/Makefile.am
 +++ b/libparted/Makefile.am
-@@ -49,7 +49,8 @@
+@@ -49,7 +49,8 @@ libparted_la_SOURCES  = debug.c			\
  EXTRA_libparted_la_SOURCES    = arch/linux.c	\
  				arch/linux.h	\
  				arch/gnu.c	\
@@ -60,8 +75,9 @@ Index: b/libparted/Makefile.am
  
  libparted_la_LIBADD =	\
    fs/libfs.la		\
-Index: b/libparted/arch/freebsd.c
-===================================================================
+diff --git a/libparted/arch/freebsd.c b/libparted/arch/freebsd.c
+new file mode 100644
+index 0000000..7919d57
 --- /dev/null
 +++ b/libparted/arch/freebsd.c
 @@ -0,0 +1,1254 @@
@@ -1319,11 +1335,11 @@ Index: b/libparted/arch/freebsd.c
 +	dev_ops:	&freebsd_dev_ops,
 +	disk_ops:	&freebsd_disk_ops
 +};
-Index: b/libparted/architecture.c
-===================================================================
+diff --git a/libparted/architecture.c b/libparted/architecture.c
+index 66e33f9..d88ab05 100644
 --- a/libparted/architecture.c
 +++ b/libparted/architecture.c
-@@ -34,6 +34,9 @@
+@@ -34,6 +34,9 @@ ped_set_architecture ()
  #elif defined(__BEOS__)
  	extern PedArchitecture ped_beos_arch;
  	const PedArchitecture* arch = &ped_beos_arch;
@@ -1333,8 +1349,8 @@ Index: b/libparted/architecture.c
  #else
  	extern PedArchitecture ped_gnu_arch;
  	const PedArchitecture* arch = &ped_gnu_arch;
-Index: b/libparted/fs/xfs/platform_defs.h
-===================================================================
+diff --git a/libparted/fs/xfs/platform_defs.h b/libparted/fs/xfs/platform_defs.h
+index 2b55752..01a06df 100644
 --- a/libparted/fs/xfs/platform_defs.h
 +++ b/libparted/fs/xfs/platform_defs.h
 @@ -37,7 +37,11 @@
@@ -1350,8 +1366,8 @@ Index: b/libparted/fs/xfs/platform_defs.h
  #include <stddef.h>
  #include <stdlib.h>
  #include <string.h>
-Index: b/libparted/labels/bsd.c
-===================================================================
+diff --git a/libparted/labels/bsd.c b/libparted/labels/bsd.c
+index 0f9eb62..b0641a0 100644
 --- a/libparted/labels/bsd.c
 +++ b/libparted/labels/bsd.c
 @@ -26,6 +26,7 @@
@@ -1362,8 +1378,8 @@ Index: b/libparted/labels/bsd.c
  
  #if ENABLE_NLS
  #  include <libintl.h>
-Index: b/libparted/labels/sun.c
-===================================================================
+diff --git a/libparted/labels/sun.c b/libparted/labels/sun.c
+index 177a47c..e70e479 100644
 --- a/libparted/labels/sun.c
 +++ b/libparted/labels/sun.c
 @@ -26,6 +26,7 @@

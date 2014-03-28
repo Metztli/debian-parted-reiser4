@@ -1,6 +1,23 @@
-diff -Nurp a/configure.ac b/configure.ac
---- a/configure.ac	2010-08-31 12:42:08.000000000 +0200
-+++ b/configure.ac	2010-08-31 12:45:00.000000000 +0200
+From 9c232dd1327369633e3ae5df47a6f8cc1062a2aa Mon Sep 17 00:00:00 2001
+From: Colin Watson <cjwatson@ubuntu.com>
+Date: Fri, 28 Mar 2014 17:09:48 +0000
+Subject: Add ZFS support
+
+Patch-Name: zfs.patch
+---
+ configure.ac                 |   1 +
+ libparted/fs/Makefile.am     |   5 +-
+ libparted/fs/zfs/Makefile.am |   8 ++++
+ libparted/fs/zfs/zfs.c       | 106 +++++++++++++++++++++++++++++++++++++++++++
+ libparted/libparted.c        |   4 ++
+ 5 files changed, 122 insertions(+), 2 deletions(-)
+ create mode 100644 libparted/fs/zfs/Makefile.am
+ create mode 100644 libparted/fs/zfs/zfs.c
+
+diff --git a/configure.ac b/configure.ac
+index 2384542..f289ba0 100644
+--- a/configure.ac
++++ b/configure.ac
 @@ -639,6 +639,7 @@ libparted/fs/ntfs/Makefile
  libparted/fs/reiserfs/Makefile
  libparted/fs/ufs/Makefile
@@ -9,9 +26,10 @@ diff -Nurp a/configure.ac b/configure.ac
  libparted/tests/Makefile
  libparted.pc
  parted/Makefile
-diff -Nurp a/libparted/fs/Makefile.am b/libparted/fs/Makefile.am
---- a/libparted/fs/Makefile.am	2010-08-31 12:42:08.000000000 +0200
-+++ b/libparted/fs/Makefile.am	2010-08-31 12:43:24.000000000 +0200
+diff --git a/libparted/fs/Makefile.am b/libparted/fs/Makefile.am
+index 9e3fc2b..06a4fba 100644
+--- a/libparted/fs/Makefile.am
++++ b/libparted/fs/Makefile.am
 @@ -4,7 +4,7 @@
  #
  # This file may be modified and/or distributed without restriction.
@@ -31,9 +49,11 @@ diff -Nurp a/libparted/fs/Makefile.am b/libparted/fs/Makefile.am
  #		    bfs/libbfs.la
  
  libfs_la_SOURCES   =
-diff -Nurp a/libparted/fs/zfs/Makefile.am b/libparted/fs/zfs/Makefile.am
---- a/libparted/fs/zfs/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-+++ b/libparted/fs/zfs/Makefile.am	2010-08-31 12:42:50.000000000 +0200
+diff --git a/libparted/fs/zfs/Makefile.am b/libparted/fs/zfs/Makefile.am
+new file mode 100644
+index 0000000..3273c6a
+--- /dev/null
++++ b/libparted/fs/zfs/Makefile.am
 @@ -0,0 +1,8 @@
 +partedincludedir	= -I$(top_srcdir)/include
 +
@@ -43,9 +63,11 @@ diff -Nurp a/libparted/fs/zfs/Makefile.am b/libparted/fs/zfs/Makefile.am
 +INCLUDES = $(partedincludedir) $(INTLINCS)
 +
 +MAINTAINERCLEANFILES = Makefile.in
-diff -Nurp a/libparted/fs/zfs/zfs.c b/libparted/fs/zfs/zfs.c
---- a/libparted/fs/zfs/zfs.c	1970-01-01 01:00:00.000000000 +0100
-+++ b/libparted/fs/zfs/zfs.c	2010-08-31 12:42:50.000000000 +0200
+diff --git a/libparted/fs/zfs/zfs.c b/libparted/fs/zfs/zfs.c
+new file mode 100644
+index 0000000..4d3988b
+--- /dev/null
++++ b/libparted/fs/zfs/zfs.c
 @@ -0,0 +1,106 @@
 +/*
 +    libparted - a library for manipulating disk partitions
@@ -153,10 +175,11 @@ diff -Nurp a/libparted/fs/zfs/zfs.c b/libparted/fs/zfs/zfs.c
 +{
 +	ped_file_system_type_unregister (&zfs_type);
 +}
-diff -Nurp a/libparted/libparted.c b/libparted/libparted.c
---- a/libparted/libparted.c	2010-08-31 12:42:08.000000000 +0200
-+++ b/libparted/libparted.c	2010-08-31 12:44:20.000000000 +0200
-@@ -110,6 +110,7 @@ extern void ped_file_system_hfs_init (vo
+diff --git a/libparted/libparted.c b/libparted/libparted.c
+index 39aa5fd..59efa6c 100644
+--- a/libparted/libparted.c
++++ b/libparted/libparted.c
+@@ -110,6 +110,7 @@ extern void ped_file_system_hfs_init (void);
  extern void ped_file_system_fat_init (void);
  extern void ped_file_system_ext2_init (void);
  extern void ped_file_system_btrfs_init (void);
@@ -172,7 +195,7 @@ diff -Nurp a/libparted/libparted.c b/libparted/libparted.c
  }
  #endif /* ENABLE_FS */
  
-@@ -191,6 +193,7 @@ extern void ped_file_system_reiserfs_don
+@@ -191,6 +193,7 @@ extern void ped_file_system_reiserfs_done (void);
  extern void ped_file_system_ufs_done (void);
  extern void ped_file_system_xfs_done (void);
  extern void ped_file_system_btrfs_done (void);

@@ -1,18 +1,26 @@
-From: Brian C. Lane <bcl@redhat.com>
-Subject: gpt: add partition attribute bits: NoBlockIOProtocol, LegacyBIOSBootable
+From 1001dc9d92a0d6aa3aeb9360b5a8d2f5e92f4122 Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Fri, 28 Mar 2014 17:10:09 +0000
+Subject: gpt: add partition attribute bits: NoBlockIOProtocol,
+ LegacyBIOSBootable
+
+Add NoBlockIOProtocol and LegacyBIOSBootable flags to the GPT partition
+Attributes entry.
+
 Origin: upstream, http://git.debian.org/?p=parted/parted.git;a=commitdiff;h=7fc2cf02e1e
 Forwaded: not-needed
 Last-Update: 2011-02-25
 
-Add NoBlockIOProtocol and LegacyBIOSBootable flags to the GPT partition
-Attributes entry.
+Patch-Name: gpt-add-partition-attribute-bits.patch
 ---
- libparted/labels/gpt.c |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+ libparted/labels/gpt.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
+diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
+index baede95..4548bed 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
-@@ -174,12 +174,16 @@
+@@ -174,12 +174,16 @@ struct __attribute__ ((packed)) _GuidPartitionEntryAttributes_t
  {
  #ifdef __GNUC__			/* XXX narrow this down to !TinyCC */
    uint64_t RequiredToFunction:1;

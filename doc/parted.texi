@@ -1049,6 +1049,10 @@ depending on what disk label you are using:
 (GPT) - Enable this to record that the selected partition is a
 GRUB BIOS partition.
 
+@item legacy_boot
+(GPT) - this flag is used to tell special purpose software that the GPT
+partition may be bootable.
+
 @item boot
 (Mac, MS-DOS, PC98) - should be enabled if you want to boot off the
 partition.  The semantics vary between disk labels.  For MS-DOS disk
@@ -1056,6 +1060,20 @@ labels, only one partition can be bootable.  If you are installing LILO
 on a partition that partition must be bootable.
 For PC98 disk labels, all ext2 partitions must be bootable (this is
 enforced by Parted).
+
+@item msftdata
+(GPT) - This flag identifies partitions that contain Microsoft filesystems
+(NTFS or FAT).  It may optionally be set on Linux filesystems to mimic the
+type of configuration created by parted 3.0 and earlier, in which a
+separate Linux filesystem type code was not available on GPT disks.  This
+flag can only be removed within parted by replacing it with a competing
+flag, such as boot or msftres.
+
+@item msftres
+(GPT) - This flag identifies a "Microsoft Reserved" partition, which is
+used by Windows on GPT disks.  Note that this flag should not normally be
+set on Windows filesystem partitions (those that contain NTFS or FAT
+filesystems).
 
 @item lba
 (MS-DOS) - this flag can be enabled to tell MS DOS, MS Windows 9x and

@@ -15,6 +15,7 @@ TESTS = \
   t0220-gpt-msftres.sh \
   t0250-gpt.sh \
   t0280-gpt-corrupt.sh \
+  t0290-gptsync.sh \
   t0300-dos-on-gpt.sh \
   t0400-loop-clobber-infloop.sh \
   t0500-dup-clobber.sh \
@@ -25,6 +26,7 @@ TESTS = \
   t2300-dos-label-extended-bootcode.sh \
   t2310-dos-extended-2-sector-min-offset.sh \
   t2400-dos-hfs-partition-type.sh \
+  t2500-freebsd-ufs.sh \
   t3000-resize-fs.sh \
   t3200-type-change.sh \
   t3300-palo-prep.sh \

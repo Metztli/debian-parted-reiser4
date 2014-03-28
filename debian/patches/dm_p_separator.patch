@@ -1,17 +1,26 @@
+From 4eb4c034173170be6a6d6abec646dfa88a8dd6fb Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@cfl.rr.com>
-Description: Device mapper type should not automatically
- mean add 'p' before the partition number.  Fall back to
- adding it only if the previous character is a digit.
- This complies with kpartx behavior and linux behavior
- "since the dawn of time".
+Date: Fri, 28 Mar 2014 17:09:57 +0000
+Subject: Fix device-mapper partition naming
+
+Device mapper type should not automatically mean add 'p' before the
+partition number.  Fall back to adding it only if the previous character
+is a digit.  This complies with kpartx behavior and linux behavior
+"since the dawn of time".
+
 Forwarded: yes
 Last-Update: 2011-03-08
 
-Index: b/libparted/arch/linux.c
-===================================================================
---- a/libparted/arch/linux.c	2011-03-08 10:43:36.726632247 -0500
-+++ b/libparted/arch/linux.c	2011-03-08 10:46:30.274635151 -0500
-@@ -2198,7 +2198,6 @@
+Patch-Name: dm_p_separator.patch
+---
+ libparted/arch/linux.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
+index 3afe976..44c5e9e 100644
+--- a/libparted/arch/linux.c
++++ b/libparted/arch/linux.c
+@@ -2198,7 +2198,6 @@ _device_get_part_path (PedDevice* dev, int num)
          } else if (dev->type == PED_DEVICE_DAC960
                          || dev->type == PED_DEVICE_CPQARRAY
                          || dev->type == PED_DEVICE_ATARAID
@@ -19,7 +28,7 @@ Index: b/libparted/arch/linux.c
                          || isdigit (dev->path[path_len - 1]))
                  snprintf (result, result_len, "%sp%d", dev->path, num);
          else
-@@ -2716,7 +2715,10 @@
+@@ -2716,7 +2715,10 @@ _dm_add_partition (PedDisk* disk, PedPartition* part)
  
          dev_name = dm_task_get_name (task);
  

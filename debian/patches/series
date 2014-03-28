@@ -1,10 +1,6 @@
-# Debian specific patches
 doc-package.patch
-
-# For upstream merging
 preserve-hidden-parts.patch
 update-ext4-code.patch
-#unblacklist-md.patch
 kfreebsd-gnu.patch
 btrfs.patch
 loop-limits.patch
@@ -25,8 +21,6 @@ gptsync.patch
 loop-partitions.patch
 dmraid.patch
 dm-part-sync.patch
-
-# Backported
 sun-revert-disk-flag.patch
 sun-raid-type-test-fix.patch
 tiny-disk-constraint.patch
@@ -37,7 +31,6 @@ libparted-gpt-copy-flags.patch
 linux-two-component.patch
 md-partitions.patch
 gnulib-gets.patch
-
 udevadm-settle.patch
 16-dos-partitions.patch
 hfs-probe-corrupt.patch
@@ -47,8 +40,5 @@ hfs-probe-corrupt.patch
 fewer-gpt-entries.patch
 avoid-disturbing-partitions.patch
 linux-specific-gpt-type.patch
-
-# Symbols for this ABI (amd64 as reference)
 update-abi-symbols.patch
-
 fix-loop-labels.patch

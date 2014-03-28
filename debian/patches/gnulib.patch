@@ -1,6 +1,20 @@
---- a/lib/regex_internal.c.orig	2012-06-08 02:15:54.083227641 +0200
-+++ b/lib/regex_internal.c	2012-06-08 02:20:44.364702306 +0200
-@@ -738,16 +738,18 @@
+From 495e560e06e4217849e333d4b8370cb896a3a237 Mon Sep 17 00:00:00 2001
+From: Colin Watson <cjwatson@ubuntu.com>
+Date: Fri, 28 Mar 2014 17:09:55 +0000
+Subject: Backport gnulib fix for set but not used variables
+
+Bug-Debian: http://bugs.debian.org/676590
+
+Patch-Name: gnulib.patch
+---
+ lib/regex_internal.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/lib/regex_internal.c b/lib/regex_internal.c
+index c964814..c3cb571 100644
+--- a/lib/regex_internal.c
++++ b/lib/regex_internal.c
+@@ -738,16 +738,18 @@ re_string_reconstruct (re_string_t *pstr, Idx idx, int eflags)
  			  unsigned char buf[6];
  			  size_t mbclen;
  

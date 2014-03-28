@@ -87,6 +87,7 @@ static const char MBR_BOOT_CODE[] = {
 #define PARTITION_LINUX		0x83
 #define PARTITION_LINUX_EXT	0x85
 #define PARTITION_LINUX_LVM	0x8e
+#define PARTITION_FREEBSD_UFS	0xa5
 #define PARTITION_HFS		0xaf
 #define PARTITION_SUN_UFS	0xbf
 #define PARTITION_DELL_DIAG	0xde
@@ -103,7 +104,7 @@ static const char MBR_BOOT_CODE[] = {
  * (i.e. 1022 is sometimes used to indicate "use LBA").
  */
 #define MAX_CHS_CYLINDER	1021
-#define MAX_TOTAL_PART		16
+#define MAX_TOTAL_PART		64
 
 typedef struct _DosRawPartition		DosRawPartition;
 typedef struct _DosRawTable		DosRawTable;
@@ -164,12 +165,23 @@ typedef struct {
 
 static PedDiskType msdos_disk_type;
 
+PedGeometry*
+fat_probe_fat16 (PedGeometry* geom);
+
+PedGeometry*
+fat_probe_fat32 (PedGeometry* geom);
+
+PedGeometry*
+ntfs_probe (PedGeometry* geom);
+
 static int
 msdos_probe (const PedDevice *dev)
 {
 	PedDiskType*	disk_type;
 	DosRawTable*	part_table;
 	int		i;
+	PedGeometry *geom = NULL;
+	PedGeometry *fsgeom = NULL;
 
 	PED_ASSERT (dev != NULL, return 0);
 
@@ -186,6 +198,19 @@ msdos_probe (const PedDevice *dev)
 	if (PED_LE16_TO_CPU (part_table->magic) != MSDOS_MAGIC)
 		goto probe_fail;
 
+	geom = ped_geometry_new (dev, 0, dev->length);
+	PED_ASSERT (geom, return 0);
+	fsgeom = fat_probe_fat16 (geom);
+	if (fsgeom)
+		goto probe_fail; /* fat fs looks like dos mbr */
+	fsgeom = fat_probe_fat32 (geom);
+	if (fsgeom)
+		goto probe_fail; /* fat fs looks like dos mbr */
+	fsgeom = ntfs_probe (geom);
+	if (fsgeom)
+		goto probe_fail; /* ntfs fs looks like dos mbr */
+	ped_geometry_destroy (geom);
+	geom = NULL;
 	/* If this is a FAT fs, fail here.  Checking for the FAT signature
 	 * has some false positives; instead, do what the Linux kernel does
 	 * and ensure that each partition has a boot indicator that is
@@ -224,6 +249,10 @@ msdos_probe (const PedDevice *dev)
 	return 1;
 
  probe_fail:
+	if (geom)
+		ped_geometry_destroy (geom);
+	if (fsgeom)
+		ped_geometry_destroy (fsgeom);
 	free (label);
 	return 0;
 }
@@ -645,8 +674,10 @@ probe_partition_for_geom (const PedPartition* part, PedCHSGeometry* bios_geom)
 	if (cyl_size * denum != a_*H - A_*h)
 		return 0;
 
-	PED_ASSERT (cyl_size > 0, return 0);
- 	PED_ASSERT (cyl_size <= 255 * 63, return 0);
+	if (cyl_size <= 0)
+		return 0;
+	if (cyl_size > 255 * 63)
+		return 0;
 
 	if (h > 0)
 		head_size = ( a_ - c * cyl_size ) / h;
@@ -657,18 +688,24 @@ probe_partition_for_geom (const PedPartition* part, PedCHSGeometry* bios_geom)
 		PED_ASSERT (0, return 0);
 	}
 
-	PED_ASSERT (head_size > 0, return 0);
-	PED_ASSERT (head_size <= 63, return 0);
+	if (head_size <= 0)
+		return 0;
+	if (head_size > 63)
+		return 0;
 
 	cylinders = part->disk->dev->length / cyl_size;
 	heads = cyl_size / head_size;
 	sectors = head_size;
 
-	PED_ASSERT (heads > 0, return 0);
-	PED_ASSERT (heads < 256, return 0);
+	if (heads <= 0)
+		return 0;
+	if (heads > 255)
+		return 0;
 
-	PED_ASSERT (sectors > 0, return 0);
-	PED_ASSERT (sectors <= 63, return 0);
+	if (sectors <= 0)
+		return 0;
+	if (sectors > 63)
+		return 0;
 
 	/* Some broken OEM partitioning program(s) seem to have an out-by-one
 	 * error on the end of partitions.  We should offer to fix the
@@ -677,8 +714,10 @@ probe_partition_for_geom (const PedPartition* part, PedCHSGeometry* bios_geom)
 	if (((C + 1) * heads + H) * sectors + S == A)
 		C++;
 
-	PED_ASSERT ((c * heads + h) * sectors + s == a, return 0);
-	PED_ASSERT ((C * heads + H) * sectors + S == A, return 0);
+	if ((c * heads + h) * sectors + s != a)
+		return 0;
+	if ((C * heads + H) * sectors + S != A)
+		return 0;
 
 	bios_geom->cylinders = cylinders;
 	bios_geom->heads = heads;
@@ -1185,13 +1224,18 @@ msdos_write (const PedDisk* disk)
 	if (!table->mbr_signature)
 		table->mbr_signature = generate_random_id();
 
-	memset (table->partitions, 0, sizeof (table->partitions));
-	table->magic = PED_CPU_TO_LE16 (MSDOS_MAGIC);
+	if (table->magic != PED_CPU_TO_LE16 (MSDOS_MAGIC)) {
+		memset (table->partitions, 0, sizeof (table->partitions));
+		table->magic = PED_CPU_TO_LE16 (MSDOS_MAGIC);
+	}
 
 	for (i=1; i<=DOS_N_PRI_PARTITIONS; i++) {
 		part = ped_disk_get_partition (disk, i);
-		if (!part)
+		if (!part) {
+			if (table->partitions [i - 1].type != PARTITION_EMPTY)
+				memset (&table->partitions [i - 1], 0, sizeof (DosRawPartition));
 			continue;
+		}
 
 		if (!fill_raw_part (&table->partitions [i - 1], part, 0))
 			goto write_fail;
@@ -1377,6 +1421,8 @@ msdos_partition_set_system (PedPartition* part,
 		dos_data->system = PARTITION_HFS;
 	else if (!strcmp (fs_type->name, "sun-ufs"))
 		dos_data->system = PARTITION_SUN_UFS;
+	else if (!strcmp (fs_type->name, "freebsd-ufs"))
+		dos_data->system = PARTITION_FREEBSD_UFS;
 	else if (is_linux_swap (fs_type->name))
 		dos_data->system = PARTITION_LINUX_SWAP;
 	else
@@ -1638,13 +1684,13 @@ _primary_constraint (const PedDisk* disk, const PedCHSGeometry* bios_geom,
 			       		dev->length - min_geom->end))
 			return NULL;
 	} else {
-		/* Do not assume that length is larger than 1 cylinder's
-		   worth of sectors.  This is useful when testing with
-		   a memory-mapped "disk" (a la scsi_debug) that is say,
-		   2048 sectors long.  */
-		if (cylinder_size < dev->length
-		    && !ped_geometry_init (&start_geom, dev, cylinder_size,
-					   dev->length - cylinder_size))
+		/* Use cylinder_size as the starting sector number
+		   when the device is large enough to accommodate that.
+		   Otherwise, use sector 1.  */
+		PedSector start = (cylinder_size < dev->length
+				   ? cylinder_size : 1);
+		if (!ped_geometry_init (&start_geom, dev, start,
+					dev->length - start))
 			return NULL;
 		if (!ped_geometry_init (&end_geom, dev, 0, dev->length))
 			return NULL;
@@ -2314,17 +2360,23 @@ next_primary (const PedDisk* disk)
 		if (!ped_disk_get_partition (disk, i))
 			return i;
 	}
-	return 0;
+	return -1;
 }
 
 static int
 next_logical (const PedDisk* disk)
 {
 	int	i;
-	for (i=5; 1; i++) {
+	for (i=5; i<=MAX_TOTAL_PART; i++) {
 		if (!ped_disk_get_partition (disk, i))
 			return i;
 	}
+	ped_exception_throw (
+		PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+		_("Can not create any more partitions"),
+		disk->dev->path);
+	return -1;
+
 }
 
 static int
@@ -2343,7 +2395,8 @@ msdos_partition_enumerate (PedPartition* part)
 		part->num = next_logical (part->disk);
 	else
 		part->num = next_primary (part->disk);
-
+	if (part->num == -1)
+		return 0;
 	return 1;
 }
 

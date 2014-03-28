@@ -1,7 +1,7 @@
-From e6536360bd4496cee1f1bf2dfb0b11f6bdbbfd4b Mon Sep 17 00:00:00 2001
+From 3475fb49bb636554b5ea000da1dedb3763ec877c Mon Sep 17 00:00:00 2001
 From: "Roderick W. Smith" <rodsmith@rodsbooks.com>
 Date: Sun, 23 Sep 2012 21:29:10 +0200
-Subject: [PATCH] add support for a new Linux-specific GPT partition type code
+Subject: add support for a new Linux-specific GPT partition type code
 
 * NEWS: Describe the new Linux-specific partition type code
 and the new msftres flag that can be used to override this type
@@ -32,18 +32,22 @@ partition table listings include "msftdata" for file systems
 of type NTFS and FAT*.
 For more discussion and justification, see
 http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
----
- NEWS                       |   19 +++++++++++++++++++
- doc/parted.texi            |   16 +++++++++++++++-
- include/parted/disk.in.h   |    5 +++--
- libparted/disk.c           |    2 ++
- libparted/labels/gpt.c     |   45 ++++++++++++++++++++++++++++++++++++++++++--
- tests/t0220-gpt-msftres.sh |    3 ++-
- 6 files changed, 84 insertions(+), 6 deletions(-)
 
+Patch-Name: linux-specific-gpt-type.patch
+---
+ NEWS                       | 19 +++++++++++++++++++
+ doc/parted.texi            | 14 ++++++++++++++
+ include/parted/disk.h      |  5 +++--
+ libparted/disk.c           |  2 ++
+ libparted/labels/gpt.c     | 46 ++++++++++++++++++++++++++++++++++++++++++++--
+ tests/t0220-gpt-msftres.sh |  3 ++-
+ 6 files changed, 84 insertions(+), 5 deletions(-)
+
+diff --git a/NEWS b/NEWS
+index e053e3f..627047d 100644
 --- a/NEWS
 +++ b/NEWS
-@@ -44,6 +44,25 @@
+@@ -44,6 +44,25 @@ GNU parted NEWS                                    -*- outline -*-
    sector support being "HIGHLY EXPERIMENTAL".  It seems to have matured
    enough to be usable at least with GPT and MSDOS partition tables.
  
@@ -69,9 +73,11 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
  
  * Noteworthy changes in release 2.2 (2010-02-26) [stable]
  
+diff --git a/doc/parted.texi b/doc/parted.texi
+index 5a2f38f..fe8338a 100644
 --- a/doc/parted.texi
 +++ b/doc/parted.texi
-@@ -1061,6 +1061,20 @@
+@@ -1061,6 +1061,20 @@ on a partition that partition must be bootable.
  For PC98 disk labels, all ext2 partitions must be bootable (this is
  enforced by Parted).
  
@@ -92,9 +98,29 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
  @item lba
  (MS-DOS) - this flag can be enabled to tell MS DOS, MS Windows 9x and
  MS Windows ME based operating systems to use Linear (LBA) mode.
+diff --git a/include/parted/disk.h b/include/parted/disk.h
+index ddd3c86..db233fe 100644
+--- a/include/parted/disk.h
++++ b/include/parted/disk.h
+@@ -70,10 +70,11 @@ enum _PedPartitionFlag {
+         PED_PARTITION_BIOS_GRUB=12,
+         PED_PARTITION_APPLE_TV_RECOVERY=13,
+         PED_PARTITION_DIAG=14,
+-        PED_PARTITION_LEGACY_BOOT=15
++	PED_PARTITION_LEGACY_BOOT=15,
++	PED_PARTITION_MSFT_DATA=16
+ };
+ #define PED_PARTITION_FIRST_FLAG        PED_PARTITION_BOOT
+-#define PED_PARTITION_LAST_FLAG         PED_PARTITION_LEGACY_BOOT
++#define PED_PARTITION_LAST_FLAG         PED_PARTITION_MSFT_DATA
+ 
+ enum _PedDiskTypeFeature {
+         PED_DISK_TYPE_EXTENDED=1,       /**< supports extended partitions */
+diff --git a/libparted/disk.c b/libparted/disk.c
+index 6fb9eb9..b242842 100644
 --- a/libparted/disk.c
 +++ b/libparted/disk.c
-@@ -2439,6 +2439,8 @@
+@@ -2439,6 +2439,8 @@ ped_partition_flag_get_name (PedPartitionFlag flag)
  		return N_("prep");
  	case PED_PARTITION_MSFT_RESERVED:
  		return N_("msftres");
@@ -103,9 +129,11 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
          case PED_PARTITION_APPLE_TV_RECOVERY:
                  return N_("atvrecv");
          case PED_PARTITION_DIAG:
+diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
+index 40c83f7..168a6eb 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
-@@ -126,6 +126,10 @@
+@@ -126,6 +126,10 @@ typedef struct
      ((efi_guid_t) { PED_CPU_TO_LE32 (0x0657fd6d), PED_CPU_TO_LE16 (0xa4ab), \
                      PED_CPU_TO_LE16 (0x43c4), 0x84, 0xe5, \
                      { 0x09, 0x33, 0xc8, 0x4b, 0x4f, 0x4f }})
@@ -116,7 +144,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
  #define PARTITION_LVM_GUID \
      ((efi_guid_t) { PED_CPU_TO_LE32 (0xe6d6d379), PED_CPU_TO_LE16 (0xf507), \
                      PED_CPU_TO_LE16 (0x44c2), 0xa2, 0x3c, \
-@@ -287,6 +291,7 @@
+@@ -287,6 +291,7 @@ typedef struct _GPTPartitionData
    int hp_service;
    int hidden;
    int msftres;
@@ -124,7 +152,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
    int atvrecv;
    int msftrecv;
    int legacy_boot;
-@@ -1048,6 +1053,7 @@
+@@ -1048,6 +1053,7 @@ _parse_part_entry (PedDisk *disk, GuidPartitionEntry_t *pte)
    gpt_part_data->lvm = gpt_part_data->raid
      = gpt_part_data->boot = gpt_part_data->hp_service
      = gpt_part_data->hidden = gpt_part_data->msftres
@@ -132,7 +160,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
      = gpt_part_data->msftrecv
      = gpt_part_data->legacy_boot
      = gpt_part_data->bios_grub = gpt_part_data->atvrecv = 0;
-@@ -1069,6 +1075,8 @@
+@@ -1069,6 +1075,8 @@ _parse_part_entry (PedDisk *disk, GuidPartitionEntry_t *pte)
      gpt_part_data->hp_service = 1;
    else if (!guid_cmp (gpt_part_data->type, PARTITION_MSFT_RESERVED_GUID))
      gpt_part_data->msftres = 1;
@@ -141,7 +169,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
    else if (!guid_cmp (gpt_part_data->type, PARTITION_MSFT_RECOVERY))
      gpt_part_data->msftrecv = 1;
    else if (!guid_cmp (gpt_part_data->type, PARTITION_APPLE_TV_RECOVERY_GUID))
-@@ -1699,7 +1707,7 @@
+@@ -1699,7 +1707,7 @@ gpt_partition_new (const PedDisk *disk,
    if (!gpt_part_data)
      goto error_free_part;
  
@@ -150,7 +178,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
    gpt_part_data->lvm = 0;
    gpt_part_data->raid = 0;
    gpt_part_data->boot = 0;
-@@ -1707,6 +1715,7 @@
+@@ -1707,6 +1715,7 @@ gpt_partition_new (const PedDisk *disk,
    gpt_part_data->hp_service = 0;
    gpt_part_data->hidden = 0;
    gpt_part_data->msftres = 0;
@@ -158,7 +186,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
    gpt_part_data->msftrecv = 0;
    gpt_part_data->atvrecv = 0;
    gpt_part_data->legacy_boot = 0;
-@@ -1803,6 +1812,11 @@
+@@ -1803,6 +1812,11 @@ gpt_partition_set_system (PedPartition *part,
        gpt_part_data->type = PARTITION_MSFT_RESERVED_GUID;
        return 1;
      }
@@ -170,7 +198,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
    if (gpt_part_data->msftrecv)
      {
        gpt_part_data->type = PARTITION_MSFT_RECOVERY;
-@@ -1839,7 +1853,7 @@
+@@ -1839,7 +1853,7 @@ gpt_partition_set_system (PedPartition *part,
          }
      }
  
@@ -179,7 +207,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
    return 1;
  }
  
-@@ -1917,6 +1931,7 @@
+@@ -1917,6 +1931,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
            = gpt_part_data->bios_grub
            = gpt_part_data->hp_service
            = gpt_part_data->msftres
@@ -187,7 +215,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
            = gpt_part_data->msftrecv
            = gpt_part_data->atvrecv = 0;
        return gpt_partition_set_system (part, part->fs_type);
-@@ -1928,6 +1943,7 @@
+@@ -1928,6 +1943,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
            = gpt_part_data->boot
            = gpt_part_data->hp_service
            = gpt_part_data->msftres
@@ -195,7 +223,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
            = gpt_part_data->msftrecv
            = gpt_part_data->atvrecv = 0;
        return gpt_partition_set_system (part, part->fs_type);
-@@ -1939,6 +1955,7 @@
+@@ -1939,6 +1955,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
            = gpt_part_data->bios_grub
            = gpt_part_data->hp_service
            = gpt_part_data->msftres
@@ -203,7 +231,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
            = gpt_part_data->msftrecv
            = gpt_part_data->atvrecv = 0;
        return gpt_partition_set_system (part, part->fs_type);
-@@ -1950,6 +1967,7 @@
+@@ -1950,6 +1967,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
            = gpt_part_data->bios_grub
            = gpt_part_data->hp_service
            = gpt_part_data->msftres
@@ -211,7 +239,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
            = gpt_part_data->msftrecv
            = gpt_part_data->atvrecv = 0;
        return gpt_partition_set_system (part, part->fs_type);
-@@ -1961,6 +1979,7 @@
+@@ -1961,6 +1979,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
            = gpt_part_data->lvm
            = gpt_part_data->bios_grub
            = gpt_part_data->msftres
@@ -219,7 +247,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
            = gpt_part_data->msftrecv
            = gpt_part_data->atvrecv = 0;
        return gpt_partition_set_system (part, part->fs_type);
-@@ -1972,8 +1991,26 @@
+@@ -1972,8 +1991,26 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
            = gpt_part_data->lvm
            = gpt_part_data->bios_grub
            = gpt_part_data->hp_service
@@ -246,7 +274,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
        return gpt_partition_set_system (part, part->fs_type);
      case PED_PARTITION_DIAG:
        gpt_part_data->msftrecv = state;
-@@ -1983,6 +2020,7 @@
+@@ -1983,6 +2020,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
            = gpt_part_data->lvm
            = gpt_part_data->bios_grub
            = gpt_part_data->hp_service
@@ -254,7 +282,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
            = gpt_part_data->msftres
            = gpt_part_data->atvrecv = 0;
        return gpt_partition_set_system (part, part->fs_type);
-@@ -1995,6 +2033,7 @@
+@@ -1995,6 +2033,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
            = gpt_part_data->bios_grub
            = gpt_part_data->hp_service
            = gpt_part_data->msftres
@@ -262,7 +290,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
            = gpt_part_data->msftrecv = 0;
        return gpt_partition_set_system (part, part->fs_type);
      case PED_PARTITION_HIDDEN:
-@@ -2033,6 +2072,8 @@
+@@ -2033,6 +2072,8 @@ gpt_partition_get_flag (const PedPartition *part, PedPartitionFlag flag)
        return gpt_part_data->hp_service;
      case PED_PARTITION_MSFT_RESERVED:
        return gpt_part_data->msftres;
@@ -271,7 +299,7 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
      case PED_PARTITION_DIAG:
        return gpt_part_data->msftrecv;
      case PED_PARTITION_APPLE_TV_RECOVERY:
-@@ -2062,6 +2103,7 @@
+@@ -2062,6 +2103,7 @@ gpt_partition_is_flag_available (const PedPartition *part,
      case PED_PARTITION_BIOS_GRUB:
      case PED_PARTITION_HPSERVICE:
      case PED_PARTITION_MSFT_RESERVED:
@@ -279,9 +307,11 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
      case PED_PARTITION_DIAG:
      case PED_PARTITION_APPLE_TV_RECOVERY:
      case PED_PARTITION_HIDDEN:
+diff --git a/tests/t0220-gpt-msftres.sh b/tests/t0220-gpt-msftres.sh
+index bbc415b..d8c0f9e 100644
 --- a/tests/t0220-gpt-msftres.sh
 +++ b/tests/t0220-gpt-msftres.sh
-@@ -60,7 +60,8 @@
+@@ -60,7 +60,8 @@ fail=0
  rm -f out
  for type in $fs_types; do
    end=$(expr $start + $part_size - 1)
@@ -291,19 +321,3 @@ http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
    parted -s $dev mkpart primary $type ${start}s ${end}s >> out 2>&1 || fail=1
    parted -s $dev name $i $type >> out 2>&1 || fail=1
    start=$(expr $end + 1)
---- a/include/parted/disk.h
-+++ b/include/parted/disk.h
-@@ -70,10 +70,11 @@
-         PED_PARTITION_BIOS_GRUB=12,
-         PED_PARTITION_APPLE_TV_RECOVERY=13,
-         PED_PARTITION_DIAG=14,
--        PED_PARTITION_LEGACY_BOOT=15
-+	PED_PARTITION_LEGACY_BOOT=15,
-+	PED_PARTITION_MSFT_DATA=16
- };
- #define PED_PARTITION_FIRST_FLAG        PED_PARTITION_BOOT
--#define PED_PARTITION_LAST_FLAG         PED_PARTITION_LEGACY_BOOT
-+#define PED_PARTITION_LAST_FLAG         PED_PARTITION_MSFT_DATA
- 
- enum _PedDiskTypeFeature {
-         PED_DISK_TYPE_EXTENDED=1,       /**< supports extended partitions */

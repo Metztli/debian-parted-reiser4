@@ -197,6 +197,7 @@ ped_disk_new (PedDevice* dev)
 	disk = ped_disk_new_fresh (dev, type);
 	if (!disk)
 		goto error_close_dev;
+	dev->loop = 0;
 	if (!type->ops->read (disk))
 		goto error_destroy_disk;
 	disk->needs_clobber = 0;
@@ -497,6 +498,7 @@ ped_disk_commit_to_dev (PedDisk* disk)
 			goto error_close_dev;
 		disk->needs_clobber = 0;
 	}
+	disk->dev->loop = 0;
 	if (!disk->type->ops->write (disk))
 		goto error_close_dev;
 	ped_device_close (disk->dev);
@@ -2439,10 +2441,14 @@ ped_partition_flag_get_name (PedPartitionFlag flag)
 		return N_("prep");
 	case PED_PARTITION_MSFT_RESERVED:
 		return N_("msftres");
+	case PED_PARTITION_MSFT_DATA:
+		return N_("msftdata");
         case PED_PARTITION_APPLE_TV_RECOVERY:
                 return N_("atvrecv");
         case PED_PARTITION_DIAG:
                 return N_("diag");
+        case PED_PARTITION_LEGACY_BOOT:
+                return N_("legacy_boot");
 
 	default:
 		ped_exception_throw (

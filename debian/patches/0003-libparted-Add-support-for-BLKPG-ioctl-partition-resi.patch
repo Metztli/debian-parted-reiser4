@@ -1,20 +1,23 @@
-From 6ca0769fcc25f1e4fc7b40769eabd05804670b30 Mon Sep 17 00:00:00 2001
+From 4a652a7cde890c35265bb49a7ecc3cb5f3daa6ca Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
 Date: Tue, 29 Nov 2011 14:05:48 -0500
-Subject: [PATCH 3/6] libparted: Add support for BLKPG ioctl partition resize
+Subject: libparted: Add support for BLKPG ioctl partition resize
 
-When resizing a partition ( same partition number, same
-start sector, different end sector ), if removing the old
-partition fails because it is in use, try to use the
-new BLKPG_RES_PARTITION request to update the kernel
-partition table with the new size.
+When resizing a partition (same partition number, same start sector,
+different end sector), if removing the old partition fails because it is
+in use, try to use the new BLKPG_RES_PARTITION request to update the
+kernel partition table with the new size.
+
+Patch-Name: 0003-libparted-Add-support-for-BLKPG-ioctl-partition-resi.patch
 ---
- libparted/arch/linux.c |   56 ++++++++++++++++++++++++++++++++++++++++++++++++
+ libparted/arch/linux.c | 56 ++++++++++++++++++++++++++++++++++++++++++++++++++
  1 file changed, 56 insertions(+)
 
+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
+index 4032efb..58aed34 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -2481,6 +2481,53 @@
+@@ -2481,6 +2481,53 @@ _blkpg_remove_partition (PedDisk* disk, int n)
                                      BLKPG_DEL_PARTITION);
  }
  
@@ -68,7 +71,7 @@ partition table with the new size.
  /* Read the unsigned long long from /sys/block/DEV_BASE/PART_BASE/ENTRY
     and set *VAL to that value, where DEV_BASE is the last component of path to
     block device corresponding to PART and PART_BASE is the sysfs name of PART.
-@@ -2696,6 +2743,15 @@
+@@ -2696,6 +2743,15 @@ _disk_sync_part_table (PedDisk* disk)
                                  if (start == part->geom.start
  				    && length == part->geom.length)
                                          ok[i - 1] = 1;

@@ -1,16 +1,24 @@
-Description: HFS/HFS+ probe: don't let a corrupt FS evoke failed assertion
-Author: Brian C. Lane <bcl@redhat.com>
+From a0ab2a3618604db9ecca922c103ed61dd81eb162 Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Fri, 28 Mar 2014 17:10:18 +0000
+Subject: HFS/HFS+ probe: don't let a corrupt FS evoke failed assertion
+
 Origin: upstream, http://git.debian.org/?p=parted/parted.git;a=commitdiff;h=6bc7e1965078579e9855f851254d67b3d8165784
 Bug-Fedora: http://bugzilla.redhat.com/714758
 Bug-Ubuntu: https://bugs.launchpad.net/bugs/796891
 Forwarded: not-needed
 Last-Update: 2012-03-20
 
-Index: b/libparted/fs/hfs/probe.c
-===================================================================
+Patch-Name: hfs-probe-corrupt.patch
+---
+ libparted/fs/hfs/probe.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/libparted/fs/hfs/probe.c b/libparted/fs/hfs/probe.c
+index e56fef9..6fab79e 100644
 --- a/libparted/fs/hfs/probe.c
 +++ b/libparted/fs/hfs/probe.c
-@@ -83,7 +83,8 @@
+@@ -83,7 +83,8 @@ hfs_and_wrapper_probe (PedGeometry* geom)
  		  + ((PedSector) PED_BE16_TO_CPU (mdb->total_blocks)
  		     * (PED_BE32_TO_CPU (mdb->block_size) / PED_SECTOR_SIZE_DEFAULT )));
  	max = search + (PED_BE32_TO_CPU (mdb->block_size) / PED_SECTOR_SIZE_DEFAULT);
@@ -20,7 +28,7 @@ Index: b/libparted/fs/hfs/probe.c
  		return NULL;
  
  	for (; search < max; search++) {
-@@ -142,8 +143,9 @@
+@@ -142,8 +143,9 @@ hfsplus_probe (PedGeometry* geom)
  		      - 2;
  		search = max - 2 * ( PED_BE32_TO_CPU (vh->block_size)
  				     / PED_SECTOR_SIZE_DEFAULT ) + 2;
@@ -32,7 +40,7 @@ Index: b/libparted/fs/hfs/probe.c
  			return NULL;
  
  		for (; search < max; search++) {
-@@ -157,8 +159,9 @@
+@@ -157,8 +159,9 @@ hfsplus_probe (PedGeometry* geom)
  		search = ((PedSector) PED_BE32_TO_CPU (vh->total_blocks) - 1)
  		      * ( PED_BE32_TO_CPU (vh->block_size) / PED_SECTOR_SIZE_DEFAULT )
  		      - 1;
@@ -44,7 +52,7 @@ Index: b/libparted/fs/hfs/probe.c
  		    || !ped_geometry_read (geom_ret, buf, search, 1)
  		    || vh->signature != PED_CPU_TO_BE16 (HFSP_SIGNATURE)) {
  		    	ped_geometry_destroy (geom_ret);
-@@ -214,8 +217,9 @@
+@@ -214,8 +217,9 @@ hfsx_probe (PedGeometry* geom)
  		      * ( PED_BE32_TO_CPU (vh->block_size) / PED_SECTOR_SIZE_DEFAULT )
  		      - 2;
  	search = max - ( PED_BE32_TO_CPU (vh->block_size) / PED_SECTOR_SIZE_DEFAULT );

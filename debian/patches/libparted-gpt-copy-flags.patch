@@ -1,21 +1,27 @@
-From: Brian C. Lane <bcl@redhat.com>
+From 48aba98c8cf0ab0bda030e93b78e95c56c254787 Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Fri, 28 Mar 2014 17:10:11 +0000
 Subject: libparted: copy flags when duplicating GPT partitions
-Origin: upstream, http://git.debian.org/?p=parted/parted.git;a=commitdiff;h=febeedd8d3d
-Forwarded: not-needed
-Last-Update: 2011-05-15
 
 * libparted/labels/gpt.c (gpt_partition_duplicate): Copy flags to new
 partition.
 
 Reported by Chris Murphy in https://bugzilla.redhat.com/747497.
 
----
- libparted/labels/gpt.c |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+Origin: upstream, http://git.debian.org/?p=parted/parted.git;a=commitdiff;h=febeedd8d3d
+Forwarded: not-needed
+Last-Update: 2011-05-15
 
+Patch-Name: libparted-gpt-copy-flags.patch
+---
+ libparted/labels/gpt.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
+index 68102a3..03154d2 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
-@@ -1743,9 +1743,7 @@
+@@ -1743,9 +1743,7 @@ gpt_partition_duplicate (const PedPartition *part)
    if (!result_data)
      goto error_free_part;
  

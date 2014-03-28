@@ -1,13 +1,25 @@
+From 54845b8bf2f2a4de9ea9df7516161bb218f77712 Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@cfl.rr.com>
+Date: Fri, 28 Mar 2014 17:10:04 +0000
 Subject: refactor device-mapper partition sync code
-Forwarded: Yes
-Description: The device-mapper partition sync code was still using the remove
- all partitions, then add new partitions method.  Refactor to use the same
- algorithm as regular disks: try to remove all, and ignore any that could not
- be removed but have not changed.
+
+The device-mapper partition sync code was still using the remove all
+partitions, then add new partitions method.  Refactor to use the same
+algorithm as regular disks: try to remove all, and ignore any that could
+not be removed but have not changed.
+
+Forwarded: yes
+
+Patch-Name: dm-part-sync.patch
+---
+ libparted/arch/linux.c | 217 ++++++++++++++++++++++++++-----------------------
+ 1 file changed, 114 insertions(+), 103 deletions(-)
+
+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
+index 73058c8..bccc2c2 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -269,6 +269,16 @@
+@@ -269,6 +269,16 @@ static char* _device_get_part_path (PedDevice* dev, int num);
  static int _partition_is_mounted_by_path (const char* path);
  static int
  _dm_is_part (const char *path);
@@ -24,7 +36,7 @@ Description: The device-mapper partition sync code was still using the remove
  
  
  static int
-@@ -2225,10 +2235,39 @@
+@@ -2225,10 +2235,39 @@ linux_probe_all ()
                  _probe_proc_partitions ();
  }
  
@@ -65,7 +77,7 @@ Description: The device-mapper partition sync code was still using the remove
          int             result_len = path_len + 16;
          char*           result;
  
-@@ -2239,18 +2278,19 @@
+@@ -2239,18 +2278,19 @@ _device_get_part_path (PedDevice* dev, int num)
          /* Check for devfs-style /disc => /partN transformation
             unconditionally; the system might be using udev with devfs rules,
             and if not the test is harmless. */
@@ -91,7 +103,7 @@ Description: The device-mapper partition sync code was still using the remove
          return result;
  }
  
-@@ -2537,6 +2577,9 @@
+@@ -2537,6 +2577,9 @@ _device_get_partition_range(PedDevice* dev)
          FILE*       fp;
          bool        ok;
  
@@ -101,7 +113,7 @@ Description: The device-mapper partition sync code was still using the remove
          r = snprintf(path, sizeof(path), "/sys/block/%s/range",
                       last_component(dev->path));
          if (r < 0 || r >= sizeof(path))
-@@ -2574,6 +2617,23 @@
+@@ -2574,6 +2617,23 @@ _disk_sync_part_table (PedDisk* disk)
          PED_ASSERT(disk->dev != NULL, return 0);
          int lpn;
  
@@ -125,7 +137,7 @@ Description: The device-mapper partition sync code was still using the remove
          /* lpn = largest partition number. */
          if (ped_disk_get_max_supported_partition_count(disk, &lpn))
                  lpn = PED_MIN(lpn, _device_get_partition_range(disk->dev));
-@@ -2607,7 +2667,7 @@
+@@ -2607,7 +2667,7 @@ _disk_sync_part_table (PedDisk* disk)
              int j;
              for (j = 0; j < lpn; j++) {
                  if (!ok[j]) {
@@ -134,7 +146,7 @@ Description: The device-mapper partition sync code was still using the remove
                      errnums[j] = errno;
                      if (!ok[j] && errnums[j] == EBUSY)
                          busy = true;
-@@ -2624,9 +2684,9 @@
+@@ -2624,9 +2684,9 @@ _disk_sync_part_table (PedDisk* disk)
                                  unsigned long long length;
                                  unsigned long long start;
                                  /* get start and length of existing partition */
@@ -147,7 +159,7 @@ Description: The device-mapper partition sync code was still using the remove
                                  if (start == part->geom.start
  				    && length == part->geom.length)
                                          ok[i - 1] = 1;
-@@ -2638,7 +2698,7 @@
+@@ -2638,7 +2698,7 @@ _disk_sync_part_table (PedDisk* disk)
                          }
  
                          /* add the (possibly modified or new) partition */
@@ -156,7 +168,7 @@ Description: The device-mapper partition sync code was still using the remove
                                  ped_exception_throw (
                                          PED_EXCEPTION_ERROR,
                                          PED_EXCEPTION_RETRY_CANCEL,
-@@ -2686,24 +2746,34 @@
+@@ -2686,24 +2746,34 @@ _disk_sync_part_table (PedDisk* disk)
  
  #ifdef ENABLE_DEVICE_MAPPER
  static int
@@ -199,7 +211,7 @@ Description: The device-mapper partition sync code was still using the remove
  }
  
  /* We consider a dm device that is a linear mapping with a  *
-@@ -2757,65 +2827,38 @@
+@@ -2757,65 +2827,38 @@ err:
          return rc;
  }
  
@@ -288,7 +300,7 @@ Description: The device-mapper partition sync code was still using the remove
  {
          char*           vol_name = NULL;
          const char*     dev_name = NULL;
-@@ -2868,7 +2911,7 @@
+@@ -2868,7 +2911,7 @@ _dm_add_partition (PedDisk* disk, PedPartition* part)
                  free(vol_name);
                  return 1;
          } else {
@@ -297,7 +309,7 @@ Description: The device-mapper partition sync code was still using the remove
          }
  err:
          dm_task_update_nodes();
-@@ -2878,34 +2921,6 @@
+@@ -2878,34 +2921,6 @@ err:
          free (vol_name);
          return 0;
  }
@@ -332,7 +344,7 @@ Description: The device-mapper partition sync code was still using the remove
  #endif
  
  static int
-@@ -2928,10 +2943,6 @@
+@@ -2928,10 +2943,6 @@ linux_disk_commit (PedDisk* disk)
          if (!_has_partitions (disk))
                  return 1;
  
