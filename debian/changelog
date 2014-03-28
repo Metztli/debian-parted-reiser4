@@ -1,4 +1,4 @@
-parted (2.3-17) UNRELEASED; urgency=low
+parted (2.3-17) unstable; urgency=low
 
   [ Phillip Susi ]
   * avoid-disturbing-partitions.patch: remove all old partitions (that are
@@ -17,7 +17,7 @@ parted (2.3-17) UNRELEASED; urgency=low
   [ Dimitri John Ledkov ]
   * Cherry-pick upstream fix for FTBFS with readline 6.3 (closes: #741842).
 
- -- Phillip Susi <psusi@ubuntu.com>  Fri, 27 Dec 2013 21:53:28 -0500
+ -- Colin Watson <cjwatson@debian.org>  Fri, 28 Mar 2014 17:49:47 +0000
 
 parted (2.3-16) unstable; urgency=low
 
