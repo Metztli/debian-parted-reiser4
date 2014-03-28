@@ -48,7 +48,8 @@ libfs_la_SOURCES =		\
   xfs/platform_defs.h		\
   xfs/xfs.c			\
   xfs/xfs_sb.h			\
-  xfs/xfs_types.h
+  xfs/xfs_types.h		\
+  zfs/zfs.c
 
 lib_LTLIBRARIES = libparted-fs-resize.la
 
