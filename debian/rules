@@ -169,7 +169,7 @@ echo-vars:
 packaging-files: $(GENFILES)
 	touch $@
 
-debian/stamp-autoreconf: debian/stamp-patched
+debian/stamp-autoreconf:
 	dh_autoreconf
 	touch $@
 
@@ -232,7 +232,7 @@ build-udeb/build-stamp: build-udeb/config.status
 
 	touch $@
 
-clean: unpatch packaging-files
+clean: packaging-files
 	dh_testdir
 	dh_testroot
 
@@ -386,8 +386,6 @@ binary-arch: build install
 	dh_builddeb
 
 binary: binary-arch binary-indep
-
-include /usr/share/quilt/quilt.make
 
 .PHONY: build-deb build-udeb build
 .PHONY: install-deb install-udeb install
