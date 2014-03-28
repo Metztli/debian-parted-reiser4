@@ -109,6 +109,7 @@ extern void ped_file_system_hfs_init (void);
 extern void ped_file_system_fat_init (void);
 extern void ped_file_system_ext2_init (void);
 extern void ped_file_system_nilfs2_init (void);
+extern void ped_file_system_btrfs_init (void);
 
 static void
 init_file_system_types ()
@@ -124,6 +125,7 @@ init_file_system_types ()
 	ped_file_system_fat_init ();
 	ped_file_system_ext2_init ();
 	ped_file_system_nilfs2_init ();
+	ped_file_system_btrfs_init ();
 }
 
 extern void ped_disk_aix_done ();
@@ -185,6 +187,7 @@ extern void ped_file_system_ntfs_done (void);
 extern void ped_file_system_reiserfs_done (void);
 extern void ped_file_system_ufs_done (void);
 extern void ped_file_system_xfs_done (void);
+extern void ped_file_system_btrfs_done (void);
 extern void ped_file_system_amiga_done (void);
 
 static void
@@ -200,6 +203,7 @@ done_file_system_types ()
 	ped_file_system_reiserfs_done ();
 	ped_file_system_ufs_done ();
 	ped_file_system_xfs_done ();
+	ped_file_system_btrfs_done ();
 	ped_file_system_amiga_done ();
 }
 
