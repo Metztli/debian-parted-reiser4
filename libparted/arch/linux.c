@@ -1180,6 +1180,12 @@ init_generic (PedDevice* dev, const char* model_name)
         if (_device_probe_geometry (dev)) {
                 ped_exception_leave_all ();
         } else {
+                if (!_device_get_length (dev)) {
+                        ped_exception_catch ();
+                        ped_exception_leave_all ();
+                        goto error_close_dev;
+                }
+
                 /* hack to allow use of files, for testing */
                 ped_exception_catch ();
                 ped_exception_leave_all ();
