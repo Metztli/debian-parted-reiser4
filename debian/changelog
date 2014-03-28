@@ -12,6 +12,7 @@ parted (2.3-17) UNRELEASED; urgency=low
   * Slight tweak to avoid-disturbing-partitions.patch to continue to handle
     entirely unchanged partitions properly.
   * Convert to git-dpm.
+  * Backport upstream change to add GPT PReP GUID support.
 
  -- Phillip Susi <psusi@ubuntu.com>  Fri, 27 Dec 2013 21:53:28 -0500
 
