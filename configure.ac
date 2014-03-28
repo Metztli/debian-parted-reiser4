@@ -629,6 +629,7 @@ libparted/Makefile
 libparted/labels/Makefile
 libparted/fs/Makefile
 libparted/fs/amiga/Makefile
+libparted/fs/btrfs/Makefile
 libparted/fs/ext2/Makefile
 libparted/fs/fat/Makefile
 libparted/fs/hfs/Makefile
