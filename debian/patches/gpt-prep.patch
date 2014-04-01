@@ -1,4 +1,4 @@
-From d1ac70b75a7d37d7a322bab3b4cfe6a2e106ba68 Mon Sep 17 00:00:00 2001
+From 7d1b73fd4ef6ebd0aae480d342480d4d06119419 Mon Sep 17 00:00:00 2001
 From: Daniel Battaiola Kreling <dbkreling@br.ibm.com>
 Date: Mon, 7 Oct 2013 11:51:50 +0530
 Subject: GPT: add support for PReP GUID

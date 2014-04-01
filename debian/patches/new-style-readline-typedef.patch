@@ -1,4 +1,4 @@
-From 38d1905f5a2d2c3712fd0b287b41bfa827871f84 Mon Sep 17 00:00:00 2001
+From f4a5a2044e5cbc2715f37e7de1a169ae96edcca2 Mon Sep 17 00:00:00 2001
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Mon, 3 Mar 2014 10:40:08 -0300
 Subject: ui: switch to new-style readline typedef

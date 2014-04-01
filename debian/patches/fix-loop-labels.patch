@@ -1,4 +1,4 @@
-From 54968b013a14156a33c8bb04d3fbf70080123fc8 Mon Sep 17 00:00:00 2001
+From c9347f74ec5adbce74931cd719678745e113b2e5 Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:10:27 +0000
 Subject: Fix loop labels
@@ -18,14 +18,15 @@ Forwarded: yes
 Patch-Name: fix-loop-labels.patch
 ---
  include/parted/device.h               |  1 +
- libparted/arch/linux.c                | 40 +++++++++++---------------------
+ libparted/arch/linux.c                | 43 +++++++++++++----------------------
+ libparted/device.c                    |  1 +
  libparted/disk.c                      |  2 ++
  libparted/fs/ntfs/ntfs.c              |  2 +-
  libparted/labels/dos.c                | 28 +++++++++++++++++++++++
  libparted/labels/loop.c               | 43 ++++++++++++-----------------------
  partprobe/partprobe.c                 |  2 --
  scripts/data/abi/baseline_symbols.txt |  1 +
- 8 files changed, 61 insertions(+), 58 deletions(-)
+ 9 files changed, 65 insertions(+), 58 deletions(-)
 
 diff --git a/include/parted/device.h b/include/parted/device.h
 index b94765c..0bbcf13 100644
@@ -40,7 +41,7 @@ index b94765c..0bbcf13 100644
  
  #include <parted/natmath.h>
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index d3daa8c..55ed6ee 100644
+index d3daa8c..6200b64 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
 @@ -48,6 +48,7 @@
@@ -118,7 +119,18 @@ index d3daa8c..55ed6ee 100644
                  if (part) {
                          unsigned long long length;
                          unsigned long long start;
-@@ -2739,7 +2728,10 @@ _disk_sync_part_table (PedDisk* disk)
+@@ -2729,7 +2718,10 @@ _disk_sync_part_table (PedDisk* disk)
+                 unsigned int n_sleep = (max_sleep_seconds
+                                         * 1000000 / sleep_microseconds);
+                 do {
++                        int loop = disk->dev->loop;
++                        disk->dev->loop = 0; /* disable so we can remove non loop partitions */
+                         ok[i-1] = remove_partition (disk, i);
++                        disk->dev->loop = loop;
+                         errnums[i-1] = errno;
+                         if (ok[i-1] || errnums[i-1] != EBUSY)
+                                 break;
+@@ -2739,7 +2731,10 @@ _disk_sync_part_table (PedDisk* disk)
                          ok[i-1] = 1; /* it already doesn't exist */
          }
          for (i = 1; i <= lpn; i++) {
@@ -130,7 +142,7 @@ index d3daa8c..55ed6ee 100644
                  if (part) {
                          unsigned long long length;
                          unsigned long long start;
-@@ -2933,9 +2925,6 @@ _dm_add_partition (PedDisk* disk, const PedPartition* part)
+@@ -2933,9 +2928,6 @@ _dm_add_partition (PedDisk* disk, const PedPartition* part)
          char*           params = NULL;
          LinuxSpecific*  arch_specific = LINUX_SPECIFIC (disk->dev);
  
@@ -140,7 +152,7 @@ index d3daa8c..55ed6ee 100644
          /* Get map name from devicemapper */
          struct dm_task *task = dm_task_create (DM_DEVICE_INFO);
          if (!task)
-@@ -3037,9 +3026,6 @@ linux_disk_commit (PedDisk* disk)
+@@ -3037,9 +3029,6 @@ linux_disk_commit (PedDisk* disk)
  {
          int ret = 1;
  
@@ -150,18 +162,30 @@ index d3daa8c..55ed6ee 100644
          /* Modern versions of udev may notice the write activity on
           * partition devices caused by _flush_cache, and may decide to
           * synthesise some change events as a result. These may in turn run
+diff --git a/libparted/device.c b/libparted/device.c
+index 4c43e09..d7f6204 100644
+--- a/libparted/device.c
++++ b/libparted/device.c
+@@ -173,6 +173,7 @@ ped_device_get (const char* path)
+ 	free (normal_path);
+ 	if (!walk)
+ 		return NULL;
++	walk->loop = 0;
+ 	_device_register (walk);
+ 	return walk;
+ }
 diff --git a/libparted/disk.c b/libparted/disk.c
-index b242842..0f94ae0 100644
+index b242842..087463f 100644
 --- a/libparted/disk.c
 +++ b/libparted/disk.c
-@@ -197,6 +197,7 @@ ped_disk_new (PedDevice* dev)
- 	disk = ped_disk_new_fresh (dev, type);
- 	if (!disk)
- 		goto error_close_dev;
+@@ -385,6 +385,7 @@ ped_disk_new_fresh (PedDevice* dev, const PedDiskType* type)
+ 	PED_ASSERT (disk->update_mode == 0, ignored);
+ 
+ 	disk->needs_clobber = 1;
 +	dev->loop = 0;
- 	if (!type->ops->read (disk))
- 		goto error_destroy_disk;
- 	disk->needs_clobber = 0;
+ 	return disk;
+ 
+ error_destroy_disk:
 @@ -497,6 +498,7 @@ ped_disk_commit_to_dev (PedDisk* disk)
  			goto error_close_dev;
  		disk->needs_clobber = 0;

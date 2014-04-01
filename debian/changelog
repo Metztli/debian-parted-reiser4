@@ -1,3 +1,14 @@
+parted (2.3-18) UNRELEASED; urgency=medium
+
+  * Fix LVM handling regressions caused by fix-loop-labels.patch
+    (LP: #1300072):
+    - Initialise dev->loop in ped_disk_new_fresh rather than ped_disk_new.
+    - Temporarily set disk->dev->loop to 0 while removing partitions, so
+      that we can remove previously-existing non-loop partitions (thanks,
+      Phillip Susi).
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 01 Apr 2014 19:55:55 +0100
+
 parted (2.3-17) unstable; urgency=low
 
   [ Phillip Susi ]

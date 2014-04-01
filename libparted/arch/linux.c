@@ -2718,7 +2718,10 @@ _disk_sync_part_table (PedDisk* disk)
                 unsigned int n_sleep = (max_sleep_seconds
                                         * 1000000 / sleep_microseconds);
                 do {
+                        int loop = disk->dev->loop;
+                        disk->dev->loop = 0; /* disable so we can remove non loop partitions */
                         ok[i-1] = remove_partition (disk, i);
+                        disk->dev->loop = loop;
                         errnums[i-1] = errno;
                         if (ok[i-1] || errnums[i-1] != EBUSY)
                                 break;
