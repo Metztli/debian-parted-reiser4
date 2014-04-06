@@ -37,17 +37,17 @@
 PedGeometry*
 ntfs_probe (PedGeometry* geom)
 {
-	char	buf[512];
+	char	*buf = alloca (geom->dev->sector_size);
+	PedGeometry *newg = NULL;
 
-	if (!ped_geometry_read (geom, buf, 0, 1))
+	if (!ped_geometry_read(geom, buf, 0, 1))
 		return 0;
 
 	if (strncmp (NTFS_SIGNATURE, buf + 3, strlen (NTFS_SIGNATURE)) == 0)
-		return ped_geometry_new (geom->dev, geom->start,
+		newg = ped_geometry_new (geom->dev, geom->start,
 					 PED_LE64_TO_CPU (*(uint64_t*)
 						 	  (buf + 0x28)));
-	else
-		return NULL;
+	return newg;
 }
 
 static PedFileSystemOps ntfs_ops = {
