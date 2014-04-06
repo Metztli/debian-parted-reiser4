@@ -35,7 +35,9 @@ fat_alloc (const PedGeometry* geom)
 	fs->type_specific = (FatSpecific*) ped_malloc (sizeof (FatSpecific));
 	if (!fs->type_specific)
 		goto error_free_fs;
-
+	FatSpecific* fs_info = (FatSpecific*) fs->type_specific;
+	fs_info->boot_sector = NULL;
+	fs_info->info_sector = NULL;
 	fs->geom = ped_geometry_duplicate (geom);
 	if (!fs->geom)
 		goto error_free_type_specific;
@@ -86,6 +88,8 @@ fat_free_buffers (PedFileSystem* fs)
 void
 fat_free (PedFileSystem* fs)
 {
+	FatSpecific* fs_info = (FatSpecific*) fs->type_specific;
+	free (fs_info->boot_sector);
 	ped_geometry_destroy (fs->geom);
 	free (fs->type_specific);
 	free (fs);
@@ -123,7 +127,7 @@ fat_probe (PedGeometry* geom, FatType* fat_type)
 
 	if (!fat_boot_sector_read (&fs_info->boot_sector, geom))
 		goto error_free_fs;
-	if (!fat_boot_sector_analyse (&fs_info->boot_sector, fs))
+	if (!fat_boot_sector_analyse (fs_info->boot_sector, fs))
 		goto error_free_fs;
 
 	*fat_type = fs_info->fat_type;
@@ -171,19 +175,21 @@ fat_probe_fat32 (PedGeometry* geom)
 int
 fat_clobber (PedGeometry* geom)
 {
-	FatBootSector		boot_sector;
+	FatBootSector		*boot_sector;
 
 	if (!fat_boot_sector_read (&boot_sector, geom))
 		return 1;
 
-	boot_sector.system_id[0] = 0;
-	boot_sector.boot_sign = 0;
-	if (boot_sector.u.fat16.fat_name[0] == 'F')
-		boot_sector.u.fat16.fat_name[0] = 0;
-	if (boot_sector.u.fat32.fat_name[0] == 'F')
-		boot_sector.u.fat32.fat_name[0] = 0;
+	boot_sector->system_id[0] = 0;
+	boot_sector->boot_sign = 0;
+	if (boot_sector->u.fat16.fat_name[0] == 'F')
+		boot_sector->u.fat16.fat_name[0] = 0;
+	if (boot_sector->u.fat32.fat_name[0] == 'F')
+		boot_sector->u.fat32.fat_name[0] = 0;
 
-        return ped_geometry_write (geom, &boot_sector, 0, 1);
+        int rc = ped_geometry_write (geom, boot_sector, 0, 1);
+	free (boot_sector);
+	return rc;
 }
 
 static int
@@ -222,13 +228,13 @@ fat_open (PedGeometry* geom)
 
 	if (!fat_boot_sector_read (&fs_info->boot_sector, geom))
 		goto error_free_fs;
-	if (!fat_boot_sector_analyse (&fs_info->boot_sector, fs))
+	if (!fat_boot_sector_analyse (fs_info->boot_sector, fs))
 		goto error_free_fs;
 	fs->type = (fs_info->fat_type == FAT_TYPE_FAT16)
 				? &fat16_type
 				: &fat32_type;
 	if (fs_info->fat_type == FAT_TYPE_FAT32) {
-		if (!fat_info_sector_read (&fs_info->info_sector, fs))
+		if (!fat_info_sector_read (fs_info->info_sector, fs))
 			goto error_free_fs;
 	}
 
@@ -377,16 +383,16 @@ fat_create (PedGeometry* geom, FatType fat_type, PedTimer* timer)
 
 	fs_info->serial_number = _gen_new_serial_number ();
 
-	if (!fat_boot_sector_set_boot_code (&fs_info->boot_sector))
+	if (!fat_boot_sector_set_boot_code (fs_info->boot_sector))
 		goto error_free_buffers;
-	if (!fat_boot_sector_generate (&fs_info->boot_sector, fs))
+	if (!fat_boot_sector_generate (fs_info->boot_sector, fs))
 		goto error_free_buffers;
-	if (!fat_boot_sector_write (&fs_info->boot_sector, fs))
+	if (!fat_boot_sector_write (fs_info->boot_sector, fs))
 		goto error_free_buffers;
 	if (fs_info->fat_type == FAT_TYPE_FAT32) {
-		if (!fat_info_sector_generate (&fs_info->info_sector, fs))
+		if (!fat_info_sector_generate (fs_info->info_sector, fs))
 			goto error_free_buffers;
-		if (!fat_info_sector_write (&fs_info->info_sector, fs))
+		if (!fat_info_sector_write (fs_info->info_sector, fs))
 			goto error_free_buffers;
 	}
 
@@ -543,7 +549,7 @@ fat_check (PedFileSystem* fs, PedTimer* timer)
 
 	if (fs_info->fat_type == FAT_TYPE_FAT32) {
 		info_free_clusters
-			= PED_LE32_TO_CPU (fs_info->info_sector.free_clusters);
+			= PED_LE32_TO_CPU (fs_info->info_sector->free_clusters);
 		if (info_free_clusters != (FatCluster) -1
 		    && info_free_clusters != fs_info->fat->free_cluster_count) {
 			if (ped_exception_throw (PED_EXCEPTION_WARNING,
