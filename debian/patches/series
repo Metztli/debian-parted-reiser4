@@ -44,3 +44,4 @@ update-abi-symbols.patch
 fix-loop-labels.patch
 gpt-prep.patch
 new-style-readline-typedef.patch
+fat-ntfs-large-sectors.patch

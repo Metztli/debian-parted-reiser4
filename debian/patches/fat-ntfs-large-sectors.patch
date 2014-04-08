@@ -1,0 +1,283 @@
+From 3d8df854148da2c5178f5a286bbef6db26c0a9d7 Mon Sep 17 00:00:00 2001
+From: Phillip Susi <psusi@ubuntu.com>
+Date: Sun, 6 Apr 2014 19:13:07 -0400
+Subject: Fix fat and ntfs detection on non 512 byte sectors
+
+The fixes for loop labels make use of fat and ntfs filesystem detection
+code to differentiate between those filesystem boot sectors and an msdos
+MBR, but the code crashed with non 512 byte sector sizes.
+
+Last-Update: 2014-04-08
+
+Patch-Name: fat-ntfs-large-sectors.patch
+---
+ libparted/fs/fat/bootsector.c | 23 ++++++-----------------
+ libparted/fs/fat/bootsector.h |  2 +-
+ libparted/fs/fat/fat.c        | 42 ++++++++++++++++++++++++------------------
+ libparted/fs/fat/fat.h        |  4 ++--
+ libparted/fs/fat/resize.c     |  8 ++++----
+ libparted/fs/fat/table.c      |  4 ++--
+ libparted/fs/ntfs/ntfs.c      | 10 +++++-----
+ 7 files changed, 44 insertions(+), 49 deletions(-)
+
+diff --git a/libparted/fs/fat/bootsector.c b/libparted/fs/fat/bootsector.c
+index b987918..5e75561 100644
+--- a/libparted/fs/fat/bootsector.c
++++ b/libparted/fs/fat/bootsector.c
+@@ -36,13 +36,14 @@
+  * fat_boot_sector_probe_type() to work (or possibly crash on a divide-by-zero)
+  */
+ int
+-fat_boot_sector_read (FatBootSector* bs, const PedGeometry *geom)
++fat_boot_sector_read (FatBootSector** bsp, const PedGeometry *geom)
+ {
+-	PED_ASSERT (bs != NULL, return 0);
++	PED_ASSERT (bsp != NULL, return 0);
+ 	PED_ASSERT (geom != NULL, return 0);
+ 
+-	if (!ped_geometry_read (geom, bs, 0, 1))
++	if (!ped_geometry_read_alloc (geom, (void **)bsp, 0, 1))
+ 		return 0;
++	FatBootSector *bs = *bsp;
+ 
+ 	if (PED_LE16_TO_CPU (bs->boot_sign) != 0xAA55) {
+ 		ped_exception_throw (PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+@@ -132,18 +133,6 @@ fat_boot_sector_analyse (FatBootSector* bs, PedFileSystem* fs)
+ 
+ 	PED_ASSERT (bs != NULL, return 0);
+ 
+-	if (PED_LE16_TO_CPU (bs->sector_size) != 512) {
+-		if (ped_exception_throw (
+-			PED_EXCEPTION_BUG,
+-			PED_EXCEPTION_IGNORE_CANCEL,
+-			_("This file system has a logical sector size of %d.  "
+-			"GNU Parted is known not to work properly with sector "
+-			"sizes other than 512 bytes."),
+-			(int) PED_LE16_TO_CPU (bs->sector_size))
+-				!= PED_EXCEPTION_IGNORE)
+-			return 0;
+-	}
+-
+ 	fs_info->logical_sector_size = PED_LE16_TO_CPU (bs->sector_size) / 512;
+ 
+ 	fs_info->sectors_per_track = PED_LE16_TO_CPU (bs->secs_track);
+@@ -257,10 +246,10 @@ fat_boot_sector_analyse (FatBootSector* bs, PedFileSystem* fs)
+ 		fs_info->serial_number
+ 			= PED_LE32_TO_CPU (bs->u.fat32.serial_number);
+ 		fs_info->info_sector_offset
+-		    = PED_LE16_TO_CPU (fs_info->boot_sector.u.fat32.info_sector)
++		    = PED_LE16_TO_CPU (fs_info->boot_sector->u.fat32.info_sector)
+ 			  * fs_info->logical_sector_size;
+ 		fs_info->boot_sector_backup_offset
+-		  = PED_LE16_TO_CPU (fs_info->boot_sector.u.fat32.backup_sector)
++		  = PED_LE16_TO_CPU (fs_info->boot_sector->u.fat32.backup_sector)
+ 			  * fs_info->logical_sector_size;
+ 		fs_info->root_cluster
+ 			= PED_LE32_TO_CPU (bs->u.fat32.root_dir_cluster);
+diff --git a/libparted/fs/fat/bootsector.h b/libparted/fs/fat/bootsector.h
+index 5a12fdf..6f743f1 100644
+--- a/libparted/fs/fat/bootsector.h
++++ b/libparted/fs/fat/bootsector.h
+@@ -117,7 +117,7 @@ struct __attribute__ ((packed)) _FatInfoSector {
+         uint16_t	signature_3;	/* should be 0xaa55 */
+ };
+ 
+-int fat_boot_sector_read (FatBootSector* bs, const PedGeometry* geom);
++int fat_boot_sector_read (FatBootSector** bs, const PedGeometry* geom);
+ FatType fat_boot_sector_probe_type (const FatBootSector* bs,
+ 				    const PedGeometry* geom);
+ int fat_boot_sector_analyse (FatBootSector* bs, PedFileSystem* fs);
+diff --git a/libparted/fs/fat/fat.c b/libparted/fs/fat/fat.c
+index efc8d79..53dd361 100644
+--- a/libparted/fs/fat/fat.c
++++ b/libparted/fs/fat/fat.c
+@@ -35,7 +35,9 @@ fat_alloc (const PedGeometry* geom)
+ 	fs->type_specific = (FatSpecific*) ped_malloc (sizeof (FatSpecific));
+ 	if (!fs->type_specific)
+ 		goto error_free_fs;
+-
++	FatSpecific* fs_info = (FatSpecific*) fs->type_specific;
++	fs_info->boot_sector = NULL;
++	fs_info->info_sector = NULL;
+ 	fs->geom = ped_geometry_duplicate (geom);
+ 	if (!fs->geom)
+ 		goto error_free_type_specific;
+@@ -86,6 +88,8 @@ fat_free_buffers (PedFileSystem* fs)
+ void
+ fat_free (PedFileSystem* fs)
+ {
++	FatSpecific* fs_info = (FatSpecific*) fs->type_specific;
++	free (fs_info->boot_sector);
+ 	ped_geometry_destroy (fs->geom);
+ 	free (fs->type_specific);
+ 	free (fs);
+@@ -123,7 +127,7 @@ fat_probe (PedGeometry* geom, FatType* fat_type)
+ 
+ 	if (!fat_boot_sector_read (&fs_info->boot_sector, geom))
+ 		goto error_free_fs;
+-	if (!fat_boot_sector_analyse (&fs_info->boot_sector, fs))
++	if (!fat_boot_sector_analyse (fs_info->boot_sector, fs))
+ 		goto error_free_fs;
+ 
+ 	*fat_type = fs_info->fat_type;
+@@ -171,19 +175,21 @@ fat_probe_fat32 (PedGeometry* geom)
+ int
+ fat_clobber (PedGeometry* geom)
+ {
+-	FatBootSector		boot_sector;
++	FatBootSector		*boot_sector;
+ 
+ 	if (!fat_boot_sector_read (&boot_sector, geom))
+ 		return 1;
+ 
+-	boot_sector.system_id[0] = 0;
+-	boot_sector.boot_sign = 0;
+-	if (boot_sector.u.fat16.fat_name[0] == 'F')
+-		boot_sector.u.fat16.fat_name[0] = 0;
+-	if (boot_sector.u.fat32.fat_name[0] == 'F')
+-		boot_sector.u.fat32.fat_name[0] = 0;
++	boot_sector->system_id[0] = 0;
++	boot_sector->boot_sign = 0;
++	if (boot_sector->u.fat16.fat_name[0] == 'F')
++		boot_sector->u.fat16.fat_name[0] = 0;
++	if (boot_sector->u.fat32.fat_name[0] == 'F')
++		boot_sector->u.fat32.fat_name[0] = 0;
+ 
+-        return ped_geometry_write (geom, &boot_sector, 0, 1);
++        int rc = ped_geometry_write (geom, boot_sector, 0, 1);
++	free (boot_sector);
++	return rc;
+ }
+ 
+ static int
+@@ -222,13 +228,13 @@ fat_open (PedGeometry* geom)
+ 
+ 	if (!fat_boot_sector_read (&fs_info->boot_sector, geom))
+ 		goto error_free_fs;
+-	if (!fat_boot_sector_analyse (&fs_info->boot_sector, fs))
++	if (!fat_boot_sector_analyse (fs_info->boot_sector, fs))
+ 		goto error_free_fs;
+ 	fs->type = (fs_info->fat_type == FAT_TYPE_FAT16)
+ 				? &fat16_type
+ 				: &fat32_type;
+ 	if (fs_info->fat_type == FAT_TYPE_FAT32) {
+-		if (!fat_info_sector_read (&fs_info->info_sector, fs))
++		if (!fat_info_sector_read (fs_info->info_sector, fs))
+ 			goto error_free_fs;
+ 	}
+ 
+@@ -377,16 +383,16 @@ fat_create (PedGeometry* geom, FatType fat_type, PedTimer* timer)
+ 
+ 	fs_info->serial_number = _gen_new_serial_number ();
+ 
+-	if (!fat_boot_sector_set_boot_code (&fs_info->boot_sector))
++	if (!fat_boot_sector_set_boot_code (fs_info->boot_sector))
+ 		goto error_free_buffers;
+-	if (!fat_boot_sector_generate (&fs_info->boot_sector, fs))
++	if (!fat_boot_sector_generate (fs_info->boot_sector, fs))
+ 		goto error_free_buffers;
+-	if (!fat_boot_sector_write (&fs_info->boot_sector, fs))
++	if (!fat_boot_sector_write (fs_info->boot_sector, fs))
+ 		goto error_free_buffers;
+ 	if (fs_info->fat_type == FAT_TYPE_FAT32) {
+-		if (!fat_info_sector_generate (&fs_info->info_sector, fs))
++		if (!fat_info_sector_generate (fs_info->info_sector, fs))
+ 			goto error_free_buffers;
+-		if (!fat_info_sector_write (&fs_info->info_sector, fs))
++		if (!fat_info_sector_write (fs_info->info_sector, fs))
+ 			goto error_free_buffers;
+ 	}
+ 
+@@ -543,7 +549,7 @@ fat_check (PedFileSystem* fs, PedTimer* timer)
+ 
+ 	if (fs_info->fat_type == FAT_TYPE_FAT32) {
+ 		info_free_clusters
+-			= PED_LE32_TO_CPU (fs_info->info_sector.free_clusters);
++			= PED_LE32_TO_CPU (fs_info->info_sector->free_clusters);
+ 		if (info_free_clusters != (FatCluster) -1
+ 		    && info_free_clusters != fs_info->fat->free_cluster_count) {
+ 			if (ped_exception_throw (PED_EXCEPTION_WARNING,
+diff --git a/libparted/fs/fat/fat.h b/libparted/fs/fat/fat.h
+index 62401fe..3a309a0 100644
+--- a/libparted/fs/fat/fat.h
++++ b/libparted/fs/fat/fat.h
+@@ -78,8 +78,8 @@ struct __attribute__ ((packed)) _FatDirEntry {
+ };
+ 
+ struct _FatSpecific {
+-	FatBootSector	boot_sector;    /* structure of boot sector */
+-	FatInfoSector	info_sector;    /* fat32-only information sector */
++	FatBootSector	*boot_sector;    /* structure of boot sector */
++	FatInfoSector	*info_sector;    /* fat32-only information sector */
+ 
+ 	int		logical_sector_size;	/* illogical sector size :-) */
+ 	PedSector	sector_count;
+diff --git a/libparted/fs/fat/resize.c b/libparted/fs/fat/resize.c
+index 15e49ba..0d24332 100644
+--- a/libparted/fs/fat/resize.c
++++ b/libparted/fs/fat/resize.c
+@@ -856,11 +856,11 @@ fat_resize (PedFileSystem* fs, PedGeometry* geom, PedTimer* timer)
+ 		goto error_abort_ctx;
+ 
+ 	_copy_hidden_sectors (ctx);
+-	fat_boot_sector_generate (&new_fs_info->boot_sector, new_fs);
+-	fat_boot_sector_write (&new_fs_info->boot_sector, new_fs);
++	fat_boot_sector_generate (new_fs_info->boot_sector, new_fs);
++	fat_boot_sector_write (new_fs_info->boot_sector, new_fs);
+ 	if (new_fs_info->fat_type == FAT_TYPE_FAT32) {
+-		fat_info_sector_generate (&new_fs_info->info_sector, new_fs);
+-		fat_info_sector_write (&new_fs_info->info_sector, new_fs);
++		fat_info_sector_generate (new_fs_info->info_sector, new_fs);
++		fat_info_sector_write (new_fs_info->info_sector, new_fs);
+ 	}
+ 
+ 	if (!resize_context_assimilate (ctx))
+diff --git a/libparted/fs/fat/table.c b/libparted/fs/fat/table.c
+index daa35d0..2ba159b 100644
+--- a/libparted/fs/fat/table.c
++++ b/libparted/fs/fat/table.c
+@@ -129,7 +129,7 @@ fat_table_read (FatTable* ft, const PedFileSystem* fs, int table_num)
+ 				fs_info->fat_sectors))
+ 		return 0;
+ 
+-        if ( *((unsigned char*) ft->table) != fs_info->boot_sector.media) {
++        if ( *((unsigned char*) ft->table) != fs_info->boot_sector->media) {
+ 		if (ped_exception_throw (
+ 			PED_EXCEPTION_ERROR,
+ 			PED_EXCEPTION_IGNORE_CANCEL,
+@@ -137,7 +137,7 @@ fat_table_read (FatTable* ft, const PedFileSystem* fs, int table_num)
+ 			  "media %x.  You should probably run scandisk."),
+ 			(int) table_num + 1,
+ 			(int) *((unsigned char*) ft->table),
+-			(int) fs_info->boot_sector.media)
++			(int) fs_info->boot_sector->media)
+ 				!= PED_EXCEPTION_IGNORE)
+ 			return 0;
+         }
+diff --git a/libparted/fs/ntfs/ntfs.c b/libparted/fs/ntfs/ntfs.c
+index 4e960a5..77f1879 100644
+--- a/libparted/fs/ntfs/ntfs.c
++++ b/libparted/fs/ntfs/ntfs.c
+@@ -37,17 +37,17 @@
+ PedGeometry*
+ ntfs_probe (PedGeometry* geom)
+ {
+-	char	buf[512];
++	char	*buf = alloca (geom->dev->sector_size);
++	PedGeometry *newg = NULL;
+ 
+-	if (!ped_geometry_read (geom, buf, 0, 1))
++	if (!ped_geometry_read(geom, buf, 0, 1))
+ 		return 0;
+ 
+ 	if (strncmp (NTFS_SIGNATURE, buf + 3, strlen (NTFS_SIGNATURE)) == 0)
+-		return ped_geometry_new (geom->dev, geom->start,
++		newg = ped_geometry_new (geom->dev, geom->start,
+ 					 PED_LE64_TO_CPU (*(uint64_t*)
+ 						 	  (buf + 0x28)));
+-	else
+-		return NULL;
++	return newg;
+ }
+ 
+ #ifndef DISCOVER_ONLY
