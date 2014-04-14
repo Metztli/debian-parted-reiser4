@@ -384,15 +384,17 @@ fat_boot_sector_write (const FatBootSector* bs, PedFileSystem* fs)
 }
 
 int
-fat_info_sector_read (FatInfoSector* is, const PedFileSystem* fs)
+fat_info_sector_read (FatInfoSector** isp, const PedFileSystem* fs)
 {
 	FatSpecific*	fs_info = FAT_SPECIFIC (fs);
 	int		status;
 
-	PED_ASSERT (is != NULL, return 0);
+	PED_ASSERT (isp != NULL, return 0);
 
-	if (!ped_geometry_read (fs->geom, is, fs_info->info_sector_offset, 1))
+	if (!ped_geometry_read_alloc (fs->geom, (void **)isp,
+				      fs_info->info_sector_offset, 1))
 		return 0;
+	FatInfoSector *is = *isp;
 
 	if (PED_LE32_TO_CPU (is->signature_2) != FAT32_INFO_MAGIC2) {
 		status = ped_exception_throw (PED_EXCEPTION_WARNING,

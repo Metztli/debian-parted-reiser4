@@ -234,7 +234,7 @@ fat_open (PedGeometry* geom)
 				? &fat16_type
 				: &fat32_type;
 	if (fs_info->fat_type == FAT_TYPE_FAT32) {
-		if (!fat_info_sector_read (fs_info->info_sector, fs))
+		if (!fat_info_sector_read (&fs_info->info_sector, fs))
 			goto error_free_fs;
 	}
 
