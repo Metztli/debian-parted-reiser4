@@ -1,8 +1,8 @@
-parted (2.3-20) UNRELEASED; urgency=medium
+parted (2.3-20) unstable; urgency=medium
 
   * Fix crash when opening FAT file systems (LP: #1306704).
 
- -- Colin Watson <cjwatson@debian.org>  Mon, 14 Apr 2014 11:33:17 +0100
+ -- Colin Watson <cjwatson@debian.org>  Mon, 14 Apr 2014 11:44:43 +0100
 
 parted (2.3-19) unstable; urgency=medium
 
