@@ -1,4 +1,4 @@
-From fe272bad0a0e531f1d78a31ab4ebefb3f1baecbd Mon Sep 17 00:00:00 2001
+From 453c1eeddb69072a473c52befe7d2919d68bfccf Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg59@srcf.ucam.org>
 Date: Fri, 28 Mar 2014 17:10:01 +0000
 Subject: GPT syncing for Intel Macs
@@ -7,7 +7,7 @@ On Intel Mac systems, write a synced MBR rather than a protective MBR.
 
 From: Colin Watson <cjwatson@ubuntu.com>
 Forwarded: no
-Last-Update: 2013-08-13
+Last-Update: 2014-07-07
 
 Patch-Name: gptsync.patch
 ---
@@ -18,7 +18,7 @@ Patch-Name: gptsync.patch
  create mode 100644 tests/t0290-gptsync.sh
 
 diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
-index e927b5b..baede95 100644
+index 62b3dec..407b16a 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
 @@ -10,6 +10,11 @@
@@ -42,7 +42,7 @@ index e927b5b..baede95 100644
  #include <fcntl.h>
  #include <unistd.h>
  #include <uuid/uuid.h>
-@@ -282,6 +289,258 @@ typedef struct _GPTPartitionData
+@@ -291,6 +298,258 @@ typedef struct _GPTPartitionData
  
  static PedDiskType gpt_disk_type;
  
@@ -301,7 +301,7 @@ index e927b5b..baede95 100644
  static inline uint32_t
  pth_get_size (const PedDevice *dev)
  {
-@@ -476,6 +735,9 @@ gpt_probe (const PedDevice *dev)
+@@ -485,6 +744,9 @@ gpt_probe (const PedDevice *dev)
    if (!gpt_sig_found)
      return 0;
  
@@ -311,7 +311,7 @@ index e927b5b..baede95 100644
    void *label;
    if (!ptt_read_sector (dev, 0, &label))
      return 0;
-@@ -889,6 +1151,10 @@ gpt_read_headers (PedDisk const *disk,
+@@ -920,6 +1182,10 @@ gpt_read_headers (PedDisk const *disk,
   *  warn if it's not there, and treat the disk as MSDOS, with a note
   *  for users to use Parted to "fix up" their disk if they
   *  really want it to be considered GPT.
@@ -322,7 +322,7 @@ index e927b5b..baede95 100644
   ************************************************************/
  static int
  gpt_read (PedDisk *disk)
-@@ -1095,6 +1361,129 @@ _write_pmbr (PedDevice *dev)
+@@ -1128,6 +1394,129 @@ _write_pmbr (PedDevice *dev, bool pmbr_boot)
    return write_ok;
  }
  
@@ -452,12 +452,12 @@ index e927b5b..baede95 100644
  static int
  _generate_header (const PedDisk *disk, int alternate, uint32_t ptes_crc,
                    GuidPartitionTableHeader_t **gpt_p)
-@@ -1201,9 +1590,15 @@ gpt_write (const PedDisk *disk)
+@@ -1240,9 +1629,15 @@ gpt_write (const PedDisk *disk)
  
-   ptes_crc = efi_crc32 (ptes, ptes_size);
+   ptes_crc = efi_crc32 (ptes, ptes_bytes);
  
 -  /* Write protective MBR */
--  if (!_write_pmbr (disk->dev))
+-  if (!_write_pmbr (disk->dev, gpt_disk_data->pmbr_boot))
 -    goto error_free_ptes;
 +  if (is_apple) {
 +    /* Write synced MBR */
@@ -465,15 +465,15 @@ index e927b5b..baede95 100644
 +      goto error_free_ptes;
 +  } else {
 +    /* Write protective MBR */
-+    if (!_write_pmbr (disk->dev))
++    if (!_write_pmbr (disk->dev, gpt_disk_data->pmbr_boot))
 +      goto error_free_ptes;
 +  }
  
    /* Write PTH and PTEs */
    /* FIXME: Caution: this code is nearly identical to what's just below. */
-@@ -1790,6 +2185,21 @@ ped_disk_gpt_init ()
-   PED_ASSERT (sizeof (GuidPartitionEntry_t) == 128, return);
- 
+@@ -1878,6 +2273,21 @@ void
+ ped_disk_gpt_init ()
+ {
    ped_disk_type_register (&gpt_disk_type);
 +
 +  char *force_gpt_apple = getenv ("PARTED_GPT_APPLE");
@@ -494,10 +494,10 @@ index e927b5b..baede95 100644
  
  void
 diff --git a/tests/Makefile.am b/tests/Makefile.am
-index ddd942e..2d00680 100644
+index 924384b..16f94eb 100644
 --- a/tests/Makefile.am
 +++ b/tests/Makefile.am
-@@ -15,6 +15,7 @@ TESTS = \
+@@ -27,6 +27,7 @@ TESTS = \
    t0220-gpt-msftres.sh \
    t0250-gpt.sh \
    t0280-gpt-corrupt.sh \

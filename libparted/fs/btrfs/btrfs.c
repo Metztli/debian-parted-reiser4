@@ -51,33 +51,8 @@ btrfs_probe (PedGeometry* geom)
 		return NULL;
 }
 
-#ifndef DISCOVER_ONLY
-static int
-btrfs_clobber (PedGeometry* geom)
-{
-	char	buf[BTRFS_SUPER_INFO_SIZE];
-
-	memset (buf, 0, BTRFS_SUPER_INFO_SIZE);
-	return ped_geometry_write (geom, buf, (BTRFS_SUPER_INFO_OFFSET / 512), (BTRFS_SUPER_INFO_SIZE / 512));
-}
-#endif /* !DISCOVER_ONLY */
-
 static PedFileSystemOps btrfs_ops = {
 	probe:		btrfs_probe,
-#ifndef DISCOVER_ONLY
-	clobber:	btrfs_clobber,
-#else
-	clobber:	NULL,
-#endif
-	open:		NULL,
-	create:		NULL,
-	close:		NULL,
-	check:		NULL,
-	copy:		NULL,
-	resize:		NULL,
-	get_create_constraint:	NULL,
-	get_resize_constraint:	NULL,
-	get_copy_constraint:	NULL
 };
 
 static PedFileSystemType btrfs_type = {

@@ -1,4 +1,4 @@
-From 189578405b02ae05a71cb1bfcbff29ce552ab4c8 Mon Sep 17 00:00:00 2001
+From a9a58a6409b08702c1e00bdbfe47fe04054962d3 Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:10:23 +0000
 Subject: Avoid disturbing unmodified partitions
@@ -14,10 +14,10 @@ Patch-Name: avoid-disturbing-partitions.patch
  1 file changed, 56 insertions(+), 50 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index 58aed34..d3daa8c 100644
+index 9008ab1..85c3d48 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -2705,68 +2705,74 @@ _disk_sync_part_table (PedDisk* disk)
+@@ -2728,68 +2728,74 @@ _disk_sync_part_table (PedDisk* disk)
          int *errnums = ped_malloc(sizeof(int) * lpn);
          if (!errnums)
                  goto cleanup;

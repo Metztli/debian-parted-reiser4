@@ -1,4 +1,4 @@
-From 26536e60834d60ca18833d24c126bc318f013a8b Mon Sep 17 00:00:00 2001
+From 763da4e1f8a94a4736e15784d019e5ce8f78c921 Mon Sep 17 00:00:00 2001
 From: Viktor Vasilev <Viktor Vasilev>
 Date: Fri, 28 Mar 2014 17:09:42 +0000
 Subject: Add GNU/kFreeBSD support
@@ -7,7 +7,7 @@ Author: Robert Millan <rmh@aybabtu.com>
 Author: Colin Watson <cjwatson@debian.org>
 Bug-Debian: http://bugs.debian.org/363381
 Forwarded: no
-Last-Update: 2012-11-06
+Last-Update: 2014-07-07
 
 Patch-Name: kfreebsd-gnu.patch
 ---
@@ -22,7 +22,7 @@ Patch-Name: kfreebsd-gnu.patch
  create mode 100644 libparted/arch/freebsd.c
 
 diff --git a/configure.ac b/configure.ac
-index 9ae5783..7f6e827 100644
+index 1444279..0fbd8be 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -60,6 +60,7 @@ case "$host_os" in
@@ -33,7 +33,7 @@ index 9ae5783..7f6e827 100644
  	*)	AC_MSG_ERROR([Unknown or unsupported OS "$host_os".  Only "linux", "gnu" and "beos" are supported in this version of GNU Parted.]) ;;
  esac
  AC_SUBST([OS])
-@@ -281,6 +282,7 @@ AC_CHECK_SIZEOF([off_t], [64], [
+@@ -267,6 +268,7 @@ AC_CHECK_SIZEOF([off_t], [64], [
  	#include <sys/types.h>
  	#include <unistd.h>
  ])
@@ -41,16 +41,16 @@ index 9ae5783..7f6e827 100644
  
  AM_ENABLE_SHARED
  if test "$OS" = linux && test $ac_cv_sizeof_off_t -lt 8; then
-@@ -518,7 +520,7 @@ If you can't find one try:
+@@ -505,7 +507,7 @@ If you can't find one try:
          http://web.mit.edu/tytso/www/linux/e2fsprogs.html])]
  )
  
 -AC_CHECK_HEADERS([getopt.h])
 +AC_CHECK_HEADERS([getopt.h endian.h sys/endian.h])
+ AC_CHECK_HEADERS([linux/ext2_fs.h])
  
  dnl required for libparted/llseek.c  (TODO: make linux-x86 only)
- if test "$OS" = linux; then
-@@ -577,7 +579,9 @@ AC_C_CONST
+@@ -564,7 +566,9 @@ AC_C_CONST
  AC_C_RESTRICT
  
  dnl Checks for library functions.
@@ -62,10 +62,10 @@ index 9ae5783..7f6e827 100644
  
  dnl NOTE: We need to remove the gl_cv_ignore_unused_libraries flag if we
 diff --git a/libparted/Makefile.am b/libparted/Makefile.am
-index fb8351e..995ff91 100644
+index 7cf35b2..6f09bef 100644
 --- a/libparted/Makefile.am
 +++ b/libparted/Makefile.am
-@@ -49,7 +49,8 @@ libparted_la_SOURCES  = debug.c			\
+@@ -47,7 +47,8 @@ libparted_la_SOURCES  = debug.c			\
  EXTRA_libparted_la_SOURCES    = arch/linux.c	\
  				arch/linux.h	\
  				arch/gnu.c	\
@@ -77,7 +77,7 @@ index fb8351e..995ff91 100644
    fs/libfs.la		\
 diff --git a/libparted/arch/freebsd.c b/libparted/arch/freebsd.c
 new file mode 100644
-index 0000000..7919d57
+index 0000000..52f5293
 --- /dev/null
 +++ b/libparted/arch/freebsd.c
 @@ -0,0 +1,1254 @@
@@ -150,8 +150,8 @@ index 0000000..7919d57
 +static int
 +_device_stat (PedDevice* dev, struct stat * dev_stat)
 +{
-+	PED_ASSERT (dev != NULL, return 0);
-+	PED_ASSERT (!dev->external_mode, return 0);
++	PED_ASSERT (dev != NULL);
++	PED_ASSERT (!dev->external_mode);
 +
 +	while (1) {
 +		if (!stat (dev->path, dev_stat)) {
@@ -215,7 +215,7 @@ index 0000000..7919d57
 +	dev->sector_size = PED_SECTOR_SIZE_DEFAULT;
 +	dev->phys_sector_size = PED_SECTOR_SIZE_DEFAULT;
 +
-+	PED_ASSERT (dev->open_count, return);
++	PED_ASSERT (dev->open_count);
 +
 +	if (ioctl (arch_specific->fd, DIOCGSECTORSIZE, &sector_size)) {
 +		ped_exception_throw (
@@ -245,8 +245,8 @@ index 0000000..7919d57
 +	FreeBSDSpecific*	arch_specific = FREEBSD_SPECIFIC (dev);
 +	off_t bytes = 0;
 +
-+	PED_ASSERT (dev->open_count > 0, return 0);
-+	PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0, return 0);
++	PED_ASSERT (dev->open_count > 0);
++	PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0);
 +
 +	if(ioctl(arch_specific->fd, DIOCGMEDIASIZE, &bytes) != 0) {
 +		ped_exception_throw (
@@ -271,7 +271,7 @@ index 0000000..7919d57
 +
 +	if (!_device_stat (dev, &dev_stat))
 +		return 0;
-+	PED_ASSERT (S_ISCHR (dev_stat.st_mode), return 0);
++	PED_ASSERT (S_ISCHR (dev_stat.st_mode));
 +
 +	_device_set_sector_size (dev);
 +
@@ -343,7 +343,7 @@ index 0000000..7919d57
 +				dev->model = strdup(_("Generic IDE"));
 +				break;
 +			default:
-+				PED_ASSERT (0, (void) 0);
++				PED_ASSERT (0);
 +				break;
 +		}
 +	} else {
@@ -444,7 +444,7 @@ index 0000000..7919d57
 +				dev->did = 0;
 +				break;
 +			default:
-+				PED_ASSERT (0, (void) 0);
++				PED_ASSERT (0);
 +				break;
 +			}
 +        }
@@ -469,7 +469,7 @@ index 0000000..7919d57
 +				dev->model = strdup(_("Generic SCSI"));
 +				break;
 +			default:
-+				PED_ASSERT (0, (void) 0);
++				PED_ASSERT (0);
 +				break;
 +		}
 +	} else {
@@ -572,7 +572,7 @@ index 0000000..7919d57
 +			case PED_EXCEPTION_IGNORE:
 +				break;
 +			default:
-+				PED_ASSERT (0, (void) 0);
++				PED_ASSERT (0);
 +				break;
 +		}
 +
@@ -601,7 +601,7 @@ index 0000000..7919d57
 +{
 +	PedDevice*	dev;
 +
-+	PED_ASSERT (path != NULL, return NULL);
++	PED_ASSERT (path != NULL);
 +
 +	dev = (PedDevice*) ped_malloc (sizeof (PedDevice));
 +	if (!dev)
@@ -845,9 +845,9 @@ index 0000000..7919d57
 +	FreeBSDSpecific*	arch_specific;
 +	off_t	pos;
 +
-+	PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0, return 0);
-+	PED_ASSERT (dev != NULL, return 0);
-+	PED_ASSERT (!dev->external_mode, return 0);
++	PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0);
++	PED_ASSERT (dev != NULL);
++	PED_ASSERT (!dev->external_mode);
 +
 +	arch_specific = FREEBSD_SPECIFIC (dev);
 +
@@ -863,8 +863,8 @@ index 0000000..7919d57
 +	PedExceptionOption	ex_status;
 +	void*			diobuf = NULL;
 +
-+        PED_ASSERT (dev != NULL, return 0);
-+        PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0, return 0);
++        PED_ASSERT (dev != NULL);
++        PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0);
 +
 +	while (1) {
 +		if (_device_seek (dev, start))
@@ -888,7 +888,7 @@ index 0000000..7919d57
 +			case PED_EXCEPTION_CANCEL:
 +				return 0;
 +			default:
-+				PED_ASSERT (0, (void) 0);
++				PED_ASSERT (0);
 +				break;
 +		}
 +	}
@@ -929,7 +929,7 @@ index 0000000..7919d57
 +			case PED_EXCEPTION_CANCEL:
 +				return 0;
 +			default:
-+				PED_ASSERT (0, (void) 0);
++				PED_ASSERT (0);
 +				break;
 +		}
 +	}
@@ -948,7 +948,7 @@ index 0000000..7919d57
 +	void*			diobuf;
 +	void*			diobuf_start;
 +
-+	PED_ASSERT(dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0, return 0);
++	PED_ASSERT(dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0);
 +
 +	if (dev->read_only) {
 +		if (ped_exception_throw (
@@ -983,7 +983,7 @@ index 0000000..7919d57
 +			case PED_EXCEPTION_CANCEL:
 +				return 0;
 +			default:
-+				PED_ASSERT (0, (void) 0);
++				PED_ASSERT (0);
 +				break;
 +		}
 +	}
@@ -1025,7 +1025,7 @@ index 0000000..7919d57
 +			case PED_EXCEPTION_CANCEL:
 +				return 0;
 +			default:
-+				PED_ASSERT (0, (void) 0);
++				PED_ASSERT (0);
 +				break;
 +		}
 +	}
@@ -1093,7 +1093,7 @@ index 0000000..7919d57
 +			case PED_EXCEPTION_CANCEL:
 +				return 0;
 +			default:
-+				PED_ASSERT (0, (void) 0);
++				PED_ASSERT (0);
 +				break;
 +		}
 +	}
@@ -1103,8 +1103,8 @@ index 0000000..7919d57
 +static int
 +freebsd_sync (PedDevice* dev)
 +{
-+	PED_ASSERT (dev != NULL, return 0);
-+	PED_ASSERT (!dev->external_mode, return 0);
++	PED_ASSERT (dev != NULL);
++	PED_ASSERT (!dev->external_mode);
 +
 +	if (dev->read_only)
 +		return 1;
@@ -1117,8 +1117,8 @@ index 0000000..7919d57
 +static int
 +freebsd_sync_fast (PedDevice* dev)
 +{
-+	PED_ASSERT (dev != NULL, return 0);
-+	PED_ASSERT (!dev->external_mode, return 0);
++	PED_ASSERT (dev != NULL);
++	PED_ASSERT (!dev->external_mode);
 +
 +	if (dev->read_only)
 +		return 1;
@@ -1278,7 +1278,7 @@ index 0000000..7919d57
 +{
 +	PedPartition*	walk;
 +
-+	PED_ASSERT (part != NULL, return 0);
++	PED_ASSERT (part != NULL);
 +
 +	if (_partition_is_mounted (part))
 +		return 1;
@@ -1336,7 +1336,7 @@ index 0000000..7919d57
 +	disk_ops:	&freebsd_disk_ops
 +};
 diff --git a/libparted/architecture.c b/libparted/architecture.c
-index 66e33f9..d88ab05 100644
+index 3b033a1..ede59e2 100644
 --- a/libparted/architecture.c
 +++ b/libparted/architecture.c
 @@ -34,6 +34,9 @@ ped_set_architecture ()
@@ -1367,7 +1367,7 @@ index 2b55752..01a06df 100644
  #include <stdlib.h>
  #include <string.h>
 diff --git a/libparted/labels/bsd.c b/libparted/labels/bsd.c
-index 0f9eb62..b0641a0 100644
+index 3970623..f5ba68a 100644
 --- a/libparted/labels/bsd.c
 +++ b/libparted/labels/bsd.c
 @@ -26,6 +26,7 @@
@@ -1379,10 +1379,10 @@ index 0f9eb62..b0641a0 100644
  #if ENABLE_NLS
  #  include <libintl.h>
 diff --git a/libparted/labels/sun.c b/libparted/labels/sun.c
-index 177a47c..e70e479 100644
+index c7a11b5..4d135fc 100644
 --- a/libparted/labels/sun.c
 +++ b/libparted/labels/sun.c
-@@ -26,6 +26,7 @@
+@@ -25,6 +25,7 @@
  #include <parted/debug.h>
  #include <parted/endian.h>
  #include <stdbool.h>

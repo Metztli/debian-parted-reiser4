@@ -68,8 +68,8 @@ static int _partition_is_mounted_by_path (const char* path);
 static int
 _device_stat (PedDevice* dev, struct stat * dev_stat)
 {
-	PED_ASSERT (dev != NULL, return 0);
-	PED_ASSERT (!dev->external_mode, return 0);
+	PED_ASSERT (dev != NULL);
+	PED_ASSERT (!dev->external_mode);
 
 	while (1) {
 		if (!stat (dev->path, dev_stat)) {
@@ -133,7 +133,7 @@ _device_set_sector_size (PedDevice* dev)
 	dev->sector_size = PED_SECTOR_SIZE_DEFAULT;
 	dev->phys_sector_size = PED_SECTOR_SIZE_DEFAULT;
 
-	PED_ASSERT (dev->open_count, return);
+	PED_ASSERT (dev->open_count);
 
 	if (ioctl (arch_specific->fd, DIOCGSECTORSIZE, &sector_size)) {
 		ped_exception_throw (
@@ -163,8 +163,8 @@ _device_get_length (PedDevice* dev)
 	FreeBSDSpecific*	arch_specific = FREEBSD_SPECIFIC (dev);
 	off_t bytes = 0;
 
-	PED_ASSERT (dev->open_count > 0, return 0);
-	PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0, return 0);
+	PED_ASSERT (dev->open_count > 0);
+	PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0);
 
 	if(ioctl(arch_specific->fd, DIOCGMEDIASIZE, &bytes) != 0) {
 		ped_exception_throw (
@@ -189,7 +189,7 @@ _device_probe_geometry (PedDevice* dev)
 
 	if (!_device_stat (dev, &dev_stat))
 		return 0;
-	PED_ASSERT (S_ISCHR (dev_stat.st_mode), return 0);
+	PED_ASSERT (S_ISCHR (dev_stat.st_mode));
 
 	_device_set_sector_size (dev);
 
@@ -261,7 +261,7 @@ init_ide (PedDevice* dev)
 				dev->model = strdup(_("Generic IDE"));
 				break;
 			default:
-				PED_ASSERT (0, (void) 0);
+				PED_ASSERT (0);
 				break;
 		}
 	} else {
@@ -362,7 +362,7 @@ init_scsi (PedDevice* dev)
 				dev->did = 0;
 				break;
 			default:
-				PED_ASSERT (0, (void) 0);
+				PED_ASSERT (0);
 				break;
 			}
         }
@@ -387,7 +387,7 @@ init_scsi (PedDevice* dev)
 				dev->model = strdup(_("Generic SCSI"));
 				break;
 			default:
-				PED_ASSERT (0, (void) 0);
+				PED_ASSERT (0);
 				break;
 		}
 	} else {
@@ -490,7 +490,7 @@ init_generic (PedDevice* dev, char* model_name)
 			case PED_EXCEPTION_IGNORE:
 				break;
 			default:
-				PED_ASSERT (0, (void) 0);
+				PED_ASSERT (0);
 				break;
 		}
 
@@ -519,7 +519,7 @@ freebsd_new (const char* path)
 {
 	PedDevice*	dev;
 
-	PED_ASSERT (path != NULL, return NULL);
+	PED_ASSERT (path != NULL);
 
 	dev = (PedDevice*) ped_malloc (sizeof (PedDevice));
 	if (!dev)
@@ -763,9 +763,9 @@ _device_seek (const PedDevice* dev, PedSector sector)
 	FreeBSDSpecific*	arch_specific;
 	off_t	pos;
 
-	PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0, return 0);
-	PED_ASSERT (dev != NULL, return 0);
-	PED_ASSERT (!dev->external_mode, return 0);
+	PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0);
+	PED_ASSERT (dev != NULL);
+	PED_ASSERT (!dev->external_mode);
 
 	arch_specific = FREEBSD_SPECIFIC (dev);
 
@@ -781,8 +781,8 @@ freebsd_read (const PedDevice* dev, void* buffer, PedSector start,
 	PedExceptionOption	ex_status;
 	void*			diobuf = NULL;
 
-        PED_ASSERT (dev != NULL, return 0);
-        PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0, return 0);
+        PED_ASSERT (dev != NULL);
+        PED_ASSERT (dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0);
 
 	while (1) {
 		if (_device_seek (dev, start))
@@ -806,7 +806,7 @@ freebsd_read (const PedDevice* dev, void* buffer, PedSector start,
 			case PED_EXCEPTION_CANCEL:
 				return 0;
 			default:
-				PED_ASSERT (0, (void) 0);
+				PED_ASSERT (0);
 				break;
 		}
 	}
@@ -847,7 +847,7 @@ freebsd_read (const PedDevice* dev, void* buffer, PedSector start,
 			case PED_EXCEPTION_CANCEL:
 				return 0;
 			default:
-				PED_ASSERT (0, (void) 0);
+				PED_ASSERT (0);
 				break;
 		}
 	}
@@ -866,7 +866,7 @@ freebsd_write (PedDevice* dev, const void* buffer, PedSector start,
 	void*			diobuf;
 	void*			diobuf_start;
 
-	PED_ASSERT(dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0, return 0);
+	PED_ASSERT(dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0);
 
 	if (dev->read_only) {
 		if (ped_exception_throw (
@@ -901,7 +901,7 @@ freebsd_write (PedDevice* dev, const void* buffer, PedSector start,
 			case PED_EXCEPTION_CANCEL:
 				return 0;
 			default:
-				PED_ASSERT (0, (void) 0);
+				PED_ASSERT (0);
 				break;
 		}
 	}
@@ -943,7 +943,7 @@ freebsd_write (PedDevice* dev, const void* buffer, PedSector start,
 			case PED_EXCEPTION_CANCEL:
 				return 0;
 			default:
-				PED_ASSERT (0, (void) 0);
+				PED_ASSERT (0);
 				break;
 		}
 	}
@@ -1011,7 +1011,7 @@ _do_fsync (PedDevice* dev)
 			case PED_EXCEPTION_CANCEL:
 				return 0;
 			default:
-				PED_ASSERT (0, (void) 0);
+				PED_ASSERT (0);
 				break;
 		}
 	}
@@ -1021,8 +1021,8 @@ _do_fsync (PedDevice* dev)
 static int
 freebsd_sync (PedDevice* dev)
 {
-	PED_ASSERT (dev != NULL, return 0);
-	PED_ASSERT (!dev->external_mode, return 0);
+	PED_ASSERT (dev != NULL);
+	PED_ASSERT (!dev->external_mode);
 
 	if (dev->read_only)
 		return 1;
@@ -1035,8 +1035,8 @@ freebsd_sync (PedDevice* dev)
 static int
 freebsd_sync_fast (PedDevice* dev)
 {
-	PED_ASSERT (dev != NULL, return 0);
-	PED_ASSERT (!dev->external_mode, return 0);
+	PED_ASSERT (dev != NULL);
+	PED_ASSERT (!dev->external_mode);
 
 	if (dev->read_only)
 		return 1;
@@ -1268,7 +1268,7 @@ freebsd_partition_is_busy (const PedPartition* part)
 {
 	PedPartition*	walk;
 
-	PED_ASSERT (part != NULL, return 0);
+	PED_ASSERT (part != NULL);
 
 	if (_partition_is_mounted (part))
 		return 1;

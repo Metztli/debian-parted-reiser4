@@ -1,20 +1,22 @@
-From 72b981e7e5a0eeee9b05f66eb63af9e5e57358dd Mon Sep 17 00:00:00 2001
+From 30630f6dfb5cb450b6ab633214855652275e7a1e Mon Sep 17 00:00:00 2001
 From: Petr Uzel <petr.uzel@suse.cz>
 Date: Mon, 26 Sep 2011 17:21:01 +0200
 Subject: parted: resizepart command
 
 TODO
 
+Last-Update: 2014-07-07
+
 Patch-Name: 0001-parted-resizepart-command.patch
 ---
- parted/parted.c | 89 +++++++++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 87 insertions(+), 2 deletions(-)
+ parted/parted.c | 88 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
 
 diff --git a/parted/parted.c b/parted/parted.c
-index a5e2870..492796b 100644
+index 789030a..1351476 100644
 --- a/parted/parted.c
 +++ b/parted/parted.c
-@@ -150,6 +150,9 @@ static const char* fs_type_msg_start = N_("FS-TYPE is one of: ");
+@@ -152,6 +152,9 @@ static const char* fs_type_msg_start = N_("FS-TYPE is one of: ");
  static const char* start_end_msg =    N_("START and END are disk locations, such as "
                  "4GB or 10%.  Negative values count from the end of the disk.  "
                  "For example, -1s specifies exactly the last sector.\n");
@@ -24,11 +26,10 @@ index a5e2870..492796b 100644
  static const char* state_msg =        N_("STATE is one of: on, off\n");
  static const char* device_msg =       N_("DEVICE is usually /dev/hda or /dev/sda\n");
  static const char* name_msg =         N_("NAME is any word you want\n");
-@@ -466,6 +469,21 @@ constraint_intersect_and_destroy (PedConstraint* a, PedConstraint* b)
-         return result;
+@@ -435,6 +438,20 @@ constraint_from_start_end (PedDevice* dev, PedGeometry* range_start,
+                 range_start, range_end, 1, dev->length);
  }
  
-+
 +static PedConstraint*
 +constraint_from_start_end_fixed_start (PedDevice* dev, PedSector start_sector,
 +                           PedGeometry* range_end)
@@ -46,7 +47,7 @@ index a5e2870..492796b 100644
  void
  help_on (char* topic)
  {
-@@ -2004,11 +2022,69 @@ error:
+@@ -1478,6 +1495,68 @@ error:
  }
  
  static int
@@ -74,8 +75,11 @@ index a5e2870..492796b 100644
 +
 +        start = part->geom.start;
 +        end = oldend = part->geom.end;
-+        if (!command_line_get_sector (_("End?"), *dev, &end, &range_end))
++        char *end_input;
++        if (!command_line_get_sector (_("End?"), *dev, &end, &range_end, &end_input))
 +                goto error;
++        _adjust_end_if_iec(&start, &end, range_end, end_input);
++        free(end_input);
 +        /* Do not move start of the partition */
 +        constraint = constraint_from_start_end_fixed_start (*dev, start, range_end);
 +        if (!ped_disk_set_partition_geom (disk, part, constraint,
@@ -111,16 +115,10 @@ index a5e2870..492796b 100644
 +static int
  do_rm (PedDevice** dev)
  {
--        PedDisk*                disk;
-+        PedDisk*		 disk;
-         PedPartition*           part = NULL;
--
-         disk = ped_disk_new (*dev);
-         if (!disk)
-                 goto error;
-@@ -2423,6 +2499,15 @@ _("mkpartfs PART-TYPE FS-TYPE START END     make a partition with a "
- NULL),
-         str_list_create (_(part_type_msg), _(start_end_msg), NULL), 1));
+         PedDisk*                disk;
+@@ -1846,6 +1925,15 @@ _("'mkpart' makes a partition without creating a new file system on the "
+   "partition.  FS-TYPE may be specified to set an appropriate partition ID.\n"),
+ NULL), 1));
  
 +//XXX: mention that this command does never move start of the partition
 +command_register (commands, command_create (
@@ -132,5 +130,5 @@ index a5e2870..492796b 100644
 +        str_list_create (_(number_msg), _(end_msg), NULL), 1));
 +
  command_register (commands, command_create (
-         str_list_create_unique ("move", _("move"), NULL),
-         do_move,
+         str_list_create_unique ("name", _("name"), NULL),
+         do_name,

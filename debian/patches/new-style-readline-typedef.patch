@@ -1,4 +1,4 @@
-From f4a5a2044e5cbc2715f37e7de1a169ae96edcca2 Mon Sep 17 00:00:00 2001
+From 4461bee1953c80726887e830cc70820da6d75c64 Mon Sep 17 00:00:00 2001
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Mon, 3 Mar 2014 10:40:08 -0300
 Subject: ui: switch to new-style readline typedef
@@ -19,10 +19,10 @@ Patch-Name: new-style-readline-typedef.patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/parted/ui.c b/parted/ui.c
-index d6ef7cd..39312c6 100644
+index d00c65a..a4f7222 100644
 --- a/parted/ui.c
 +++ b/parted/ui.c
-@@ -1441,7 +1441,7 @@ init_readline (void)
+@@ -1474,7 +1474,7 @@ init_readline (void)
  #ifdef HAVE_LIBREADLINE
    if (!opt_script_mode) {
      rl_initialize ();

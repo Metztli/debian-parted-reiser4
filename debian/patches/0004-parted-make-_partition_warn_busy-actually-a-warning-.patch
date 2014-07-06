@@ -1,4 +1,4 @@
-From 98b73a746d9f835df8b12a2bc251c91a5c2625cc Mon Sep 17 00:00:00 2001
+From 7efd72a95e00e4528ed89000ebb81d6a9b0432eb Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
 Date: Wed, 30 Nov 2011 13:13:58 -0500
 Subject: parted: make _partition_warn_busy actually a warning instead of an
@@ -14,10 +14,10 @@ Patch-Name: 0004-parted-make-_partition_warn_busy-actually-a-warning-.patch
  1 file changed, 11 insertions(+), 8 deletions(-)
 
 diff --git a/parted/parted.c b/parted/parted.c
-index 492796b..16c7752 100644
+index 1351476..4a55173 100644
 --- a/parted/parted.c
 +++ b/parted/parted.c
-@@ -224,14 +224,17 @@ _partition_warn_busy (PedPartition* part)
+@@ -222,14 +222,17 @@ _partition_warn_busy (PedPartition* part)
  
          if (ped_partition_is_busy (part)) {
                  path = ped_partition_get_path (part);

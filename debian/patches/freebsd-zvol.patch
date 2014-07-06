@@ -1,4 +1,4 @@
-From fdab1ffa043bfee110e5d8bb0578a43b93f8d9c0 Mon Sep 17 00:00:00 2001
+From 455ec94be97bcb24113ecea0da62b74c66508401 Mon Sep 17 00:00:00 2001
 From: Robert Millan <rmh@debian.org>
 Date: Fri, 28 Mar 2014 17:09:50 +0000
 Subject: Detection of ZFS volumes (ZVOL)
@@ -18,7 +18,7 @@ Patch-Name: freebsd-zvol.patch
  1 file changed, 40 insertions(+)
 
 diff --git a/libparted/arch/freebsd.c b/libparted/arch/freebsd.c
-index 7919d57..9861806 100644
+index 52f5293..a53eadc 100644
 --- a/libparted/arch/freebsd.c
 +++ b/libparted/arch/freebsd.c
 @@ -23,6 +23,7 @@

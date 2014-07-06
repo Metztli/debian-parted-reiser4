@@ -1,4 +1,4 @@
-From 54845b8bf2f2a4de9ea9df7516161bb218f77712 Mon Sep 17 00:00:00 2001
+From 9cc46c9897e8b34272ebaaae23b3e0b9d6a76d3a Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@cfl.rr.com>
 Date: Fri, 28 Mar 2014 17:10:04 +0000
 Subject: refactor device-mapper partition sync code
@@ -9,17 +9,18 @@ algorithm as regular disks: try to remove all, and ignore any that could
 not be removed but have not changed.
 
 Forwarded: yes
+Last-Update: 2014-07-07
 
 Patch-Name: dm-part-sync.patch
 ---
- libparted/arch/linux.c | 217 ++++++++++++++++++++++++++-----------------------
- 1 file changed, 114 insertions(+), 103 deletions(-)
+ libparted/arch/linux.c | 213 ++++++++++++++++++++++++++-----------------------
+ 1 file changed, 112 insertions(+), 101 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index 73058c8..bccc2c2 100644
+index 47d98e1..b64d9b6 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -269,6 +269,16 @@ static char* _device_get_part_path (PedDevice* dev, int num);
+@@ -289,6 +289,16 @@ static char* _device_get_part_path (PedDevice* dev, int num);
  static int _partition_is_mounted_by_path (const char* path);
  static int
  _dm_is_part (const char *path);
@@ -36,8 +37,8 @@ index 73058c8..bccc2c2 100644
  
  
  static int
-@@ -2225,10 +2235,39 @@ linux_probe_all ()
-                 _probe_proc_partitions ();
+@@ -2267,26 +2277,55 @@ zasprintf (const char *format, ...)
+   return r < 0 ? NULL : resultp;
  }
  
 +static char *dm_canonical_path (PedDevice *dev)
@@ -66,56 +67,50 @@ index 73058c8..bccc2c2 100644
 +}
 +
  static char*
- _device_get_part_path (PedDevice* dev, int num)
+ _device_get_part_path (PedDevice *dev, int num)
  {
--        int             path_len = strlen (dev->path);
+-        size_t path_len = strlen (dev->path);
 +        char*           devpath;
 +        if (dev->type == PED_DEVICE_DM)
 +                devpath = dm_canonical_path (dev);
 +        else devpath = dev->path;
-+        int             path_len = strlen (devpath);
-         int             result_len = path_len + 16;
-         char*           result;
++        size_t path_len = strlen (devpath);
  
-@@ -2239,18 +2278,19 @@ _device_get_part_path (PedDevice* dev, int num)
+         char *result;
          /* Check for devfs-style /disc => /partN transformation
             unconditionally; the system might be using udev with devfs rules,
             and if not the test is harmless. */
--        if (!strcmp (dev->path + path_len - 5, "/disc")) {
-+        if (!strcmp (devpath + path_len - 5, "/disc")) {
-                 /* replace /disc with /path%d */
--                strcpy (result, dev->path);
-+                strcpy (result, devpath);
-                 snprintf (result + path_len - 5, 16, "/part%d", num);
-         } else if (dev->type == PED_DEVICE_DAC960
-                         || dev->type == PED_DEVICE_CPQARRAY
-                         || dev->type == PED_DEVICE_ATARAID
--                        || isdigit (dev->path[path_len - 1]))
--                snprintf (result, result_len, "%sp%d", dev->path, num);
-+                        || isdigit (devpath[path_len - 1]))
-+                snprintf (result, result_len, "%sp%d", devpath, num);
-         else
--                snprintf (result, result_len, "%s%d", dev->path, num);
--
-+                snprintf (result, result_len, "%s%d", devpath, num);
-+        if (dev->type == PED_DEVICE_DM)
-+                free (devpath);
-         return result;
- }
+-        if (5 < path_len && !strcmp (dev->path + path_len - 5, "/disc")) {
++        if (5 < path_len && !strcmp (devpath + path_len - 5, "/disc")) {
+                 /* replace /disc with /part%d */
+                 result = zasprintf ("%.*s/part%d",
+-                                    (int) (path_len - 5), dev->path, num);
++                                    (int) (path_len - 5), devpath, num);
+         } else {
+                 char const *p = (dev->type == PED_DEVICE_DAC960
+                                  || dev->type == PED_DEVICE_CPQARRAY
+                                  || dev->type == PED_DEVICE_ATARAID
+-                                 || isdigit (dev->path[path_len - 1])
++                                 || isdigit (devpath[path_len - 1])
+                                  ? "p" : "");
+-                result = zasprintf ("%s%s%d", dev->path, p, num);
++                result = zasprintf ("%s%s%d", devpath, p, num);
+         }
  
-@@ -2537,6 +2577,9 @@ _device_get_partition_range(PedDevice* dev)
-         FILE*       fp;
-         bool        ok;
+         return result;
+@@ -2574,6 +2613,9 @@ _device_get_partition_range(PedDevice const* dev)
+         int range;
+         bool ok = _sysfs_int_entry_from_dev(dev, "ext_range", &range);
  
 +        if (dev->type == PED_DEVICE_DM)
 +                return MAX_NUM_PARTS;
 +
-         r = snprintf(path, sizeof(path), "/sys/block/%s/range",
-                      last_component(dev->path));
-         if (r < 0 || r >= sizeof(path))
-@@ -2574,6 +2617,23 @@ _disk_sync_part_table (PedDisk* disk)
-         PED_ASSERT(disk->dev != NULL, return 0);
-         int lpn;
+         if (!ok)
+                 return MAX_NUM_PARTS;
+         /* both 0 and 1 mean no partitions */
+@@ -2603,6 +2645,23 @@ _disk_sync_part_table (PedDisk* disk)
+ 
+         unsigned int part_range = _device_get_partition_range(disk->dev);
  
 +        int (*add_partition)(PedDisk* disk, const PedPartition *part);
 +        int (*remove_partition)(PedDisk* disk, int partno);
@@ -136,8 +131,8 @@ index 73058c8..bccc2c2 100644
 +
          /* lpn = largest partition number. */
          if (ped_disk_get_max_supported_partition_count(disk, &lpn))
-                 lpn = PED_MIN(lpn, _device_get_partition_range(disk->dev));
-@@ -2607,7 +2667,7 @@ _disk_sync_part_table (PedDisk* disk)
+                 lpn = PED_MIN(lpn, part_range);
+@@ -2636,7 +2695,7 @@ _disk_sync_part_table (PedDisk* disk)
              int j;
              for (j = 0; j < lpn; j++) {
                  if (!ok[j]) {
@@ -146,7 +141,7 @@ index 73058c8..bccc2c2 100644
                      errnums[j] = errno;
                      if (!ok[j] && errnums[j] == EBUSY)
                          busy = true;
-@@ -2624,9 +2684,9 @@ _disk_sync_part_table (PedDisk* disk)
+@@ -2653,9 +2712,9 @@ _disk_sync_part_table (PedDisk* disk)
                                  unsigned long long length;
                                  unsigned long long start;
                                  /* get start and length of existing partition */
@@ -159,7 +154,7 @@ index 73058c8..bccc2c2 100644
                                  if (start == part->geom.start
  				    && length == part->geom.length)
                                          ok[i - 1] = 1;
-@@ -2638,7 +2698,7 @@ _disk_sync_part_table (PedDisk* disk)
+@@ -2667,7 +2726,7 @@ _disk_sync_part_table (PedDisk* disk)
                          }
  
                          /* add the (possibly modified or new) partition */
@@ -168,7 +163,7 @@ index 73058c8..bccc2c2 100644
                                  ped_exception_throw (
                                          PED_EXCEPTION_ERROR,
                                          PED_EXCEPTION_RETRY_CANCEL,
-@@ -2686,24 +2746,34 @@ _disk_sync_part_table (PedDisk* disk)
+@@ -2715,24 +2774,34 @@ _disk_sync_part_table (PedDisk* disk)
  
  #ifdef ENABLE_DEVICE_MAPPER
  static int
@@ -211,7 +206,7 @@ index 73058c8..bccc2c2 100644
  }
  
  /* We consider a dm device that is a linear mapping with a  *
-@@ -2757,65 +2827,38 @@ err:
+@@ -2786,65 +2855,39 @@ err:
          return rc;
  }
  
@@ -246,7 +241,8 @@ index 73058c8..bccc2c2 100644
 +        if (!(task = dm_task_create(DM_DEVICE_TABLE)))
 +                return 0;
 +        path = _device_get_part_path (part->disk->dev, part->num);
-+        PED_ASSERT(path, return false);
++        if (!path)
++                return 0;
 +        dm_task_set_name(task, path);
          if (!dm_task_run(task))
                  goto err;
@@ -300,7 +296,7 @@ index 73058c8..bccc2c2 100644
  {
          char*           vol_name = NULL;
          const char*     dev_name = NULL;
-@@ -2868,7 +2911,7 @@ _dm_add_partition (PedDisk* disk, PedPartition* part)
+@@ -2894,7 +2937,7 @@ _dm_add_partition (PedDisk* disk, PedPartition* part)
                  free(vol_name);
                  return 1;
          } else {
@@ -309,7 +305,7 @@ index 73058c8..bccc2c2 100644
          }
  err:
          dm_task_update_nodes();
-@@ -2878,34 +2921,6 @@ err:
+@@ -2904,34 +2947,6 @@ err:
          free (vol_name);
          return 0;
  }
@@ -344,14 +340,14 @@ index 73058c8..bccc2c2 100644
  #endif
  
  static int
-@@ -2928,10 +2943,6 @@ linux_disk_commit (PedDisk* disk)
-         if (!_has_partitions (disk))
-                 return 1;
- 
+@@ -2951,10 +2966,6 @@ _have_blkpg ()
+ static int
+ linux_disk_commit (PedDisk* disk)
+ {
 -#ifdef ENABLE_DEVICE_MAPPER
 -        if (disk->dev->type == PED_DEVICE_DM)
 -                return _dm_reread_part_table (disk);
 -#endif
          if (disk->dev->type != PED_DEVICE_FILE) {
-                 /* The ioctl() command BLKPG_ADD_PARTITION does not notify
-                  * the devfs system; consequently, /proc/partitions will not
+ 
+ 		/* We now require BLKPG support.  If this assertion fails,

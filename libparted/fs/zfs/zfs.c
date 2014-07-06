@@ -57,33 +57,8 @@ zfs_probe (PedGeometry* geom)
 		return NULL;
 }
 
-#ifndef DISCOVER_ONLY
-static int
-zfs_clobber (PedGeometry* geom)
-{
-	char	buf[512];
-
-	memset (buf, 0, 512);
-	return ped_geometry_write (geom, buf, 256, 1);
-}
-#endif /* !DISCOVER_ONLY */
-
 static PedFileSystemOps zfs_ops = {
 	probe:		zfs_probe,
-#ifndef DISCOVER_ONLY
-	clobber:	zfs_clobber,
-#else
-	clobber:	NULL,
-#endif
-	open:		NULL,
-	create:		NULL,
-	close:		NULL,
-	check:		NULL,
-	copy:		NULL,
-	resize:		NULL,
-	get_create_constraint:	NULL,
-	get_resize_constraint:	NULL,
-	get_copy_constraint:	NULL
 };
 
 static PedFileSystemType zfs_type = {

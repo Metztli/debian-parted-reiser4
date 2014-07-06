@@ -1,4 +1,4 @@
-From 4a652a7cde890c35265bb49a7ecc3cb5f3daa6ca Mon Sep 17 00:00:00 2001
+From db305eaaa2436dd1bdfce5648e7007d76ed31acb Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
 Date: Tue, 29 Nov 2011 14:05:48 -0500
 Subject: libparted: Add support for BLKPG ioctl partition resize
@@ -8,16 +8,18 @@ different end sector), if removing the old partition fails because it is
 in use, try to use the new BLKPG_RES_PARTITION request to update the
 kernel partition table with the new size.
 
+Last-Update: 2014-07-07
+
 Patch-Name: 0003-libparted-Add-support-for-BLKPG-ioctl-partition-resi.patch
 ---
  libparted/arch/linux.c | 56 ++++++++++++++++++++++++++++++++++++++++++++++++++
  1 file changed, 56 insertions(+)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index 4032efb..58aed34 100644
+index 5eb5dd7..9008ab1 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -2481,6 +2481,53 @@ _blkpg_remove_partition (PedDisk* disk, int n)
+@@ -2492,6 +2492,53 @@ _blkpg_remove_partition (PedDisk* disk, int n)
                                      BLKPG_DEL_PARTITION);
  }
  
@@ -28,8 +30,8 @@ index 4032efb..58aed34 100644
 +        const char*             vol_name;
 +        char*                   dev_name;
 +
-+        PED_ASSERT(disk != NULL, return 0);
-+        PED_ASSERT(disk->dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0, return 0);
++        PED_ASSERT (disk != NULL);
++        PED_ASSERT (disk->dev->sector_size % PED_SECTOR_SIZE_DEFAULT == 0);
 +
 +        dev_name = _device_get_part_path (disk->dev, part->num);
 +        if (!dev_name)
@@ -68,10 +70,10 @@ index 4032efb..58aed34 100644
 +}
 +#endif
 +
- /* Read the unsigned long long from /sys/block/DEV_BASE/PART_BASE/ENTRY
-    and set *VAL to that value, where DEV_BASE is the last component of path to
-    block device corresponding to PART and PART_BASE is the sysfs name of PART.
-@@ -2696,6 +2743,15 @@ _disk_sync_part_table (PedDisk* disk)
+ /* Read the integer from /sys/block/DEV_BASE/ENTRY and set *VAL
+    to that value, where DEV_BASE is the last component of DEV->path.
+    Upon success, return true.  Otherwise, return false. */
+@@ -2719,6 +2766,15 @@ _disk_sync_part_table (PedDisk* disk)
                                  if (start == part->geom.start
  				    && length == part->geom.length)
                                          ok[i - 1] = 1;

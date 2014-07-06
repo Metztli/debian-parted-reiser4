@@ -1,4 +1,4 @@
-From f56fea54867e967fe0158e75661c05f23051637a Mon Sep 17 00:00:00 2001
+From 0676326b5de2a114cdbe42dce531d31401432d82 Mon Sep 17 00:00:00 2001
 From: Robert Millan <rmh@debian.org>
 Date: Fri, 28 Mar 2014 17:09:51 +0000
 Subject: Detection of GEOM encryption devices (GELI)
@@ -13,7 +13,7 @@ Patch-Name: freebsd-geli.patch
  1 file changed, 6 insertions(+)
 
 diff --git a/libparted/arch/freebsd.c b/libparted/arch/freebsd.c
-index 9861806..36d14d5 100644
+index a53eadc..b3f23c3 100644
 --- a/libparted/arch/freebsd.c
 +++ b/libparted/arch/freebsd.c
 @@ -1058,6 +1058,8 @@ _probe_kern_disks ()

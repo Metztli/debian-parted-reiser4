@@ -1,7 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 2004-2005, 2007, 2009-2010 Free Software Foundation,
-    Inc.
+    Copyright (C) 2004-2005, 2007, 2009-2012 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,8 +40,8 @@ hfsc_can_use_geom (PedGeometry* geom)
 	PedDevice* dev;
 
 	dev = geom->dev;
-	PED_ASSERT (geom != NULL, return 0);
-	PED_ASSERT (dev != NULL, return 0);
+	PED_ASSERT (geom != NULL);
+	PED_ASSERT (dev != NULL);
 
 	if (dev->sector_size != PED_SECTOR_SIZE_DEFAULT) {
 		ped_exception_throw (
@@ -68,8 +67,8 @@ hfs_and_wrapper_probe (PedGeometry* geom)
 	PedGeometry*	geom_ret;
 	PedSector	search, max;
 
-	PED_ASSERT (geom != NULL, return NULL);
-	PED_ASSERT (hfsc_can_use_geom (geom), return NULL);
+	PED_ASSERT (geom != NULL);
+	PED_ASSERT (hfsc_can_use_geom (geom));
 
 	mdb = (HfsMasterDirectoryBlock *) buf;
 
@@ -105,7 +104,7 @@ hfsplus_probe (PedGeometry* geom)
 	PedGeometry*	geom_ret;
 	uint8_t		buf[PED_SECTOR_SIZE_DEFAULT];
 
-	PED_ASSERT (geom != NULL, return NULL);
+	PED_ASSERT (geom != NULL);
 
 	if (!hfsc_can_use_geom (geom))
 		return NULL;
@@ -177,7 +176,7 @@ hfs_probe (PedGeometry* geom)
 	PedGeometry*	geom_base;
 	PedGeometry*	geom_plus = NULL;
 
-	PED_ASSERT (geom != NULL, return NULL);
+	PED_ASSERT (geom != NULL);
 
 	if (!hfsc_can_use_geom (geom))
 		return NULL;
@@ -200,7 +199,7 @@ hfsx_probe (PedGeometry* geom)
 	PedSector	search, max;
 	HfsPVolumeHeader *vh = (HfsPVolumeHeader *) buf;
 
-	PED_ASSERT (geom != NULL, return NULL);
+	PED_ASSERT (geom != NULL);
 
 	if (!hfsc_can_use_geom (geom))
 		return NULL;

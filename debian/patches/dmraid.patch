@@ -1,4 +1,4 @@
-From 69bc46a282b6c6c8993b6d248daad63c173dd3b1 Mon Sep 17 00:00:00 2001
+From 5ea0c3fcb6cb59f1a271f5113b8dc8dd1e48d72f Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:10:03 +0000
 Subject: Hide non dmraid whole disk dm devices
@@ -14,10 +14,10 @@ Patch-Name: dmraid.patch
  1 file changed, 65 insertions(+), 11 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index ecd0139..73058c8 100644
+index e2c4139..47d98e1 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
-@@ -267,6 +267,9 @@ struct blkdev_ioctl_param {
+@@ -287,6 +287,9 @@ struct blkdev_ioctl_param {
  
  static char* _device_get_part_path (PedDevice* dev, int num);
  static int _partition_is_mounted_by_path (const char* path);
@@ -27,7 +27,7 @@ index ecd0139..73058c8 100644
  
  static int
  _read_fd (int fd, char **buf)
-@@ -484,13 +487,52 @@ _probe_dm_devices ()
+@@ -504,13 +507,52 @@ _probe_dm_devices ()
                 if (stat (buf, &st) != 0)
                         continue;
  
@@ -81,7 +81,7 @@ index ecd0139..73058c8 100644
  #endif
  
  static int
-@@ -2664,20 +2706,26 @@ _dm_remove_map_name(char *name)
+@@ -2693,20 +2735,26 @@ _dm_remove_map_name(char *name)
          return 0;
  }
  
@@ -110,7 +110,7 @@ index ecd0139..73058c8 100644
          if (!dm_task_run(task))
                  goto err;
  
-@@ -2690,14 +2738,20 @@ _dm_is_part (struct dm_info *this, char *name)
+@@ -2719,14 +2767,20 @@ _dm_is_part (struct dm_info *this, char *name)
          if (!deps)
                  goto err;
  

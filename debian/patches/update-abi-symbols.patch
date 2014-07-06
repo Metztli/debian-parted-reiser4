@@ -1,15 +1,17 @@
-From 4b59aba60cc1b86f6ccfc54ae4dce70423612b1b Mon Sep 17 00:00:00 2001
+From b8f6cf3b76f77f6c80b988b9e8ab466600a78f08 Mon Sep 17 00:00:00 2001
 From: Otavio Salvador <otavio@ossystems.com.br>
 Date: Tue, 2 Feb 2010 16:40:11 -0200
 Subject: Update ABI symbols
 
+Last-Update: 2014-07-07
+
 Patch-Name: update-abi-symbols.patch
 ---
- scripts/data/abi/baseline_symbols.txt | 188 +++++++++++++++++++++++++++-------
- 1 file changed, 149 insertions(+), 39 deletions(-)
+ scripts/data/abi/baseline_symbols.txt | 187 +++++++++++++++++++++++++++-------
+ 1 file changed, 149 insertions(+), 38 deletions(-)
 
 diff --git a/scripts/data/abi/baseline_symbols.txt b/scripts/data/abi/baseline_symbols.txt
-index 010a55e..4466388 100644
+index 9162f1a..7856da6 100644
 --- a/scripts/data/abi/baseline_symbols.txt
 +++ b/scripts/data/abi/baseline_symbols.txt
 @@ -1,4 +1,5 @@
@@ -190,7 +192,7 @@ index 010a55e..4466388 100644
  FUNC:ped_geometry_set
  FUNC:ped_geometry_set_end
  FUNC:ped_geometry_set_start
-@@ -376,13 +421,11 @@ FUNC:ped_partition_is_active
+@@ -376,7 +421,6 @@ FUNC:ped_partition_is_active
  FUNC:ped_partition_is_busy
  FUNC:ped_partition_is_flag_available
  FUNC:ped_partition_new
@@ -198,13 +200,7 @@ index 010a55e..4466388 100644
  FUNC:ped_partition_set_flag
  FUNC:ped_partition_set_name
  FUNC:ped_partition_set_system
- FUNC:ped_partition_type_get_name
- FUNC:ped_realloc
--FUNC:ped_register_disk_type
- FUNC:ped_round_down_to
- FUNC:ped_round_to_nearest
- FUNC:ped_round_up_to
-@@ -406,45 +449,112 @@ FUNC:ped_unit_get_size
+@@ -405,45 +449,112 @@ FUNC:ped_unit_get_size
  FUNC:ped_unit_parse
  FUNC:ped_unit_parse_custom
  FUNC:ped_unit_set_default

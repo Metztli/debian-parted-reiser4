@@ -1,74 +1,38 @@
-From 9c232dd1327369633e3ae5df47a6f8cc1062a2aa Mon Sep 17 00:00:00 2001
+From 820c5de97411153256e7ff29d8c46e68b6ed5220 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:09:48 +0000
 Subject: Add ZFS support
 
+Last-Update: 2014-07-07
+
 Patch-Name: zfs.patch
 ---
- configure.ac                 |   1 +
- libparted/fs/Makefile.am     |   5 +-
- libparted/fs/zfs/Makefile.am |   8 ++++
- libparted/fs/zfs/zfs.c       | 106 +++++++++++++++++++++++++++++++++++++++++++
- libparted/libparted.c        |   4 ++
- 5 files changed, 122 insertions(+), 2 deletions(-)
- create mode 100644 libparted/fs/zfs/Makefile.am
+ libparted/fs/Makefile.am |  3 +-
+ libparted/fs/zfs/zfs.c   | 81 ++++++++++++++++++++++++++++++++++++++++++++++++
+ libparted/libparted.c    |  4 +++
+ 3 files changed, 87 insertions(+), 1 deletion(-)
  create mode 100644 libparted/fs/zfs/zfs.c
 
-diff --git a/configure.ac b/configure.ac
-index 2384542..f289ba0 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -639,6 +639,7 @@ libparted/fs/ntfs/Makefile
- libparted/fs/reiserfs/Makefile
- libparted/fs/ufs/Makefile
- libparted/fs/xfs/Makefile
-+libparted/fs/zfs/Makefile
- libparted/tests/Makefile
- libparted.pc
- parted/Makefile
 diff --git a/libparted/fs/Makefile.am b/libparted/fs/Makefile.am
-index 9e3fc2b..06a4fba 100644
+index a8fb313..3dab52e 100644
 --- a/libparted/fs/Makefile.am
 +++ b/libparted/fs/Makefile.am
-@@ -4,7 +4,7 @@
- #
- # This file may be modified and/or distributed without restriction.
+@@ -50,7 +50,8 @@ libfs_la_SOURCES =		\
+   xfs/platform_defs.h		\
+   xfs/xfs.c			\
+   xfs/xfs_sb.h			\
+-  xfs/xfs_types.h
++  xfs/xfs_types.h		\
++  zfs/zfs.c
  
--SUBDIRS       = amiga ext2 ufs fat ntfs hfs linux_swap xfs jfs reiserfs btrfs # bfs
-+SUBDIRS       = amiga ext2 ufs fat ntfs hfs linux_swap xfs jfs reiserfs btrfs zfs # bfs
+ lib_LTLIBRARIES = libparted-fs-resize.la
  
- partedincludedir      =	-I$(top_srcdir)/include
- noinst_LTLIBRARIES    =	libfs.la
-@@ -25,7 +25,8 @@ libfs_la_LIBADD   = $(UUID_LIBS)		\
- 		    xfs/libxfs.la		\
- 		    jfs/libjfs.la		\
- 		    reiserfs/libreiserfs.la	\
--		    btrfs/libbtrfs.la
-+		    btrfs/libbtrfs.la		\
-+		    zfs/libzfs.la
- #		    bfs/libbfs.la
- 
- libfs_la_SOURCES   =
-diff --git a/libparted/fs/zfs/Makefile.am b/libparted/fs/zfs/Makefile.am
-new file mode 100644
-index 0000000..3273c6a
---- /dev/null
-+++ b/libparted/fs/zfs/Makefile.am
-@@ -0,0 +1,8 @@
-+partedincludedir	= -I$(top_srcdir)/include
-+
-+noinst_LTLIBRARIES	= libzfs.la
-+libzfs_la_SOURCES	= zfs.c
-+
-+INCLUDES = $(partedincludedir) $(INTLINCS)
-+
-+MAINTAINERCLEANFILES = Makefile.in
 diff --git a/libparted/fs/zfs/zfs.c b/libparted/fs/zfs/zfs.c
 new file mode 100644
-index 0000000..4d3988b
+index 0000000..24cee7d
 --- /dev/null
 +++ b/libparted/fs/zfs/zfs.c
-@@ -0,0 +1,106 @@
+@@ -0,0 +1,81 @@
 +/*
 +    libparted - a library for manipulating disk partitions
 +    Copyright (C) 2000, 2007, 2009-2010 Free Software Foundation, Inc.
@@ -128,33 +92,8 @@ index 0000000..4d3988b
 +		return NULL;
 +}
 +
-+#ifndef DISCOVER_ONLY
-+static int
-+zfs_clobber (PedGeometry* geom)
-+{
-+	char	buf[512];
-+
-+	memset (buf, 0, 512);
-+	return ped_geometry_write (geom, buf, 256, 1);
-+}
-+#endif /* !DISCOVER_ONLY */
-+
 +static PedFileSystemOps zfs_ops = {
 +	probe:		zfs_probe,
-+#ifndef DISCOVER_ONLY
-+	clobber:	zfs_clobber,
-+#else
-+	clobber:	NULL,
-+#endif
-+	open:		NULL,
-+	create:		NULL,
-+	close:		NULL,
-+	check:		NULL,
-+	copy:		NULL,
-+	resize:		NULL,
-+	get_create_constraint:	NULL,
-+	get_resize_constraint:	NULL,
-+	get_copy_constraint:	NULL
 +};
 +
 +static PedFileSystemType zfs_type = {
@@ -176,26 +115,26 @@ index 0000000..4d3988b
 +	ped_file_system_type_unregister (&zfs_type);
 +}
 diff --git a/libparted/libparted.c b/libparted/libparted.c
-index 39aa5fd..59efa6c 100644
+index 6b3e4f4..1fed49e 100644
 --- a/libparted/libparted.c
 +++ b/libparted/libparted.c
-@@ -110,6 +110,7 @@ extern void ped_file_system_hfs_init (void);
- extern void ped_file_system_fat_init (void);
+@@ -110,6 +110,7 @@ extern void ped_file_system_fat_init (void);
  extern void ped_file_system_ext2_init (void);
+ extern void ped_file_system_nilfs2_init (void);
  extern void ped_file_system_btrfs_init (void);
 +extern void ped_file_system_zfs_init (void);
  
  static void
  init_file_system_types ()
-@@ -125,6 +126,7 @@ init_file_system_types ()
- 	ped_file_system_fat_init ();
+@@ -126,6 +127,7 @@ init_file_system_types ()
  	ped_file_system_ext2_init ();
+ 	ped_file_system_nilfs2_init ();
  	ped_file_system_btrfs_init ();
 +	ped_file_system_zfs_init ();
  }
- #endif /* ENABLE_FS */
  
-@@ -191,6 +193,7 @@ extern void ped_file_system_reiserfs_done (void);
+ extern void ped_disk_aix_done ();
+@@ -188,6 +190,7 @@ extern void ped_file_system_reiserfs_done (void);
  extern void ped_file_system_ufs_done (void);
  extern void ped_file_system_xfs_done (void);
  extern void ped_file_system_btrfs_done (void);
@@ -203,11 +142,11 @@ index 39aa5fd..59efa6c 100644
  extern void ped_file_system_amiga_done (void);
  
  static void
-@@ -206,6 +209,7 @@ done_file_system_types ()
+@@ -204,6 +207,7 @@ done_file_system_types ()
  	ped_file_system_ufs_done ();
  	ped_file_system_xfs_done ();
  	ped_file_system_btrfs_done ();
 +	ped_file_system_zfs_done ();
  	ped_file_system_amiga_done ();
  }
- #endif /* ENABLE_FS */
+ 
