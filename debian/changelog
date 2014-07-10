@@ -1,6 +1,14 @@
 parted (3.1-1) UNRELEASED; urgency=medium
 
   * New upstream release (closes: #646130, LP: #1046391).
+  * Update binary package names to libparted2 (etc.).  We can safely drop
+    the "debian1" suffix now, as the previous incarnation of libparted2 was
+    about 14 years ago, and the Conflicts against it were made versioned
+    four years ago in 2.2-4.
+  * Split off separate packages for libparted-fs-resize, which has a
+    different SONAME.
+  * Remove largely-unhelpful version from libparted-i18n and libparted-dev
+    package names.
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
 
