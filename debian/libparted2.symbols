@@ -1,4 +1,4 @@
-libparted.so.@LIBSONAME@ libparted@LIBSONAME@ #MINVER#
+libparted.so.2 libparted2 #MINVER#
 * Build-Depends-Package: libparted-dev
  ped_alignment_align_down@Base 3.1
  ped_alignment_align_nearest@Base 3.1

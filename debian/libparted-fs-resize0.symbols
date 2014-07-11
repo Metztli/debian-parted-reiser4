@@ -1,4 +1,4 @@
-libparted-fs-resize.so.@LIBRESIZESONAME@ libparted-fs-resize@LIBRESIZESONAME@ #MINVER#
+libparted-fs-resize.so.0 libparted-fs-resize0 #MINVER#
 * Build-Depends-Package: libparted-dev
  LIBPARTED_FS_RESIZE_0.0.0@LIBPARTED_FS_RESIZE_0.0.0 3.1
  ped_file_system_close@LIBPARTED_FS_RESIZE_0.0.0 3.1
