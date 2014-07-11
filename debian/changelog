@@ -18,6 +18,7 @@ parted (3.1-1) UNRELEASED; urgency=medium
     harder to understand.
   * Modernise and correct use of dpkg-architecture variables to work better
     when cross-building.
+  * Drop another vestige of the old parted-bf package.
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
 
