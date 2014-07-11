@@ -148,6 +148,7 @@ Depends: libc6-dev, libparted2 (= ${binary:Version}), libparted-fs-resize0 (= ${
 Suggests: parted (= ${binary:Version}), parted-doc
 Conflicts: libparted0-dev, parted (<< 1.2.11)
 Replaces: libparted0-dev, libparted2-dev (<< 2.2)
+Multi-Arch: same
 Description: disk partition manipulator - development files
  GNU Parted is a program that allows you to create, destroy, resize,
  move, and copy disk partitions. This is useful for creating space

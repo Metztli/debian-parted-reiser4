@@ -1,4 +1,5 @@
-usr/lib/libparted.so
-usr/lib/libparted-fs-resize.so
-usr/lib/pkgconfig
+#! /usr/bin/dh-exec
+usr/lib/${DEB_HOST_MULTIARCH}/libparted.so
+usr/lib/${DEB_HOST_MULTIARCH}/libparted-fs-resize.so
+usr/lib/${DEB_HOST_MULTIARCH}/pkgconfig
 usr/include
