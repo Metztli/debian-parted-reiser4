@@ -220,7 +220,6 @@ binary-arch: build install
 	dh_compress
 	dh_fixperms
 	DH_OPTIONS= dh_makeshlibs -plibparted2 \
-		-V'libparted2 (>= 3.1-1~)' \
 		--add-udeb=libparted2-udeb \
 		-- -c4
 	DH_OPTIONS= dh_makeshlibs -plibparted-fs-resize0 \
