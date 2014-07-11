@@ -94,7 +94,7 @@ endif
 	cd build-deb && $(buildflags) ../configure --prefix=/usr \
 	    --sbindir=/sbin --mandir=\$${prefix}/share/man \
 	    --infodir=\$${prefix}/share/info --enable-mtrace \
-	    --enable-shared \
+	    --enable-shared --disable-static \
 	    --build=$(DEB_BUILD_GNU_TYPE) --host=$(DEB_HOST_GNU_TYPE) \
 		$(CONFDEVMAPPER) \
 	    $(CONFFLAGS)
