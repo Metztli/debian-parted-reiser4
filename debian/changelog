@@ -24,6 +24,8 @@ parted (3.1-1) UNRELEASED; urgency=medium
     hand in debian/rules.
   * Move development libraries into multiarch directories and mark
     libparted-dev as Multi-Arch: same.
+  * Drop -fgnu89-inline workaround, which is no longer needed (and was
+    actually disabled by accident in 2.3-10).
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
 

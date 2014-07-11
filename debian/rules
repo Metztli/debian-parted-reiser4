@@ -55,10 +55,6 @@ ifeq (powerpc, $(DEB_HOST_ARCH))
   CONFFLAGS += --disable-pc98
 endif
 
-# Workaround/fix bug #442308
-CFLAGS += -fgnu89-inline
-UDEB_CFLAGS += -fgnu89-inline
-
 # Enable device-mapper only on Linux
 ifeq (linux, $(DEB_HOST_ARCH_OS))
   CONFDEVMAPPER = --enable-device-mapper
