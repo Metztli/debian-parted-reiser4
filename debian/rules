@@ -1,12 +1,4 @@
 #!/usr/bin/make -f
-# GNU Parted debian/rules
-#
-# This file is used by dpkg-buildpackage to build the parted packages.
-# To build a package, run `dpkg-buildpackage' or `debuild' from the
-# parent directory. (You may need to specify `-rfakeroot' to
-# dpkg-buildpackage if you are not running it as root ...)
-#
-# $Id: rules,v 1.50 2003/02/19 11:13:18 timshel Exp $
 #
 # Copyright (C) 1999, 2000, 2001, 2002  Timshel Knoll
 # Licensed under the terms of the GNU General Public License
@@ -15,28 +7,13 @@
 # `Sample debian/rules that uses debhelper' from dh_make,
 # GNU Copyright (C) 1997 to 1999 by Joey Hess
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
-
-# This has to be exported to make some magic below work.
-export DH_OPTIONS
-
-DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_HOST_ARCH_OS ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
-DEB_HOST_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
-DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
-
-CPPFLAGS := $(shell dpkg-buildflags --get CPPFLAGS)
-CFLAGS := $(shell dpkg-buildflags --get CFLAGS)
-UDEB_CFLAGS := $(patsubst -O2,-Os,$(CFLAGS))
-LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS)
-buildflags := CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)"
-udeb_buildflags := CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(UDEB_CFLAGS)" \
-		   LDFLAGS="$(LDFLAGS)"
 
 # Tell automake to produce verbose build logs.
 export V := 1
+
+CONFFLAGS := --sbindir=/sbin --enable-mtrace --enable-shared --disable-static
 
 # This is a workaround for a m68k compiler bug ...
 ifeq (m68k, $(DEB_HOST_ARCH))
@@ -57,184 +34,59 @@ endif
 
 # Enable device-mapper only on Linux
 ifeq (linux, $(DEB_HOST_ARCH_OS))
-  CONFDEVMAPPER = --enable-device-mapper
+  CONFFLAGS += --enable-device-mapper
 else
-  CONFDEVMAPPER = --disable-device-mapper
+  CONFFLAGS += --disable-device-mapper
 endif
 
-# by default, do something sane ...
-default: echo-vars
+# Everything above here is common to the deb and udeb builds.
+CONFFLAGS_UDEB := $(CONFFLAGS)
 
-echo-vars:
-	@echo "Try: debian/rules [configure|build|install|binary|binary-arch|binary-indep|clean]"
-	@echo "CPPFLAGS:	$(CPPFLAGS)"
-	@echo "CFLAGS:		$(CFLAGS)"
-	@echo "LDFLAGS:		$(LDFLAGS)"
-	@echo "DEB_BUILD_GNU_TYPE: $(DEB_BUILD_GNU_TYPE)"
-	@echo "DEB_HOST_GNU_TYPE: $(DEB_HOST_GNU_TYPE)"
+# Options specific to the udeb build.
+CONFFLAGS_UDEB += ac_cv_header_execinfo_h=no --libdir=/lib --without-readline
 
-debian/stamp-autoreconf:
-	dh_autoreconf
-	touch $@
+%:
+	dh $@ --with=autoreconf
 
-build-deb/config.status: debian/stamp-autoreconf
-	dh_testdir
-	[ -d build-deb ] || mkdir build-deb
+override_dh_auto_configure:
+	dh_auto_configure -Bbuild-deb -- $(CONFFLAGS)
+	# We need to unset CFLAGS here to force debhelper to recompute it
+	# with the new DEB_CFLAGS_MAINT_APPEND.  We also need to unset
+	# DH_INTERNAL_BUILDFLAGS to force debhelper to recompute any build
+	# flags at all.  If there's a better way to do this I'd like to hear
+	# about it.
+	env -u DH_INTERNAL_BUILDFLAGS -u CFLAGS DEB_CFLAGS_MAINT_APPEND=-Os \
+		dh_auto_configure -Bbuild-udeb -- $(CONFFLAGS_UDEB)
 
-ifneq (, $(findstring debug, $(DEB_BUILD_OPTIONS)))
-	@echo "warning: option \`debug' in \$$DEB_BUILD_OPTIONS: building with gcc option \`-g'" >&2
-endif
-
-#	 Add here commands to configure the package.
-#	 Install the `parted' executable to /sbin ...
-	cd build-deb && $(buildflags) ../configure --prefix=/usr \
-	    --sbindir=/sbin --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) --mandir=\$${prefix}/share/man \
-	    --infodir=\$${prefix}/share/info --enable-mtrace \
-	    --enable-shared --disable-static \
-	    --build=$(DEB_BUILD_GNU_TYPE) --host=$(DEB_HOST_GNU_TYPE) \
-		$(CONFDEVMAPPER) \
-	    $(CONFFLAGS)
-	touch $@
-
-build-udeb/config.status: debian/stamp-autoreconf
-	dh_testdir
-	[ -d build-udeb ] || mkdir build-udeb
-
-	cd build-udeb && $(udeb_buildflags) ac_cv_header_execinfo_h=no ../configure --prefix=/usr \
-	    --sbindir=/sbin --libdir=/lib --mandir=\$${prefix}/share/man \
-	    --infodir=\$${prefix}/share/info --enable-mtrace \
-	    --enable-shared --disable-static \
-	    --build=$(DEB_BUILD_GNU_TYPE) --host=$(DEB_HOST_GNU_TYPE) \
-	    --without-readline $(CONFDEVMAPPER) \
-		$(CONFFLAGS)
-	touch $@
-
-build build-arch: build-deb build-udeb
-build-indep: build-deb
-
-build-deb: build-deb/build-stamp
-build-deb/build-stamp: build-deb/config.status
-	dh_testdir
-
-	$(MAKE) -C build-deb
-
-	touch $@
-
-build-udeb: build-udeb/build-stamp
-build-udeb/build-stamp: build-udeb/config.status
-	dh_testdir
-
-#	 Only build binaries
+override_dh_auto_build:
+	dh_auto_build -Bbuild-deb
+	# Only build binaries for the udeb pass.
 	$(MAKE) -C build-udeb/lib
 	$(MAKE) -C build-udeb/libparted
 	$(MAKE) -C build-udeb/parted
 
-	touch $@
+override_dh_auto_test:
+	:
 
-clean:
-	dh_testdir
-	dh_testroot
-	rm -rf install install-deb install-udeb
-	rm -rf build build-deb build-udeb
-	dh_autoreconf_clean
-	rm -f debian/stamp-autoreconf
-	dh_clean
+override_dh_auto_clean:
+	rm -rf build-deb build-udeb
 
-install: install-deb install-udeb
-	touch $@
-
-install-deb: DH_OPTIONS=-Nparted-udeb -Nlibparted2-udeb -Nlibparted-fs-resize0-udeb
-install-deb: build-deb
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-
-	$(MAKE) -C build-deb install DESTDIR=$(CURDIR)/debian/tmp
-
-#	 Make sure the shared libs are in /lib (otherwise there's no point
-#	 installing the executable to /sbin ...) :-)
-	mkdir -p debian/tmp/lib/$(DEB_HOST_MULTIARCH)
-	mv debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/*.so.* debian/tmp/lib/$(DEB_HOST_MULTIARCH)
-	rm -f debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/*.la
-
-	dh_install --fail-missing
-	touch $@
-
-install-udeb: DH_OPTIONS=-pparted-udeb -plibparted2-udeb -plibparted-fs-resize0-udeb
-install-udeb: build-udeb
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-
+override_dh_auto_install:
+	dh_auto_install -Bbuild-deb
 	$(MAKE) -C build-udeb/libparted install DESTDIR=$(CURDIR)/debian/tmp-udeb
 	$(MAKE) -C build-udeb/parted install DESTDIR=$(CURDIR)/debian/tmp-udeb
+	rm -f debian/tmp/usr/lib/*/*.la
 	rm -f debian/tmp-udeb/lib/*.la debian/tmp-udeb/lib/*.so
 
-	dh_install --sourcedir=debian/tmp-udeb --fail-missing
+override_dh_install:
+	dh_install -Nparted-udeb -Nlibparted2-udeb -Nlibparted-fs-resize0-udeb --fail-missing
+	dh_install -pparted-udeb -plibparted2-udeb -plibparted-fs-resize0-udeb --sourcedir=debian/tmp-udeb --fail-missing
 
-	touch $@
+override_dh_strip:
+	dh_strip -plibparted2 --dbg-package=libparted2-dbg
+	dh_strip -plibparted-fs-resize0 --dbg-package=libparted-fs-resize0-dbg
+	dh_strip -Nlibparted2 -Nlibparted-fs-resize0
 
-# Build architecture-independent packages.
-# Unfortunately, we still need to build since the info file has to be
-# re-generated before installation and the locales need to be installed :-(
-binary-indep: DH_OPTIONS=-i
-binary-indep: build-deb install-deb
-	dh_testdir
-	dh_testroot
-	dh_installdocs
-	dh_installchangelogs
-	dh_installexamples
-	dh_installmenu
-	dh_installcron
-	dh_installman
-	dh_installinfo
-	dh_lintian
-	dh_link
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-# Build architecture-dependent packages.
-binary-arch: DH_OPTIONS=-a
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installdocs
-	dh_installchangelogs
-	dh_installexamples
-	dh_installmenu
-	dh_installcron
-	dh_installman
-	dh_installinfo
-	dh_lintian
-	DH_OPTIONS= dh_strip -plibparted2 --dbg-package=libparted2-dbg
-	DH_OPTIONS= dh_strip -plibparted-fs-resize0 \
-		--dbg-package=libparted-fs-resize0-dbg
-	DH_OPTIONS= dh_strip -Nlibparted2 -Nlibparted-fs-resize0
-	dh_link
-	dh_compress
-	dh_fixperms
-	DH_OPTIONS= dh_makeshlibs -plibparted2 \
-		--add-udeb=libparted2-udeb \
-		-- -c4
-	DH_OPTIONS= dh_makeshlibs -plibparted-fs-resize0 \
-		--add-udeb=libparted-fs-resize0-udeb \
-		-- -c4
-	dh_shlibdeps
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-arch binary-indep
-
-.PHONY: build-deb build-udeb build
-.PHONY: install-deb install-udeb install
-.PHONY: binary-indep binary-arch binary
-.PHONY: binary-arch binary-indep binary
-.PHONY: clean
+override_dh_makeshlibs:
+	dh_makeshlibs -plibparted2 --add-udeb=libparted2-udeb -- -c4
+	dh_makeshlibs -plibparted-fs-resize0 --add-udeb=libparted-fs-resize0-udeb -- -c4

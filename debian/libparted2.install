@@ -1,2 +1,2 @@
 #! /usr/bin/dh-exec
-lib/${DEB_HOST_MULTIARCH}/libparted.so.*
+usr/lib/${DEB_HOST_MULTIARCH}/libparted.so.* lib/${DEB_HOST_MULTIARCH}

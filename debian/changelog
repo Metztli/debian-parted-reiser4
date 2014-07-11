@@ -29,6 +29,7 @@ parted (3.1-1) UNRELEASED; urgency=medium
   * Drop the hardcoded minimum version passed to dh_makeshlibs, since this
     is now effectively superseded by the .symbols file.
   * Update Vcs-* to current canonical URLs.
+  * Convert to dh(1).
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
 
