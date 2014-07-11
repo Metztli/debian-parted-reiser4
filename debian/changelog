@@ -11,6 +11,7 @@ parted (3.1-1) UNRELEASED; urgency=medium
     package names.
   * Add .symbols files and stop using the old "make check-abi" mechanism,
     which was cumbersome and appears to be unmaintained upstream.
+  * Convert from the long-deprecated dh_movefiles to dh_install.
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
 

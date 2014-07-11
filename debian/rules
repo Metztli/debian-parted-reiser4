@@ -49,16 +49,16 @@ SUBSTS = BINPKGVER DEPVER LIBSONAME LIBRESIZESONAME DEB_HOST_MULTIARCH
 # You will probably need to change this depending on what files your package
 # needs ...
 GENFILES = debian/control \
-	debian/libparted$(LIBSONAME).files \
+	debian/libparted$(LIBSONAME).install \
 	debian/libparted$(LIBSONAME).symbols \
-	debian/libparted$(LIBSONAME)-udeb.files \
-	debian/libparted-fs-resize$(LIBRESIZESONAME).files \
+	debian/libparted$(LIBSONAME)-udeb.install \
+	debian/libparted-fs-resize$(LIBRESIZESONAME).install \
 	debian/libparted-fs-resize$(LIBRESIZESONAME).symbols \
-	debian/libparted-fs-resize$(LIBRESIZESONAME)-udeb.files
+	debian/libparted-fs-resize$(LIBRESIZESONAME)-udeb.install
 
 ifneq (, $(BINPKGVER))
-GENFILES += debian/parted$(BINPKGVER).files \
-	debian/parted$(BINPKGVER)-doc.files \
+GENFILES += debian/parted$(BINPKGVER).install \
+	debian/parted$(BINPKGVER)-doc.install \
 	debian/parted$(BINPKGVER)-doc.docs \
 	debian/parted$(BINPKGVER)-doc.postinst \
 	debian/parted$(BINPKGVER)-doc.prerm
@@ -315,17 +315,7 @@ install-deb: build-deb packaging-files
 	mv debian/tmp/usr/lib/*.so.* debian/tmp/lib/$(DEB_HOST_MULTIARCH)
 	rm -f debian/tmp/usr/lib/*.la
 
-	dh_movefiles
-
-#	 Remove all empty directories under debian/tmp
-#	 The `sort -r' makes sure that the dir `x/y' is removed before `x'
-	rmdir --ignore-fail-on-non-empty `find debian/tmp -type d | sort -r`
-
-	@if [ -d debian/tmp ]; then \
-	   echo " *** WARNING: files exists in debian/tmp after" \
-	        "dh_movefiles!!!" >&2; \
-	   echo " *** Maybe the debian/*.files files need updating ..." >&2; \
-	 fi
+	dh_install --fail-missing
 	touch $@
 
 install-udeb: DH_OPTIONS=-pparted$(BINPKGVER)-udeb -plibparted$(LIBSONAME)-udeb -plibparted-fs-resize$(LIBRESIZESONAME)-udeb
@@ -340,8 +330,9 @@ install-udeb: build-udeb packaging-files
 
 	$(MAKE) -C build-udeb/libparted install DESTDIR=$(CURDIR)/debian/tmp-udeb
 	$(MAKE) -C build-udeb/parted install DESTDIR=$(CURDIR)/debian/tmp-udeb
+	rm -f debian/tmp-udeb/lib/*.la debian/tmp-udeb/lib/*.so
 
-	dh_movefiles --sourcedir=debian/tmp-udeb
+	dh_install --sourcedir=debian/tmp-udeb --fail-missing
 
 	touch $@
 
