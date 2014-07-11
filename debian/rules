@@ -21,37 +21,11 @@
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
 
-ifeq (, $(DEB_BUILD_ARCH))
-DEB_BUILD_ARCH = $(shell dpkg-architecture -qDEB_BUILD_ARCH)
-endif
-
-ifeq (, $(DEB_BUILD_ARCH_OS))
-DEB_BUILD_ARCH_OS = $(shell dpkg-architecture -qDEB_BUILD_ARCH_OS)
-endif
-
-ifeq (, $(DEB_BUILD_GNU_TYPE))
-DEB_BUILD_GNU_TYPE = $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
-endif
-
-ifeq (, $(DEB_HOST_ARCH))
-DEB_HOST_ARCH = $(shell dpkg-architecture -qDEB_HOST_ARCH)
-endif
-
-ifeq (, $(DEB_HOST_GNU_TYPE))
-DEB_HOST_GNU_TYPE = $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
-endif
-
-ifeq (, $(DEB_BUILD_GNU_SYSTEM))
-DEB_BUILD_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_BUILD_GNU_SYSTEM)
-endif
-
-ifeq (, $(DEB_HOST_MULTIARCH))
-DEB_HOST_MULTIARCH = $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
-endif
-
-ifeq (, $(ARCH))
-ARCH = $(DEB_BUILD_ARCH)
-endif
+DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_ARCH_OS ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
+DEB_HOST_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
 CPPFLAGS := $(shell dpkg-buildflags --get CPPFLAGS)
 CFLAGS := $(shell dpkg-buildflags --get CFLAGS)
@@ -65,13 +39,13 @@ udeb_buildflags := CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(UDEB_CFLAGS)" \
 export V := 1
 
 # This is a workaround for a m68k compiler bug ...
-ifeq (m68k, $(DEB_BUILD_ARCH))
+ifeq (m68k, $(DEB_HOST_ARCH))
   CONFFLAGS += --disable-Werror
 endif
-ifeq (s390, $(DEB_BUILD_ARCH))
+ifeq (s390, $(DEB_HOST_ARCH))
   CONFFLAGS += --disable-Werror
 endif
-ifeq (gnu, $(DEB_BUILD_GNU_SYSTEM))
+ifeq (hurd, $(DEB_HOST_ARCH_OS))
   CONFFLAGS += --disable-Werror
 endif
 
@@ -86,7 +60,7 @@ CFLAGS += -fgnu89-inline
 UDEB_CFLAGS += -fgnu89-inline
 
 # Enable device-mapper only on Linux
-ifeq (linux, $(DEB_BUILD_ARCH_OS))
+ifeq (linux, $(DEB_HOST_ARCH_OS))
   CONFDEVMAPPER = --enable-device-mapper
 else
   CONFDEVMAPPER = --disable-device-mapper
@@ -100,7 +74,6 @@ echo-vars:
 	@echo "CPPFLAGS:	$(CPPFLAGS)"
 	@echo "CFLAGS:		$(CFLAGS)"
 	@echo "LDFLAGS:		$(LDFLAGS)"
-	@echo "DEB_BUILD_ARCH:	$(DEB_BUILD_ARCH)"
 	@echo "DEB_BUILD_GNU_TYPE: $(DEB_BUILD_GNU_TYPE)"
 	@echo "DEB_HOST_GNU_TYPE: $(DEB_HOST_GNU_TYPE)"
 
