@@ -27,7 +27,7 @@ Build-Depends:
 
 Package: parted
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libparted2 (= ${binary:Version})
 Suggests: parted-doc
 Conflicts: fsresize, parted1.6
 Replaces: fsresize, parted1.6
@@ -59,7 +59,7 @@ Architecture: any
 Section: debian-installer
 Priority: extra
 XB-Installer-Menu-Item: 99999
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, libparted2-udeb (= ${binary:Version})
 Description: Manually partition a hard drive (parted)
 
 Package: libparted2
