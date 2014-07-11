@@ -32,6 +32,9 @@ parted (3.1-1) UNRELEASED; urgency=medium
   * Convert to dh(1).
   * Make parted and parted-udeb have exact-version dependencies on
     libparted2 and libparted2-udeb respectively.
+  * Add a libparted0-dev transitional package.  Most of the packages that
+    build-depend on us have a versioned build-dependency on libparted0-dev
+    right now, so this greatly simplifies the transition.
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
 
