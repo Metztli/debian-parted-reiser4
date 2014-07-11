@@ -156,15 +156,6 @@ install-deb: build-deb
 
 	$(MAKE) -C build-deb install DESTDIR=$(CURDIR)/debian/tmp
 
-#	 Fix the libparted*.so symlinks to point to
-#	 /lib/$(DEB_HOST_MULTIARCH)/libparted*.so.x.x.x rather than
-#	 being relative & pointing to the current directory
-	@(cd debian/tmp/usr/lib; \
-	  ln -sf /lib/$(DEB_HOST_MULTIARCH)/`readlink libparted.so` \
-	         libparted.so; \
-	  ln -sf /lib/$(DEB_HOST_MULTIARCH)/`readlink libparted-fs-resize.so` \
-	         libparted-fs-resize.so)
-
 #	 Make sure the shared libs are in /lib (otherwise there's no point
 #	 installing the executable to /sbin ...) :-)
 	mkdir -p debian/tmp/lib/$(DEB_HOST_MULTIARCH)

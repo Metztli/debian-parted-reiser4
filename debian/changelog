@@ -20,6 +20,8 @@ parted (3.1-1) UNRELEASED; urgency=medium
     when cross-building.
   * Drop another vestige of the old parted-bf package.
   * Stop shipping static libraries.
+  * Use dh_link to fix up .so links in libparted-dev rather than doing it by
+    hand in debian/rules.
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
 
