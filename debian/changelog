@@ -9,6 +9,8 @@ parted (3.1-1) UNRELEASED; urgency=medium
     different SONAME.
   * Remove largely-unhelpful version from libparted-i18n and libparted-dev
     package names.
+  * Add .symbols files and stop using the old "make check-abi" mechanism,
+    which was cumbersome and appears to be unmaintained upstream.
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
 

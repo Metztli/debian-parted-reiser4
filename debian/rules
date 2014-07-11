@@ -50,8 +50,10 @@ SUBSTS = BINPKGVER DEPVER LIBSONAME LIBRESIZESONAME DEB_HOST_MULTIARCH
 # needs ...
 GENFILES = debian/control \
 	debian/libparted$(LIBSONAME).files \
+	debian/libparted$(LIBSONAME).symbols \
 	debian/libparted$(LIBSONAME)-udeb.files \
 	debian/libparted-fs-resize$(LIBRESIZESONAME).files \
+	debian/libparted-fs-resize$(LIBRESIZESONAME).symbols \
 	debian/libparted-fs-resize$(LIBRESIZESONAME)-udeb.files
 
 ifneq (, $(BINPKGVER))
@@ -216,11 +218,6 @@ build-deb/build-stamp: build-deb/config.status
 	dh_testdir
 
 	$(MAKE) -C build-deb
-
-#	By now just use ABI detection on amd64 machines.
-	if [ $(DEB_BUILD_ARCH) = "amd64" ]; then \
-		$(MAKE) -C build-deb check-abi; \
-	fi
 
 	touch $@
 
@@ -394,9 +391,11 @@ binary-arch: build install
 	dh_fixperms
 	DH_OPTIONS= dh_makeshlibs -plibparted$(LIBSONAME) \
 		-V'libparted$(LIBSONAME) (>= $(DEPVER))' \
-		--add-udeb=$(shell dh_listpackages | grep -E '^libparted$(LIBSONAME)-udeb$$')
+		--add-udeb=$(shell dh_listpackages | grep -E '^libparted$(LIBSONAME)-udeb$$') \
+		-- -c4
 	DH_OPTIONS= dh_makeshlibs -plibparted-fs-resize$(LIBRESIZESONAME) \
-		--add-udeb=$(shell dh_listpackages | grep -E '^libparted-fs-resize$(LIBRESIZESONAME)-udeb$$')
+		--add-udeb=$(shell dh_listpackages | grep -E '^libparted-fs-resize$(LIBRESIZESONAME)-udeb$$') \
+		-- -c4
 	dh_shlibdeps
 	dh_installdeb
 	dh_gencontrol
