@@ -1,4 +1,4 @@
-From 25abd0e881a352de5c07896986871a82aa1c3189 Mon Sep 17 00:00:00 2001
+From f51f9b78e64885af878678d6ce159bc98f49900a Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
 Date: Sun, 6 Apr 2014 19:13:07 -0400
 Subject: Fix fat and ntfs detection on non 512 byte sectors

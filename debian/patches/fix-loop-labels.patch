@@ -1,4 +1,4 @@
-From 4b014429c3b2d3c56696a1b832bc5d366fac2828 Mon Sep 17 00:00:00 2001
+From 792b918119e04de97d47b4bc030ff171860ca4fa Mon Sep 17 00:00:00 2001
 From: Phillip Susi <psusi@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:10:27 +0000
 Subject: Fix loop labels
@@ -14,20 +14,19 @@ Several filesystems end up using the first sector for 2048/4096 byte
 sectors even though they don't for 512/1024 byte sectors.
 
 Forwarded: yes
-Last-Update: 2014-07-07
+Last-Update: 2014-07-11
 
 Patch-Name: fix-loop-labels.patch
 ---
- include/parted/device.h               |  1 +
- libparted/arch/linux.c                | 20 +++++++++++++---
- libparted/device.c                    |  1 +
- libparted/disk.c                      |  2 ++
- libparted/fs/ntfs/ntfs.c              |  2 +-
- libparted/labels/dos.c                | 29 +++++++++++++++++++++++
- libparted/labels/loop.c               | 43 ++++++++++++-----------------------
- partprobe/partprobe.c                 |  2 --
- scripts/data/abi/baseline_symbols.txt |  1 +
- 9 files changed, 67 insertions(+), 34 deletions(-)
+ include/parted/device.h  |  1 +
+ libparted/arch/linux.c   | 20 +++++++++++++++++---
+ libparted/device.c       |  1 +
+ libparted/disk.c         |  2 ++
+ libparted/fs/ntfs/ntfs.c |  2 +-
+ libparted/labels/dos.c   | 29 +++++++++++++++++++++++++++++
+ libparted/labels/loop.c  | 43 +++++++++++++++----------------------------
+ partprobe/partprobe.c    |  2 --
+ 8 files changed, 66 insertions(+), 34 deletions(-)
 
 diff --git a/include/parted/device.h b/include/parted/device.h
 index 525033f..9666637 100644
@@ -298,15 +297,3 @@ index 8bccc4f..da61fe5 100644
  
  	disk = ped_disk_new (dev);
  	if (!disk)
-diff --git a/scripts/data/abi/baseline_symbols.txt b/scripts/data/abi/baseline_symbols.txt
-index 7856da6..5fa9721 100644
---- a/scripts/data/abi/baseline_symbols.txt
-+++ b/scripts/data/abi/baseline_symbols.txt
-@@ -226,6 +226,7 @@ FUNC:last_component
- FUNC:locale_charset
- FUNC:mdir_name
- FUNC:mmalloca
-+FUNC:ntfs_probe
- FUNC:parse_long_options
- FUNC:ped_alignment_align_down
- FUNC:ped_alignment_align_nearest
