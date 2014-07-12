@@ -17,7 +17,8 @@ parted (3.1-1) UNRELEASED; urgency=medium
   * Remove largely-unhelpful version from libparted-i18n and libparted-dev
     package names.
   * Add .symbols files and stop using the old "make check-abi" mechanism,
-    which was cumbersome and appears to be unmaintained upstream.
+    which was cumbersome and appears to be unmaintained upstream.  This is
+    also more robust against differing build options (closes: #744313).
   * Convert from the long-deprecated dh_movefiles to dh_install.
   * Remove lots of parameterisation from the packaging which was intended to
     make it easier to handle SONAME changes.  Enough things still have to be
