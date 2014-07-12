@@ -1,6 +1,13 @@
 parted (3.1-1) UNRELEASED; urgency=medium
 
-  * New upstream release (closes: #646130, LP: #1046391).
+  * New upstream release (closes: #646130, LP: #1046391):
+    - Improve support of DASD devices on s390 (closes: #578097).
+    - Remove old and unmaintainable file system creation, deletion, and
+      copying code; please use other FS-specific tools instead (closes:
+      #751406).  Most resizing code is also gone, although HFS+ and FAT
+      resizing is still available via libparted-fs-resize.
+    - Fix snap radius to avoid miscalculation of partition size when the
+      start or end is 1<unit> (closes: #706023).
   * Update binary package names to libparted2 (etc.).  We can safely drop
     the "debian1" suffix now, as the previous incarnation of libparted2 was
     about 14 years ago, and the Conflicts against it were made versioned
