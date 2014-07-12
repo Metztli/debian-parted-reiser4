@@ -71,6 +71,10 @@ override_dh_auto_test:
 override_dh_auto_clean:
 	rm -rf build-deb build-udeb
 
+override_dh_clean:
+	rm -rf debian/tmp-udeb
+	dh_clean
+
 override_dh_auto_install:
 	dh_auto_install -Bbuild-deb
 	$(MAKE) -C build-udeb/libparted install DESTDIR=$(CURDIR)/debian/tmp-udeb
