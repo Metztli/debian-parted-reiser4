@@ -26,12 +26,6 @@ ifeq (hurd, $(DEB_HOST_ARCH_OS))
   CONFFLAGS += --disable-Werror
 endif
 
-# Cell partition tables get misdetected for pc98; we don't need pc98 support
-# on powerpc
-ifeq (powerpc, $(DEB_HOST_ARCH))
-  CONFFLAGS += --disable-pc98
-endif
-
 # Enable device-mapper only on Linux
 ifeq (linux, $(DEB_HOST_ARCH_OS))
   CONFFLAGS += --enable-device-mapper

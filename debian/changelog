@@ -43,6 +43,8 @@ parted (3.1-1) UNRELEASED; urgency=medium
   * Add a libparted0-dev transitional package.  Most of the packages that
     build-depend on us have a versioned build-dependency on libparted0-dev
     right now, so this greatly simplifies the transition.
+  * Stop disabling pc98 support on powerpc; 3.1 tightened up pc98 probing so
+    that it has many fewer false positives.
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
 
