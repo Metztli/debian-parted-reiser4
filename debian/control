@@ -54,7 +54,7 @@ Description: disk partition manipulator
  it, and do so at your own risk.
 
 Package: parted-udeb
-XC-Package-Type: udeb
+Package-Type: udeb
 Architecture: any
 Section: debian-installer
 Priority: extra
@@ -98,7 +98,7 @@ Description: disk partition manipulator - shared FS resizing library
  resizing HFS+ and FAT file systems.
 
 Package: libparted2-udeb
-XC-Package-Type: udeb
+Package-Type: udeb
 Architecture: any
 Section: debian-installer
 Priority: extra
@@ -112,7 +112,7 @@ Description: disk partition manipulator - library udeb
  This is a cut-down library package for use in debian-installer.
 
 Package: libparted-fs-resize0-udeb
-XC-Package-Type: udeb
+Package-Type: udeb
 Architecture: any
 Section: debian-installer
 Priority: extra
