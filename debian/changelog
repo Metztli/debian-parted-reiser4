@@ -45,6 +45,9 @@ parted (3.1-1) UNRELEASED; urgency=medium
     right now, so this greatly simplifies the transition.
   * Stop disabling pc98 support on powerpc; 3.1 tightened up pc98 probing so
     that it has many fewer false positives.
+  * Remove use of --disable-Werror on several architectures; as of 3.0,
+    parted no longer supports this configure option and just builds without
+    -Werror.
 
  -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
 

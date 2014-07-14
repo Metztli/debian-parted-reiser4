@@ -15,17 +15,6 @@ export V := 1
 
 CONFFLAGS := --sbindir=/sbin --enable-mtrace --enable-shared --disable-static
 
-# This is a workaround for a m68k compiler bug ...
-ifeq (m68k, $(DEB_HOST_ARCH))
-  CONFFLAGS += --disable-Werror
-endif
-ifeq (s390, $(DEB_HOST_ARCH))
-  CONFFLAGS += --disable-Werror
-endif
-ifeq (hurd, $(DEB_HOST_ARCH_OS))
-  CONFFLAGS += --disable-Werror
-endif
-
 # Enable device-mapper only on Linux
 ifeq (linux, $(DEB_HOST_ARCH_OS))
   CONFFLAGS += --enable-device-mapper
