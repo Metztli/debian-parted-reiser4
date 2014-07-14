@@ -1,6 +1,7 @@
 parted (3.1-1) UNRELEASED; urgency=medium
 
-  * New upstream release (closes: #646130, LP: #1046391):
+  * New upstream release (closes: #646130, LP: #1046391; see #754582 for
+    transition tracking):
     - Improve support of DASD devices on s390 (closes: #578097).
     - Remove old and unmaintainable file system creation, deletion, and
       copying code; please use other FS-specific tools instead (closes:
