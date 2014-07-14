@@ -1,4 +1,4 @@
-parted (3.1-1) UNRELEASED; urgency=medium
+parted (3.1-1) experimental; urgency=medium
 
   * New upstream release (closes: #646130, LP: #1046391; see #754582 for
     transition tracking):
@@ -50,7 +50,7 @@ parted (3.1-1) UNRELEASED; urgency=medium
     parted no longer supports this configure option and just builds without
     -Werror.
 
- -- Colin Watson <cjwatson@debian.org>  Sun, 06 Jul 2014 20:56:04 +0100
+ -- Colin Watson <cjwatson@debian.org>  Mon, 14 Jul 2014 12:44:37 +0100
 
 parted (2.3-20) unstable; urgency=medium
 
