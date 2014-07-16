@@ -45,6 +45,7 @@ libparted.so.2 libparted2 #MINVER#
  ped_device_get_optimal_aligned_constraint@Base 3.1
  ped_device_get_optimum_alignment@Base 3.1
  ped_device_is_busy@Base 3.1
+ (arch=hurd-any)ped_device_new_from_store@Base 3.1
  ped_device_open@Base 3.1
  ped_device_probe_all@Base 3.1
  ped_device_read@Base 3.1
