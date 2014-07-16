@@ -1,6 +1,8 @@
 parted (3.1-2) UNRELEASED; urgency=medium
 
   * Rename XC-Package-Type control fields to Package-Type.
+  * Note the presence of ped_disk_dasd_done and ped_disk_dasd_init symbols
+    on s390 and s390x.
 
  -- Colin Watson <cjwatson@debian.org>  Mon, 14 Jul 2014 15:34:02 +0100
 

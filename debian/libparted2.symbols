@@ -63,6 +63,8 @@ libparted.so.2 libparted2 #MINVER#
  ped_disk_commit@Base 3.1
  ped_disk_commit_to_dev@Base 3.1
  ped_disk_commit_to_os@Base 3.1
+ (arch=s390 s390x)ped_disk_dasd_done@Base 3.1
+ (arch=s390 s390x)ped_disk_dasd_init@Base 3.1
  ped_disk_delete_all@Base 3.1
  ped_disk_delete_partition@Base 3.1
  ped_disk_destroy@Base 3.1
