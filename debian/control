@@ -163,7 +163,7 @@ Package: libparted0-dev
 Architecture: all
 Section: oldlibs
 Priority: extra
-Depends: libparted-dev (>= ${source:Version})
+Depends: ${misc:Depends}, libparted-dev (>= ${source:Version})
 Description: disk partition manipulator - transitional package
  GNU Parted is a program that allows you to create, destroy, resize,
  move, and copy disk partitions. This is useful for creating space
