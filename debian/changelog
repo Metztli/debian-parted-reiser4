@@ -1,3 +1,9 @@
+parted (3.1-3) UNRELEASED; urgency=medium
+
+  * Upload to unstable.
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 21 Jul 2014 10:22:51 +0100
+
 parted (3.1-2) experimental; urgency=medium
 
   * Rename XC-Package-Type control fields to Package-Type.
