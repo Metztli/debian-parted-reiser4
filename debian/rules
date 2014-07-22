@@ -13,7 +13,7 @@ DEB_HOST_ARCH_OS ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
 # Tell automake to produce verbose build logs.
 export V := 1
 
-CONFFLAGS := --sbindir=/sbin --enable-mtrace --enable-shared --disable-static
+CONFFLAGS := --sbindir=/sbin --enable-mtrace --enable-shared
 
 # Enable device-mapper only on Linux
 ifeq (linux, $(DEB_HOST_ARCH_OS))
@@ -26,7 +26,8 @@ endif
 CONFFLAGS_UDEB := $(CONFFLAGS)
 
 # Options specific to the udeb build.
-CONFFLAGS_UDEB += ac_cv_header_execinfo_h=no --libdir=/lib --without-readline
+CONFFLAGS_UDEB += ac_cv_header_execinfo_h=no --libdir=/lib
+CONFFLAGS_UDEB += --disable-static --without-readline
 
 %:
 	dh $@ --with=autoreconf
