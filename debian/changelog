@@ -1,8 +1,8 @@
-parted (3.1-4) UNRELEASED; urgency=medium
+parted (3.1-4) unstable; urgency=medium
 
   * Ship static libraries again.  hurd needs them for ext2fs.static.
 
- -- Colin Watson <cjwatson@debian.org>  Tue, 22 Jul 2014 12:25:56 +0100
+ -- Colin Watson <cjwatson@debian.org>  Wed, 23 Jul 2014 10:55:09 +0100
 
 parted (3.1-3) unstable; urgency=medium
 
