@@ -1,3 +1,10 @@
+parted (3.1-5) UNRELEASED; urgency=medium
+
+  * Drop currently-unused build-dependency on po4a (thanks, Johannes
+    Schauer).
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 28 Jul 2014 11:06:21 +0100
+
 parted (3.1-4) unstable; urgency=medium
 
   * Ship static libraries again.  hurd needs them for ext2fs.static.

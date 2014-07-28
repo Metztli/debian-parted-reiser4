@@ -19,7 +19,6 @@ Build-Depends:
  texinfo (>= 4.2),
  debianutils (>= 1.13.1),
  libblkid-dev,
- po4a,
  pkg-config,
  check,
  dh-autoreconf,
