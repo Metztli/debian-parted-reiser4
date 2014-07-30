@@ -1,6 +1,6 @@
 /*
     libparted
-    Copyright (C) 1998-2000, 2002, 2004, 2007, 2009-2012 Free Software
+    Copyright (C) 1998-2000, 2002, 2004, 2007, 2009-2014 Free Software
     Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
@@ -46,13 +46,6 @@ fat_boot_sector_read (FatBootSector** bsp, const PedGeometry *geom)
 	FatBootSector *bs = *bsp;
 
 	if (PED_LE16_TO_CPU (bs->boot_sign) != 0xAA55) {
-		ped_exception_throw (PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
-			_("File system has an invalid signature for a FAT "
-			  "file system."));
-		return 0;
-	}
-
-	if (!bs->system_id[0]) {
 		ped_exception_throw (PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
 			_("File system has an invalid signature for a FAT "
 			  "file system."));
@@ -276,32 +269,3 @@ fat_boot_sector_analyse (FatBootSector* bs, PedFileSystem* fs)
 		= fs_info->cluster_size / sizeof (FatDirEntry);
 	return 1;
 }
-
-#ifndef DISCOVER_ONLY
-
-int
-fat_info_sector_read (FatInfoSector** isp, const PedFileSystem* fs)
-{
-	FatSpecific*	fs_info = FAT_SPECIFIC (fs);
-	int		status;
-
-	PED_ASSERT (isp != NULL);
-
-	if (!ped_geometry_read_alloc (fs->geom, (void **)isp,
-				      fs_info->info_sector_offset, 1))
-		return 0;
-	FatInfoSector *is = *isp;
-
-	if (PED_LE32_TO_CPU (is->signature_2) != FAT32_INFO_MAGIC2) {
-		status = ped_exception_throw (PED_EXCEPTION_WARNING,
-				PED_EXCEPTION_IGNORE_CANCEL,
-				_("The information sector has the wrong "
-				"signature (%x).  Select cancel for now, "
-				"and send in a bug report.  If you're "
-				"desperate, it's probably safe to ignore."),
-				PED_LE32_TO_CPU (is->signature_2));
-		if (status == PED_EXCEPTION_CANCEL) return 0;
-	}
-	return 1;
-}
-#endif /* !DISCOVER_ONLY */

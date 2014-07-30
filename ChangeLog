@@ -1,4 +1,1187 @@
+2014-07-28  Phillip Susi  <psusi@ubuntu.com>
+
+	version 3.2
+	* NEWS: Record release date.
+
+2014-07-27  Phillip Susi  <psusi@ubuntu.com>
+
+	Bump library REVISION number for release
+
+	tests: don't require en_US locale in t0251-gpt-unicode.sh
+	Switch from en_US.UTF-8 to C.UTF-8 so the test does not fail on systems
+	that do not have the en_US locale installed.
+
+2014-06-23  Jim Meyering  <meyering@fb.com>
+
+	maint: correct a POT-file updating rule
+	* doc/C/Makefile.am (updatepo): If there is no po/$name.pot,
+	create an empty one.  Reported by Philip Susi.
+
+2014-06-15  Phillip Susi  <psusi@ubuntu.com>
+
+	tests: fix t9020-alignment.sh
+	This test was refering to print-alignment by absolute path, which
+	broke building with a different object directory, causing
+	make distcheck to fail.
+
+	Document resizepart command
+
+	parted: Add stub resize command for backward compatibility
+	To make sure that older scripts trying to use the resize command do not
+	accidentally run the new resizepart command by mistake, this undocumented
+	stub command will throw an error if called.
+
+	parted: Allow undocumented commands
+	Have command_print_summary print nothing if the command summary is NULL.
+	This allows for a command to be registered, but not documented in the
+	output of help.
+
+	parted: make _partition_warn_busy actually a warning instead of an error
+	This function was throwing a PED_EXCEPTION_ERROR with only the
+	PED_EXCEPTION_CANCEL option.  Converted to a PED_EXCEPTION_WARNING
+	with the option to continue anyhow.
+
+	libparted: Add support for partition resize
+	When resizing a partition ( same partition number, same
+	start sector, different end sector ), try to use the
+	new BLKPG_RES_PARTITION request to update the kernel
+	partition table with the new size.  Also handle resizing
+	devmapper targets.
+
+2014-06-15  Petr Uzel  <petr.uzel@suse.cz>
+
+	tests: excersise resize command
+	a lot of TODOs
+
+	parted: add resizepart command
+	Add resizepart command to resize ( change the end position ) an existing
+	partition.  Note that it does nothing to a filesystem in the partition.
+
+2014-06-15  Brian C. Lane  <bcl@redhat.com>
+
+	Fix python test scripts for distribution
+	make distcheck was failing because these scripts were not being
+	included.
+
+	Make them both executable and and add the path to the tests that use
+	them. They also need to be included in the distribution so update
+	Makefile.am
+
+	* tests/Makefile.am: Add python test scripts
+	* tests/gpt-header-move.py: rename to gpt-header-move and make it
+	  executable
+	* tests/msdos-overlap.py: rename to overlap.py
+	* tests/t0282-gpt-move-backup.sh: add path to scripts and use new name
+	* tests/t0283-overlap-partitions.sh: same
+
+2014-06-15  Brian C. Lane  <bcl@redhat.com>
+
+	tests: check name when duplicating
+	Create a second partition with a name when supported by the disk label.
+	Check to make sure that the duplicate has copied over the name. The goal
+	with this was to try to catch the bug fixed by the previous commit but I
+	was unable to make it fail. But this should improve our test coverage
+	anyway.
+
+	* tests/duplicate.c: Add a partition name test.
+
+2014-06-15  Brian C. Lane  <bcl@redhat.com>
+
+	libparted: Fix part dupe with empty name
+	It was setting the original translated_name to 0, not the new copy.
+
+	* libparted/labels/gpt.c (gpt_partition_duplicate): fix empty name
+
+2014-05-28  Jim Meyering  <meyering@fb.com>
+
+	tests: use test's "=" operator, not "=="
+	* tests/t1700-probe-fs.sh: Avoid "make syntax-check" error: s/==/=/
+
+	tests: avoid false-positive failure due to symlink
+	* tests/t6000-dm.sh (sanitize): Helper function.
+	Before this change, this test would fail due to difference between
+	absolute name and symlink-including names in "parted print" output
+
+	maint: fix "make syntax-check" nits
+	* doc/parted.texi: Update copyright year to 2014.
+	* tests/gpt-header-move.py: Remove empty line at EOF.
+	* tests/t0281-gpt-grow.sh: Correct reversed args to compare.
+	* tests/t0282-gpt-move-backup.sh: Likewise.
+	* libparted/labels/gpt.c (gpt_partition_set_name): Change "Can not"
+	to "failed to" in diagnostic.
+	(gpt_partition_get_name): Likewise.
+	* tests/t1102-loop-label.sh (dev): Remove trailing space in
+	here document that creates expected output, and strip that
+	same trailing space from actual output.
+	* libparted/fs/jfs/jfs.c: Do not cast alloca return value.
+	* libparted/fs/reiserfs/reiserfs.c: Likewise.
+	* libparted/fs/xfs/xfs.c: Likewise.
+
+2014-05-27  Brian C. Lane  <bcl@redhat.com>
+
+	tests: Use mkfs.xfs to create files (#1101112)
+	On s390 there is a bug with mkfs.xfs and pre-existing files. Work around
+	it by creating the file directly with mkfs.xfs. This also works on other
+	arches.
+
+	* tests/t1700-probe-fs.sh: Check for xfs and use direct file creation
+	* tests/t4100-dvh-partition-limits.sh: Use mkfs.xfs -dfile
+	* tests/t4100-msdos-partition-limits.sh: Use mkfs.xfs -dfile
+
+2014-05-27  Brian C. Lane  <bcl@redhat.com>
+
+	tests: Add ntfs vfat hfsplus to t1700 probe test
+	Add some new filesystems to test. Adjust how mkfs.* tests, since some of
+	them don't support -V, and add fsname so that the printed filesystem
+	name doesn't have to match the type.
+
+	* tests/t1700-probe-fs.sh: Add new filesystems to test
+
+2014-05-26  Jim Meyering  <meyering@fb.com>
+
+	maint: run "make update-copyright"
+
+2014-05-25  Jim Meyering  <meyering@fb.com>
+
+	maint: remove doubled word: s/on on/on/
+	* NEWS: Remove doubled-word detected by "make syntax-check".
+
+	gnulib: update submodule to latest
+	* gnulib: Update module to latest.
+	* bootstrap: Update from gnulib.
+
+2014-05-25  Sergei Antonov  <saproj@gmail.com>
+
+	libparted: mac: support sector size > 512 correctly
+	This patch fixes several problems found when trying to do Apple
+	Partition Map on a 4K-sector iPod. The problems happened because of
+	unneeded conversion between physical sectors and 512-byte units.
+	For devices with sector 512 the conversion did no harm, for others it did.
+
+	List of problems (all are gone with the patch):
+
+	* Partition in OS X, connect to Linux, run "parted <dev> print".
+	  "Error: Can't have a partition outside the disk!" is shown.
+	  Every partition is displayed 8 times (4k/512) bigger its real size.
+
+	* Exec "mktable mac", connect to OS X.
+	  The drive's partitioning scheme is not recognized.
+
+	* mkpart creates partitions 8 times (4k/512) smaller than requested.
+
+2014-05-22  Phillip Susi  <psusi@ubuntu.com>
+
+	tests: test loop labels
+	Verify previous fixes to loop labels.
+
+	libparted: don't trash filesystem when writing loop label
+	If you deleted the fake partition on a loop label, loop_write() would write
+	the loop signature to the device, zeroing out all other bytes in the first
+	sector.  When the disk contained an ext[234] filesystem and was using 2k
+	sectors, this would trash the super block residing in the 1-2kb part of the
+	sector causing the disk to become unrecognized.  Instead, read the existing
+	sector and only modify the first few bytes that contain the loop label.
+
+	libparted: give correct partition device name on loop labels
+	ped_partition_get_path() was returning "/dev/foo1" instead of
+	"/dev/foo" on loop labels.  This caused gparted to run tools like mkfs on
+	a device node that did not actually exist.
+
+	partprobe: do not skip loop labels
+	Partprobe was not syncing loop labels.  This resulted it failing to remove
+	existing partitions when switching to a loop label.
+
+	libparted: don't create partition on loop label
+	The loop label represents an unpartitioned disk, but creates
+	a dummy partition to represent the whole disk.  This dummy partition
+	was actually being loaded into the kernel.  Don't do that.
+
+2014-05-22  Phillip Susi  <psusi@ubuntu.com>
+
+	libparted: fix loop labels to not vanish
+	The loop label type was using the existence of a partition as a proxy for
+	a filesystem being detected, and loop_write() would try to write a loop
+	signature if there was no filesystem, and erase it if there was.  Because
+	of this, creating a partition without writing a filesystem to it caused
+	loop_write to erase the loop label.
+
+	There seems to be no reason to bother erasing the loop label if it is still
+	present along with a filesystem signature, so don't bother with this, and
+	actually check to see if a filesystem is detected in the partition rather
+	than using the existence of a partition to decide if writing the loop
+	signature is needed.  Finally, since there is no way to preserve the
+	existence of a partition with no filesystem in it, have loop_read() always
+	create a partition, even if no filesystem is detected.
+
+2014-05-22  Phillip Susi  <psusi@ubuntu.com>
+
+	libparted: remove all old partitions, even if new label allows less
+	We were limiting partition sync operations to the lesser number allowed
+	by the device, or the label.  This meant that when creating a new label
+	over an old label that had more partitions than the new one allows, the
+	higher partitions would not be removed.  Use the greater of the two values
+	for the remove pass, and the lesser for the add.
+
+	libparted: remove old partitions *first* before adding new ones
+	"libparted: avoid disturbing partitions" put the remove of the old
+	partition in second pass.  If you simultaneously removed partitions 1
+	and 2, and created a new partition #1 that overlapped the previous second
+	partition, the sync would fail because it would try to create the new,
+	larger partition #1 before removing the old partition #2.
+
+	libparted: don't detect fat and ntfs boot sectors as dos MBR
+	fat and ntfs boot sectors are very similar to an MBR so if you had one of
+	these filesystems on an unpartitioned disk, parted detected them as a dos
+	partition table.  Have the dos label code call the fat and ntfs filesystem
+	probes and if they recognize the sector ( their tests are more stringent )
+	then don't claim it as a dos label.
+
+2014-05-22  Phillip Susi  <psusi@ubuntu.com>
+
+	parted: don't reload partition table on every command
+	gpt was using a static local variable to suppress repeatedly reporting
+	an error if you chose to ignore it.  This is incorrect as the variable is
+	global to all disks, and ignoring the error on one should not suppress its
+	reporting on another.  Moving the flag to the PedDisk object made it
+	effectively useless because parted was destroying the PedDisk and reloading
+	the partition table on every command.
+
+	Parted has been reworked to cache the PedDisk once loaded, and only discard
+	it when changing disks, or creating a new disklabel.
+
+2014-05-22  Phillip Susi  <psusi@ubuntu.com>
+
+	libparted: fix fat resize
+	The changes to fix filesystem detection on non 512 byte sector sizes broke
+	fat filesystem resizing.
+
+2014-05-19  Brian C. Lane  <bcl@redhat.com>
+
+	GPT strings are UCS-2LE not UTF-16
+	There was a problem using UTF-16, it was writing the Byte Order Mark
+	before the string which caused problems with older versions of parted
+	reading the partition name. The test was skipping these 2 bytes when
+	checking the written string.
+
+	* libparted/labels/gpt.c: Switch to UCS-2LE for GPT Partition names
+	* tests/t0251-gpt-unicode.sh: Update the test
+
+2014-04-29  Brian C. Lane  <bcl@redhat.com>
+
+	Update NEWS with new DASD features.
+	* NEWS: New DASD support
+
+2014-04-29  Petr Uzel  <petr.uzel@suse.cz>
+
+	dasd: avoid usage of uninitialized data
+	In ped_partition_new(), disk_specific data of PedPartition
+	structure is allocated (via dasd_partition_new()). This
+	data is later used uninitialized in dasd_partition_set_system().
+
+	* libparted/labels/dasd.c (dasd_partition_new):
+	Zero out allocated disk_specific data.
+
+2014-04-29  Nageswara R Sastry  <rnsastry@linux.vnet.ibm.com>
+
+	libparted: mklabel to support EDEV DASD
+	Fixed Block Access (FBA) DASDs are mainframe-specific disk devices
+	which are layed out as a sequence of 512-byte sectors. This patch adds
+	support for mklabel to properly handle FBA devices.
+
+	libparted: Avoid dasd as default disk type while probe
+	This patch avoids setting 'dasd' as a default disk type for
+	'disk image file' at the time of probe.
+
+	libparted: mklabel to support EAV DASD
+	Extended Address Volume (EAV) DASDs are ECKD DASDs with more than
+	65520 cylinders. This patch adds support for mklabel to properly
+	handle unformatted EAV DASDs.
+
+2014-04-29  Nageswara R Sastry  <rnsastry@linux.vnet.ibm.com>
+
+	libparted: add support for EAV DASD partitions
+	Extended Address Volume (EAV) DASDs are ECKD DASDs with more than
+	65520 cylinders. This patch adds support for recognizing and
+	modifying partitions on EAV DASDs to Parted. The changes are
+	based on the EAV support added to version 1.8.1 [1] of the
+	s390-tools package.
+
+	[1] http://www.ibm.com/developerworks/linux/linux390/s390-tools-1.8.1.html
+
+2014-04-29  Nageswara R Sastry  <rnsastry@linux.vnet.ibm.com>
+
+	libparted: add support for implicit FBA DASD partitions
+	Fixed Block Access (FBA) DASDs are mainframe-specific disk devices
+	which are layed out as a sequence of 512-byte sectors. In contrast
+	to ECKD DASDs, these disks do not require formatting and resemble
+	the LBA layout of non-mainframe disks. Despite this resemblance,
+	the Linux kernel applies special handling during partition detection
+	for FBA DASDs, resulting in a single, immutable partition being
+	reported.
+
+	While actual FBA DASD hardware is no longer available, the z/VM
+	hypervisor can simulate FBA DASD disks, backed by either ECKD or
+	SCSI devices.
+
+	This patch adds support for recognizing FBA DASD partitions
+	to parted.
+
+2014-04-18  Phillip Susi  <psusi@ubuntu.com>
+
+	Fix filesystem detection on non 512 byte sectors
+	Enable probing for filesystems with non 512 byte sectors, and fix up each
+	filesystem to correctly handle that.  Remove unused field from the fs type
+	structure listing acceptable sector sizes.
+
+	tests: fix t2310-dos-extended-2-sector-min-offset.sh
+	This test was ignoring the requested sector size and always using
+	512 bytes per sector.  Fix it to use the requested sector size.
+
+	tests: fix t1700
+	bb181a7e: "tests: Use force for xfs in t1700 and a larger file" caused
+	the previous filesystem signatures to be left in the image file
+	causing mkfs.nilfs2 to complain that there is already an xfs filesystem
+	there, and hang the test suite waiting for an answer to proceed or not.
+	Remove the file between filesystems so it is recreated cleanly again.
+
+	libparted: remove last_usable_if_grown
+	Commit 3398e82a: "libparted: Use common function to calculate PTE sectors"
+	removed usage of the last_usable_if_grown variable, resulting in an error
+	because it is now unused but still defined.
+
+2014-04-17  Brian C. Lane  <bcl@redhat.com>
+
+	tests: t1700 change count to seek
+	Fix a typo when changing to sparse images.
+
+	* tests/t1700-probe-fs.sh: count should be seek.
+
+2014-04-16  Brian C. Lane  <bcl@redhat.com>
+
+	tests: Use force for xfs in t1700 and a larger file
+	Also use sparse files that are (with 512B blocks) 128M so that they are
+	large enough for all the filesystems.
+
+	* tests/t1700-probe-fs.sh: Make changes.
+
+2014-04-10  Ming Liu  <ming.liu@windriver.com>
+
+	libparted: fix several integer overflows with dvh labels
+	Integer overflows was found in libparted/labels/dvh.c, while attemptting
+	assign unsigned int values to int types in some places.
+
+	Defined by unsigned int instead.
+
+	* libparted/labels/dvh.h: Change int to unsigned int
+
+2014-04-10  Brian C. Lane  <bcl@redhat.com>
+
+	testing: Use little-endian packing in gpt tests
+	Fix gpt-header-move.py and gpt-header-munge to use little endian when
+	packing and unpacking. This allows us to turn the t0210 and t0211 tests
+	back on for big-endian systems.
+
+	* tests/gpt-header-move.py: Use little endian for pack/unpack
+	* tests/gpt-header-munge: Same
+	* tests/t-lib-helpers.sh: Add requires_64bit_ that checks for x86_64 and ppc64
+	* tests/t0210-gpt-resized-partition-entry-array.sh: Remove x86_64 test
+	* tests/t0211-gpt-rewrite-header.sh: Same
+
+2014-04-08  Brian C. Lane  <bcl@redhat.com>
+
+	tests: Use msdos-overlap to setup t0283
+	xxd isn't present in minimal build systems, as it is part of vim. Change
+	to using a simple python script to mangle the msdos disklabel for the
+	test.
+
+	* tests/msdos-overlap.py: New file
+	* tests/t0283-overlap-partitions.sh: Use msdos-overlap.py
+
+2014-04-08  Brian C. Lane  <bcl@redhat.com>
+
+	tests: Add emit_superuser_warning for gpt tests
+	When parted runs without script mode it will print a warning about not
+	being superuser. Add the library call to add this to expected output
+	from the tests.
+
+	* tests/t0281-gpt-grow.sh: Add emit_superuser_warning
+	* tests/t0282-gpt-move-backup.sh: Add emit_superuser_warning
+	* tests/t0283-overlap-partitions.sh: Add emit_superuser_warning
+
+2014-04-08  Brian C. Lane  <bcl@redhat.com>
+
+	libparted: Use common function to calculate PTE sectors
+	Use _ptes_sectors in _parse_header's calculation to determine if the
+	disk has been grown.
+
+	* libparted/labels/gpt.c (_parse_header): use _ptes_sectors
+
+2014-04-08  Brian C. Lane  <bcl@redhat.com>
+
+	libparted: Fix check for backup header location
+	Add a couple of helper functions for calculating the partition table
+	entry size (in sectors) and for guessing the end of the disk based on
+	the LastUsableLBA and the Partition Table Entry size.
+
+	The backup header should be either at the end of the disk, or at what
+	the primary header thinks is the end of the disk. Prompt to fix the
+	backup header if it is located any other place.
+
+	* libparted/labels/gpt.c (_ptes_sectors): New function
+	  (_hdr_disk_end): New function
+	  (gpt_read): Use new function to test for pri's idea of end of disk
+
+2014-03-05  Gustavo Zacarias  <gustavo@zacarias.com.ar>
+
+	ui: switch to new-style readline typedef
+	The CPPFunction typedef (among others) have been deprecated in favour of
+	specific prototyped typedefs since readline 4.2 (circa 2001).
+	It's been working since because compatibility typedefs have been in
+	place until they where removed in the recent readline 6.3 release.
+	Switch to the new style to avoid build breakage.
+
+2014-03-05  Phillip Susi  <psusi@ubuntu.com>
+
+	libparted: sync partitions > 16
+	The linux partition sync code was hard coded to only flush
+	the first 16 partitions.
+
+2014-03-02  Phillip Susi  <psusi@ubuntu.com>
+
+	libparted: don't require a system id string
+	Historically the system ID field of a fat boot sector contains a
+	string identifying the OS that formatted it.  It appears that some
+	recent versions of Windows have stopped bothering with this.  Stop
+	requiring this string to recognize fat as valid.
+
+2014-03-02  Brian C. Lane  <bcl@redhat.com>
+
+	tests: Restrict gpt-header-munge to little-endian systems
+	gpt-header-munge uses perl to manipulate the gpt header for the test. It
+	only works on 64 bit little-endian systems so restrict it to x86_64
+	only.
+
+	* tests/t0210-gpt-resized-partition-entry-array.sh: Skip if not x86_64
+	* tests/t0211-gpt-rewrite-header.sh: Skip if not x86_64
+
+2014-03-02  Brian C. Lane  <bcl@redhat.com>
+
+	tests: Add btrfs and xfs to the fs probe test
+	* tests/tests/t1700-probe-fs.sh: Add btrfs and xfs
+
+2014-03-02  Brian C. Lane  <bcl@redhat.com>
+
+	libparted: Recognize btrfs filesystem
+	Add support for showing 'btrfs' in  the 'file system' column. Also
+	allows the used to enter btrfs as the fs type. It doesn't really do
+	anything -- just sets the partition type to linux.
+
+	* NEWS (Changes in behavior): Mention it.
+	* doc/parted.texti: Document btrfs fs.
+	* (libparted/fs/Makefile.am): Add btrfs.c
+	* (libparted/fs/btrfs/btrfs.c): Probe for btrfs
+	* (libparted/libparted.c): Register btrfs
+
+2014-03-02  Brian C. Lane  <bcl@redhat.com>
+
+	libparted: Add UEFI System Partition flag.
+	This adds support for the ESP partition type on MS-DOS. It also aliases
+	it to the boot flag on GPT which sets the ESP GUID type.
+
+	* NEWS (New Features): Mention it.
+	* doc/C/parted.8: Document esp flag.
+	* doc/parted.texti: Document esp flag.
+	* include/parted/disk.in.h (_PedPartitionFlag): Add PED_PARTITION_ESP flag
+	* libparted/disk.c (ped_partition_flag_get_name): Add esp flag
+	* libparted/labels/dos.c (DosPartitionData): Likewise
+	(raw_part_parse): Likewise
+	(msdos_partition_new): Likewise
+	(msdos_partition_duplicate): Likewise
+	(msdos_partition_set_system): Likewise
+	(clear_flags): Likewise
+	(msdos_partition_set_flag): Likewise
+	(msdos_partition_get_flag): Likewise
+	(msdos_partition_is_flag_available): Likewise
+	* libparted/labels/gpt.c (gpt_partition_set_flag): Add PED_PARTITION_ESP
+	(gpt_partition_get_flag): Likewise
+	(gpt_partition_is_flag_available): Likewise
+
+2014-03-02  Brian C. Lane  <bcl@redhat.com>
+
+	libparted: Add Intel Rapid Start Technology partition flag.
+	This adds support for the irst partition type flag. Sets the type to
+	0x84 on MS-DOS and D3BFE2DE-3DAF-11DF-BA-40-E3A556D89593 on GPT.
+
+	* NEWS (New Features): Mention it.
+	* doc/C/parted.8: Document irst flag.
+	* doc/parted.texti: Document irst flag.
+	* include/parted/disk.in.h (_PedPartitionFlag): Add PED_PARTITION_IRST flag
+	* libparted/disk.c (ped_partition_flag_get_name): Add irst flag
+	* libparted/labels/dos.c (DosPartitionData): Likewise
+	(raw_part_parse): Likewise
+	(msdos_partition_new): Likewise
+	(msdos_partition_duplicate): Likewise
+	(msdos_partition_set_system): Likewise
+	(clear_flags): Likewise
+	(msdos_partition_set_flag): Likewise
+	(msdos_partition_get_flag): Likewise
+	(msdos_partition_is_flag_available): Likewise
+	* libparted/labels/gpt.c: Add PARTITION_IRST_GUID
+	(GPTPartitionData): Add irst flag
+	(_parse_part_entry): Likewise
+	(gpt_partition_new): Likewise
+	(gpt_partition_set_system): Likewise
+	(gpt_partition_set_flag): Likewise
+	(gpt_partition_get_flag): Likewise
+	(gpt_partition_is_flag_available): Likewise
+
+2014-03-02  Brian C. Lane  <bcl@redhat.com>
+
+	tests: rewrite t6001 to use /dev/mapper
+	This test began failing because using a private copy of /dev/mapper
+	confuses the system. This fixes that and generally cleans up the test.
+
+	tests/t6001.sh: update to use /dev/mapper directly
+
+2014-03-02  Brian C. Lane  <bcl@redhat.com>
+
+	libparted: don't canonicalize /dev/md/ paths (#872361)
+	This is the same issue we have with /dev/mapper/ paths that was fixed in
+	commit c1eb485b9fd8919e18f192d678bc52b0488e6ee0. When libparted
+	is used to setup the device the symlink should be used to reference it,
+	not the backing device name which could change.
+
+	* libparted/device.c (ped_device_get): Don't canonicalize names
+	  that start with "/dev/md/".
+
+2014-03-02  Brian C. Lane  <bcl@redhat.com>
+
+	tests: Make sure dm UUIDs are not erased
+	* tests/t6005-dm-uuid.sh: Make sure dm UUIDs are not erased
+
+	libparted: preserve the uuid on dm partitions (#832145)
+	* libparted/arch/linux.c (_dm_add_partition): Set the uuid if there was
+	  one.
+
+2014-03-02  Brian C. Lane  <bcl@redhat.com>
+
+	libparted: use dm_udev_wait (#698121)
+	This is based on Peter Rajnoha's patch to use dm_udev_wait to
+	synchronize with udev.
+
+	This requires libdevmapper v1.02.39 and higher.
+
+	mailing list thread:
+	https://lists.gnu.org/archive/html/bug-parted/2010-09/msg00007.html
+
+	* libparted/arch/linux.c (_dm_task_run_wait): New function
+	(_is_dm_major): Add cookie and change call to _dm_task_run_wait
+	(_is_dmraid_device): Same
+	(_dm_is_part): Same
+	(dm_canonical_path): Same
+	(_dm_remove_partition): Same
+	(_dm_get_partition_start_and_length): Same
+	(_dm_add_partition): Same
+	(linux_new): Enable udev sync support
+
+2014-02-25  Brian C. Lane  <bcl@redhat.com>
+
+	tests: test creating 20 device-mapper partitions (#803108)
+	* tests/t6004-dm-many-partitions.sh: Make sure > 17 partitions appear in
+	  device mapper.
+
+	libparted: copy pmbr_boot when duplicating GPT disk
+	* libparted/labels/gpt.c (gpt_duplicate): copy pmbr_boot flag
+
+2014-02-24  Phillip Susi  <psusi@ubuntu.com>
+
+	Fix help text for disk_{set,toggle}
+	Fix the help text to show *disk* flags instead of partition flags.
+
+2013-12-23  Phillip Susi  <psusi@ubuntu.com>
+
+	bug#15591: [PATCH] libparted: handle i18n gpt partition names correctly
+	gpt.c was simply truncating the UTF-16 characters stored
+	in the partition name field to 8 bits.  This corrupted non
+	ascii characters which later resulted in parted crashing in
+	strlist.c trying to convert the now invalid multi byte
+	characters to wchar.
+
+	gpt.c will now properly convert the UTF-16 to the current
+	locale encoding.
+
+2013-11-23  Phillip Susi  <psusi@ubuntu.com>
+
+	libparted: make sure not to treat percentages as exact
+	If 1% of the drive size worked out ot be an even power of
+	two, it would trigger the exact placement.  Add an exception
+	for the percent units.
+
+2013-11-23  Daniel Battaiola Kreling  <dbkreling@br.ibm.com>
+
+	GPT: add support for PReP GUID
+	PReP (PowerPC Reference Platform) boot partition is the first partition used in
+	PowerPC platform for containing the bootable kernel or bootloader. The firmware
+	searches for this partition and jumps to it for booting. So far no GUID was
+	specified for this partition type and hence booting from GPT disk was not
+	supported on this platform. A new GUID 9e1a2d38-c612-4316-aa26-8b49521e5a8b for
+	PReP partition is proposed to be included in GPT.
+
+2013-11-23  Phillip Susi  <psusi@ubuntu.com>
+
+	Fix test compilation
+	The tests were not being linked against libpthread but were using
+	it, and recent versions of gcc refuse to implicitly pull it in.
+
+	libparted: avoid disturbing partitions
+	The partition sync logic was first removing all
+	partitions, then trying to re-add them.  This resulted in many
+	udev events triggering annoying behavior like auto mounting.
+	Refactor the code to avoid removing and re-adding unmodified
+	partitions.
+
+	Revert "linux-commit: do not unnecessarily open partition device nodes"
+	This reverts commit 2a6936fab4d4499a4b812dd330d3db50549029e0.  The commit
+	disabled flushing the block buffer caches on the partition nodes to ensure
+	cache consistency on 2.6 kernels, supposedly because this was no longer
+	required.  It appears this was incorrect, and the caches DO still need
+	flushed, otherwise a new fs written to the partition device does not show
+	up in the disk device cache, causing parted to still identify the old fs.
+
+	libparted: allow some common errors to be ignored
+	Partitions that overlap or extend beyond the end of the disk are common
+	errors that usually result in people having to use other tools to correct
+	because parted refuses to operate when it sees them.  Change these errors
+	to allow you to ignore them and use parted to correct the problem.
+
+2013-11-23  Phillip Susi  <psusi@ubuntu.com>
+
+	libparted: fix gpt end of disk handling
+	There are two checks for problems with the end of disk.  The first checks
+	to make sure that the backup gpt is actually at the end of the disk as it
+	should be.  The second checks to see that the gpt's idea of where the disk
+	ends is correct.  The handling of the backup gpt location was wrong because
+	if you chose not to fix the error, then as soon as you made any changes the
+	backup would be written to the end of the disk anyhow, only the previous
+	backup would not be zeroed.
+
+	This patch fixes the write path to put the backup gpt where the gpt says
+	it goes, not where we think the disk ends.  This allows you to choose
+	not to fix the problems, and the backup gpt will be written to the same
+	place it was before, not the new end of disk.
+
+2013-11-23  Phillip Susi  <psusi@ubuntu.com>
+
+	libparted: handle logical partitions starting immediately after the EBR
+	_blkpg_add_partition() set the length of the extended partition
+	to 2 sectors to allow LILO to be installed there, beacuse the
+	linux kernel does this.  If a logical partition used that second
+	sector, adding it would fail beacuse of the overlap.  Now
+	_blkpg_add_partition() will limit the length to only the first
+	sector if the second is used by a logical partition.
+
+	Previously parted did create the partition table, and after a
+	reboot, the kernel would recognize the table, and happily create
+	the extended partition as 2 sectors long, thus overlapping the
+	logical partition, but when parted tried to recreate the same
+	table with BLKPG, the kernel rightly rejected it.
+
+2013-11-23  Phillip Susi  <psusi@ubuntu.com>
+
+	gpt: Revert small device commits
+	The following commit broke the position of the LastUsableLBA:
+
+	48f236f9: gpt: permit "mklabel gpt" on a 67-sector device
+
+	It introduced an off by one error, leaving LastUsableLBA pointing to
+	the first sector of the backup partition table instead.
+
+	This effectively reverts that commit, as well as adjusting the subsequent
+	commits to instead use 68 sectors as the minimum length.  I believe
+	this is the minimum legal size as at 67 sectors, there is no valid
+	value for FirstUsableLBA and LastUsableLBA.
+
+2013-11-23  Phillip Susi  <psusi@ubuntu.com>
+
+	tests: t6003-dm-hide: don't hang on exception
+	If the parted -l found any exceptions, it would print the prompt, which was
+	redirected to the log, then hang waiting for input, which never came.  Use
+	script mode to disable the prompts.
+
+	parted: fix EOF and ctrl-c handling
+	feof() seems to not detect EOF after readline() hits it, so parted went
+	into an infinite loop prompting for input on EOF.  Change test to use the
+	got_ctrl_c variable instead, which is set when readline hits EOF and
+	returns NULL.  This also makes parted properly exit on ctrl-c.
+
+2013-10-09  Jim Meyering  <meyering@fb.com>
+
+	bootstrap: update to latest from gnulib
+
+2013-10-09  Jonathan Liu  <net147@gmail.com>
+
+	dos: improve MBR signature generation
+	Using tv_usec in struct timeval from gettimeofday() doesn't provide
+	enough precision to fill an unsigned 32-bit integer and isn't really
+	random. It it always less than one million when using the GNU C library
+	while an unsigned 32-bit integer ranges between 0 and 4294967295.
+
+	In FAT filesystem creation, parted already uses a better random
+	generator, so move that code into a common function and use it
+	for MS-DOS MBR signature generation.
+
+	* libparted/fs/r/fat/fat.c (_gen_new_serial_number): Remove.
+	(fat_create): Use generate_random_uint32 instead of
+	_gen_new_serial_number.
+	* libparted/labels/dos.c (generate_random_id): Remove.
+	(msdos_write): Use generate_random_uint32 instead of
+	generate_random_id.
+	* libparted/labels/misc.h (generate_random_uint32): New function.
+	Created from _gen_new_serial_number in libparted/fs/r/fat/fat.c with
+	additional check to avoid returning zero, which may be interpreted
+	as no FAT serial number or no MBR signature.
+
+2013-01-06  Jim Meyering  <jim@meyering.net>
+
+	maint: avoid new warning/error with gcc-4.8.0 20130105
+	* configure.ac (WERROR_CFLAGS): Disable -Wsuggest-attribute=format.
+	It was suggesting to apply the gnu_printf attribute to vsnprintf.
+
+	maint: update all copyright year number ranges
+	Run "make update-copyright".
+
+	build: update gnulib submodule to latest
+
+2013-01-02  Jim Meyering  <jim@meyering.net>
+
+	doc: 1MiB-alignment is not enough for cheap flash drives
+	* doc/parted.texi: Add an example that aligns to 4GiB, and
+	reference Arnd Bergman's LWN article.
+
+2012-10-29  Jim Meyering  <jim@meyering.net>
+
+	tests: make t6003-dm-hide work reliably on F17
+	* tests/t6003-dm-hide.sh: Adjust to work reliably on Fedora 17.
+
+2012-10-29  Phillip Susi  <psusi@ubuntu.com>
+
+	libparted: don't probe every dm device in probe_all
+	We were probing every dm device.  Only probe dmraid whole disk
+	(non-partition) devices instead.  This removes the clutter of
+	LVM logical volumes, and dmraid partitions from the list, which
+	usually do not make sense to partition.
+
+	* NEWS (Changes in behavior): Mention it.
+	* libparted/arch/linux.c (_is_dmraid_device): New function.
+	(_dm_is_part): Likewise.
+	(_probe_dm_devices): Use the latter.
+	* tests/t6003-dm-hide.sh: New test.
+	* tests/Makefile.am (TESTS): Add it.
+
+2012-10-29  Phillip Susi  <psusi@ubuntu.com>
+
+	libparted: remove extraneous blkpg add partition ped exception
+	_blkpg_add_partition was throwing an exception if it failed to add the
+	new partition, in addition to _disk_sync_part_table throwing one, and
+	then bailing out.  Instead of bailing out, just log the error for
+	reporting later and continue.
+
+	libparted: refactor device-mapper partition sync code
+	The device-mapper partition sync code was still using the remove all
+	partitions, then add new partitions method.  Refactor to use the same
+	algorithm as regular disks: try to remove all, and ignore any that could
+	not be removed but have not changed.
+
+2012-10-23  Eric Blake  <eblake@redhat.com>
+
+	build: default to --enable-gcc-warnings in a git tree
+	Anyone building from cloned sources can be assumed to have a new
+	enough environment, such that enabling gcc warnings by default will
+	be useful.  Tarballs still default to no warnings, and the default
+	can still be overridden with --disable-gcc-warnings.
+	* configure.ac (gl_gcc_warnings): Set default based on environment.
+
+2012-10-17  Brian C. Lane  <bcl@redhat.com>
+
+	tests: cleanup losetup usage
+	The unsafe_losetup_ function was failing because losetup didn't
+	recognize that the 'private' /dev/loopX devices were the same as
+	/dev/loopX, it would fail even if one was in use. Switch to using
+	losetup --show which is a cleaner solution.
+	Also use sparse file for loop_setup to save space.
+	* tests/t-lvm.sh (unsafe_losetup_): Remove function.
+	(loop_setup_): Use losetup's --show option instead.
+	Use dd with /dev/null, not /dev/zero.
+	* tests/t6001-psep.sh: Use loop_setup_ rather than losetup --show.
+
+2012-10-17  Jim Meyering  <jim@meyering.net>
+
+	maint: regenerate .po, .pot files
+
+	maint: use $(AM_V_GEN) to cut down on build noise
+	* doc/Makefile.am: Prefix each rule with $(AM_V_GEN).
+	* doc/po4a.mk (dist_man_MANS): Likewise.
+
+2012-10-16  Petr Uzel  <petr.uzel@suse.cz>
+
+	partprobe: remove partitions when there is no partition table
+	When partprobe detects no partition table on a device, it should
+	tell the kernel to drop partitions on that device, but it did not.
+	* parted/partprobe.c (process_dev): When ped_disk_probe fails,
+	create a dummy (empty) partition table and use that.
+	* NEWS (Bug fixes): Mention it.
+	Addresses: https://bugzilla.novell.com/783419
+
+2012-10-15  Petr Uzel  <petr.uzel@suse.cz>
+
+	doc: update partprobe manpage
+	* doc/C/partprobe.8: Add long options, REPORTING BUGS section
+	and adjust DESCRIPTION section because it wasn't quite correct.
+
+	partprobe: remove --no-update long option
+	It was deprecated and scheduled for removal in 2009.
+	* partprobe/partprobe.c (long_options): Remove "no-update" entry.
+
+	build: .gitignore: ignore tests/fs-resize
+
+2012-10-09  Jim Meyering  <meyering@redhat.com>
+
+	build: do not rely on automake's AM_TESTS_ENVIRONMENT
+	* tests/Makefile.am (TESTS_ENVIRONMENT): Rename from
+	AM_TESTS_ENVIRONMENT, since it is not honored in automake-1.11.3
+	after all.  This reverts commit v3.1-14-g2bd66d7.  For now, I'll
+	leave the following commit that made bootstrap.conf require 1.11.2.
+	Prompted by a report of test failure from Phillip Susi.
+
+2012-10-09  Gilles Espinasse  <g.esp@free.fr>
+
+	tests: t8001: do not rely on "modprobe loop"
+	Remove 'rmmod loop' and 'modprobe loop max_part=7' commands.
+	The latter command may fail after the first command has run,
+	leaving the machine with no loop support.
+
+	This happens on my chroot, because:
+	- rmmod does not depend on the availability of the loop module,
+	- modprobe fails, since the kernel compiled inside the chroot
+	  is different from the running kernel.
+
+	Instead, rely on t-lvm loop_setup_ to load the loop module, if required.
+
+2012-10-09  Jim Meyering  <meyering@redhat.com>
+
+	tests: improve test for partitionable loop devices
+	* tests/init.cfg (require_partitionable_loop_device_): Skip
+	when cat fails.
+
+2012-10-06  Jim Meyering  <meyering@redhat.com>
+
+	maint: fix an error in the preceding commit log
+	Stefano Lattarini noticed an error in the log for
+	commit v3.1-32-g478e472.  Arrange for that error
+	to be fixed in the generated ChangeLog file.
+	* build-aux/git-log-fix: New file.
+	* Makefile.am (gen-ChangeLog): Adjust rule to use it.
+
+	tests: stop using private "dev" directory for losetup
+	Something about Fedora 17's losetup changed so that using a private
+	dev directory no longer worked.  Now, simply use /dev/ directly.
+	* tests/t-lvm.sh: Don't use $G_dev_.  Not needed, and actually
+	caused the t6000-dm root-only test to fail on Fedora 17.
+	Also, redirect less to /dev/null: that helps diagnose failure.
+
+2012-10-04  Bob Beers  <bob.beers.gmail.com>  (tiny change)
+
+	doc: libparted/disk.c: correct doxygen comment typo
+	* libparted/disk.c: s/PedPartition/PedDisk/
+
+2012-09-29  Jim Meyering  <meyering@redhat.com>
+
+	tests: clean up tests
+	Use warn_ and $ME_ in place of warn and $ME; remove definitions of
+	the latter two.  Remove unused code.
+	* tests/lvm-utils.sh: Remove file.  All functions were either unused
+	or duplicated/better in t-lvm.sh.
+	* tests/Makefile.am (EXTRA_DIST): Remove it.
+	* tests/t-local.sh (scsi_debug_setup_): Use echo 1>&2, not warn_, to
+	emit to log file only, not console.  The diagnostic it emitted (in
+	verbose mode) was more "informational" than a warning.
+	* tests/t9030-align-check.sh: Use warn_, not warn.
+	* tests/t-lvm.sh: Likewise, and use fail_, not error (undefined!).
+	* tests/t-lib-helpers.sh (device_mapper_required_): Use t-lvm.sh
+	and an explicit lvm_init_root_dir_ in place of lvm-utils.sh.
+
+2012-09-29  Roderick W. Smith  <rodsmith@rodsbooks.com>
+
+	add support for a new Linux-specific GPT partition type code
+	* NEWS: Describe the new Linux-specific partition type code
+	and the new msftres flag that can be used to override this type
+	code, should it be necessary.
+	* doc/parted.texi: Describe of the new msftres flag.
+	* include/parted/disk.in.h [_PedPartitionFlag]: Add
+	PED_PARTITION_MSFT_DATA.
+	* libparted/disk.c: Add check for PED_PARTITION_MSFT_DATA, with
+	return of "msftdata", to ped_partition_flag_get_name()
+	* libparted/labels/gpt.c (PARTITION_LINUX_DATA_GUID): Define.
+	[_GPTPartitionData]: New member, "int msftdata".
+	(_parse_part_entry): Set the msftdata flag if and only if the
+	PARTITION_BASIC_DATA_GUID type code is in use;
+	(gpt_partition_new): Use the PARTITION_LINUX_DATA_GUID
+	type as the default type code
+	(gpt_partition_set_system): Set the PARTITION_BASIC_DATA_GUID type
+	code on partitions on which the msftdata flag is set and set
+	PARTITION_LINUX_DATA_GUID as the type by default.
+	Clear the msftdata flag in most tests in gpt_partition_set_flag()
+	(gpt_partition_set_flag): Add test for PED_PARTITION_MSFT_DATA, which
+	sets msftdata and other flags appropriately
+	(gpt_partition_get_flag): Add test for the PED_PARTITION_MSFT_DATA
+	item that returns the status of the msftdata flag
+	(gpt_partition_is_flag_available): Add test for
+	PED_PARTITION_MSFT_DATA item to
+	* tests/t0220-gpt-msftres.sh: Accommodate the fact that now,
+	partition table listings include "msftdata" for file systems
+	of type NTFS and FAT*.
+	For more discussion and justification, see
+	http://thread.gmane.org/gmane.comp.gnu.parted.bugs/10456
+
+2012-09-20  Jim Meyering  <meyering@redhat.com>
+
+	tests: mac: exercise the just-fixed bug
+	* tests/t0350-mac-PT-increases-sector-size.sh: New test.
+	* tests/Makefile.am (TESTS): Add it.
+
+2012-09-20  Brian C. Lane  <bcl@redhat.com>
+
+	mac: don't let larger partition-table-specified block size evoke UB
+	For example, in reading a MAC partition table on a 512-byte sector-size
+	disk, _disk_analyse_block_size could find reason to ask if it's ok to
+	increase that to e.g., 2048.  Upon a positive reply, we would read 2048
+	bytes into a 512-byte buffer.
+
+	* libparted/labels/mac.c (mac_read): If needed, reallocate "buf"
+	to accommodate a new, larger sector size.
+	* NEWS (Bug fixes): Mention it.
+
+2012-09-20  Jim Meyering  <meyering@redhat.com>
+
+	tests: avoid syntax-check failure for reversed compare args
+	* tests/t0203-gpt-create-on-min-sized-device.sh: Reverse args,
+	so that any diff output (upon failed test) looks sensible.
+
+2012-09-12  Jim Meyering  <meyering@redhat.com>
+
+	tests: show that small dev now evokes "mklabel gpt" diagnostic
+	* tests/t0203-gpt-create-on-min-sized-device.sh: New test.
+	* tests/Makefile.am (TESTS): Add it.
+
+	gpt: when "mklabel gpt" fails, always provide a diagnostic
+	* libparted/labels/gpt.c (gpt_alloc): When rejecting a device because
+	it is too small, give a diagnostic, as is done in every other failure
+	path through this function.
+
+	gpt: permit "mklabel gpt" on a 67-sector device
+	* libparted/labels/gpt.c (gpt_alloc): Correct checks in order to
+	allow creation of a GPT partition table on a 67-sector device.
+	The computation of the "data_end" sector number was one too low.
+	Whereas there are two sectors at the beginning of the disk (pMBR
+	and the GPT header sector), there is only one at the end: the
+	backup GPT header.  That (67) is the size of the smallest GPT
+	partition table, allowing for *no* partition table sectors.
+
+	tests: update t7000-scripting.sh to avoid new FP
+	* tests/t7000-scripting.sh: Use -34s as the endpoint, not -1s,
+	to avoid a spurious difference.  Also, remove quoting artifacts.
+
+2012-09-12  Davidlohr Bueso  <dave@gnu.org>
+
+	gpt: require first_usable_LBA <= last_usable_LBA
+	When verifying GPT header integrity, ensure that the
+	first usable LBA is no larger than the last usable LBA.
+	* libparted/labels/gpt.c (_header_is_valid): Reject a header
+	with last_usable < first_usable.
+
+2012-09-12  Jim Meyering  <meyering@redhat.com>
+
+	tests: clarify a comment: _reading_ gpt tables on tiny devices
+	* tests/t0203-gpt-tiny-device-abort.sh: Clarify.
+
+	maint: remove unnecessary wcslen use
+	* parted/strlist.c (gettext_to_wchar): Tighten up test for
+	mbsrtowcs failure and remove unnecessary wcslen use.
+
+2012-08-30  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
+
+	maint: tighten per version requirement
+	* bootstrap.conf ($buildreq): Require Perl >= 5.6 (not merely >= 5.5),
+	because that's the minimal version required by modern Automake and
+	Autoconf.
+
+	maint: make Autoconf version requirement consistent
+	* bootstrap.conf ($buildreq): Require Autoconf >= 2.63, not >= 2.61,
+	for consistency with what is done in AC_INIT in configure.ac
+
+2012-08-30  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
+
+	build: require Automake >= 1.11.6
+	Now that we use AM_TESTS_ENVIRONMENT, we should require at least
+	Automake >= 1.11.2; but since all the Automake version until 1.11.5
+	are vulnerable to CVE-2012-3386:
+
+	    <https://lists.gnu.org/archive/html/automake/2012-07/msg00023.html>
+
+	it's even better to require 1.11.6.
+
+	* configure.ac (AM_INIT_AUTOMAKE): Bump version requirement to 1.11.6.
+	* bootstrap.conf ($buildreq): Likewise.
+
+2012-08-30  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
+
+	tests: remove unused AM_TESTS_ENVIRONMENT entries
+	Probably a copy&paste errors, likely from the TESTS_ENVIRONMENT
+	definition in the 'tests/Makefile.am' in GNU coreutils.
+
+	* tests/Makefile.am (AM_TESTS_ENVIRONMENT): Don't define nor export
+	any of the variables PREFERABLY_POSIX_SHELL, REPLACE_GETCWD, CC,
+	MAKE, PERL.
+
+2012-08-30  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
+
+	tests: prefer AM_TESTS_ENVIRONMENT over TESTS_ENVIRONMENT
+	The latter should be reserved for user overrides.
+
+	* tests/Makefile.am (TESTS_ENVIRONMENT): Rename ...
+	(AM_TESTS_ENVIRONMENT): ... like this.
+
+2012-08-30  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
+
+	build: enable subdir-objects Automake option globally
+	That option is enabled unconditionally in Automake-NG, and enabling
+	it also for mainline Automake will help to ensure no unexpected
+	incompatibilities is introduced in a potential port to Automake-NG.
+
+	Moreover, if we have a source file 'sub/foo.c', having it compiled
+	in 'sub/foo.o' rather than in 'foo.o' is undeniably cleaner and more
+	natural.
+
+	* configure.ac (AM_INIT_AUTOMAKE): Add 'subdir-objects'.
+	* libparted/fs/Makefile.am (AUTOMAKE_OPTIONS): No need to declare
+	'subdir-objects' explicitly now.
+
+2012-08-30  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
+
+	build: prefer pattern rules over suffix rules
+	That is acceptable, because the GNU parted build system already
+	requires GNU make anyway: the $(subst ...) built-in is used in the
+	common recipe for the 'ss-1024', 'ss-2048' and 'ss-4096' targets
+	in Makefile.am.
+
+	* include/parted/Makefile.am (.in.h.h): Rename ...
+	(%.h: %.in.h): ... as this pattern rule.
+	(SUFFIXES): Delete, no more needed.
+
+2012-08-30  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
+
+	build: don't list files with unknown suffix in _SOURCES
+	While this works with mainline Automake (which blindly treats source
+	files with an unknown extension as if they were header files), it is
+	undocumented (albeit admittedly unlikely to change).  Moreover, it no
+	longer works with Automake-NG (and that's by design), so the use of
+	such feature would make a port to Automake-NG more difficult.
+
+	* libparted/labels/Makefile.am (liblabels_la_SOURCES): ... don't
+	list 'pt-limit.gperf' here; rather ...
+	(EXTRA_DIST): ... list 'pt-limit.c' and 'pt-limit.gperf' here.
+	(EXTRA_DIST, BUILT_SOURCES): Enhance few comments.
+
+2012-08-30  Stefano Lattarini  <stefano.lattarini@gmail.com>  (tiny change)
+
+	build: prefer $(AM_CPPFLAGS) over $(INCLUDES)
+	The latter is obsolete, and might be removed in future Automake versions.
+	Moreover, it's already been removed in Automake-NG, so its use would make
+	a port to Automake-NG more difficult.
+
+	* parted/Makefile.am (INCLUDES): Rename ...
+	(AM_CPPFLAGS): ... like this.
+	* partprobe/Makefile.am: Likewise.
+	* libparted/fs/Makefile.am: Likewise.
+	* libparted/Makefile.am: Likewise.
+	* libparted/labels/Makefile.am: Likewise.
+
+2012-08-28  Jim Meyering  <meyering@redhat.com>
+
+	build: update gnulib, bootstrap and init.sh
+
+	maint: don't prohibit strncpy just yet
+	* cfg.mk (local-checks-to-skip): Add sc_prohibit_strncpy,
+	so that we do not yet enable the strncpy prohibition.
+	There are many uses, and it will be a lot of work to remove
+	all of them.
+
+	maint: avoid new syntax-check failure re @xref
+	* doc/parted.texi: Adjust @xref usage: it must be used only
+	at start of sentence.
+	* doc/parted-pt_BR.texi: Likewise.
+
+2012-06-09  Jim Meyering  <meyering@redhat.com>
+
+	tests: add a test to exercise just-fixed code
+	* tests/print-max.c: Extend to provide coverage of
+	ped_disk_get_max_supported_partition_count, too.
+	* tests/t9021-maxima.sh (max_n_partitions): New function, with
+	naively hard-coded max-number-of-partitions-per-partition-table-type
+	values.
+	Use it to ensure that each expected value matches the actual one.
+	* cfg.mk: Exempt this test's use of error from the syntax-check
+	for unmarked diagnostics.
+
+2012-06-09  Richard W.M. Jones  <rjones@redhat.com>
+
+	gpt: fix endianness bug in gpt_get_max_supported_partition_count
+	* libparted/labels/gpt.c (gpt_get_max_supported_partition_count):
+	Take endianness of pth->FirstUsableLBA into account (64-bit,
+	little endian) when calculating the maximum number of partitions.
+	* NEWS (Bug fixes): Mention it.
+
+2012-03-26  Jim Meyering  <meyering@redhat.com>
+
+	tests: remove bogus envvar setting from t0300-dos-on-gpt.sh
+	* tests/t0300-dos-on-gpt.sh: Remove envvar setting that effectively
+	disabled testing(only in this test) of simulated sector sizes smaller
+	than 4KiB.
+	Also, use a much smaller backing file.
+
+2012-03-24  Brian C. Lane  <bcl@redhat.com>
+
+	tests: add t0301-overwrite-gpt-pmbr.sh
+	Make sure parted checks the PMBR before the GPT partition table.
+
+	* NEWS: Update with new GPT behavior.
+	* tests/overwrite-gpt-pmbr.sh: New test.
+	* tests/Makefile.am (TESTS): Add it.
+
+2012-03-24  Brian C. Lane  <bcl@redhat.com>
+
+	libparted: check PMBR before GPT partition table
+	The UEFI spec requires that a valid GPT disk label have a PMBR
+	partition. This moves the PMBR check to before the GPT check,
+	exiting gpt_probe with a 0 if the PMBR is not valid.
+
+	The previous behavior would cause problems in the following situation:
+	 1. format a disk as GPT
+	 2. re-format it as MSDOS using tools that don't understand GPT
+
+	Subsequent operations with parted would then complain about the invalid
+	PMBR, but would not allow the disk to be used as an msdos disk. This
+	change causes parted to recognize the msdos partition table.
+
+	* libparted/labels/gpt.c (gpt_probe): Move _pmbr_is_valid test.
+	Reported by Chris Murphy in http://bugzilla.redhat.com/805272
+
 2012-03-02  Jim Meyering  <meyering@redhat.com>
+
+	maint: post-release administrivia
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
 
 	version 3.1
 	* NEWS: Record release date.
@@ -2124,7 +3307,7 @@
 	* tests/t9021-maxima.sh: Update for the new loop limit.
 	* NEWS (Bug fixes): Mention it.
 
-2010-08-19  Jim Meyering  <meyering@redhat.com>
+2010-08-18  Jim Meyering  <meyering@redhat.com>
 
 	avoid non-srcdir "make check" failure
 	* tests/Makefile.am (EXTRA_DIST): Add init.cfg.
@@ -2133,8 +3316,6 @@
 	build and tests: update bootstrap and init.sh from gnulib
 	* tests/init.sh: Update from gnulib.
 	* bootstrap: Likewise.
-
-2010-08-18  Jim Meyering  <meyering@redhat.com>
 
 	build: update gnulib submodule to latest
 
@@ -2204,7 +3385,7 @@
 	* tests/t1101-busy-partition.sh: new file.
 	* tests/Makefile.am (TESTS): add the new test in check target.
 
-2010-06-27  Otavio Salvador  <otavio@ossystems.com.br>
+2010-06-26  Otavio Salvador  <otavio@ossystems.com.br>
 
 	tests: skip loop-clobber-infloop if mkswap cannot be found
 	* tests/t0400-loop-clobber-infloop.sh: Skip the test is case of mkswap
@@ -3377,12 +4558,12 @@
 	* dist-check.mk: Sync from coreutils.
 	* gnulib: Update to latest.
 
+2009-12-12  Jim Meyering  <meyering@redhat.com>
+
 	build: distribute gperf-generated file, pt-limit.c
 	* libparted/labels/Makefile.am (EXTRA_DIST): Distribute the
 	gperf-generated file, pt-limit.c, so that people don't need to
 	run gperf at build-from-tarball time.
-
-2009-12-12  Jim Meyering  <meyering@redhat.com>
 
 	ui: mkpart: avoid double free
 	* parted/parted.c (do_mkpart): This function frees "part_name"
@@ -5760,7 +6941,7 @@
 	* parted/parted.c (do_print): add the "virtblk" string to the transport
 	array.
 
-2009-05-24  Otavio Salvador  <otavio@ossystems.com.br>
+2009-05-23  Otavio Salvador  <otavio@ossystems.com.br>
 
 	Makefile.am: fail if ABI has changed
 
@@ -6717,13 +7898,13 @@
 	Corrected memory leak when displaying partition flags.
 	Deallocated memory allocated by partition_print_flags()
 
-2008-04-27  Matt Davis  <mattdavis9@gmail.com>
+2008-04-26  Matt Davis  <mattdavis9@gmail.com>
 
 	Corrected a small memory leak when displaying partition information
 	Deallocated a very small memory allocation that occurs in a for loop.
 	This occurred during output of partition numbers.
 
-2008-04-27  Otavio Salvador  <otavio@ossystems.com.br>
+2008-04-26  Otavio Salvador  <otavio@ossystems.com.br>
 
 	do not loop in case message exception has no message
 	The exception handler was looping when the exception had no message.
@@ -6910,7 +8091,7 @@
 	list of compatible features and to recommend the usage of tune2fs or
 	debugfs to remove features which are not compatible.
 
-2007-09-01  Otavio Salvador  <otavio@ossystems.com.br>
+2007-08-31  Otavio Salvador  <otavio@ossystems.com.br>
 
 	Really duplicate the disk instead of readd every partition
 	To avoid possible differences between the original disk layout and the
@@ -6981,7 +8162,7 @@
 	Revert "History with undo and redo capabilities."
 	This reverts commit 3bb8494e1ed5af0a48ad0211c3219e653167854f.
 
-2007-08-09  David Cantrell  <dcantrel@mortise.boston.redhat.com>
+2007-08-08  David Cantrell  <dcantrel@mortise.boston.redhat.com>
 
 	History with undo and redo capabilities.
 	Author: Matt Davis <mattdavis@gmail.com>
@@ -7034,7 +8215,7 @@
 
 	Removed unused label (compiler warning). (cherry picked from commit b43bda3134059cdacb13e1a4d0a0bee8a543cfb0)
 
-2007-07-27  Otavio Salvador  <otavio@ossystems.com.br>
+2007-07-26  Otavio Salvador  <otavio@ossystems.com.br>
 
 	Fix bootstrap script to support the new translationproject html files
 
@@ -7304,13 +8485,13 @@
 	Now that "label" is malloc'd, be sure to free it before returning.
 	(read_table): Likewise.
 
-	Fix "make distcheck" failure due to not finding usable partition * m4/o-direct.m4: Require that read as well as write succeed. Require that both work with blocks of size 512 as well as 4096. Reiserfs3 doesn't support 512-byte reads. Allow the user running the test to specify the first directory to test via the PARTED_TMPDIR envvar, in case none of the dirs checked by default is usable.
-
 2007-05-30  Jim Meyering  <jim@meyering.net>
+
+	Fix "make distcheck" failure due to not finding usable partition * m4/o-direct.m4: Require that read as well as write succeed. Require that both work with blocks of size 512 as well as 4096. Reiserfs3 doesn't support 512-byte reads. Allow the user running the test to specify the first directory to test via the PARTED_TMPDIR envvar, in case none of the dirs checked by default is usable.
 
 	Fix configure-with-nls vs. wchar.h/wcsdup problem differently. * parted/table.c: Include <config.h> *before* all other #include directives.  Remove explicit declaration of wcsdup.  Now, we'll get the one from <wchar.h>.
 
-2007-05-30  Otavio Salvador  <otavio@ossystems.com.br>
+2007-05-29  Otavio Salvador  <otavio@ossystems.com.br>
 
 	parted/table.c: Fix a warning when compiling with translation support
 	,----[ Output when compiling with translation support ]
@@ -7320,7 +8501,7 @@
 	| table.c:168: warning: assignment makes pointer from integer without a cast
 	`----
 
-2007-05-30  Benno Schulenberg  <bensberg@justemail.net>
+2007-05-29  Benno Schulenberg  <bensberg@justemail.net>
 
 	fdasd label: Move formatting out of translatable strings.
 	Also gettextize several missed messages, and simplify some of them.
@@ -7476,7 +8657,7 @@
 
 	partprobe: new option: --dry-run, synonym for now-deprecated --no-update; improve its description
 
-2007-05-16  Anant Narayanan  <anant@theghost.local>
+2007-05-15  Anant Narayanan  <anant@theghost.local>
 
 	Test commit
 
@@ -7543,7 +8724,7 @@
 
 	Avoid "make distcheck" failure, with newer system headers. * parted/parted.c: Include <limits.h>, for use of CHAR_MAX.
 
-2007-05-04  Anant Narayanan  <anant@kix.in>
+2007-05-03  Anant Narayanan  <anant@kix.in>
 
 	Updated Doxyfile
 
@@ -7627,9 +8808,11 @@
 	shouldn't redo it. It's always better to have simple tests so is much
 	easier to find the bugs.
 
+2007-04-19  Otavio Salvador  <otavio@ossystems.com.br>
+
 	[tests] Trivial coding style fixes around the tests code
 
-2007-04-20  Otavio Salvador  <otavio@ossystems.com.br>
+2007-04-19  Otavio Salvador  <otavio@ossystems.com.br>
 
 	[tests] Add _test_exception_handler to fail every time an exception is raised
 	Sometimes parts of code raises exceptions and this shouldn't happen on
@@ -7644,27 +8827,25 @@
 	        ped_exception_set_handler (_test_exception_handler);
 	...
 
-2007-04-20  Debarshi Ray  <rishi@gnu.org>
+2007-04-19  Debarshi Ray  <rishi@gnu.org>
 
 	[tests] New test for cloning of disk labels.
 
-2007-04-19  Debarshi Ray  <rishi@gnu.org>
-
 	[tests] Fix spacing around brackets and asterisks.
 
-2007-04-19  Benno Schulenberg  <bensberg@justemail.net>
+2007-04-18  Benno Schulenberg  <bensberg@justemail.net>
 
 	Handle options independent of their order.
 	Abort on any invalid option, and handle -v and -h first.
 
-2007-04-19  Otavio Salvador  <otavio@ossystems.com.br>
+2007-04-18  Otavio Salvador  <otavio@ossystems.com.br>
 
 	[tests] Small refactoring on test_create_label
 	 - Destroy the temporary device once the test has been finished,
 	 - Use the _implemented_disk_label and _create_disk_label methods
 	   to avoid code duplication.
 
-2007-04-19  Otavio Salvador  <otavio@ossystems.com.br>
+2007-04-18  Otavio Salvador  <otavio@ossystems.com.br>
 
 	[tests] Implements _implemented_disk_label and _create_disk_label on common.[hc]
 	 - _implemented_disk_label: returns 0 when we haven't yet implemented
@@ -7712,7 +8893,7 @@
 
 	Tweak some help messages: change third person to imperative for consistency, add single quotes and remove letters for clarity
 
-2007-03-20  David Cantrell  <dcantrell@redhat.com>
+2007-03-19  David Cantrell  <dcantrell@redhat.com>
 
 	Conditionalize the System Z stuff correctly.  We get headers installed on non-System Z platforms, but the code only compiles on that platform.
 
@@ -7776,6 +8957,8 @@
 	* parted/ui.c (non_interactive_mode): Plug a tiny leak. Exercise by running the following with a CD-ROM in the drive: valgrind --leak-check=full parted/parted /dev/cdrom print Before, we'd leak the 6-byte command: "print\0".
 
 	linux.c: Avoid memory overrun.  Handle 2048-byte logical sectors. * libparted/arch/linux.c (linux_read): Allocate the right amount of space for the (potentially 2048-byte-long) sectors we're about to read.
+
+2007-03-07  Jim Meyering  <jim@meyering.net>
 
 	Don't use deprecated mktemp, to avoid linker warning * libparted/tests/common.c (_create_disk): Rewrite to use mkstemp instead.
 
@@ -7920,6 +9103,8 @@
 
 	Arrange for "make distcheck" to be stricter.
 
+2007-02-26  Jim Meyering  <jim@meyering.net>
+
 	* bootstrap: new file.
 
 2007-02-26  Debarshi Ray  <rishi@gnu.org>
@@ -7990,6 +9175,8 @@
 2007-02-19  Debarshi Ray  <rishi@gnu.org>
 
 	Introduced MAINTAINERCLEANFILES in Makefile.am for carrying out 'make maintainer-clean'.
+
+2007-02-18  Debarshi Ray  <rishi@gnu.org>
 
 	Cleaning up nested structs & unions.
 
@@ -8091,11 +9278,11 @@
 	* libparted/labels/dasd.c: Remove unused labels and declarations
 	of unused variables.
 
-2007-02-16  Debarshi Ray  <rishi@gnu.org>
+2007-02-15  Debarshi Ray  <rishi@gnu.org>
 
 	Fix the style of typedef, enum, struct and __attribute__ ((packed)).
 
-2007-02-15  Debarshi Ray  <rishi@gnu.org>
+2007-02-14  Debarshi Ray  <rishi@gnu.org>
 
 	Deprecating ped_[register|unregister]_disk_type in favour of ped_disk_type_[register|unregister].
 
@@ -8226,6 +9413,8 @@
 
 	cb6ca73be06f360308e6a2fccb7142ed8175af29 continued.
 
+2007-01-15  Debarshi Ray  <rishi@gnu.org>
+
 	Add stdint.h stdlib.h & string.h to include/parted/parted.h and remove them from other files.
 
 2007-01-14  Debarshi Ray  <rishi@gnu.org>
@@ -8246,7 +9435,7 @@
 
 	Updated the AUTHORS file. (cherry picked from commit 7ab32d423cc43a5e9372a7dc000feb183db9a89a)
 
-2007-01-12  Debarshi Ray  <rishi@gnu.org>
+2007-01-11  Debarshi Ray  <rishi@gnu.org>
 
 	Rectify segmentation fault caused by 9e05418de3477666b0709f5d1996149febd33100
 
@@ -8272,7 +9461,7 @@
 
 	added scripts/update-po
 
-2006-12-13  David Cantrell  <dcantrel@mortise.boston.redhat.com>
+2006-12-12  David Cantrell  <dcantrel@mortise.boston.redhat.com>
 
 	Merge branches 'master' and 'master' of git+ssh://dcantrell-guest@git.debian.org/git/parted/parted
 
@@ -8300,7 +9489,7 @@
 
 	Zero sized device is shown as 0.00B and not -0.00kB.
 
-2006-12-07  Otavio Salvador  <otavio@debian.org>
+2006-12-06  Otavio Salvador  <otavio@debian.org>
 
 	libparted/exception.c: Dynamically allow space of exception message.
 
@@ -8310,7 +9499,7 @@
 
 	Implement 'print devices'.
 
-2006-12-06  Benno Schulenberg  <bensberg@justemail.net>
+2006-12-05  Benno Schulenberg  <bensberg@justemail.net>
 
 	Translate the copyright message, and hard wrap it
 
@@ -8329,11 +9518,11 @@
 
 	parted/parted.c: Remove useless line break
 
-2006-12-05  Otavio Salvador  <otavio@ossystems.com.br>
+2006-12-04  Otavio Salvador  <otavio@ossystems.com.br>
 
 	Add check unittest support and a initial test for a resizing bug.
 
-2006-12-04  David Cantrell  <dcantrel@mortise.boston.redhat.com>
+2006-12-03  David Cantrell  <dcantrel@mortise.boston.redhat.com>
 
 	Fix the upload script to correctly reference the sig files.
 
@@ -8361,11 +9550,9 @@
 
 	Cleanup _partition_warn_busy, _disk_warn_busy, _partition_warn_loss and _disk_warn_loss.
 
-2006-11-29  Otavio Salvador  <otavio@debian.org>
+2006-11-28  Otavio Salvador  <otavio@debian.org>
 
 	Proper print when there're no extended partitions, but partition names (patch from Sven Luther)
-
-2006-11-28  Otavio Salvador  <otavio@debian.org>
 
 	libparted/arch/linux.c: initialize task point to please GCC
 
@@ -8377,7 +9564,7 @@
 
 	Make mktable aliased to mklabel.
 
-2006-11-28  Otavio Salvador  <otavio@debian.org>
+2006-11-27  Otavio Salvador  <otavio@debian.org>
 
 	Fix 'print' command help
 	'print' command help was missing a new line at end and then breaking
@@ -8387,7 +9574,7 @@
 
 	Updated translations.
 
-2006-11-27  Otavio Salvador  <otavio@debian.org>
+2006-11-26  Otavio Salvador  <otavio@debian.org>
 
 	Remove doc/mdate-sh and doc/texinfo.tex since they are included when we run autogen.sh
 
@@ -8413,7 +9600,7 @@
 
 	Fix loop in print_all, thanks to Debarshi Ray for the patch.
 
-2006-11-21  Otavio Salvador  <otavio@debian.org>
+2006-11-20  Otavio Salvador  <otavio@debian.org>
 
 	Remove useless 'return 0;' call
 	Since PED_ASSERT will always be run, the return 0 is useless, hence
@@ -8475,7 +9662,7 @@
 
 	git-svn-id: svn://svn.debian.org/svn/parted/upstream/trunk@892 2d424fd7-7fe2-0310-af74-8bc65edeb173
 
-2006-11-11  Otavio Salvador  <otavio@debian.org>
+2006-11-10  Otavio Salvador  <otavio@debian.org>
 
 	Changes done on darcs repository suitable for 1.8 release:
 	Fri Nov 10 23:19:15 BRST 2006  Otavio Salvador <otavio@debian.org>
@@ -8511,7 +9698,7 @@
 
 	git-svn-id: svn://svn.debian.org/svn/parted/upstream/trunk@890 2d424fd7-7fe2-0310-af74-8bc65edeb173
 
-2006-11-06  David Cantrell  <dcantrell@redhat.com>
+2006-11-05  David Cantrell  <dcantrell@redhat.com>
 
 	Updates for parted-1.8.0rc3
 	git-svn-id: svn://svn.debian.org/svn/parted/upstream/trunk@882 2d424fd7-7fe2-0310-af74-8bc65edeb173
@@ -8519,7 +9706,7 @@
 	   * arch/linux.c: Define PROC_DEVICES_BUFSIZ for reading /proc/devices,    set to 16384.
 	git-svn-id: svn://svn.debian.org/svn/parted/upstream/trunk@881 2d424fd7-7fe2-0310-af74-8bc65edeb173
 
-2006-11-03  David Cantrell  <dcantrell@redhat.com>
+2006-11-02  David Cantrell  <dcantrell@redhat.com>
 
 	   * labels/mac.c (_rawpart_is_boot): Check for Apple_Boot type.    * labels/mac.c (_rawpart_analyse): Don't check the data_region_length    against the part->geom.length for boot partitions.
 	git-svn-id: svn://svn.debian.org/svn/parted/upstream/trunk@880 2d424fd7-7fe2-0310-af74-8bc65edeb173

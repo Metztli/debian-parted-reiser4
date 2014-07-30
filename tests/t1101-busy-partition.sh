@@ -2,7 +2,7 @@
 # test for Debian bug #582818 (http://bugs.debian.org/582818); forbid
 # the removal of a mounted partition.
 
-# Copyright (C) 2010-2012 Free Software Foundation, Inc.
+# Copyright (C) 2010-2014 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ scsi_debug_setup_ dev_size_mb=80 > dev-name ||
 dev=$(cat dev-name)
 
 cat <<EOF > exp-error || framework_failure
-Error: Partition ${dev}2 is being used. You must unmount it before you modify it with Parted.
+Warning: Partition ${dev}2 is being used. Are you sure you want to continue?
 EOF
 
 parted -s "$dev" mklabel msdos > out 2>&1 || fail=1

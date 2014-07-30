@@ -93,6 +93,10 @@ Rescue a lost partition that was located somewhere between \fIstart\fP and
 \fIend\fP.  If a partition is found, \fBparted\fP will ask if you want to
 create an entry for it in the partition table.
 .TP
+.B resizepart \fIpartition\fP \fIend\fP
+Change the \fIend\fP position of \fIpartition\fP.  Note that this does not
+modify any filesystem present in the partition.
+.TP
 .B rm \fIpartition\fP
 Delete \fIpartition\fP.
 .TP
@@ -104,7 +108,7 @@ or an LVM logical volume if necessary.
 .B set \fIpartition\fP \fIflag\fP \fIstate\fP
 Change the state of the \fIflag\fP on \fIpartition\fP to \fIstate\fP.
 Supported flags are: "boot", "root", "swap", "hidden", "raid", "lvm", "lba",
-"legacy_boot" and "palo".
+"legacy_boot", "irst", "esp" and "palo".
 \fIstate\fP should be either "on" or "off".
 .TP
 .B unit \fIunit\fP

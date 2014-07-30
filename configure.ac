@@ -1,5 +1,5 @@
 dnl GNU Parted - a library and front end for manipulation hard disk partitions
-dnl Copyright (C) 1998-2002, 2005-2012 Free Software Foundation, Inc.
+dnl Copyright (C) 1998-2002, 2005-2014 Free Software Foundation, Inc.
 dnl
 dnl This file may be modified and/or distributed without restriction.
 
@@ -52,7 +52,8 @@ AC_SUBST([LT_CURRENT])
 AC_SUBST([LT_REVISION])
 AC_SUBST([LT_AGE])
 
-AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz color-tests parallel-tests])
+AM_INIT_AUTOMAKE([1.11.6 no-dist-gzip dist-xz color-tests parallel-tests
+                  subdir-objects])
 AM_SILENT_RULES([yes]) # make --enable-silent-rules the default.
 
 AC_CANONICAL_HOST
@@ -187,7 +188,11 @@ AC_ARG_ENABLE([gcc-warnings],
      *)      AC_MSG_ERROR([bad value $enableval for gcc-warnings option]) ;;
    esac
    gl_gcc_warnings=$enableval],
-  [gl_gcc_warnings=no]
+  [if test -d "$srcdir"/.git; then
+     gl_gcc_warnings=yes
+   else
+     gl_gcc_warnings=no
+   fi]
 )
 
 if test "$gl_gcc_warnings" = yes; then
@@ -231,6 +236,7 @@ if test "$gl_gcc_warnings" = yes; then
   nw="$nw -Wstrict-overflow"        # expr.c, pr.c, tr.c, factor.c
   nw="$nw -Wstack-protector"        # libparted/label/gpt.c
   # ?? -Wstrict-overflow
+  nw="$nw -Wsuggest-attribute=format" # suggests to use gnu_printf for vsnprintf
 
   gl_MANYWARN_ALL_GCC([ws])
   gl_MANYWARN_COMPLEMENT([ws], [$ws], [$nw])

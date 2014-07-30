@@ -1,23 +1,23 @@
-From 820c5de97411153256e7ff29d8c46e68b6ed5220 Mon Sep 17 00:00:00 2001
+From 9e70755f48d4587b476170b4e125d57a06ce25c7 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:09:48 +0000
 Subject: Add ZFS support
 
-Last-Update: 2014-07-07
+Last-Update: 2014-07-30
 
 Patch-Name: zfs.patch
 ---
  libparted/fs/Makefile.am |  3 +-
- libparted/fs/zfs/zfs.c   | 81 ++++++++++++++++++++++++++++++++++++++++++++++++
+ libparted/fs/zfs/zfs.c   | 77 ++++++++++++++++++++++++++++++++++++++++++++++++
  libparted/libparted.c    |  4 +++
- 3 files changed, 87 insertions(+), 1 deletion(-)
+ 3 files changed, 83 insertions(+), 1 deletion(-)
  create mode 100644 libparted/fs/zfs/zfs.c
 
 diff --git a/libparted/fs/Makefile.am b/libparted/fs/Makefile.am
-index a8fb313..3dab52e 100644
+index d3cc8bc..de607a2 100644
 --- a/libparted/fs/Makefile.am
 +++ b/libparted/fs/Makefile.am
-@@ -50,7 +50,8 @@ libfs_la_SOURCES =		\
+@@ -48,7 +48,8 @@ libfs_la_SOURCES =		\
    xfs/platform_defs.h		\
    xfs/xfs.c			\
    xfs/xfs_sb.h			\
@@ -29,10 +29,10 @@ index a8fb313..3dab52e 100644
  
 diff --git a/libparted/fs/zfs/zfs.c b/libparted/fs/zfs/zfs.c
 new file mode 100644
-index 0000000..24cee7d
+index 0000000..47cd677
 --- /dev/null
 +++ b/libparted/fs/zfs/zfs.c
-@@ -0,0 +1,81 @@
+@@ -0,0 +1,77 @@
 +/*
 +    libparted - a library for manipulating disk partitions
 +    Copyright (C) 2000, 2007, 2009-2010 Free Software Foundation, Inc.
@@ -65,8 +65,6 @@ index 0000000..24cee7d
 +
 +#include <unistd.h>
 +
-+#define ZFS_BLOCK_SIZES       ((int[2]){512, 0})
-+
 +#define ZFS_SIGNATURE		0x00bab10c
 +
 +struct zfs_uberblock
@@ -78,10 +76,9 @@ index 0000000..24cee7d
 +static PedGeometry*
 +zfs_probe (PedGeometry* geom)
 +{
-+	uint8_t	buf[512];
-+	struct zfs_uberblock *uber = (void *) buf;
++	struct zfs_uberblock *uber = alloca (geom->dev->sector_size);
 +
-+	if (!ped_geometry_read (geom, buf, 256, 1))
++	if (!ped_geometry_read (geom, uber, 256, 1))
 +		return 0;
 +
 +	if ((le64toh (uber->signature) == ZFS_SIGNATURE
@@ -100,7 +97,6 @@ index 0000000..24cee7d
 +	next:	NULL,
 +	ops:	&zfs_ops,
 +	name:	"zfs",
-+	block_sizes: ZFS_BLOCK_SIZES
 +};
 +
 +void
@@ -115,7 +111,7 @@ index 0000000..24cee7d
 +	ped_file_system_type_unregister (&zfs_type);
 +}
 diff --git a/libparted/libparted.c b/libparted/libparted.c
-index 6b3e4f4..1fed49e 100644
+index d5cbb3a..fe0c7fe 100644
 --- a/libparted/libparted.c
 +++ b/libparted/libparted.c
 @@ -110,6 +110,7 @@ extern void ped_file_system_fat_init (void);
@@ -134,19 +130,16 @@ index 6b3e4f4..1fed49e 100644
  }
  
  extern void ped_disk_aix_done ();
-@@ -188,6 +190,7 @@ extern void ped_file_system_reiserfs_done (void);
- extern void ped_file_system_ufs_done (void);
+@@ -189,10 +191,12 @@ extern void ped_file_system_ufs_done (void);
  extern void ped_file_system_xfs_done (void);
+ extern void ped_file_system_amiga_done (void);
  extern void ped_file_system_btrfs_done (void);
 +extern void ped_file_system_zfs_done (void);
- extern void ped_file_system_amiga_done (void);
  
  static void
-@@ -204,6 +207,7 @@ done_file_system_types ()
- 	ped_file_system_ufs_done ();
- 	ped_file_system_xfs_done ();
- 	ped_file_system_btrfs_done ();
+ done_file_system_types ()
+ {
 +	ped_file_system_zfs_done ();
- 	ped_file_system_amiga_done ();
- }
- 
+ 	ped_file_system_nilfs2_done ();
+ 	ped_file_system_ext2_done ();
+ 	ped_file_system_fat_done ();

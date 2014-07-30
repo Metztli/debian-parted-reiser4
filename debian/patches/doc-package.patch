@@ -1,4 +1,4 @@
-From 58546144474a46dd7ff98684c2fff5a83edccc99 Mon Sep 17 00:00:00 2001
+From c094ca84e656d6f219b0ca9a9399439d677057bb Mon Sep 17 00:00:00 2001
 From: Timshel Knoll <timshel@debian.org>
 Date: Fri, 28 Mar 2014 17:09:39 +0000
 Subject: Small documentation fixes
@@ -11,10 +11,10 @@ Patch-Name: doc-package.patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/doc/C/parted.8 b/doc/C/parted.8
-index a9f73f5..375b0b3 100644
+index 689011c..e2d864b 100644
 --- a/doc/C/parted.8
 +++ b/doc/C/parted.8
-@@ -130,7 +130,7 @@ The \fIparted\fP program is fully documented in the
+@@ -134,7 +134,7 @@ The \fIparted\fP program is fully documented in the
  .BR info(1)
  format
  .IR "GNU partitioning software"

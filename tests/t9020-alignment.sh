@@ -1,7 +1,7 @@
 #!/bin/sh
 # verify that new alignment-querying functions work
 
-# Copyright (C) 2009-2012 Free Software Foundation, Inc.
+# Copyright (C) 2009-2014 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ scsi_debug_setup_ physblk_exp=3 lowest_aligned=7 num_parts=4 > dev-name ||
 scsi_dev=$(cat dev-name)
 
 # print alignment info
-"$abs_srcdir/print-align" $scsi_dev > out 2>&1 || fail=1
+../print-align $scsi_dev > out 2>&1 || fail=1
 
 compare exp out || fail=1
 

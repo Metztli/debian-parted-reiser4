@@ -1,6 +1,6 @@
 /*
     parted - a frontend to libparted
-    Copyright (C) 1999-2002, 2006-2012 Free Software Foundation, Inc.
+    Copyright (C) 1999-2002, 2006-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -647,15 +647,7 @@ exception_handler (PedException* ex)
 
         got_ctrl_c = 0;
 
-        do {
-                opt = command_line_get_ex_opt ("", ex->options);
-        } while (opt == PED_EXCEPTION_UNHANDLED
-                 && (isatty (0) || pretend_input_tty) && !got_ctrl_c);
-
-        if (got_ctrl_c) {
-                got_ctrl_c = 0;
-                opt = PED_EXCEPTION_UNHANDLED;
-        }
+	opt = command_line_get_ex_opt ("", ex->options);
 
         return opt;
 }
@@ -900,6 +892,10 @@ command_line_get_word (const char* prompt, const char* def,
 
                 command_line_prompt_words (prompt, def, possibilities,
                                            multi_word);
+                if (got_ctrl_c) {
+                        got_ctrl_c = 0;
+                        return NULL;
+                }
         } while (command_line_get_word_count ());
 
         return NULL;
@@ -1561,7 +1557,7 @@ print_using_dev (PedDevice* dev)
 }
 
 int
-interactive_mode (PedDevice** dev, Command* cmd_list[])
+interactive_mode (PedDevice** dev, PedDisk** disk, Command* cmd_list[])
 {
         StrList*    list;
         StrList*    command_names = command_get_names (cmd_list);
@@ -1581,7 +1577,7 @@ interactive_mode (PedDevice** dev, Command* cmd_list[])
                 Command*    cmd;
 
                 while (!command_line_get_word_count ()) {
-                        if (feof (stdin)) {
+                        if (got_ctrl_c) {
                                 putchar ('\n');
                                 return 1;
                         }
@@ -1594,7 +1590,7 @@ interactive_mode (PedDevice** dev, Command* cmd_list[])
                         cmd = command_get (commands, word);
                         free (word);
                         if (cmd) {
-                                if (!command_run (cmd, dev))
+                                if (!command_run (cmd, dev, disk))
                                         command_line_flush ();
                         } else
                                 print_commands_help ();
@@ -1606,7 +1602,7 @@ interactive_mode (PedDevice** dev, Command* cmd_list[])
 
 
 int
-non_interactive_mode (PedDevice** dev, Command* cmd_list[],
+non_interactive_mode (PedDevice** dev, PedDisk **disk, Command* cmd_list[],
                       int argc, char* argv[])
 {
         int         i;
@@ -1637,7 +1633,7 @@ non_interactive_mode (PedDevice** dev, Command* cmd_list[],
                         goto error;
                 }
 
-                if (!command_run (cmd, dev))
+                if (!command_run (cmd, dev, disk))
                         goto error;
         }
         return 1;

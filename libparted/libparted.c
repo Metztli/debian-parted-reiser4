@@ -1,6 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 1999-2001, 2007-2012 Free Software Foundation, Inc.
+    Copyright (C) 1999-2001, 2007-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -189,13 +189,14 @@ extern void ped_file_system_ntfs_done (void);
 extern void ped_file_system_reiserfs_done (void);
 extern void ped_file_system_ufs_done (void);
 extern void ped_file_system_xfs_done (void);
+extern void ped_file_system_amiga_done (void);
 extern void ped_file_system_btrfs_done (void);
 extern void ped_file_system_zfs_done (void);
-extern void ped_file_system_amiga_done (void);
 
 static void
 done_file_system_types ()
 {
+	ped_file_system_zfs_done ();
 	ped_file_system_nilfs2_done ();
 	ped_file_system_ext2_done ();
 	ped_file_system_fat_done ();
@@ -206,9 +207,8 @@ done_file_system_types ()
 	ped_file_system_reiserfs_done ();
 	ped_file_system_ufs_done ();
 	ped_file_system_xfs_done ();
-	ped_file_system_btrfs_done ();
-	ped_file_system_zfs_done ();
 	ped_file_system_amiga_done ();
+	ped_file_system_btrfs_done ();
 }
 
 static void _done() __attribute__ ((destructor));

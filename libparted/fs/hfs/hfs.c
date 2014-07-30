@@ -1,6 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 2000, 2003-2005, 2007, 2009-2012 Free Software Foundation,
+    Copyright (C) 2000, 2003-2005, 2007, 2009-2014 Free Software Foundation,
     Inc.
 
     This program is free software; you can redistribute it and/or modify
@@ -44,10 +44,6 @@ uint8_t* hfsp_block = NULL;
 unsigned hfs_block_count;
 unsigned hfsp_block_count;
 
-#define HFS_BLOCK_SIZES       ((int[2]){512, 0})
-#define HFSP_BLOCK_SIZES       ((int[2]){512, 0})
-#define HFSX_BLOCK_SIZES       ((int[2]){512, 0})
-
 static PedFileSystemOps hfs_ops = {
 	probe:		hfs_probe,
 };
@@ -65,21 +61,18 @@ static PedFileSystemType hfs_type = {
 	next:	NULL,
 	ops:	&hfs_ops,
 	name:	"hfs",
-	block_sizes: HFS_BLOCK_SIZES
 };
 
 static PedFileSystemType hfsplus_type = {
 	next:	NULL,
 	ops:	&hfsplus_ops,
 	name:	"hfs+",
-	block_sizes: HFSP_BLOCK_SIZES
 };
 
 static PedFileSystemType hfsx_type = {
 	next:	NULL,
 	ops:	&hfsx_ops,
 	name:	"hfsx",
-	block_sizes: HFSX_BLOCK_SIZES
 };
 
 void

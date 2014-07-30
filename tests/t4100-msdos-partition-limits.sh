@@ -1,7 +1,7 @@
 #!/bin/sh
 # enforce limits on partition start sector and length
 
-# Copyright (C) 2008-2012 Free Software Foundation, Inc.
+# Copyright (C) 2008-2014 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,8 +37,7 @@ mp=`pwd`/mount-point
 n=4096
 
 # create an XFS file system
-dd if=/dev/zero of=$fs bs=1MB count=2 seek=20 || fail=1
-mkfs.xfs -f -q $fs || fail=1
+mkfs.xfs -dfile,name=$fs,size=100m || fail=1
 mkdir "$mp" || fail=1
 
 # Unmount upon interrupt, failure, etc., as well as upon normal completion.

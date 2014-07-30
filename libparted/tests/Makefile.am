@@ -1,5 +1,5 @@
 # This file is part of GNU Parted
-# Copyright (C) 1999-2001, 2007-2012 Free Software Foundation, Inc.
+# Copyright (C) 1999-2001, 2007-2014 Free Software Foundation, Inc.
 #
 # This file may be modified and/or distributed without restriction.
 
@@ -10,7 +10,8 @@ AM_CFLAGS = $(WARN_CFLAGS) $(WERROR_CFLAGS)
 
 LDADD = \
   $(top_builddir)/libparted/libparted.la \
-  $(CHECK_LIBS)
+  $(CHECK_LIBS) \
+  -lpthread
 
 AM_CPPFLAGS = \
   $(CHECK_CFLAGS) \

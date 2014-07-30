@@ -1,7 +1,7 @@
 #!/bin/sh
 # Probe Ext2, Ext3 and Ext4 file systems
 
-# Copyright (C) 2008-2012 Free Software Foundation, Inc.
+# Copyright (C) 2008-2014 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,29 +21,43 @@ require_512_byte_sector_size_
 
 dev=loop-file
 ss=$sector_size_
+n_sectors=$((257*1024))
 
-for type in ext2 ext3 ext4 nilfs2; do
+for type in ext2 ext3 ext4 btrfs xfs nilfs2 ntfs vfat hfsplus; do
 
-  ( mkfs.$type -V ) >/dev/null 2>&1 \
+  ( mkfs.$type 2>&1 | grep -i '^usage' ) > /dev/null \
       || { warn_ "$ME: no $type support"; continue; }
 
-  case $type in ext*) n_sectors=8000 force=-F;;
-      *) n_sectors=$((257*1024)) force=;; esac
+  fsname=$type
+  force=
+  case $type in
+      ext*) force=-F;;
+      xfs) force=-f;;
+      nilfs2) force=-f;;
+      ntfs) force=-F;;
+      vfat) fsname=fat16;;
+      hfsplus) fsname=hfs+;;
+  esac
 
   # create an $type file system
-  dd if=/dev/zero of=$dev bs=$ss count=$n_sectors >/dev/null || fail=1
-  mkfs.$type $force $dev || { warn_ $ME: mkfs.$type failed; fail=1; continue; }
+  if [ "$type" = "xfs" ]; then
+      # Work around a problem with s390
+      mkfs.xfs -ssize=$ss -dfile,name=$dev,size=${n_sectors}s || fail=1
+  else
+      dd if=/dev/null of=$dev bs=$ss seek=$n_sectors >/dev/null || fail=1
+      mkfs.$type $force $dev || { warn_ $ME: mkfs.$type failed; fail=1; continue; }
+  fi
 
   # probe the $type file system
   parted -m -s $dev u s print >out 2>&1 || fail=1
-  grep '^1:.*:'$type'::;$' out || { cat out; fail=1; }
-
+  grep '^1:.*:'$fsname'::;$' out || { cat out; fail=1; }
+  rm $dev
 done
 
 # Some features should indicate ext4 by themselves.
 for feature in uninit_bg flex_bg; do
   # create an ext3 file system
-  dd if=/dev/zero of=$dev bs=1024 count=4096 >/dev/null || fail=1
+  dd if=/dev/null of=$dev bs=1024 seek=4096 >/dev/null || fail=1
   mkfs.ext3 -F $dev >/dev/null || skip_ "mkfs.ext3 failed"
 
   # set the feature
@@ -52,6 +66,7 @@ for feature in uninit_bg flex_bg; do
   # probe the file system, which should now be ext4
   parted -m -s $dev u s print >out 2>&1 || fail=1
   grep '^1:.*:ext4::;$' out || fail=1
+  rm $dev
 done
 
 Exit $fail

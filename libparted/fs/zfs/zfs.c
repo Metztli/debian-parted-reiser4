@@ -30,8 +30,6 @@
 
 #include <unistd.h>
 
-#define ZFS_BLOCK_SIZES       ((int[2]){512, 0})
-
 #define ZFS_SIGNATURE		0x00bab10c
 
 struct zfs_uberblock
@@ -43,10 +41,9 @@ struct zfs_uberblock
 static PedGeometry*
 zfs_probe (PedGeometry* geom)
 {
-	uint8_t	buf[512];
-	struct zfs_uberblock *uber = (void *) buf;
+	struct zfs_uberblock *uber = alloca (geom->dev->sector_size);
 
-	if (!ped_geometry_read (geom, buf, 256, 1))
+	if (!ped_geometry_read (geom, uber, 256, 1))
 		return 0;
 
 	if ((le64toh (uber->signature) == ZFS_SIGNATURE
@@ -65,7 +62,6 @@ static PedFileSystemType zfs_type = {
 	next:	NULL,
 	ops:	&zfs_ops,
 	name:	"zfs",
-	block_sizes: ZFS_BLOCK_SIZES
 };
 
 void

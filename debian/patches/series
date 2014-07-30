@@ -1,7 +1,6 @@
 doc-package.patch
 preserve-hidden-parts.patch
 kfreebsd-gnu.patch
-btrfs.patch
 freebsd-ufs.patch
 zfs.patch
 freebsd-zvol.patch
@@ -10,15 +9,5 @@ kfreebsd_lvm.patch
 hurd-partition-path.patch
 hurd-reread.patch
 gptsync.patch
-dmraid.patch
-dm-part-sync.patch
 udevadm-settle.patch
-0001-parted-resizepart-command.patch
-0003-libparted-Add-support-for-BLKPG-ioctl-partition-resi.patch
-0004-parted-make-_partition_warn_busy-actually-a-warning-.patch
-avoid-disturbing-partitions.patch
-linux-specific-gpt-type.patch
-fix-loop-labels.patch
-gpt-prep.patch
-new-style-readline-typedef.patch
-fat-ntfs-large-sectors.patch
+fat-resize-large-sectors.patch

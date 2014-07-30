@@ -1,5 +1,6 @@
-parted (3.1-5) UNRELEASED; urgency=medium
+parted (3.2-1) UNRELEASED; urgency=medium
 
+  * New upstream release.
   * Drop currently-unused build-dependency on po4a (thanks, Johannes
     Schauer).
 

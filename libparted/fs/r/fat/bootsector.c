@@ -1,6 +1,6 @@
 /*
     libparted
-    Copyright (C) 1998-2000, 2002, 2004, 2007, 2009-2012 Free Software
+    Copyright (C) 1998-2000, 2002, 2004, 2007, 2009-2014 Free Software
     Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
@@ -44,15 +44,7 @@ fat_boot_sector_read (FatBootSector** bsp, const PedGeometry *geom)
 	if (!ped_geometry_read_alloc (geom, (void **)bsp, 0, 1))
 		return 0;
 	FatBootSector *bs = *bsp;
-
 	if (PED_LE16_TO_CPU (bs->boot_sign) != 0xAA55) {
-		ped_exception_throw (PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
-			_("File system has an invalid signature for a FAT "
-			  "file system."));
-		return 0;
-	}
-
-	if (!bs->system_id[0]) {
 		ped_exception_throw (PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
 			_("File system has an invalid signature for a FAT "
 			  "file system."));
@@ -288,11 +280,13 @@ fat_boot_sector_set_boot_code (FatBootSector* bs)
 }
 
 int
-fat_boot_sector_generate (FatBootSector* bs, const PedFileSystem* fs)
+fat_boot_sector_generate (FatBootSector** bsp, const PedFileSystem* fs)
 {
 	FatSpecific*	fs_info = FAT_SPECIFIC (fs);
 
-	PED_ASSERT (bs != NULL);
+	PED_ASSERT (bsp != NULL);
+	*bsp = ped_malloc (fs->geom->dev->sector_size);
+	FatBootSector *bs = *bsp;
 
 	memcpy (bs->system_id, "MSWIN4.1", 8);
 	bs->sector_size = PED_CPU_TO_LE16 (fs_info->logical_sector_size * 512);
@@ -391,11 +385,9 @@ fat_info_sector_read (FatInfoSector** isp, const PedFileSystem* fs)
 
 	PED_ASSERT (isp != NULL);
 
-	if (!ped_geometry_read_alloc (fs->geom, (void **)isp,
-				      fs_info->info_sector_offset, 1))
+	if (!ped_geometry_read_alloc (fs->geom, (void **)isp, fs_info->info_sector_offset, 1))
 		return 0;
 	FatInfoSector *is = *isp;
-
 	if (PED_LE32_TO_CPU (is->signature_2) != FAT32_INFO_MAGIC2) {
 		status = ped_exception_throw (PED_EXCEPTION_WARNING,
 				PED_EXCEPTION_IGNORE_CANCEL,
@@ -410,11 +402,13 @@ fat_info_sector_read (FatInfoSector** isp, const PedFileSystem* fs)
 }
 
 int
-fat_info_sector_generate (FatInfoSector* is, const PedFileSystem* fs)
+fat_info_sector_generate (FatInfoSector** isp, const PedFileSystem* fs)
 {
 	FatSpecific*	fs_info = FAT_SPECIFIC (fs);
 
-	PED_ASSERT (is != NULL);
+	PED_ASSERT (isp != NULL);
+	*isp = ped_malloc (fs->geom->dev->sector_size);
+	FatInfoSector *is = *isp;
 
 	fat_table_count_stats (fs_info->fat);
 

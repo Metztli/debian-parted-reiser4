@@ -1,6 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 2000, 2007, 2009-2012 Free Software Foundation, Inc.
+    Copyright (C) 2000, 2007, 2009-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,8 +30,6 @@
 
 #include <unistd.h>
 
-#define NTFS_BLOCK_SIZES       ((int[2]){512, 0})
-
 #define NTFS_SIGNATURE	"NTFS"
 
 PedGeometry*
@@ -58,7 +56,6 @@ static PedFileSystemType ntfs_type = {
 	next:	NULL,
 	ops:	&ntfs_ops,
 	name:	"ntfs",
-	block_sizes: NTFS_BLOCK_SIZES
 };
 
 void

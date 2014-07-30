@@ -1,5 +1,5 @@
 # This file is part of GNU Parted
-# Copyright (C) 1999-2001, 2007-2012 Free Software Foundation, Inc.
+# Copyright (C) 1999-2001, 2007-2014 Free Software Foundation, Inc.
 #
 # This file may be modified and/or distributed without restriction.
 
@@ -37,12 +37,13 @@ liblabels_la_SOURCES = \
 
 liblabels_la_LIBADD = $(OS_LIBS) $(INTLLIBS)
 
-INCLUDES = $(partedincludedir) $(INTLINCS)
+AM_CPPFLAGS = $(partedincludedir) $(INTLINCS)
 
+# Included by 'pt-tools.c', so needs to be built early.
 BUILT_SOURCES = pt-limit.c
 MAINTAINERCLEANFILES = $(BUILT_SOURCES)
-liblabels_la_SOURCES += pt-limit.gperf
-EXTRA_DIST = $(BUILT_SOURCES)
+# DOn't add this to '_SOURCES', because it's not to be compiled!
+EXTRA_DIST= pt-limit.c
 
 GPERF = gperf
 GPERF_OPTIONS = \
@@ -55,3 +56,4 @@ pt-limit.c: pt-limit.gperf
 	  > $@-tmp
 	chmod a-w $@-tmp
 	mv $@-tmp $@
+EXTRA_DIST += pt-limit.gperf

@@ -1,6 +1,6 @@
 /*
     libparted
-    Copyright (C) 1998-2001, 2007-2012 Free Software Foundation, Inc.
+    Copyright (C) 1998-2001, 2007-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -128,20 +128,16 @@ static PedFileSystemOps fat32_ops = {
 	probe:		fat_probe_fat32,
 };
 
-#define FAT_BLOCK_SIZES ((int[2]){512, 0})
-
 PedFileSystemType fat16_type = {
 	next:	        NULL,
 	ops:	        &fat16_ops,
 	name:	        "fat16",
-        block_sizes:    FAT_BLOCK_SIZES
 };
 
 PedFileSystemType fat32_type = {
 	next:	        NULL,
 	ops:	        &fat32_ops,
 	name:	        "fat32",
-        block_sizes:    FAT_BLOCK_SIZES
 };
 
 void

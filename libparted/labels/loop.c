@@ -1,6 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 1999-2000, 2007-2012 Free Software Foundation, Inc.
+    Copyright (C) 1999-2000, 2007-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -81,9 +81,22 @@ loop_alloc (const PedDevice* dev)
 	if (dev->length < 256)
 		return NULL;
 	PedDisk *disk = _ped_disk_alloc ((PedDevice*)dev, &loop_disk_type);
-	if (disk)
-		disk->disk_specific = (void *)0;
+	PED_ASSERT (disk != NULL);
+	PedGeometry *geom = ped_geometry_new (dev, 0, dev->length);
+	PED_ASSERT (geom != NULL);
+	PedPartition *part = ped_partition_new (disk, PED_PARTITION_NORMAL,
+						NULL, geom->start, geom->end);
+	PED_ASSERT (part != NULL);
+	ped_geometry_destroy (geom);
+	PedConstraint *constraint_any = ped_constraint_any (dev);
+	if (!ped_disk_add_partition (disk, part, constraint_any))
+		goto error;
+	ped_constraint_destroy (constraint_any);
 	return disk;
+ error:
+	ped_constraint_destroy (constraint_any);
+	ped_disk_destroy (disk);
+	return NULL;
 }
 
 static PedDisk*
@@ -134,13 +147,10 @@ loop_read (PedDisk* disk)
 	ped_geometry_destroy (geom);
 	if (!part)
 		goto error;
-	part->fs_type = fs_type;
 
 	if (!ped_disk_add_partition (disk, part, constraint_any))
 		goto error;
 	ped_constraint_destroy (constraint_any);
-	dev->loop = 1;
-	disk->disk_specific = (void *)1; /* don't rewrite label */
 	return 1;
 
 error_free_geom:
@@ -156,16 +166,15 @@ loop_write (const PedDisk* disk)
 {
 	size_t buflen = disk->dev->sector_size;
 	char *buf = alloca (buflen);
-	disk->dev->loop = 1;
-	/* only write label after creating it new */
-	if (disk->disk_specific)
+	PedPartition *part = ped_disk_get_partition (disk, 1);
+	/* if there is already a filesystem on the disk, we don't need to write the signature */
+	if (part && part->fs_type)
 		return 1;
-
-	memset (buf, 0, buflen);
-	strcpy (buf, LOOP_SIGNATURE);
-        if (!ped_device_write (disk->dev, buf, 0, 1))
+	if (!ped_device_read (disk->dev, buf, 0, 1))
 		return 0;
-	return 1;
+	strcpy (buf, LOOP_SIGNATURE);
+
+        return ped_device_write (disk->dev, buf, 0, 1);
 }
 #endif /* !DISCOVER_ONLY */
 

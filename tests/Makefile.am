@@ -16,6 +16,7 @@ TESTS = \
   t0202-gpt-pmbr.sh \
   t0203-gpt-tiny-device-abort.sh \
   t0203-gpt-shortened-device-primary-valid.sh \
+  t0203-gpt-create-on-min-sized-device.sh \
   t0205-gpt-list-clobbers-pmbr.sh \
   t0206-gpt-print-with-corrupt-primary-clobbers-pmbr.sh \
   t0207-IEC-binary-notation.sh \
@@ -26,14 +27,22 @@ TESTS = \
   t0212-gpt-many-partitions.sh \
   t0220-gpt-msftres.sh \
   t0250-gpt.sh \
+  t0251-gpt-unicode.sh \
   t0280-gpt-corrupt.sh \
+  t0281-gpt-grow.sh \
+  t0282-gpt-move-backup.sh \
+  t0283-overlap-partitions.sh \
   t0290-gptsync.sh \
   t0300-dos-on-gpt.sh \
+  t0301-overwrite-gpt-pmbr.sh \
+  t0350-mac-PT-increases-sector-size.sh \
   t0400-loop-clobber-infloop.sh \
   t0500-dup-clobber.sh \
   t0501-duplicate.sh \
   t1100-busy-label.sh \
   t1101-busy-partition.sh \
+  t1102-loop-label.sh \
+  t1104-remove-and-add-partition.sh \
   t1700-probe-fs.sh \
   t2200-dos-label-recog.sh \
   t2201-pc98-label-recog.sh \
@@ -43,6 +52,7 @@ TESTS = \
   t2500-freebsd-ufs.sh \
   t2500-probe-corrupt-hfs.sh \
   t3000-resize-fs.sh \
+  t3200-resize-partition.sh \
   t3200-type-change.sh \
   t3300-palo-prep.sh \
   t3310-flags.sh \
@@ -57,6 +67,10 @@ TESTS = \
   t5000-tags.sh \
   t6000-dm.sh \
   t6001-psep.sh \
+  t6002-dm-busy.sh \
+  t6003-dm-hide.sh \
+  t6004-dm-many-partitions.sh \
+  t6005-dm-uuid.sh \
   t6100-mdraid-partitions.sh \
   t7000-scripting.sh \
   t8000-loop.sh \
@@ -73,8 +87,9 @@ TESTS = \
   t9050-partition-table-types.sh
 
 EXTRA_DIST = \
-  $(TESTS) lvm-utils.sh t-local.sh t-lvm.sh \
-  init.cfg init.sh t-lib-helpers.sh gpt-header-munge
+  $(TESTS) t-local.sh t-lvm.sh \
+  init.cfg init.sh t-lib-helpers.sh gpt-header-munge \
+  gpt-header-move msdos-overlap
 
 check_PROGRAMS = print-align print-max dup-clobber duplicate fs-resize
 fs_resize_LDADD = \
@@ -108,16 +123,11 @@ TESTS_ENVIRONMENT =				\
   srcdir='$(srcdir)'				\
   top_srcdir='$(top_srcdir)'			\
   AWK='$(AWK)'					\
-  CC='$(CC)'					\
-  MAKE=$(MAKE)					\
   PACKAGE_BUGREPORT='$(PACKAGE_BUGREPORT)'	\
   PACKAGE_VERSION=$(PACKAGE_VERSION)		\
   CONFIG_HEADER='$(abs_top_builddir)/lib/config.h' \
   ENABLE_DEVICE_MAPPER=$(ENABLE_DEVICE_MAPPER)	\
   PARTED_TEST_NAME=`basename '$(abs_srcdir)'`,`echo $$tst|sed 's,^\./,,;s,/,-,g'`\
-  PERL='$(PERL)'				\
-  PREFERABLY_POSIX_SHELL='$(PREFERABLY_POSIX_SHELL)' \
-  REPLACE_GETCWD=$(REPLACE_GETCWD)		\
   PATH='$(abs_top_builddir)/parted$(PATH_SEPARATOR)'"$$PATH" \
   VERSION=$(VERSION)				\
   ; 9>&2

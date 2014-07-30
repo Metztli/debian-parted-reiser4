@@ -13,7 +13,7 @@ Build-Depends:
  dh-exec,
  libncurses-dev | libncurses5-dev,
  libreadline-dev | libreadline6-dev,
- libdevmapper-dev (>= 2:1.02.33) [linux-any],
+ libdevmapper-dev (>= 2:1.02.39) [linux-any],
  uuid-dev,
  gettext,
  texinfo (>= 4.2),
@@ -22,6 +22,8 @@ Build-Depends:
  pkg-config,
  check,
  dh-autoreconf,
+ autoconf (>= 2.63),
+ automake (>= 1:1.11.6),
  autopoint
 
 Package: parted

@@ -1,4 +1,4 @@
-From 763da4e1f8a94a4736e15784d019e5ce8f78c921 Mon Sep 17 00:00:00 2001
+From e907ef5ece2c020bf9eda7efd9b97a055ce8595d Mon Sep 17 00:00:00 2001
 From: Viktor Vasilev <Viktor Vasilev>
 Date: Fri, 28 Mar 2014 17:09:42 +0000
 Subject: Add GNU/kFreeBSD support
@@ -22,10 +22,10 @@ Patch-Name: kfreebsd-gnu.patch
  create mode 100644 libparted/arch/freebsd.c
 
 diff --git a/configure.ac b/configure.ac
-index 1444279..0fbd8be 100644
+index 436d0e2..038ebdc 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -60,6 +60,7 @@ case "$host_os" in
+@@ -61,6 +61,7 @@ case "$host_os" in
  	linux*) OS=linux ;;
  	gnu*)	OS=gnu ;;
  	beos*)	OS=beos ;;
@@ -33,7 +33,7 @@ index 1444279..0fbd8be 100644
  	*)	AC_MSG_ERROR([Unknown or unsupported OS "$host_os".  Only "linux", "gnu" and "beos" are supported in this version of GNU Parted.]) ;;
  esac
  AC_SUBST([OS])
-@@ -267,6 +268,7 @@ AC_CHECK_SIZEOF([off_t], [64], [
+@@ -273,6 +274,7 @@ AC_CHECK_SIZEOF([off_t], [64], [
  	#include <sys/types.h>
  	#include <unistd.h>
  ])
@@ -41,7 +41,7 @@ index 1444279..0fbd8be 100644
  
  AM_ENABLE_SHARED
  if test "$OS" = linux && test $ac_cv_sizeof_off_t -lt 8; then
-@@ -505,7 +507,7 @@ If you can't find one try:
+@@ -511,7 +513,7 @@ If you can't find one try:
          http://web.mit.edu/tytso/www/linux/e2fsprogs.html])]
  )
  
@@ -50,7 +50,7 @@ index 1444279..0fbd8be 100644
  AC_CHECK_HEADERS([linux/ext2_fs.h])
  
  dnl required for libparted/llseek.c  (TODO: make linux-x86 only)
-@@ -564,7 +566,9 @@ AC_C_CONST
+@@ -570,7 +572,9 @@ AC_C_CONST
  AC_C_RESTRICT
  
  dnl Checks for library functions.
@@ -62,7 +62,7 @@ index 1444279..0fbd8be 100644
  
  dnl NOTE: We need to remove the gl_cv_ignore_unused_libraries flag if we
 diff --git a/libparted/Makefile.am b/libparted/Makefile.am
-index 7cf35b2..6f09bef 100644
+index edc5f2e..b410e64 100644
 --- a/libparted/Makefile.am
 +++ b/libparted/Makefile.am
 @@ -47,7 +47,8 @@ libparted_la_SOURCES  = debug.c			\
@@ -1336,7 +1336,7 @@ index 0000000..52f5293
 +	disk_ops:	&freebsd_disk_ops
 +};
 diff --git a/libparted/architecture.c b/libparted/architecture.c
-index 3b033a1..ede59e2 100644
+index df0f381..8c31fba 100644
 --- a/libparted/architecture.c
 +++ b/libparted/architecture.c
 @@ -34,6 +34,9 @@ ped_set_architecture ()
@@ -1367,7 +1367,7 @@ index 2b55752..01a06df 100644
  #include <stdlib.h>
  #include <string.h>
 diff --git a/libparted/labels/bsd.c b/libparted/labels/bsd.c
-index 3970623..f5ba68a 100644
+index a8525a4..16dba31 100644
 --- a/libparted/labels/bsd.c
 +++ b/libparted/labels/bsd.c
 @@ -26,6 +26,7 @@
@@ -1379,7 +1379,7 @@ index 3970623..f5ba68a 100644
  #if ENABLE_NLS
  #  include <libintl.h>
 diff --git a/libparted/labels/sun.c b/libparted/labels/sun.c
-index c7a11b5..4d135fc 100644
+index b23ff86..0fc514c 100644
 --- a/libparted/labels/sun.c
 +++ b/libparted/labels/sun.c
 @@ -25,6 +25,7 @@

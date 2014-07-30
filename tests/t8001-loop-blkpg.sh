@@ -1,7 +1,7 @@
 #!/bin/sh
 # Test support for partitions on loop devices
 
-# Copyright (C) 2008-2012 Free Software Foundation, Inc.
+# Copyright (C) 2008-2014 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 require_root_
 require_udevadm_settle_
+lvm_init_root_dir_
 
 cleanup_fn_()
 {
@@ -27,21 +28,14 @@ cleanup_fn_()
     && { udevadm settle --timeout=3; losetup -d "$loopdev"; }
 }
 
-# If the loop module is loaded, unload it first
-if lsmod | grep '^loop[[:space:]]'; then
-    rmmod loop || fail=1
-fi
-
-# Insert loop module with max_part > 1
-modprobe loop max_part=7 || fail=1
-
 # Create backing file
 dd if=/dev/zero of=backing_file bs=1M count=4 >/dev/null 2>&1 || fail=1
 
 # Set up loop device on top of backing file
-loopdev=$(losetup -f --show backing_file)
+loopdev=$(loop_setup_ backing_file)
 test -z "$loopdev" && fail=1
 
+# Skip this test if loop devices are not partitionable.
 require_partitionable_loop_device_ $loopdev
 
 # Expect this to succeed
