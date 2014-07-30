@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: parted 3.0\n"
 "Report-Msgid-Bugs-To: bug-parted@gnu.org\n"
-"POT-Creation-Date: 2012-03-02 17:52+0100\n"
+"POT-Creation-Date: 2014-07-28 23:04-0400\n"
 "PO-Revision-Date: 2011-06-01 13:35+0100\n"
 "Last-Translator: Nicolas Provost <nprovost@quadriv.com>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -32,7 +32,7 @@ msgstr "argument ambigu %s pour %s"
 msgid "Valid arguments are:"
 msgstr "Arguments valides : "
 
-#: lib/closeout.c:112 libparted/labels/fdasd.c:107
+#: lib/closeout.c:112 libparted/labels/fdasd.c:151
 msgid "write error"
 msgstr "erreur d'écriture"
 
@@ -116,83 +116,83 @@ msgstr "%s : l'option '-W %s' requiert un argument\n"
 #. If you don't know what to put here, please see
 #. <http://en.wikipedia.org/wiki/Quotation_marks_in_other_languages>
 #. and use glyphs suitable for your language.
-#: lib/quotearg.c:311
+#: lib/quotearg.c:312
 msgid "`"
 msgstr "«"
 
-#: lib/quotearg.c:312
+#: lib/quotearg.c:313
 msgid "'"
 msgstr "»"
 
-#: lib/regcomp.c:130
+#: lib/regcomp.c:131
 msgid "Success"
 msgstr "Succès"
 
-#: lib/regcomp.c:133
+#: lib/regcomp.c:134
 msgid "No match"
 msgstr "Non trouvé"
 
-#: lib/regcomp.c:136
+#: lib/regcomp.c:137
 msgid "Invalid regular expression"
 msgstr "Expression régulière incorrecte"
 
-#: lib/regcomp.c:139
+#: lib/regcomp.c:140
 msgid "Invalid collation character"
 msgstr "Suite de caractères invalide"
 
-#: lib/regcomp.c:142
+#: lib/regcomp.c:143
 msgid "Invalid character class name"
 msgstr "Nom de classe de caractères invalide"
 
-#: lib/regcomp.c:145
+#: lib/regcomp.c:146
 msgid "Trailing backslash"
 msgstr "Problème d'antislash"
 
-#: lib/regcomp.c:148
+#: lib/regcomp.c:149
 msgid "Invalid back reference"
 msgstr "Référence invalide"
 
-#: lib/regcomp.c:151
+#: lib/regcomp.c:152
 msgid "Unmatched [ or [^"
 msgstr "Non trouvé : [ ou [^"
 
-#: lib/regcomp.c:154
+#: lib/regcomp.c:155
 msgid "Unmatched ( or \\("
 msgstr "Non trouvé : ( ou \\("
 
-#: lib/regcomp.c:157
+#: lib/regcomp.c:158
 msgid "Unmatched \\{"
 msgstr "Non trouvé : \\{"
 
-#: lib/regcomp.c:160
+#: lib/regcomp.c:161
 msgid "Invalid content of \\{\\}"
 msgstr "Contenu invalide de \\{\\}"
 
-#: lib/regcomp.c:163
+#: lib/regcomp.c:164
 msgid "Invalid range end"
 msgstr "Nombre ou intervalle invalide."
 
-#: lib/regcomp.c:166
+#: lib/regcomp.c:167
 msgid "Memory exhausted"
 msgstr "Mémoire épuisée"
 
-#: lib/regcomp.c:169
+#: lib/regcomp.c:170
 msgid "Invalid preceding regular expression"
 msgstr "L'expression régulière précédente est incorrecte"
 
-#: lib/regcomp.c:172
+#: lib/regcomp.c:173
 msgid "Premature end of regular expression"
 msgstr "Fin prématurée de l'expression régulière"
 
-#: lib/regcomp.c:175
+#: lib/regcomp.c:176
 msgid "Regular expression too big"
 msgstr "Expression régulière trop longue"
 
-#: lib/regcomp.c:178
+#: lib/regcomp.c:179
 msgid "Unmatched ) or \\)"
 msgstr "Non trouvé : ) ou \\)"
 
-#: lib/regcomp.c:703
+#: lib/regcomp.c:707
 msgid "No previous regular expression"
 msgstr "Expression régulière manquante"
 
@@ -202,7 +202,7 @@ msgstr "Expression régulière manquante"
 #. To enquire the regular expression that your system uses for this
 #. purpose, you can use the command
 #. locale -k LC_MESSAGES | grep '^yesexpr='
-#: lib/rpmatch.c:147
+#: lib/rpmatch.c:150
 msgid "^[yY]"
 msgstr "^[oO]"
 
@@ -212,7 +212,7 @@ msgstr "^[oO]"
 #. To enquire the regular expression that your system uses for this
 #. purpose, you can use the command
 #. locale -k LC_MESSAGES | grep '^noexpr='
-#: lib/rpmatch.c:160
+#: lib/rpmatch.c:163
 msgid "^[nN]"
 msgstr "^[nN]"
 
@@ -413,60 +413,60 @@ msgid "Disk Image"
 msgstr "Image Disque"
 
 #: libparted/arch/beos.c:346 libparted/arch/gnu.c:277
-#: libparted/arch/linux.c:1558
+#: libparted/arch/linux.c:1639
 #, c-format
 msgid "Error opening %s: %s"
 msgstr "Erreur pendant l'ouverture de %s: %s"
 
 #: libparted/arch/beos.c:357 libparted/arch/gnu.c:287
-#: libparted/arch/linux.c:1569
+#: libparted/arch/linux.c:1650
 #, c-format
 msgid "Unable to open %s read-write (%s).  %s has been opened read-only."
 msgstr ""
 "Impossible d'ouvrir %s en lecture-écriture (%s). %s a été ouvert en lecture "
 "seule."
 
-#: libparted/arch/beos.c:419 libparted/arch/linux.c:1727
+#: libparted/arch/beos.c:419 libparted/arch/linux.c:1806
 #, c-format
 msgid "%s during seek for read on %s"
 msgstr "%s lors d'un positionnement pour lecture sur %s"
 
 #: libparted/arch/beos.c:452 libparted/arch/gnu.c:465 libparted/arch/gnu.c:564
-#: libparted/arch/gnu.c:692 libparted/arch/linux.c:1687
-#: libparted/arch/linux.c:1768
+#: libparted/arch/gnu.c:692 libparted/arch/linux.c:1766
+#: libparted/arch/linux.c:1847
 #, c-format
 msgid "%s during read on %s"
 msgstr "%s lors de la lecture sur %s"
 
 #: libparted/arch/beos.c:488 libparted/arch/gnu.c:525
-#: libparted/arch/linux.c:1844
+#: libparted/arch/linux.c:1923
 #, c-format
 msgid "Can't write to %s, because it is opened read-only."
 msgstr "Ne peut écrire sur %s car il est ouvert en lecture seule."
 
-#: libparted/arch/beos.c:504 libparted/arch/linux.c:1869
+#: libparted/arch/beos.c:504 libparted/arch/linux.c:1948
 #, c-format
 msgid "%s during seek for write on %s"
 msgstr "%s lors d'un positionnement pour écriture sur %s"
 
 #: libparted/arch/beos.c:541 libparted/arch/gnu.c:601 libparted/arch/gnu.c:646
-#: libparted/arch/gnu.c:723 libparted/arch/linux.c:1817
-#: libparted/arch/linux.c:1911 libparted/arch/linux.c:1983
+#: libparted/arch/gnu.c:723 libparted/arch/linux.c:1896
+#: libparted/arch/linux.c:1990 libparted/arch/linux.c:2062
 #, c-format
 msgid "%s during write on %s"
 msgstr "%s lors de l'écriture sur %s"
 
-#: partprobe/partprobe.c:137
+#: partprobe/partprobe.c:143
 #, c-format
 msgid "Try `%s --help' for more information.\n"
 msgstr "Essayez `%s --help' pour plus d'informations.\n"
 
-#: partprobe/partprobe.c:141
+#: partprobe/partprobe.c:147
 #, c-format
 msgid "Usage: %s [OPTION] [DEVICE]...\n"
 msgstr "Usage: %s [OPTION] [PERIPHERIQUE]...\n"
 
-#: partprobe/partprobe.c:142
+#: partprobe/partprobe.c:148
 msgid ""
 "Inform the operating system about partition table changes.\n"
 "\n"
@@ -483,7 +483,7 @@ msgstr ""
 "  -h, --help       affiche l'aide et quitte\n"
 "  -v, --version    affiche les informations de version et quitte\n"
 
-#: partprobe/partprobe.c:150
+#: partprobe/partprobe.c:156
 msgid ""
 "\n"
 "When no DEVICE is given, probe all partitions.\n"
@@ -491,7 +491,7 @@ msgstr ""
 "\n"
 "Quand aucun PERIPHERIQUE n'est précisé, teste toutes les partitions.\n"
 
-#: partprobe/partprobe.c:154
+#: partprobe/partprobe.c:160
 #, c-format
 msgid ""
 "\n"
@@ -538,7 +538,7 @@ msgstr ""
 "ne connaît rien des modifications effectuées. Vous devriez redémarrer "
 "l'ordinateur avant de faire quoi que ce soit avec %s."
 
-#: libparted/arch/gnu.c:396 parted/parted.c:2140
+#: libparted/arch/gnu.c:396 parted/parted.c:2262
 msgid ""
 "You should reinstall your boot loader before rebooting.  Read section 4 of "
 "the Parted User documentation for more information."
@@ -552,17 +552,17 @@ msgstr ""
 msgid "%s trying to sync %s to disk"
 msgstr "%s essaie de synchroniser %s sur le disque"
 
-#: libparted/arch/linux.c:529
+#: libparted/arch/linux.c:622
 #, c-format
 msgid "Could not stat device %s - %s."
 msgstr "Ne peut évaluer le statut du périphérique %s - %s."
 
-#: libparted/arch/linux.c:586
+#: libparted/arch/linux.c:679
 #, c-format
 msgid "Unable to determine the dm type of %s."
 msgstr "Impossible de déterminer le type dm de %s."
 
-#: libparted/arch/linux.c:677
+#: libparted/arch/linux.c:757
 #, c-format
 msgid ""
 "Could not determine sector size for %s: %s.\n"
@@ -571,7 +571,7 @@ msgstr ""
 "Impossible de déterminer la taille des secteurs de %s : %s.\n"
 "Utilisation de la taille des secteurs par défaut (%lld)."
 
-#: libparted/arch/linux.c:698
+#: libparted/arch/linux.c:778
 #, c-format
 msgid ""
 "Could not determine physical sector size for %s.\n"
@@ -580,21 +580,21 @@ msgstr ""
 "Impossible de déterminer la taille des secteurs physiques de %s.\n"
 "Utilisation de la taille des secteurs logiques (%lld)."
 
-#: libparted/arch/linux.c:754
+#: libparted/arch/linux.c:834
 #, c-format
 msgid "Unable to determine the size of %s (%s)."
 msgstr "Impossible de déterminer la taille de %s (%s)."
 
-#: libparted/arch/linux.c:840
+#: libparted/arch/linux.c:920
 #, c-format
 msgid "Could not get identity of device %s - %s"
 msgstr "Impossible d'obtenir l'identité du périphérique %s - %s"
 
-#: libparted/arch/linux.c:849
+#: libparted/arch/linux.c:929
 msgid "Generic IDE"
 msgstr "IDE générique"
 
-#: libparted/arch/linux.c:870
+#: libparted/arch/linux.c:950
 #, c-format
 msgid ""
 "Device %s has multiple (%d) logical sectors per physical sector.\n"
@@ -609,12 +609,12 @@ msgstr ""
 "ext2/3.\n"
 "Merci de consulter le site web pour des informations à jour."
 
-#: libparted/arch/linux.c:1047
+#: libparted/arch/linux.c:1127
 #, c-format
 msgid "Error initialising SCSI device %s - %s"
 msgstr "Erreur d'initialisation du périphérique SCSI %s - %s"
 
-#: libparted/arch/linux.c:1111
+#: libparted/arch/linux.c:1191
 #, c-format
 msgid ""
 "The device %s is so small that it cannot possibly store a file system or "
@@ -624,7 +624,7 @@ msgstr ""
 "système de fichiers ou une table de partition. Peut-être avez-vous "
 "sélectionné le mauvais périphérique ?"
 
-#: libparted/arch/linux.c:1224
+#: libparted/arch/linux.c:1304
 #, c-format
 msgid ""
 "Unable to determine geometry of file/device %s.  You should not use Parted "
@@ -633,87 +633,87 @@ msgstr ""
 "Impossible de déterminer la géométrie du fichier/périphérique %s. Vous ne "
 "devriez pas utiliser Parted sans VRAIMENT savoir ce que vous faites !"
 
-#: libparted/arch/linux.c:1284
+#: libparted/arch/linux.c:1364
 msgid "Generic SD/MMC Storage Card"
 msgstr "Carte de stockage SD/MMC générique"
 
-#: libparted/arch/linux.c:1337
+#: libparted/arch/linux.c:1421
 msgid "DAC960 RAID controller"
 msgstr "Contrôleur RAID DAC960"
 
-#: libparted/arch/linux.c:1342
+#: libparted/arch/linux.c:1426
 msgid "Promise SX8 SATA Device"
 msgstr "Périphérique Promise SX8 SATA"
 
-#: libparted/arch/linux.c:1347
+#: libparted/arch/linux.c:1431
 msgid "ATA over Ethernet Device"
 msgstr "Périph. ATA sur Ethernet"
 
-#: libparted/arch/linux.c:1353
+#: libparted/arch/linux.c:1437
 msgid "IBM S390 DASD drive"
 msgstr "Disque IBM S390 DASD"
 
-#: libparted/arch/linux.c:1359
+#: libparted/arch/linux.c:1443
 msgid "IBM iSeries Virtual DASD"
 msgstr "IBM iSeries Virtual DASD"
 
-#: libparted/arch/linux.c:1364
+#: libparted/arch/linux.c:1448
 msgid "Compaq Smart Array"
 msgstr "Compaq Smart Array"
 
-#: libparted/arch/linux.c:1369
+#: libparted/arch/linux.c:1453
 msgid "ATARAID Controller"
 msgstr "Contrôleur ATARAID"
 
-#: libparted/arch/linux.c:1374
+#: libparted/arch/linux.c:1458
 msgid "I2O Controller"
 msgstr "Contrôleur I2O"
 
-#: libparted/arch/linux.c:1379
+#: libparted/arch/linux.c:1463
 msgid "User-Mode Linux UBD"
 msgstr "User-Mode Linux UBD"
 
-#: libparted/arch/linux.c:1389
+#: libparted/arch/linux.c:1473
 #, fuzzy
 msgid "Loopback device"
 msgstr "Périphérique source ?"
 
-#: libparted/arch/linux.c:1397
+#: libparted/arch/linux.c:1481
 #, c-format
 msgid "Linux device-mapper (%s)"
 msgstr "Mappeur de périphériques Linux (%s)"
 
-#: libparted/arch/linux.c:1408
+#: libparted/arch/linux.c:1492
 msgid "Xen Virtual Block Device"
 msgstr "Périphérique par blocs virtuel Xen"
 
-#: libparted/arch/linux.c:1413
+#: libparted/arch/linux.c:1497
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: libparted/arch/linux.c:1422
+#: libparted/arch/linux.c:1506
 msgid "Virtio Block Device"
 msgstr "Périphérique par blocs Virtio"
 
-#: libparted/arch/linux.c:1427
+#: libparted/arch/linux.c:1511
 msgid "Linux Software RAID Array"
 msgstr "Grappe RAID logiciel Linux"
 
-#: libparted/arch/linux.c:1434
+#: libparted/arch/linux.c:1518
 msgid "ped_device_new()  Unsupported device type"
 msgstr "ped_device_new()  Type de périphérique non supporté"
 
-#: libparted/arch/linux.c:1531 libparted/arch/linux.c:1603
+#: libparted/arch/linux.c:1612 libparted/arch/linux.c:1682
 #, c-format
 msgid "Error fsyncing/closing %s: %s"
 msgstr "Erreur de synchronisation/fermeture %s: %s"
 
-#: libparted/arch/linux.c:1767
+#: libparted/arch/linux.c:1846
 #, fuzzy, c-format
 msgid "%0.0send of file while reading %s"
 msgstr "fin de fichier atteinte en lisant %s"
 
-#: libparted/arch/linux.c:2388
+#: libparted/arch/linux.c:2564
 #, c-format
 msgid ""
 "Error informing the kernel about modifications to partition %s -- %s.  This "
@@ -725,17 +725,12 @@ msgstr ""
 "sur %s avant de redémarrer - vous ne devriez donc pas le monter ou "
 "l'utiliser avant de redémarrer."
 
-#: libparted/arch/linux.c:2517
+#: libparted/arch/linux.c:2683
 #, fuzzy, c-format
 msgid "Unable to determine the start and length of %s."
 msgstr "Impossible de déterminer la taille de %s."
 
-#: libparted/arch/linux.c:2632
-#, c-format
-msgid "Failed to add partition %d (%s)"
-msgstr "Impossible d'ajouter la partition %d (%s)"
-
-#: libparted/arch/linux.c:2659
+#: libparted/arch/linux.c:3080
 #, c-format
 msgid ""
 "Partition(s) %s on %s have been written, but we have been unable to inform "
@@ -748,33 +743,19 @@ msgstr ""
 "utilisation. Ainsi, les anciennes partitions restent en usage. Vous devriez "
 "redémarrer maintenant avant d'effectuer d'autres changements."
 
-#: libparted/arch/linux.c:2785
-#, c-format
-msgid ""
-"parted was unable to re-read the partition table on %s (%s).  This means "
-"Linux won't know anything about the modifications you made. "
-msgstr ""
-"Parted a été incapable de relire la table de partition sur %s (%s). Cela "
-"signifie que Linux ne reconnaîtra aucune des modifications effectuées avant "
-"de redémarrer. Vous devriez redémarrer votre ordinateur."
-
-#: libparted/cs/geom.c:161
+#: libparted/cs/geom.c:162
 #, c-format
 msgid "Can't have the end before the start! (start sector=%jd length=%jd)"
 msgstr ""
 "La fin ne peut pas être avant le début ! (secteur début=%jd longueur=%jd)"
 
-#: libparted/cs/geom.c:169
-msgid "Can't have a partition outside the disk!"
-msgstr "La partition ne peut pas être en dehors du disque !"
-
-#: libparted/cs/geom.c:384
+#: libparted/cs/geom.c:378
 #, c-format
 msgid "Attempt to write sectors %ld-%ld outside of partition on %s."
 msgstr ""
 "Tentative d'écriture des secteurs %ld-%ld en dehors de la partition sur %s."
 
-#: libparted/cs/geom.c:424
+#: libparted/cs/geom.c:418
 msgid "checking for bad blocks"
 msgstr "recherche de blocs défectueux"
 
@@ -788,12 +769,12 @@ msgstr "Backtrace : %d appels sur la pile:\n"
 msgid "Assertion (%s) at %s:%d in function %s() failed."
 msgstr "Assertion (%s) à %s: échec de %d dans la fonction %s()."
 
-#: libparted/disk.c:192
+#: libparted/disk.c:193
 #, c-format
 msgid "%s: unrecognised disk label"
 msgstr "Impossible d'ouvrir %s - étiquette de disque non reconnue."
 
-#: libparted/disk.c:484
+#: libparted/disk.c:486
 #, c-format
 msgid ""
 "This libparted doesn't have write support for %s.  Perhaps it was compiled "
@@ -802,42 +783,42 @@ msgstr ""
 "Cette librairie \"libparted\" n'a pas de support pour l'écriture sur %s. "
 "Peut-être a-t-elle été compilée pour la lecture seulement."
 
-#: libparted/disk.c:629
+#: libparted/disk.c:631
 #, c-format
 msgid "Partition %d is %s, but the file system is %s."
 msgstr "La partition %d est %s mais le système de fichiers est %s."
 
-#: libparted/disk.c:838
+#: libparted/disk.c:840
 msgid "cylinder_alignment"
 msgstr "alignement_cylindre"
 
-#: libparted/disk.c:840
+#: libparted/disk.c:842
 #, fuzzy
 msgid "pmbr_boot"
 msgstr "démarrage"
 
-#: libparted/disk.c:845
+#: libparted/disk.c:847
 #, c-format
 msgid "Unknown disk flag, %d."
 msgstr "Drapeau de partition inconnu, %d."
 
-#: libparted/disk.c:1284
+#: libparted/disk.c:1288
 #, c-format
 msgid "%s disk labels do not support extended partitions."
 msgstr "Les étiquettes du disque %s ne supportent pas les partitions étendues."
 
-#: libparted/disk.c:1859
+#: libparted/disk.c:1820
 #, c-format
 msgid "%s disk labels don't support logical or extended partitions."
 msgstr ""
 "Les étiquettes du disque %s ne supportent pas les partitions logiques ou "
 "étendues."
 
-#: libparted/disk.c:1872
+#: libparted/disk.c:1833
 msgid "Too many primary partitions."
 msgstr "Trop de partitions primaires."
 
-#: libparted/disk.c:1881
+#: libparted/disk.c:1842
 #, c-format
 msgid ""
 "Can't add a logical partition to %s, because there is no extended partition."
@@ -845,112 +826,130 @@ msgstr ""
 "Impossible d'ajouter une partition logique sur %s parce qu'il n'y a pas de "
 "partition étendue."
 
-#: libparted/disk.c:1905
+#: libparted/disk.c:1866
 #, c-format
 msgid "Can't have more than one extended partition on %s."
 msgstr "On ne peut avoir plus d'une partition étendue sur %s"
 
-#: libparted/disk.c:1915
+#: libparted/disk.c:1876
 msgid "Can't have logical partitions outside of the extended partition."
 msgstr "Ne peut avoir de partition logique en dehors de la partition étendue."
 
-#: libparted/disk.c:1940
+#: libparted/disk.c:1901
 #, c-format
 msgid "Can't have a logical partition outside of the extended partition on %s."
 msgstr ""
 "Ne peut avoir une partition logique en dehors de la partition étendue sur %s."
 
-#: libparted/disk.c:1950 libparted/disk.c:2009 libparted/disk.c:2188
-msgid "Can't have overlapping partitions."
-msgstr "Impossible d'avoir des partitions qui se chevauchent."
-
-#: libparted/disk.c:1958
+#: libparted/disk.c:1911
 msgid "Can't have a primary partition inside an extended partition."
 msgstr ""
 "Impossible d'avoir une partition primaire à l'intérieur d'une partition "
 "étendue."
 
-#: libparted/disk.c:2389
+#: libparted/disk.c:1920
+msgid "Can't have a partition outside the disk!"
+msgstr "La partition ne peut pas être en dehors du disque !"
+
+#: libparted/disk.c:1971 libparted/disk.c:2149
+msgid "Can't have overlapping partitions."
+msgstr "Impossible d'avoir des partitions qui se chevauchent."
+
+#: libparted/disk.c:2350
 msgid "metadata"
 msgstr "méta-données"
 
-#: libparted/disk.c:2391
+#: libparted/disk.c:2352
 msgid "free"
 msgstr "libre"
 
-#: libparted/disk.c:2393 parted/ui.c:1226 parted/ui.c:1254
+#: libparted/disk.c:2354 parted/ui.c:1222 parted/ui.c:1250
 msgid "extended"
 msgstr "étendue"
 
-#: libparted/disk.c:2395 parted/ui.c:1230 parted/ui.c:1258
+#: libparted/disk.c:2356 parted/ui.c:1226 parted/ui.c:1254
 msgid "logical"
 msgstr "logique"
 
-#: libparted/disk.c:2397 parted/ui.c:1222 parted/ui.c:1250
+#: libparted/disk.c:2358 parted/ui.c:1218 parted/ui.c:1246
 msgid "primary"
 msgstr "primaire"
 
-#: libparted/disk.c:2413
+#: libparted/disk.c:2374
 msgid "boot"
 msgstr "démarrage"
 
-#: libparted/disk.c:2415
+#: libparted/disk.c:2376
 msgid "bios_grub"
 msgstr "bios_grub"
 
-#: libparted/disk.c:2417
+#: libparted/disk.c:2378
 msgid "root"
 msgstr "racine"
 
-#: libparted/disk.c:2419
+#: libparted/disk.c:2380
 msgid "swap"
 msgstr "partition d'échange (swap)"
 
-#: libparted/disk.c:2421
+#: libparted/disk.c:2382
 msgid "hidden"
 msgstr "caché"
 
-#: libparted/disk.c:2423
+#: libparted/disk.c:2384
 msgid "raid"
 msgstr "raid"
 
-#: libparted/disk.c:2425
+#: libparted/disk.c:2386
 msgid "lvm"
 msgstr "lvm (gestionnaire de volumes logiques)"
 
-#: libparted/disk.c:2427
+#: libparted/disk.c:2388
 msgid "lba"
 msgstr "lba"
 
-#: libparted/disk.c:2429
+#: libparted/disk.c:2390
 msgid "hp-service"
 msgstr "hp-service"
 
-#: libparted/disk.c:2431
+#: libparted/disk.c:2392
 msgid "palo"
 msgstr "palo"
 
-#: libparted/disk.c:2433
+#: libparted/disk.c:2394
 msgid "prep"
 msgstr "prep"
 
-#: libparted/disk.c:2435
+#: libparted/disk.c:2396
 msgid "msftres"
 msgstr "msftres"
 
-#: libparted/disk.c:2437
+#: libparted/disk.c:2398
+#, fuzzy
+msgid "msftdata"
+msgstr "méta-données"
+
+#: libparted/disk.c:2400
 msgid "atvrecv"
 msgstr "atvrecv"
 
-#: libparted/disk.c:2439
+#: libparted/disk.c:2402
 msgid "diag"
 msgstr "diag"
 
-#: libparted/disk.c:2441
+#: libparted/disk.c:2404
 msgid "legacy_boot"
 msgstr "legacy_boot"
 
-#: libparted/disk.c:2447
+#: libparted/disk.c:2406
+msgid "irst"
+msgstr ""
+
+#: libparted/disk.c:2408
+#, fuzzy
+msgid "esp"
+msgstr "Oui"
+
+#: libparted/disk.c:2414
 #, c-format
 msgid "Unknown partition flag, %d."
 msgstr "Fanion de partition inconnu %d."
@@ -1057,10 +1056,10 @@ msgstr ""
 "Le support pour la modification des drapeaux du système de fichiers AIX "
 "n'est pas encore implanté."
 
-#: libparted/labels/bsd.c:571 libparted/labels/dasd.c:833
-#: libparted/labels/dos.c:2176 libparted/labels/dvh.c:769
-#: libparted/labels/gpt.c:1838 libparted/labels/loop.c:247
-#: libparted/labels/mac.c:1425 libparted/labels/pc98.c:701
+#: libparted/labels/bsd.c:571 libparted/labels/dasd.c:874
+#: libparted/labels/dos.c:2237 libparted/labels/dvh.c:769
+#: libparted/labels/gpt.c:2015 libparted/labels/loop.c:243
+#: libparted/labels/mac.c:1420 libparted/labels/pc98.c:701
 #: libparted/labels/rdb.c:1052 libparted/labels/sun.c:780
 msgid "Unable to satisfy all constraints on the partition."
 msgstr "Impossible de satisfaire toutes les contraintes sur la partition."
@@ -1069,32 +1068,32 @@ msgstr "Impossible de satisfaire toutes les contraintes sur la partition."
 msgid "Unable to allocate a bsd disklabel slot."
 msgstr "Impossible d'allouer l'entrée d'une étiquette de disque BSD."
 
-#: libparted/labels/dasd.c:859
+#: libparted/labels/dasd.c:900
 msgid "Unable to allocate a dasd disklabel slot"
 msgstr "Impossible d'allouer l'entrée d'une étiquette de disque DASD."
 
-#: libparted/labels/dos.c:966
+#: libparted/labels/dos.c:1001
 #, c-format
 msgid "Invalid partition table on %s -- wrong signature %x."
 msgstr "Table de partition invalide sur %s - signature erronée %x."
 
-#: libparted/labels/dos.c:994
+#: libparted/labels/dos.c:1029
 #, c-format
 msgid "Invalid partition table - recursive partition on %s."
 msgstr "Table de partition invalide - partition récursive sur %s."
 
-#: libparted/labels/dos.c:1504
+#: libparted/labels/dos.c:1545
 msgid "Extended partitions cannot be hidden on msdos disk labels."
 msgstr ""
 "Les partitions étendues ne peuvent être cachées sur les disques étiquetés MS-"
 "DOS."
 
-#: libparted/labels/dos.c:2158
+#: libparted/labels/dos.c:2219
 msgid "Parted can't resize partitions managed by Windows Dynamic Disk."
 msgstr ""
 "Parted ne peut redimensionner les partitions gérées par Windows Dynamic Disk."
 
-#: libparted/labels/dos.c:2414
+#: libparted/labels/dos.c:2475
 #, fuzzy
 msgid "cannot create any more partitions"
 msgstr "Ne peut ajouter de nouvelle partition."
@@ -1135,83 +1134,83 @@ msgstr ""
 msgid "Too many primary partitions"
 msgstr "Trop de partitions primaires"
 
-#: libparted/labels/fdasd.c:98
+#: libparted/labels/fdasd.c:142
 msgid "open error"
 msgstr "erreur d'ouverture"
 
-#: libparted/labels/fdasd.c:101
+#: libparted/labels/fdasd.c:145
 msgid "seek error"
 msgstr "erreur de positionnement"
 
-#: libparted/labels/fdasd.c:104
+#: libparted/labels/fdasd.c:148
 msgid "read error"
 msgstr "erreur de lecture"
 
-#: libparted/labels/fdasd.c:110
+#: libparted/labels/fdasd.c:154
 msgid "ioctl() error"
 msgstr "erreur ioctl()"
 
-#: libparted/labels/fdasd.c:114
+#: libparted/labels/fdasd.c:158
 msgid "API version mismatch"
 msgstr "mauvaise version d'API"
 
-#: libparted/labels/fdasd.c:118
+#: libparted/labels/fdasd.c:162
 msgid "Unsupported disk type"
 msgstr "Type de disque non supporté"
 
-#: libparted/labels/fdasd.c:122
+#: libparted/labels/fdasd.c:166
 msgid "Unsupported disk format"
 msgstr "Format de disque non supporté"
 
-#: libparted/labels/fdasd.c:126
+#: libparted/labels/fdasd.c:170
 msgid "Disk is in use"
 msgstr "Disque en cours d'utilisation"
 
-#: libparted/labels/fdasd.c:130
+#: libparted/labels/fdasd.c:174
 msgid "Syntax error in config file"
 msgstr "Erreur de syntaxe dans le fichier de configuration"
 
-#: libparted/labels/fdasd.c:134
+#: libparted/labels/fdasd.c:178
 msgid "Volume label is corrupted"
 msgstr "Etiquette de volume corrompue"
 
-#: libparted/labels/fdasd.c:138
+#: libparted/labels/fdasd.c:182
 msgid "A data set name is corrupted"
 msgstr "Un ensemble de données (noms) est corrompu"
 
-#: libparted/labels/fdasd.c:142
+#: libparted/labels/fdasd.c:186
 msgid "Memory allocation failed"
 msgstr "Echec d'une allocation de mémoire"
 
-#: libparted/labels/fdasd.c:146
+#: libparted/labels/fdasd.c:190
 msgid "Device verification failed"
 msgstr "Echec de vérification du périphérique"
 
-#: libparted/labels/fdasd.c:147
+#: libparted/labels/fdasd.c:191
 msgid "The specified device is not a valid DASD device"
 msgstr "Le périphérique spécifié n'est pas un périphérique DASD valide"
 
-#: libparted/labels/fdasd.c:150 libparted/labels/vtoc.c:179
+#: libparted/labels/fdasd.c:194 libparted/labels/vtoc.c:179
 msgid "Fatal error"
 msgstr "Erreur fatale"
 
-#: libparted/labels/fdasd.c:226
+#: libparted/labels/fdasd.c:266
 msgid "No room for volume label."
 msgstr "Pas de place pour l'étiquette de volume."
 
-#: libparted/labels/fdasd.c:234
+#: libparted/labels/fdasd.c:274
 msgid "No room for partition info."
 msgstr "Pas de place pour les informations de partition."
 
-#: libparted/labels/fdasd.c:709
+#: libparted/labels/fdasd.c:854
 msgid "Invalid VTOC."
 msgstr "Table de volume (VTOC) incorrecte."
 
-#: libparted/labels/fdasd.c:766
+#: libparted/labels/fdasd.c:938
 msgid "Could not retrieve API version."
 msgstr "Impossible de détecter la version de l'API."
 
-#: libparted/labels/fdasd.c:769
+#: libparted/labels/fdasd.c:941
 #, c-format
 msgid ""
 "The current API version '%d' doesn't match dasd driver API version '%d'!"
@@ -1219,35 +1218,24 @@ msgstr ""
 "La version courante de l'API '%d' ne correspond pas avec celle du pilote "
 "DASD '%d' !"
 
-#: libparted/labels/fdasd.c:806
+#: libparted/labels/fdasd.c:984
 msgid "Could not retrieve disk geometry information."
 msgstr "Impossible d'analyser la géométrie du disque."
 
-#: libparted/labels/fdasd.c:810
+#: libparted/labels/fdasd.c:988
 msgid "Could not retrieve blocksize information."
 msgstr "Impossible de trouver la taille de bloc."
 
-#: libparted/labels/fdasd.c:815
+#: libparted/labels/fdasd.c:993
 msgid "Could not retrieve disk information."
 msgstr "Impossible de trouver les informations sur le disque."
 
-#: libparted/labels/gpt.c:494
-#, c-format
-msgid ""
-"%s contains GPT signatures, indicating that it has a GPT table.  However, it "
-"does not have a valid fake msdos partition table, as it should.  Perhaps it "
-"was corrupted -- possibly by a program that doesn't understand GPT partition "
-"tables.  Or perhaps you deleted the GPT table, and are now using an msdos "
-"partition table.  Is this a GPT partition table?"
-msgstr ""
-"%s contient des signatures GPT, indiquant qu'il a une table GPT. Cependant, "
-"il n'a pas de table fictive de partitions MSDOS valide tel qu'il le devrait. "
-"Peut-être a-t-elle été corrompue - peut-être par un programme qui ne "
-"comprend pas les tables de partitions GPT. Ou peut-être avez-vous supprimé "
-"la table GPT et utilisez-vous une table de partition MS-DOS. Ceci est-il une "
-"table de partitions GPT ?"
+#: libparted/labels/gpt.c:532
+#, fuzzy
+msgid "device is too small for GPT"
+msgstr "Périphérique trop petit pour %lu blocs."
 
-#: libparted/labels/gpt.c:700
+#: libparted/labels/gpt.c:734
 #, c-format
 msgid ""
 "The format of the GPT partition table is version %x, which is newer than "
@@ -1256,7 +1244,7 @@ msgstr ""
 "Le format de la table de partitions GPT est de version %x, ce qui est plus "
 "récent que ce que Parted peut reconnaître. SVP prévenez-nous !"
 
-#: libparted/labels/gpt.c:746
+#: libparted/labels/gpt.c:770
 #, c-format
 msgid ""
 "Not all of the space available to %s appears to be used, you can fix the GPT "
@@ -1267,10 +1255,10 @@ msgstr ""
 "voulez-vous ajuster la table GPT pour utiliser tout l'espace (%llu blocs en "
 "plus) ou continuer ainsi ?"
 
-#: libparted/labels/gpt.c:967
+#: libparted/labels/gpt.c:1006
+#, fuzzy
 msgid ""
-"The backup GPT table is not at the end of the disk, as it should be.  This "
-"might mean that another operating system believes the disk is smaller.  Fix, "
+"The backup GPT table is not at the end of the disk, as it should be.  Fix, "
 "by moving the backup to the end (and removing the old backup)?"
 msgstr ""
 "La sauvegarde de la table GPT n'est pas à la fin du disque ainsi qu'elle le "
@@ -1278,7 +1266,7 @@ msgstr ""
 "le disque est plus petit. Faut-il corriger en déplaçant la copie à la fin du "
 "disque (et enlever la vieille sauvegarde) ?"
 
-#: libparted/labels/gpt.c:991
+#: libparted/labels/gpt.c:1024
 msgid ""
 "Both the primary and backup GPT tables are corrupt.  Try making a fresh "
 "table, and using Parted's rescue feature to recover partitions."
@@ -1287,7 +1275,7 @@ msgstr ""
 "les deux. Essayer d'écrire une nouvelle table et d'utiliser le mode de "
 "secours de Parted pour recupérer les partitions."
 
-#: libparted/labels/gpt.c:1002
+#: libparted/labels/gpt.c:1035
 msgid ""
 "The backup GPT table is corrupt, but the primary appears OK, so that will be "
 "used."
@@ -1295,7 +1283,7 @@ msgstr ""
 "La sauvegarde de table GPT est corrompue mais l'originale semble valide et "
 "sera donc utilisée."
 
-#: libparted/labels/gpt.c:1014
+#: libparted/labels/gpt.c:1047
 msgid ""
 "The primary GPT table is corrupt, but the backup appears OK, so that will be "
 "used."
@@ -1303,9 +1291,14 @@ msgstr ""
 "La table primaire GPT est corrompue mais sa sauvegarde semble valide, elle "
 "sera donc utilisée."
 
-#: libparted/labels/gpt.c:1038
+#: libparted/labels/gpt.c:1071
 msgid "primary partition table array CRC mismatch"
 msgstr "erreur CRC sur la table primaire de partitions"
+
+#: libparted/labels/gpt.c:1901 libparted/labels/gpt.c:1928
+#, fuzzy
+msgid "failed to translate partition name"
+msgstr "Impossible d'allouer un numéro de partition."
 
 #: libparted/labels/mac.c:184
 #, c-format
@@ -1321,35 +1314,35 @@ msgstr "La table de partitions n'a pas d'entrée de table de partition !"
 msgid "%s is too small for a Mac disk label!"
 msgstr "%s est trop petit pour une étiquette de disque Mac !"
 
-#: libparted/labels/mac.c:508
+#: libparted/labels/mac.c:506
 #, c-format
 msgid "Partition %d has an invalid signature %x."
 msgstr "La partition %d a une signature invalide %x."
 
-#: libparted/labels/mac.c:526
+#: libparted/labels/mac.c:523
 #, c-format
 msgid "Partition %d has an invalid length of 0 bytes!"
 msgstr "La partition %d a une longueur invalide de 0 octet !"
 
-#: libparted/labels/mac.c:557
+#: libparted/labels/mac.c:554
 msgid "The data region doesn't start at the start of the partition."
 msgstr "La zone de données ne commence pas au début de la partition."
 
-#: libparted/labels/mac.c:574
+#: libparted/labels/mac.c:571
 msgid "The boot region doesn't start at the start of the partition."
 msgstr "La zone d'amorce n'est pas au début de la partition."
 
-#: libparted/labels/mac.c:588
+#: libparted/labels/mac.c:585
 msgid "The partition's boot region doesn't occupy the entire partition."
 msgstr ""
 "La zone d'amorce de la partition ne couvre pas entièrement la partition."
 
-#: libparted/labels/mac.c:599
+#: libparted/labels/mac.c:596
 msgid "The partition's data region doesn't occupy the entire partition."
 msgstr ""
 "La zone de données de la partition ne couvre pas entièrement la partition."
 
-#: libparted/labels/mac.c:652
+#: libparted/labels/mac.c:648
 #, c-format
 msgid ""
 "Weird block size on device descriptor: %d bytes is not divisible by 512."
@@ -1357,7 +1350,7 @@ msgstr ""
 "Taille bizarre de bloc sur le descripteur de périphérique : %d octets n'est "
 "pas divisible par 512."
 
-#: libparted/labels/mac.c:665
+#: libparted/labels/mac.c:661
 #, c-format
 msgid ""
 "The driver descriptor says the physical block size is %d bytes, but Linux "
@@ -1366,11 +1359,11 @@ msgstr ""
 "Le descripteur du pilote indique une taille physique de bloc de %d octets, "
 "mais Linux lui indique %d octets."
 
-#: libparted/labels/mac.c:718
+#: libparted/labels/mac.c:714
 msgid "No valid partition map found."
 msgstr "Aucune table de partitions valide n'a été trouvée."
 
-#: libparted/labels/mac.c:779
+#: libparted/labels/mac.c:787
 #, c-format
 msgid ""
 "Conflicting partition map entry sizes!  Entry 1 says it is %d, but entry %d "
@@ -1379,7 +1372,7 @@ msgstr ""
 "Tailles conflictuelles des entrées de la table de partition ! L'entrée 1 "
 "indique %d alors que l'entrée %d indique %d !"
 
-#: libparted/labels/mac.c:810
+#: libparted/labels/mac.c:818
 msgid "Weird!  There are 2 partitions map entries!"
 msgstr "Bizarre - Il y a 2 entrées de table de partitions !"
 
@@ -1391,7 +1384,7 @@ msgstr ""
 "Changer le nom d'une partition racine (root) ou d'échange (swap) empêchera "
 "Linux de les reconnaître en tant que telles."
 
-#: libparted/labels/mac.c:1460
+#: libparted/labels/mac.c:1455
 msgid "Can't add another partition -- the partition map is too small!"
 msgstr ""
 "Impossible d'ajouter une autre partition - la table de partition est trop "
@@ -1540,56 +1533,61 @@ msgstr "échec d'écriture sur le périphérique"
 msgid "reading from device failed"
 msgstr "échec de lecture sur le périphérique"
 
-#: libparted/labels/vtoc.c:299 libparted/labels/vtoc.c:308
-#: libparted/labels/vtoc.c:329 libparted/labels/vtoc.c:336
+#: libparted/labels/vtoc.c:371 libparted/labels/vtoc.c:380
+#: libparted/labels/vtoc.c:401 libparted/labels/vtoc.c:408
 msgid "Could not read volume label."
 msgstr "Impossible de lire l'étiquette du volume."
 
-#: libparted/labels/vtoc.c:356 libparted/labels/vtoc.c:363
+#: libparted/labels/vtoc.c:428 libparted/labels/vtoc.c:435
 msgid "Could not write volume label."
 msgstr "Impossible d'écrire l'étiquette du volume."
 
-#: libparted/labels/vtoc.c:469
+#: libparted/labels/vtoc.c:541
 msgid "Could not read VTOC labels."
 msgstr "Impossible de lire les étiquettes de la table de volume (VTOC)."
 
-#: libparted/labels/vtoc.c:475
+#: libparted/labels/vtoc.c:547
 msgid "Could not read VTOC FMT1 DSCB."
 msgstr "Impossible de lire la table de volume VTOC FMT1 DSCB."
 
-#: libparted/labels/vtoc.c:482
+#: libparted/labels/vtoc.c:554
 msgid "Could not read VTOC FMT4 DSCB."
 msgstr "Impossible de lire la table de volume VTOC FMT4 DSCB."
 
-#: libparted/labels/vtoc.c:489
+#: libparted/labels/vtoc.c:561
 msgid "Could not read VTOC FMT5 DSCB."
 msgstr "Impossible de lire la table de volume VTOC FMT5 DSCB."
 
-#: libparted/labels/vtoc.c:496
+#: libparted/labels/vtoc.c:568
 msgid "Could not read VTOC FMT7 DSCB."
 msgstr "Impossible de lire la table de volume VTOC FMT7 DSCB."
 
-#: libparted/labels/vtoc.c:516
+#: libparted/labels/vtoc.c:589
 msgid "Could not write VTOC labels."
 msgstr "Impossible d'écrire les étiquettes de la table de volume (VTOC)."
 
-#: libparted/labels/vtoc.c:522
+#: libparted/labels/vtoc.c:595
 msgid "Could not write VTOC FMT1 DSCB."
 msgstr "Impossible d'écrire la table de volume VTOC FMT1 DSCB."
 
-#: libparted/labels/vtoc.c:529
+#: libparted/labels/vtoc.c:602
 msgid "Could not write VTOC FMT4 DSCB."
 msgstr "Impossible d'écrire la table de volume VTOC FMT4 DSCB."
 
-#: libparted/labels/vtoc.c:536
+#: libparted/labels/vtoc.c:609
 msgid "Could not write VTOC FMT5 DSCB."
 msgstr "Impossible d'écrire la table de volume VTOC FMT5 DSCB."
 
-#: libparted/labels/vtoc.c:543
+#: libparted/labels/vtoc.c:616
 msgid "Could not write VTOC FMT7 DSCB."
 msgstr "Impossible d'écrire la table de volume VTOC FMT7 DSCB."
 
-#: libparted/libparted.c:230
+#: libparted/labels/vtoc.c:626
+#, fuzzy
+msgid "Could not write VTOC FMT9 DSCB."
+msgstr "Impossible d'écrire la table de volume VTOC FMT1 DSCB."
+
+#: libparted/libparted.c:234
 msgid "Out of memory."
 msgstr "Mémoire insuffisante."
 
@@ -1625,25 +1623,25 @@ msgstr "Nombre invalide."
 msgid "Use a smaller unit instead of a value < 1"
 msgstr ""
 
-#: libparted/fs/amiga/affs.c:62 libparted/fs/amiga/apfs.c:55
-#: libparted/fs/amiga/asfs.c:69
+#: libparted/fs/amiga/affs.c:63 libparted/fs/amiga/apfs.c:57
+#: libparted/fs/amiga/asfs.c:71
 #, c-format
 msgid "%s : Failed to allocate partition block\n"
 msgstr "%s : Impossible d'allouer un bloc de partition\n"
 
-#: libparted/fs/amiga/affs.c:77 libparted/fs/amiga/apfs.c:68
-#: libparted/fs/amiga/asfs.c:81
+#: libparted/fs/amiga/affs.c:78 libparted/fs/amiga/apfs.c:70
+#: libparted/fs/amiga/asfs.c:83
 #, c-format
 msgid "%s : Failed to allocate block\n"
 msgstr "%s : Impossible d'allouer un bloc\n"
 
-#: libparted/fs/amiga/affs.c:82 libparted/fs/amiga/apfs.c:73
+#: libparted/fs/amiga/affs.c:83 libparted/fs/amiga/apfs.c:75
 #, c-format
 msgid "%s : Couldn't read boot block %llu\n"
 msgstr "%s : Impossible de lire le bloc de démarrage %llu\n"
 
-#: libparted/fs/amiga/affs.c:98 libparted/fs/amiga/apfs.c:84
-#: libparted/fs/amiga/asfs.c:87 libparted/fs/amiga/asfs.c:101
+#: libparted/fs/amiga/affs.c:99 libparted/fs/amiga/apfs.c:86
+#: libparted/fs/amiga/asfs.c:89 libparted/fs/amiga/asfs.c:103
 #, c-format
 msgid "%s : Couldn't read root block %llu\n"
 msgstr "%s : Impossible de lire le bloc racine %llu\n"
@@ -1684,7 +1682,7 @@ msgstr ""
 msgid "%s : Failed to read partition block %llu\n"
 msgstr "%s : Impossible de lire les blocs de la partition %llu\n"
 
-#: libparted/fs/fat/fat.c:148 libparted/fs/r/fat/fat.c:819
+#: libparted/fs/fat/fat.c:148 libparted/fs/r/fat/fat.c:811
 msgid ""
 "GNU Parted was miscompiled: the FAT boot sector should be 512 bytes.  FAT "
 "support will be disabled."
@@ -1692,99 +1690,79 @@ msgstr ""
 "GNU Parted a été mal compilé : le secteur d'amorce FAT devrait être de 512 "
 "octets. Le support du système de fichiers FAT sera désactivé."
 
-#: libparted/fs/fat/bootsector.c:49 libparted/fs/fat/bootsector.c:56
-#: libparted/fs/r/fat/bootsector.c:49 libparted/fs/r/fat/bootsector.c:56
+#: libparted/fs/fat/bootsector.c:50 libparted/fs/r/fat/bootsector.c:49
 msgid "File system has an invalid signature for a FAT file system."
 msgstr ""
 "Le système de fichiers a une signature invalide pour un système de fichiers "
 "FAT."
 
-#: libparted/fs/fat/bootsector.c:64 libparted/fs/r/fat/bootsector.c:64
+#: libparted/fs/fat/bootsector.c:58 libparted/fs/r/fat/bootsector.c:57
 msgid "File system has an invalid sector size for a FAT file system."
 msgstr ""
 "Le système de fichiers a une taille de secteur invalide pour un système de "
 "fichiers FAT."
 
-#: libparted/fs/fat/bootsector.c:71 libparted/fs/r/fat/bootsector.c:71
+#: libparted/fs/fat/bootsector.c:65 libparted/fs/r/fat/bootsector.c:64
 msgid "File system has an invalid cluster size for a FAT file system."
 msgstr ""
 "Le système de fichiers a une taille de cluster invalide pour un système de "
 "fichiers FAT."
 
-#: libparted/fs/fat/bootsector.c:78 libparted/fs/r/fat/bootsector.c:78
+#: libparted/fs/fat/bootsector.c:72 libparted/fs/r/fat/bootsector.c:71
 msgid ""
 "File system has an invalid number of reserved sectors for a FAT file system."
 msgstr ""
 "Le système de fichiers a un nombre invalide de secteurs réservés pour un "
 "système de fichiers FAT."
 
-#: libparted/fs/fat/bootsector.c:85 libparted/fs/r/fat/bootsector.c:85
+#: libparted/fs/fat/bootsector.c:79 libparted/fs/r/fat/bootsector.c:78
 msgid "File system has an invalid number of FATs."
 msgstr "Le système de fichiers a un nombre incorrect de tables FAT."
 
-#: libparted/fs/fat/bootsector.c:156 libparted/fs/r/fat/bootsector.c:139
-#, c-format
-msgid ""
-"This file system has a logical sector size of %d.  GNU Parted is known not "
-"to work properly with sector sizes other than 512 bytes."
-msgstr ""
-"Ce système de fichier a une taille de secteur logique de %d. GNU Parted ne "
-"traite pas correctement les tailles de secteurs différentes de 512 octets."
-
-#: libparted/fs/fat/bootsector.c:180
+#: libparted/fs/fat/bootsector.c:162
 #, c-format
 msgid ""
 "The file system's CHS geometry is (%d, %d, %d), which is invalid.  The "
 "partition table's CHS geometry is (%d, %d, %d)."
 msgstr ""
 
-#: libparted/fs/fat/bootsector.c:215 libparted/fs/r/fat/bootsector.c:213
+#: libparted/fs/fat/bootsector.c:197 libparted/fs/r/fat/bootsector.c:206
 msgid "FAT boot sector says logical sector size is 0.  This is weird. "
 msgstr ""
 "Le secteur d'amorce FAT indique une taille de secteur logique de 0. Ceci est "
 "bizarre."
 
-#: libparted/fs/fat/bootsector.c:221 libparted/fs/r/fat/bootsector.c:219
+#: libparted/fs/fat/bootsector.c:203 libparted/fs/r/fat/bootsector.c:212
 msgid "FAT boot sector says there are no FAT tables.  This is weird. "
 msgstr ""
 "Le secteur d'amorce FAT indique qu'il n'y a pas de tables FAT. Ceci est "
 "bizarre."
 
-#: libparted/fs/fat/bootsector.c:227 libparted/fs/r/fat/bootsector.c:225
+#: libparted/fs/fat/bootsector.c:209 libparted/fs/r/fat/bootsector.c:218
 msgid "FAT boot sector says clusters are 0 sectors.  This is weird. "
 msgstr ""
 "Le secteur d'amorce FAT indique des clusters ayant 0 secteur. Ceci est "
 "curieux."
 
-#: libparted/fs/fat/bootsector.c:237 libparted/fs/r/fat/bootsector.c:235
+#: libparted/fs/fat/bootsector.c:219 libparted/fs/r/fat/bootsector.c:228
 msgid "File system is FAT12, which is unsupported."
 msgstr "Le système de fichiers est FAT12, lequel n'est pas supporté."
 
-#: libparted/fs/fat/bootsector.c:307 libparted/fs/r/fat/bootsector.c:411
-#, c-format
-msgid ""
-"The information sector has the wrong signature (%x).  Select cancel for now, "
-"and send in a bug report.  If you're desperate, it's probably safe to ignore."
-msgstr ""
-"L'information de secteur contient une signature erronée (%x). Sélectionner « "
-"annuler » (cancel) pour le moment et transmettre un rapport d'anomalie. Si "
-"vous êtes désespéré, il est probablement prudent de sélectionner « ignorer »."
-
-#: libparted/fs/linux_swap/linux_swap.c:247
+#: libparted/fs/linux_swap/linux_swap.c:230
 #, c-format
 msgid "Unrecognised old style linux swap signature '%10s'."
 msgstr ""
 "Signature de partition d'échange Linux (swap) de type ancien non reconnue  "
 "'%10s'."
 
-#: libparted/fs/linux_swap/linux_swap.c:290
+#: libparted/fs/linux_swap/linux_swap.c:268
 #, c-format
 msgid "Unrecognised new style linux swap signature '%10s'."
 msgstr ""
 "Signature de partition d'échange Linux (swap) de type nouveau non reconnue "
 "'%10s'."
 
-#: libparted/fs/linux_swap/linux_swap.c:330
+#: libparted/fs/linux_swap/linux_swap.c:308
 #, c-format
 msgid "Unrecognised swsusp linux swap signature '%9s'."
 msgstr ""
@@ -1800,7 +1778,16 @@ msgstr ""
 "Parted ne peut utiliser des systèmes de fichiers HFS sur les disques dont la "
 "taille des secteurs n'est pas égale à %d octets."
 
-#: libparted/fs/r/fat/bootsector.c:164
+#: libparted/fs/r/fat/bootsector.c:132
+#, c-format
+msgid ""
+"This file system has a logical sector size of %d.  GNU Parted is known not "
+"to work properly with sector sizes other than 512 bytes."
+msgstr ""
+"Ce système de fichier a une taille de secteur logique de %d. GNU Parted ne "
+"traite pas correctement les tailles de secteurs différentes de 512 octets."
+
+#: libparted/fs/r/fat/bootsector.c:157
 #, c-format
 msgid ""
 "The file system's CHS geometry is (%d, %d, %d), which is invalid.  The "
@@ -1815,6 +1802,16 @@ msgstr ""
 "restera inchangée. Si vous choisissez de réparer (Fix), la géométrie CHS du "
 "système de fichiers sera modifiée de manière à concorder avec la géométrie "
 "CHS de la table des partitions."
+
+#: libparted/fs/r/fat/bootsector.c:406
+#, c-format
+msgid ""
+"The information sector has the wrong signature (%x).  Select cancel for now, "
+"and send in a bug report.  If you're desperate, it's probably safe to ignore."
+msgstr ""
+"L'information de secteur contient une signature erronée (%x). Sélectionner « "
+"annuler » (cancel) pour le moment et transmettre un rapport d'anomalie. Si "
+"vous êtes désespéré, il est probablement prudent de sélectionner « ignorer »."
 
 #: libparted/fs/r/fat/calc.c:134
 #, c-format
@@ -1880,13 +1877,13 @@ msgstr ""
 "Le fichier %s est marqué comme fichier système. Cela signifie que son "
 "déplacement pourrait amener certains programmes à cesser de fonctionner."
 
-#: libparted/fs/r/fat/fat.c:251
+#: libparted/fs/r/fat/fat.c:243
 #, c-format
 msgid "Partition too big/small for a %s file system."
 msgstr ""
 "La partition est trop grande ou trop petite pour un système de fichiers %s."
 
-#: libparted/fs/r/fat/fat.c:417
+#: libparted/fs/r/fat/fat.c:409
 msgid ""
 "The FATs don't match.  If you don't know what this means, then select "
 "cancel, run scandisk on the file system, and then come back."
@@ -1895,11 +1892,11 @@ msgstr ""
 "alors sélectionnez « annuler » (cancel) et exécutez scandisk sur le système "
 "de fichiers, puis réessayez."
 
-#: libparted/fs/r/fat/fat.c:457
+#: libparted/fs/r/fat/fat.c:449
 msgid "There are no possible configurations for this FAT type."
 msgstr "Il n'y a pas de configuration possible pour ce type FAT."
 
-#: libparted/fs/r/fat/fat.c:469
+#: libparted/fs/r/fat/fat.c:461
 #, c-format
 msgid ""
 "File system doesn't have expected sizes for Windows to like it.  Cluster "
@@ -1910,7 +1907,7 @@ msgstr ""
 "Windows. La taille du cluster est %dk (%dk attendu). Le nombre de clusters "
 "est %d (%d attendu). La taille des FAT est de %d secteurs (%d attendu)."
 
-#: libparted/fs/r/fat/fat.c:492
+#: libparted/fs/r/fat/fat.c:484
 #, c-format
 msgid ""
 "File system is reporting the free space as %d clusters, not %d clusters."
@@ -2387,27 +2384,27 @@ msgstr ""
 msgid "LABEL-TYPE is one of: "
 msgstr "LABEL-TYPE est une des valeurs : "
 
-#: parted/parted.c:146
+#: parted/parted.c:146 parted/parted.c:147
 msgid "FLAG is one of: "
 msgstr "FANION est une des valeurs : "
 
-#: parted/parted.c:147
+#: parted/parted.c:148
 msgid "UNIT is one of: "
 msgstr "UNITE est parmi : "
 
-#: parted/parted.c:148
+#: parted/parted.c:149
 msgid "desired alignment: minimum or optimal"
 msgstr "alignement souhaité : minimum ou optimal"
 
-#: parted/parted.c:149
+#: parted/parted.c:150
 msgid "PART-TYPE is one of: primary, logical, extended\n"
 msgstr "PART-TYPE est une des valeurs : primary, logical, extended\n"
 
-#: parted/parted.c:151
+#: parted/parted.c:152
 msgid "FS-TYPE is one of: "
 msgstr "FS-TYPE est parmi : "
 
-#: parted/parted.c:152
+#: parted/parted.c:153
 msgid ""
 "START and END are disk locations, such as 4GB or 10%.  Negative values count "
 "from the end of the disk.  For example, -1s specifies exactly the last "
@@ -2417,19 +2414,29 @@ msgstr ""
 "valeurs négatives se comptent à partir de la fin du disque. Par exemple, "
 "=-1s spécifie précisément le dernier secteur.\n"
 
-#: parted/parted.c:155
+#: parted/parted.c:156
+#, fuzzy
+msgid ""
+"END is disk location, such as 4GB or 10%.  Negative value counts from the "
+"end of the disk.  For example, -1s specifies exactly the last sector.\n"
+msgstr ""
+"DEBUT et FIN sont des emplacements sur un disque, comme 4GB ou 10%. Les "
+"valeurs négatives se comptent à partir de la fin du disque. Par exemple, "
+"=-1s spécifie précisément le dernier secteur.\n"
+
+#: parted/parted.c:159
 msgid "STATE is one of: on, off\n"
 msgstr "ETAT est une des valeurs : on, off\n"
 
-#: parted/parted.c:156
+#: parted/parted.c:160
 msgid "DEVICE is usually /dev/hda or /dev/sda\n"
 msgstr "PERIPHERIQUE est habituellement du genre /dev/hda ou /dev/sda\n"
 
-#: parted/parted.c:157
+#: parted/parted.c:161
 msgid "NAME is any word you want\n"
 msgstr "NOM est un mot de votre choix\n"
 
-#: parted/parted.c:160
+#: parted/parted.c:164
 msgid ""
 "Copyright (C) 1998 - 2006 Free Software Foundation, Inc.\n"
 "This program is free software, covered by the GNU General Public License.\n"
@@ -2449,26 +2456,24 @@ msgstr ""
 "GNU pour plus de détails.\n"
 "\n"
 
-#: parted/parted.c:206
+#: parted/parted.c:211
 #, c-format
 msgid "%0.f%%\t(time left %.2d:%.2d)"
 msgstr "%0.f%%\t(temps restant %.2d:%.2d)"
 
-#: parted/parted.c:225
-#, c-format
-msgid ""
-"Partition %s is being used. You must unmount it before you modify it with "
-"Parted."
+#: parted/parted.c:230
+#, fuzzy, c-format
+msgid "Partition %s is being used. Are you sure you want to continue?"
 msgstr ""
 "La partition %s est en cours d'utilisation. Vous devez la démonter avant de "
 "la modifier avec Parted."
 
-#: parted/parted.c:243
+#: parted/parted.c:251
 #, c-format
 msgid "Partition(s) on %s are being used."
 msgstr "Au moins une partition de %s est en cours d'utilisation."
 
-#: parted/parted.c:255
+#: parted/parted.c:263
 #, c-format
 msgid ""
 "The existing disk label on %s will be destroyed and all data on this disk "
@@ -2477,31 +2482,31 @@ msgstr ""
 "Le type du disque %s va être effacé et toutes les données vont être perdues. "
 "Voulez-vous continuer ?"
 
-#: parted/parted.c:497
+#: parted/parted.c:524
 msgid "New disk label type?"
 msgstr "Nouveau type d'étiquette de disque ?"
 
-#: parted/parted.c:629
+#: parted/parted.c:661
 msgid "Partition type?"
 msgstr "Type de partition ?"
 
-#: parted/parted.c:647 parted/parted.c:841
+#: parted/parted.c:679 parted/parted.c:869
 msgid "Partition name?"
 msgstr "Nom de la partition ?"
 
-#: parted/parted.c:655
+#: parted/parted.c:687
 msgid "File system type?"
 msgstr "Type de système de fichiers ?"
 
-#: parted/parted.c:661 parted/parted.c:1449
+#: parted/parted.c:693 parted/parted.c:1476
 msgid "Start?"
 msgstr "Début ?"
 
-#: parted/parted.c:664 parted/parted.c:1451
+#: parted/parted.c:696 parted/parted.c:1478 parted/parted.c:1546
 msgid "End?"
 msgstr "Fin ?"
 
-#: parted/parted.c:732
+#: parted/parted.c:764
 #, fuzzy, c-format
 msgid ""
 "You requested a partition from %s to %s (sectors %llu..%llu).\n"
@@ -2510,7 +2515,7 @@ msgstr ""
 "Vous voulez établir une partition de %s à %s.\n"
 "La position la plus proche gérable est %s à %s. %s"
 
-#: parted/parted.c:741
+#: parted/parted.c:773
 msgid ""
 "\n"
 "Is this still acceptable to you?"
@@ -2518,85 +2523,85 @@ msgstr ""
 "\n"
 "Est-ce acceptable pour vous ?"
 
-#: parted/parted.c:763
+#: parted/parted.c:795
 msgid "The resulting partition is not properly aligned for best performance."
 msgstr ""
 "L'alignement de la partition ainsi définie n'est pas optimal au niveau "
 "performance."
 
-#: parted/parted.c:838 parted/parted.c:1490 parted/parted.c:1562
-#: parted/parted.c:1633
+#: parted/parted.c:866 parted/parted.c:1539 parted/parted.c:1587
+#: parted/parted.c:1661 parted/parted.c:1725
 msgid "Partition number?"
 msgstr "Numéro de partition ?"
 
-#: parted/parted.c:935
+#: parted/parted.c:960
 #, c-format
 msgid "BIOS cylinder,head,sector geometry: %d,%d,%d.  Each cylinder is %s.\n"
 msgstr ""
 "Géométrie BIOS cylindre,tête,secteur : %d,%d,%d. Chaque cylindre : %s.\n"
 
-#: parted/parted.c:976
+#: parted/parted.c:1001
 #, c-format
 msgid "Model: %s (%s)\n"
 msgstr "Modèle: %s (%s)\n"
 
-#: parted/parted.c:978
+#: parted/parted.c:1003
 #, c-format
 msgid "Disk %s: %s\n"
 msgstr "Disque %s : %s\n"
 
-#: parted/parted.c:979
+#: parted/parted.c:1004
 #, c-format
 msgid "Sector size (logical/physical): %lldB/%lldB\n"
 msgstr "Taille des secteurs (logiques/physiques): %lldB/%lldB\n"
 
-#: parted/parted.c:991
+#: parted/parted.c:1016
 #, c-format
 msgid "Partition Table: %s\n"
 msgstr "Table de partitions : %s\n"
 
-#: parted/parted.c:992
+#: parted/parted.c:1017
 #, fuzzy, c-format
 msgid "Disk Flags: %s\n"
 msgstr "Disque %s : %s\n"
 
-#: parted/parted.c:1115 parted/parted.c:1118
+#: parted/parted.c:1139 parted/parted.c:1142
 msgid "Number"
 msgstr "Numéro"
 
-#: parted/parted.c:1115 parted/parted.c:1118
+#: parted/parted.c:1139 parted/parted.c:1142
 msgid "Start"
 msgstr "Début"
 
-#: parted/parted.c:1116 parted/parted.c:1119
+#: parted/parted.c:1140 parted/parted.c:1143
 msgid "End"
 msgstr "Fin"
 
-#: parted/parted.c:1119
+#: parted/parted.c:1143
 msgid "Size"
 msgstr "Taille"
 
-#: parted/parted.c:1123
+#: parted/parted.c:1147
 msgid "Type"
 msgstr "Type"
 
-#: parted/parted.c:1125
+#: parted/parted.c:1149
 msgid "File system"
 msgstr "Système de fichiers"
 
-#: parted/parted.c:1128
+#: parted/parted.c:1152
 msgid "Name"
 msgstr "Nom"
 
-#: parted/parted.c:1130
+#: parted/parted.c:1154
 msgid "Flags"
 msgstr "Fanions"
 
-#: parted/parted.c:1187
+#: parted/parted.c:1211
 msgid "Free Space"
 msgstr "Espace libre"
 
-#: parted/parted.c:1348
+#: parted/parted.c:1371
 #, c-format
 msgid ""
 "A %s %s partition was found at %s -> %s.  Do you want to add it to the "
@@ -2605,45 +2610,54 @@ msgstr ""
 "Une partition %s %s a été localisée de %s à %s. Voulez-vous l'ajouter à la "
 "table de partition ?"
 
-#: parted/parted.c:1387
+#: parted/parted.c:1410
 msgid "searching for file systems"
 msgstr "recherche des systèmes de fichiers"
 
-#: parted/parted.c:1515
+#: parted/parted.c:1513
+msgid "The resize command has been removed in parted 3.0"
+msgstr ""
+
+#: parted/parted.c:1558
+msgid ""
+"Shrinking a partition can cause data loss, are you sure you want to continue?"
+msgstr ""
+
+#: parted/parted.c:1609
 msgid "New device?"
 msgstr "Nouveau périphérique ?"
 
-#: parted/parted.c:1560
+#: parted/parted.c:1659
 msgid "alignment type(min/opt)"
 msgstr "type d'alignement (min/opt)"
 
-#: parted/parted.c:1567
+#: parted/parted.c:1666
 #, c-format
 msgid "%d aligned\n"
 msgstr "%d aligné(es)\n"
 
-#: parted/parted.c:1567
+#: parted/parted.c:1666
 #, c-format
 msgid "%d not aligned\n"
 msgstr "%d non aligné(es)\n"
 
-#: parted/parted.c:1595 parted/parted.c:1635
+#: parted/parted.c:1690 parted/parted.c:1727
 msgid "Flag to Invert?"
 msgstr "Fanion à inverser ?"
 
-#: parted/parted.c:1600 parted/parted.c:1640
+#: parted/parted.c:1695 parted/parted.c:1732
 msgid "New state?"
 msgstr "Nouvel état ?"
 
-#: parted/parted.c:1689
+#: parted/parted.c:1778
 msgid "Unit?"
 msgstr "Unité ?"
 
-#: parted/parted.c:1807
+#: parted/parted.c:1913
 msgid "align-check"
 msgstr "align-check"
 
-#: parted/parted.c:1810
+#: parted/parted.c:1916
 msgid ""
 "align-check TYPE N                        check partition N for TYPE(min|"
 "opt) alignment"
@@ -2651,11 +2665,11 @@ msgstr ""
 "align-check TYPE N                        contrôle l'alignement de type TYPE "
 "(min|opt) de la partition N"
 
-#: parted/parted.c:1818
+#: parted/parted.c:1924
 msgid "help"
 msgstr "aide"
 
-#: parted/parted.c:1821
+#: parted/parted.c:1927
 msgid ""
 "help [COMMAND]                           print general help, or help on "
 "COMMAND"
@@ -2663,15 +2677,15 @@ msgstr ""
 "help [COMMANDE]                          affiche l'aide générale ou l'aide "
 "concernant la COMMANDE"
 
-#: parted/parted.c:1827
+#: parted/parted.c:1933
 msgid "mklabel"
 msgstr "mklabel"
 
-#: parted/parted.c:1827
+#: parted/parted.c:1933
 msgid "mktable"
 msgstr "mktable"
 
-#: parted/parted.c:1830
+#: parted/parted.c:1936
 msgid ""
 "mklabel,mktable LABEL-TYPE               create a new disklabel (partition "
 "table)"
@@ -2679,15 +2693,15 @@ msgstr ""
 "mklabel,mktable LABEL-TYPE                crée une nouvelle étiquette de "
 "disque (table de partition)"
 
-#: parted/parted.c:1836
+#: parted/parted.c:1942
 msgid "mkpart"
 msgstr "mkpart"
 
-#: parted/parted.c:1839
+#: parted/parted.c:1945
 msgid "mkpart PART-TYPE [FS-TYPE] START END     make a partition"
 msgstr "mkpart PART-TYPE [FS-TYPE] DEBUT FIN      créer une partition"
 
-#: parted/parted.c:1845
+#: parted/parted.c:1951
 msgid ""
 "'mkpart' makes a partition without creating a new file system on the "
 "partition.  FS-TYPE may be specified to set an appropriate partition ID.\n"
@@ -2696,21 +2710,21 @@ msgstr ""
 "partition. FS-TYPE doit être spécifié pour initialiser le type de partition "
 "approprié.\n"
 
-#: parted/parted.c:1850
+#: parted/parted.c:1956
 msgid "name"
 msgstr "nommer"
 
-#: parted/parted.c:1853
+#: parted/parted.c:1959
 msgid "name NUMBER NAME                         name partition NUMBER as NAME"
 msgstr ""
 "name NOMBRE NOM                           donner le nom NOM la partition "
 "numéro NOMBRE"
 
-#: parted/parted.c:1858
+#: parted/parted.c:1964
 msgid "print"
 msgstr "afficher"
 
-#: parted/parted.c:1861
+#: parted/parted.c:1967
 msgid ""
 "print [devices|free|list,all|NUMBER]     display the partition table, "
 "available devices, free space, all found partitions, or a particular "
@@ -2720,7 +2734,7 @@ msgstr ""
 "les périphériques disponibles, l'espace libre, toutes les partitions ou une "
 "partition précise"
 
-#: parted/parted.c:1866
+#: parted/parted.c:1972
 msgid ""
 "Without arguments, 'print' displays the entire partition table. However with "
 "the following arguments it performs various other actions.\n"
@@ -2728,11 +2742,11 @@ msgstr ""
 "Sans argument, 'print' affiche toute la table de partitions. Toutefois avec "
 "les arguments suivants, elle permet bien d'autres actions.\n"
 
-#: parted/parted.c:1868
+#: parted/parted.c:1974
 msgid "  devices   : display all active block devices\n"
 msgstr "  devices : affiche tous les périphériques par blocs actifs\n"
 
-#: parted/parted.c:1869
+#: parted/parted.c:1975
 msgid ""
 "  free      : display information about free unpartitioned space on the "
 "current block device\n"
@@ -2740,14 +2754,14 @@ msgstr ""
 "  free : affiche l'information sur l'espace libre non partitionné du "
 "périphérique courant\n"
 
-#: parted/parted.c:1871
+#: parted/parted.c:1977
 msgid ""
 "  list, all : display the partition tables of all active block devices\n"
 msgstr ""
 "  list,all : afficher la table de partitions de tous les périphériques par "
 "blocs actifs\n"
 
-#: parted/parted.c:1872
+#: parted/parted.c:1978
 msgid ""
 "  NUMBER    : display more detailed information about this particular "
 "partition\n"
@@ -2755,19 +2769,19 @@ msgstr ""
 "  NOMBRE : affiche les informations détaillées sur la partition numéro "
 "NOMBRE\n"
 
-#: parted/parted.c:1877
+#: parted/parted.c:1983
 msgid "quit"
 msgstr "quitter"
 
-#: parted/parted.c:1880
+#: parted/parted.c:1986
 msgid "quit                                     exit program"
 msgstr "quit                                    quitter le programme"
 
-#: parted/parted.c:1885
+#: parted/parted.c:1991
 msgid "rescue"
 msgstr "rescue"
 
-#: parted/parted.c:1888
+#: parted/parted.c:1994
 msgid ""
 "rescue START END                         rescue a lost partition near START "
 "and END"
@@ -2775,29 +2789,48 @@ msgstr ""
 "rescue DEBUT FIN                         restaurer une partition perdue "
 "entre DEBUT et FIN"
 
-#: parted/parted.c:1894
+#: parted/parted.c:2000
+msgid "resize"
+msgstr "redimentionner"
+
+#: parted/parted.c:2003
+msgid "The resize command was removed in parted 3.0\n"
+msgstr ""
+
+#: parted/parted.c:2006
+#, fuzzy
+msgid "resizepart"
+msgstr "redimentionner"
+
+#: parted/parted.c:2009
+#, fuzzy
+msgid "resizepart NUMBER END                    resize partition NUMBER"
+msgstr ""
+"move NOMBRE DEBUT FIN                    déplacer la partition numéro NOMBRE"
+
+#: parted/parted.c:2014
 msgid "rm"
 msgstr "rm"
 
-#: parted/parted.c:1897
+#: parted/parted.c:2017
 msgid "rm NUMBER                                delete partition NUMBER"
 msgstr ""
 "rm NOMBRE                                détruire la partition numéro NOMBRE"
 
-#: parted/parted.c:1902
+#: parted/parted.c:2022
 msgid "select"
 msgstr "sélectionner"
 
-#: parted/parted.c:1905
+#: parted/parted.c:2025
 msgid "select DEVICE                            choose the device to edit"
 msgstr ""
 "select PÉRIPHÉRIQUE                     sélectionner le périphérique à éditer"
 
-#: parted/parted.c:1910
+#: parted/parted.c:2030
 msgid "disk_set"
 msgstr ""
 
-#: parted/parted.c:1913
+#: parted/parted.c:2033
 #, fuzzy
 msgid ""
 "disk_set FLAG STATE                      change the FLAG on selected device"
@@ -2805,12 +2838,12 @@ msgstr ""
 "set NOMBRE FANION ETAT                  positionner le FANION à l'état ETAT "
 "sur la partition numéro NOMBRE"
 
-#: parted/parted.c:1918
+#: parted/parted.c:2038
 #, fuzzy
 msgid "disk_toggle"
 msgstr "inverser"
 
-#: parted/parted.c:1921
+#: parted/parted.c:2041
 #, fuzzy
 msgid ""
 "disk_toggle [FLAG]                       toggle the state of FLAG on "
@@ -2819,22 +2852,22 @@ msgstr ""
 "toggle [NOMBRE [FANION]]               inverser l'état du fanion sur la "
 "partition numéro NOMBRE"
 
-#: parted/parted.c:1927
+#: parted/parted.c:2047
 msgid "set"
 msgstr "positionner"
 
-#: parted/parted.c:1930
+#: parted/parted.c:2050
 msgid ""
 "set NUMBER FLAG STATE                    change the FLAG on partition NUMBER"
 msgstr ""
 "set NOMBRE FANION ETAT                  positionner le FANION à l'état ETAT "
 "sur la partition numéro NOMBRE"
 
-#: parted/parted.c:1936
+#: parted/parted.c:2056
 msgid "toggle"
 msgstr "inverser"
 
-#: parted/parted.c:1939
+#: parted/parted.c:2059
 msgid ""
 "toggle [NUMBER [FLAG]]                   toggle the state of FLAG on "
 "partition NUMBER"
@@ -2842,20 +2875,20 @@ msgstr ""
 "toggle [NOMBRE [FANION]]               inverser l'état du fanion sur la "
 "partition numéro NOMBRE"
 
-#: parted/parted.c:1945
+#: parted/parted.c:2065
 msgid "unit"
 msgstr "unit"
 
-#: parted/parted.c:1948
+#: parted/parted.c:2068
 msgid "unit UNIT                                set the default unit to UNIT"
 msgstr ""
 "unit UNITE                             affecte l'unité par défaut à UNITE"
 
-#: parted/parted.c:1953
+#: parted/parted.c:2073
 msgid "version"
 msgstr "version"
 
-#: parted/parted.c:1956
+#: parted/parted.c:2076
 msgid ""
 "version                                  display the version number and "
 "copyright information of GNU Parted"
@@ -2863,31 +2896,31 @@ msgstr ""
 "version                                  affiche la version courante de GNU "
 "Parted ainsi que l'information sur le copyright"
 
-#: parted/parted.c:1960
+#: parted/parted.c:2080
 msgid ""
 "'version' displays copyright and version information corresponding to this "
 "copy of GNU Parted\n"
 msgstr ""
 "'version' affiche le copyright et la version de cette copie de GNU Parted\n"
 
-#: parted/parted.c:2028
+#: parted/parted.c:2148
 #, c-format
 msgid "Usage: %s [-hlmsv] [-a<align>] [DEVICE [COMMAND [PARAMETERS]]...]\n"
 msgstr ""
 "Usage : %s [-hlmsv] [-a <alignement>] [PERIPHERIQUE [COMMANDE "
 "[PARAMETRES]]...]\n"
 
-#: parted/parted.c:2072
+#: parted/parted.c:2192
 msgid "No device found"
 msgstr "Aucun périphérique trouvé"
 
-#: parted/parted.c:2109
+#: parted/parted.c:2229
 #, fuzzy
 msgid "WARNING: You are not superuser.  Watch out for permissions.\n"
 msgstr ""
 "ATTENTION : vous n'êtes pas superutilisateur. Contrôlez les permissions."
 
-#: parted/parted.c:2147
+#: parted/parted.c:2269
 msgid "You may need to update /etc/fstab.\n"
 msgstr "Ne pas oublier de mettre à jour /etc/fstab si nécessaire.\n"
 
@@ -3147,65 +3180,65 @@ msgstr ""
 "\n"
 "Erreur : un signal SIGILL général est survenu."
 
-#: parted/ui.c:891
+#: parted/ui.c:883
 #, c-format
 msgid "invalid token: %s"
 msgstr "élément incorrect: %s"
 
-#: parted/ui.c:1051
+#: parted/ui.c:1047
 msgid "Expecting a partition number."
 msgstr "Numéro de partition attendu."
 
-#: parted/ui.c:1060
+#: parted/ui.c:1056
 msgid "Partition doesn't exist."
 msgstr "La partition n'existe pas."
 
-#: parted/ui.c:1080
+#: parted/ui.c:1076
 msgid "Expecting a file system type."
 msgstr "Type de système de fichiers attendu."
 
-#: parted/ui.c:1087
+#: parted/ui.c:1083
 #, c-format
 msgid "Unknown file system type \"%s\"."
 msgstr "Type de système de fichiers inconnu \"%s\"."
 
-#: parted/ui.c:1108
+#: parted/ui.c:1104
 msgid "Expecting a disk label type."
 msgstr "Type d'étiquette de disque attendu."
 
-#: parted/ui.c:1235
+#: parted/ui.c:1231
 msgid "Can't create any more partitions."
 msgstr "Ne peut ajouter de nouvelle partition."
 
-#: parted/ui.c:1245
+#: parted/ui.c:1241
 msgid "Expecting a partition type."
 msgstr "Type de partition attendu."
 
-#: parted/ui.c:1393
+#: parted/ui.c:1389
 msgid "on"
 msgstr "on"
 
-#: parted/ui.c:1394
+#: parted/ui.c:1390
 msgid "off"
 msgstr "off"
 
-#: parted/ui.c:1411
+#: parted/ui.c:1407
 msgid "optimal"
 msgstr "optimal"
 
-#: parted/ui.c:1412
+#: parted/ui.c:1408
 msgid "minimal"
 msgstr "minimal"
 
-#: parted/ui.c:1545
+#: parted/ui.c:1541
 msgid "OPTIONs:"
 msgstr "OPTIONS :"
 
-#: parted/ui.c:1550
+#: parted/ui.c:1546
 msgid "COMMANDs:"
 msgstr "COMMANDES :"
 
-#: parted/ui.c:1553
+#: parted/ui.c:1549
 #, c-format
 msgid ""
 "\n"
@@ -3214,14 +3247,39 @@ msgstr ""
 "\n"
 "Rapporter les anomalies à %s\n"
 
-#: parted/ui.c:1560
+#: parted/ui.c:1556
 #, c-format
 msgid "Using %s\n"
 msgstr "Utilisation de %s\n"
 
-#: parted/ui.c:1634
+#: parted/ui.c:1630
 msgid "This command does not make sense in non-interactive mode.\n"
 msgstr "Cette commande n'a pas de sens en mode non-interactif.\n"
+
+#~ msgid "Failed to add partition %d (%s)"
+#~ msgstr "Impossible d'ajouter la partition %d (%s)"
+
+#~ msgid ""
+#~ "parted was unable to re-read the partition table on %s (%s).  This means "
+#~ "Linux won't know anything about the modifications you made. "
+#~ msgstr ""
+#~ "Parted a été incapable de relire la table de partition sur %s (%s). Cela "
+#~ "signifie que Linux ne reconnaîtra aucune des modifications effectuées "
+#~ "avant de redémarrer. Vous devriez redémarrer votre ordinateur."
+
+#~ msgid ""
+#~ "%s contains GPT signatures, indicating that it has a GPT table.  However, "
+#~ "it does not have a valid fake msdos partition table, as it should.  "
+#~ "Perhaps it was corrupted -- possibly by a program that doesn't understand "
+#~ "GPT partition tables.  Or perhaps you deleted the GPT table, and are now "
+#~ "using an msdos partition table.  Is this a GPT partition table?"
+#~ msgstr ""
+#~ "%s contient des signatures GPT, indiquant qu'il a une table GPT. "
+#~ "Cependant, il n'a pas de table fictive de partitions MSDOS valide tel "
+#~ "qu'il le devrait. Peut-être a-t-elle été corrompue - peut-être par un "
+#~ "programme qui ne comprend pas les tables de partitions GPT. Ou peut-être "
+#~ "avez-vous supprimé la table GPT et utilisez-vous une table de partition "
+#~ "MS-DOS. Ceci est-il une table de partitions GPT ?"
 
 #~ msgid ""
 #~ "Usage: %s [OPTION]\n"
@@ -3341,9 +3399,6 @@ msgstr "Cette commande n'a pas de sens en mode non-interactif.\n"
 #~ msgid "Couldn't create reiserfs device abstraction handler."
 #~ msgstr ""
 #~ "Impossible de créer le gestionnaire virtuel Reiser sur ce périphérique."
-
-#~ msgid "Device is too small for %lu blocks."
-#~ msgstr "Périphérique trop petit pour %lu blocs."
 
 #~ msgid "copying"
 #~ msgstr "copie en cours"
@@ -3605,14 +3660,6 @@ msgstr "Cette commande n'a pas de sens en mode non-interactif.\n"
 
 #~ msgid "move"
 #~ msgstr "déplacer"
-
-#~ msgid "move NUMBER START END                    move partition NUMBER"
-#~ msgstr ""
-#~ "move NOMBRE DEBUT FIN                    déplacer la partition numéro "
-#~ "NOMBRE"
-
-#~ msgid "resize"
-#~ msgstr "redimentionner"
 
 #~ msgid ""
 #~ "resize NUMBER START END                  resize partition NUMBER and its "

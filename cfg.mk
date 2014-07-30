@@ -1,5 +1,5 @@
 # Customize maint.mk                           -*- makefile -*-
-# Copyright (C) 2003-2012 Free Software Foundation, Inc.
+# Copyright (C) 2003-2014 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ local-checks-to-skip = \
   sc_error_message_period \
   sc_file_system \
   sc_prohibit_strcmp \
+  sc_prohibit_strncpy \
   sc_prohibit_atoi_atof \
   sc_require_test_exit_idiom \
   sc_space_tab \
@@ -42,7 +43,7 @@ local-checks-to-skip = \
 # Now that we have better (check.mk) tests, make this the default.
 export VERBOSE = yes
 
-old_NEWS_hash = 04810d10a532cf2e75d602ddda0d64b1
+old_NEWS_hash = bd453bcf049e292a9677c094d24a29dd
 
 include $(srcdir)/dist-check.mk
 
@@ -69,3 +70,5 @@ exclude_file_name_regexp--sc_prohibit_always-defined_macros = \
 
 exclude_file_name_regexp--sc_prohibit_path_max_allocation = \
   ^libparted/arch/beos\.c$$
+
+exclude_file_name_regexp--sc_unmarked_diagnostics = ^tests/print-max\.c$$

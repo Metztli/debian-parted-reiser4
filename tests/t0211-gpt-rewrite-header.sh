@@ -5,7 +5,7 @@
 # header to the end of the device.  Before parted-3.1, when it attempted
 # to do that, starting with a 9-PTE array, it would render the result invalid.
 
-# Copyright (C) 2012 Free Software Foundation, Inc.
+# Copyright (C) 2012-2014 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,6 +22,9 @@
 
 . "${srcdir=.}/init.sh"; path_prepend_ ../parted $srcdir
 require_perl_digest_crc_
+
+# gpt-header-munge won't work on 32bit systems
+require_64bit_
 
 ss=$sector_size_
 

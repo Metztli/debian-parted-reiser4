@@ -1,7 +1,7 @@
 #!/bin/sh
 # exercise the align-check command
 
-# Copyright (C) 2009-2012 Free Software Foundation, Inc.
+# Copyright (C) 2009-2014 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,7 +49,8 @@ while :; do
   test $i = 70 && break
 
   # Wait up to 10s for the partition file to disappear.
-  wait_for_dev_to_disappear_ $p1 10 || { fail=1; warn $p1 failed to disappear; }
+  wait_for_dev_to_disappear_ $p1 10 \
+    || { fail=1; warn_ $ME_ $p1 failed to disappear; }
 done
 
 Exit $fail

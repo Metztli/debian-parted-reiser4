@@ -1,5 +1,166 @@
 GNU parted NEWS                                    -*- outline -*-
 
+* Noteworthy changes in release 3.2 (2014-07-28) [stable]
+
+** New Features
+
+  Add resizepart command to resize a partition.  This works even on
+  mounted partitions.
+
+  Add support for EAV DASD partitions, which are ECKD's with more than
+  65520 cylinders.
+
+  Add support for implicit FBA DASD partitions with a single immutable
+  partition.
+
+  Added support for recognizing btrfs filesystem. This simply displays
+  btrfs in the 'file system' column of the parted output.
+
+  Added new partition type flag, esp, to set the type to 0xEF on MS-DOS.
+  Also aliased to boot on GPT to set the UEFI ESP GUID.
+
+  Added new partition type flag, irst, for use with Intel Rapid Start
+  Technology. On MS-DOS disk labels it sets the type to 0x84 and on GPT
+  it sets the GUID to D3BFE2DE-3DAF-11DF-BA-40-E3A556D89593.
+
+  You can now choose to ignore errors about partitions that overlap,
+  or are longer than the disk.  This allows you to use parted to
+  repair the problem.
+
+  Add support for prep flag to GPT to select PowerPC Reference Platform
+  boot partition type.
+
+** Bug Fixes
+
+  libparted: fix mac partition tables on > 512 byte sector sizes
+
+  libparted: ped_partition_get_path() was returning "/dev/foo1" instead
+  of "/dev/foo" for loop labels.
+
+  partprobe: when called on a disk that has become a loop label,
+  remove any partitions left over from a previous label.
+
+  libparted: The loop label represents an unpartitioned disk, but creates
+  a dummy partition to represent the whole disk.  This dummy partition
+  was actually being loaded into the kernel.  Don't do that.
+
+  libparted: fix loop labels to not vanish if you don't create
+  a filesystem, and to not return an error syncing when you do.
+
+  libparted: remove all old partitions, even if new label does not allow
+  as many.
+
+  libparted: fat and ntfs boot sectors were misdetected as dos
+  partition tables instead of being treated as a loop label.
+
+  libparted: previously if you chose to ignore the warning about
+  the gpt thinking the disk was smaller than it appears to be on
+  disk, subsequent warnings on other disks would be suppressed.
+  Now parted will warn once per disk.
+
+  Fix filesystem detection on non 512 byte sector sizes
+
+  Fix linux partition sync code to flush partitions > 16
+
+  Do not reject a FAT boot sector as invalid because it has no
+  system ID string.
+
+  libparted: /dev/md/ symlink can change after libparted dereferences it,
+  instead it should just use the symlink as given by the caller in the
+  same way we do with /dev/mapper/.
+
+  libparted: On multipath systems new partitions would sometimes not
+  appear, reporting 'device-mapper: create ioctl failed: Device or
+  resource busy' until the system was rebooted. Added dm_udev_wait
+  calls to synchronize parted with udev.
+
+  Fix help text for disk_{set,toggle} to show *disk* flags instead
+  of partition flags.
+
+  Fix gpt to correctly handle non ASCII charcters in partition names
+
+  If a drive was 100 times an even multiple of two, sizes specified as
+  a percentage would trigger the exact placement rule and refuse to round
+  to the nearest half percent.
+
+  Avoid generating udev add/remove events for all unmodified partitions
+  when writing a new table.
+
+  Fix cache coherency issue by flushing partition block devices.
+  This had been mistakenly disabled in parted 2.0, and resulted
+  in parted sometimes identifying the previous filesystem type
+  after running an mkfs to format a partition to a new type.
+
+  libparted: fix gpt end of disk handling.  Previously if the backup
+  copy of the gpt was not at the end of the disk and you chose to
+  ignore this error, parted would move it to the end of the disk
+  anyhow.  It will now leave the backup in the same location if
+  you chose to ignore this error.
+
+  libparted: handle logical partitions starting immediately after
+  the EBR.  Creating a logical partition one sector after the EBR
+  used to cause parted to complain that it could not inform the
+  kernel of the changes, but after a reboot, everything was fine.
+  Parted will now correctly inform the kernel of the changes, but
+  only set the length of the extended partition to 1 sector instead
+  of two, which would cause it to overlap the logical partition.
+
+  parted: fix EOF and ctrl-c handling.  parted used to refuse to exit
+  in response to ctrl-c and would get stuck in an infinite loop
+  prompting for more input when it reached EOF on stdin.
+
+  libparted: Don't fail to manipulate partitions on dmraid disks that
+  have other partitions in use.
+
+  libparted: mac: a MAC partition table could have a block_size larger
+  than the one the kernel told us about.  Upon reading that partition
+  table, libparted would ask if it's ok to use the larger block size.
+  If you were to respond in the affirmative, libparted would read the
+  larger number of bytes into a buffer of the shorter length,
+  overrunning it.
+
+  libparted: gpt: fix gpt_get_max_supported_partition_count to work
+  also on little-endian systems.
+
+  libparted: treat a disk with no pMBR as an msdos-labeled disk
+  even when it has valid GPT headers.
+
+  partprobe now tells the kernel to forget about any partitions
+  on a device that has no recognizable partition table.
+
+  dos: the range of random MBR signature values was artificially limited
+  to 0..999999, which mistakenly included 0.  Now, we use the full 32-bit
+  range, but exclude 0.
+
+** Changes in behavior
+
+  When attempting to manipulate a mounted partition, parted now issues
+  a warning that you can choose to ignore, instead of an error.
+
+  When creating a loop label, it automatically comes with a partition
+  using the whole disk.
+
+  parted -l no longer lists device-mapper devices other than
+  dmraid whole disks.
+
+  Added new Linux-specific partition GUID type code
+  (0FC63DAF-8483-4772-8E79-3D69D8477DE4) for Linux filesystem data on GPT
+  disks.  This type code is now assigned as the default partition type code
+  for new partitions holding Linux filesystems.
+
+  Added new "msftdata" flag to identify partitions holding NTFS or FAT
+  filesystems on GPT disks.  This flag corresponds to a GPT type code of
+  EBD0A0A2-B9E5-4433-87C0-68B6B72699C7 ("Microsoft Basic Data").  Since
+  Linux filesystem partitions formerly used this type code, this flag may
+  optionally be set on Linux partitions to make the partition table type
+  codes match former configurations in case the new Linux filesystem type
+  code causes problems with some utility.  Note that this flag cannot be
+  removed from NTFS or FAT partitions within parted except by setting a
+  competing flag, such as "boot" (which sets the type code used by EFI
+  System partitions) or "msftres" (which sets the "Microsoft Reserved" type
+  code).
+
+
 * Noteworthy changes in release 3.1 (2012-03-02) [stable]
 
 ** New features
@@ -698,7 +859,7 @@ GNU parted NEWS                                    -*- outline -*-
 
 ========================================================================
 
-Copyright (C) 2001-2012 Free Software Foundation, Inc.
+Copyright (C) 2001-2014 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or

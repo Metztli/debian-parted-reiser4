@@ -1,6 +1,6 @@
 /*
     parted - a frontend to libparted
-    Copyright (C) 1999-2001, 2007, 2009-2012 Free Software Foundation, Inc.
+    Copyright (C) 1999-2001, 2007, 2009-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -112,10 +112,10 @@ gettext_to_wchar (const char* str)
 
 	memset(&ps, 0, sizeof (ps));
 	status = mbsrtowcs(result, &str, count, &ps);
-	if (status == (size_t) -1)
+	if (str != NULL)
 		goto error;
 
-	result = xrealloc (result, (wcslen (result) + 1) * sizeof (wchar_t));
+	result = xrealloc (result, (status + 1) * sizeof (wchar_t));
 	return result;
 
 error:

@@ -1,7 +1,7 @@
 #!/bin/sh
 # exercise GPT handling of n_partition_array_entries != 128
 
-# Copyright (C) 2009-2012 Free Software Foundation, Inc.
+# Copyright (C) 2009-2014 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,9 @@
 
 . "${srcdir=.}/init.sh"; path_prepend_ ../parted $srcdir
 require_perl_digest_crc_
+
+# gpt-header-munge won't work on 32bit systems
+require_64bit_
 
 ss=$sector_size_
 

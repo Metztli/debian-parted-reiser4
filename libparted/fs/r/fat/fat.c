@@ -1,6 +1,6 @@
 /*
     libparted
-    Copyright (C) 1998-2001, 2007-2012 Free Software Foundation, Inc.
+    Copyright (C) 1998-2001, 2007-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,10 +18,10 @@
 
 #include <config.h>
 #include <string.h>
-#include <uuid/uuid.h>
 
 #include "fat.h"
 #include "calc.h"
+#include "../../../labels/misc.h"
 
 PedFileSystem*
 fat_alloc (const PedGeometry* geom)
@@ -35,7 +35,9 @@ fat_alloc (const PedGeometry* geom)
 	fs->type_specific = (FatSpecific*) ped_malloc (sizeof (FatSpecific));
 	if (!fs->type_specific)
 		goto error_free_fs;
-
+	FatSpecific* fs_info = (FatSpecific*) fs->type_specific;
+	fs_info->boot_sector = NULL;
+	fs_info->info_sector = NULL;
 	fs->geom = ped_geometry_duplicate (geom);
 	if (!fs->geom)
 		goto error_free_type_specific;
@@ -86,6 +88,8 @@ fat_free_buffers (PedFileSystem* fs)
 void
 fat_free (PedFileSystem* fs)
 {
+	FatSpecific* fs_info = (FatSpecific*) fs->type_specific;
+	free (fs_info->boot_sector);
 	ped_geometry_destroy (fs->geom);
 	free (fs->type_specific);
 	free (fs);
@@ -112,19 +116,22 @@ fat_set_frag_sectors (PedFileSystem* fs, PedSector frag_sectors)
 int
 fat_clobber (PedGeometry* geom)
 {
-	FatBootSector		boot_sector;
+	FatBootSector *boot_sector;
+	int ok;
 
 	if (!fat_boot_sector_read (&boot_sector, geom))
 		return 1;
 
-	boot_sector.system_id[0] = 0;
-	boot_sector.boot_sign = 0;
-	if (boot_sector.u.fat16.fat_name[0] == 'F')
-		boot_sector.u.fat16.fat_name[0] = 0;
-	if (boot_sector.u.fat32.fat_name[0] == 'F')
-		boot_sector.u.fat32.fat_name[0] = 0;
+	boot_sector->system_id[0] = 0;
+	boot_sector->boot_sign = 0;
+	if (boot_sector->u.fat16.fat_name[0] == 'F')
+		boot_sector->u.fat16.fat_name[0] = 0;
+	if (boot_sector->u.fat32.fat_name[0] == 'F')
+		boot_sector->u.fat32.fat_name[0] = 0;
 
-        return ped_geometry_write (geom, &boot_sector, 0, 1);
+        ok = ped_geometry_write (geom, boot_sector, 0, 1);
+	free (boot_sector);
+	return ok;
 }
 
 static int
@@ -163,7 +170,7 @@ fat_open (PedGeometry* geom)
 
 	if (!fat_boot_sector_read (&fs_info->boot_sector, geom))
 		goto error_free_fs;
-	if (!fat_boot_sector_analyse (&fs_info->boot_sector, fs))
+	if (!fat_boot_sector_analyse (fs_info->boot_sector, fs))
 		goto error_free_fs;
 	fs->type = (fs_info->fat_type == FAT_TYPE_FAT16)
 				? &fat16_type
@@ -200,21 +207,6 @@ fat_root_dir_clear (PedFileSystem* fs)
 	return ped_geometry_write (fs->geom, fs_info->buffer,
 				   fs_info->root_dir_offset,
 				   fs_info->root_dir_sector_count);
-}
-
-/* hack: use the ext2 uuid library to generate a reasonably random (hopefully
- * with /dev/random) number.  Unfortunately, we can only use 4 bytes of it
- */
-static uint32_t
-_gen_new_serial_number (void)
-{
-	union {
-		uuid_t uuid;
-		uint32_t i;
-	} uu32;
-
-	uuid_generate (uu32.uuid);
-	return uu32.i;
 }
 
 PedFileSystem*
@@ -316,18 +308,18 @@ fat_create (PedGeometry* geom, FatType fat_type, PedTimer* timer)
 			return 0;
 	}
 
-	fs_info->serial_number = _gen_new_serial_number ();
+	fs_info->serial_number = generate_random_uint32 ();
 
-	if (!fat_boot_sector_set_boot_code (&fs_info->boot_sector))
+	if (!fat_boot_sector_set_boot_code (fs_info->boot_sector))
 		goto error_free_buffers;
 	if (!fat_boot_sector_generate (&fs_info->boot_sector, fs))
 		goto error_free_buffers;
-	if (!fat_boot_sector_write (&fs_info->boot_sector, fs))
+	if (!fat_boot_sector_write (fs_info->boot_sector, fs))
 		goto error_free_buffers;
 	if (fs_info->fat_type == FAT_TYPE_FAT32) {
 		if (!fat_info_sector_generate (&fs_info->info_sector, fs))
 			goto error_free_buffers;
-		if (!fat_info_sector_write (&fs_info->info_sector, fs))
+		if (!fat_info_sector_write (fs_info->info_sector, fs))
 			goto error_free_buffers;
 	}
 
@@ -484,7 +476,7 @@ fat_check (PedFileSystem* fs, PedTimer* timer)
 
 	if (fs_info->fat_type == FAT_TYPE_FAT32) {
 		info_free_clusters
-			= PED_LE32_TO_CPU (fs_info->info_sector.free_clusters);
+			= PED_LE32_TO_CPU (fs_info->info_sector->free_clusters);
 		if (info_free_clusters != (FatCluster) -1
 		    && info_free_clusters != fs_info->fat->free_cluster_count) {
 			if (ped_exception_throw (PED_EXCEPTION_WARNING,

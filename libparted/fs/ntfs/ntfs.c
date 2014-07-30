@@ -1,6 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 2000, 2007, 2009-2012 Free Software Foundation, Inc.
+    Copyright (C) 2000, 2007, 2009-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,24 +30,22 @@
 
 #include <unistd.h>
 
-#define NTFS_BLOCK_SIZES       ((int[2]){512, 0})
-
 #define NTFS_SIGNATURE	"NTFS"
 
-static PedGeometry*
+PedGeometry*
 ntfs_probe (PedGeometry* geom)
 {
-	char	buf[512];
+	char	*buf = alloca (geom->dev->sector_size);
+	PedGeometry *newg = NULL;
 
-	if (!ped_geometry_read (geom, buf, 0, 1))
+	if (!ped_geometry_read(geom, buf, 0, 1))
 		return 0;
 
 	if (strncmp (NTFS_SIGNATURE, buf + 3, strlen (NTFS_SIGNATURE)) == 0)
-		return ped_geometry_new (geom->dev, geom->start,
+		newg = ped_geometry_new (geom->dev, geom->start,
 					 PED_LE64_TO_CPU (*(uint64_t*)
 						 	  (buf + 0x28)));
-	else
-		return NULL;
+	return newg;
 }
 
 static PedFileSystemOps ntfs_ops = {
@@ -58,7 +56,6 @@ static PedFileSystemType ntfs_type = {
 	next:	NULL,
 	ops:	&ntfs_ops,
 	name:	"ntfs",
-	block_sizes: NTFS_BLOCK_SIZES
 };
 
 void

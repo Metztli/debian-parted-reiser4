@@ -1,7 +1,7 @@
 #!/bin/sh
 # Ensure that parted knows when N'th (N>=16) partition is mounted
 
-# Copyright (C) 2010-2012 Free Software Foundation, Inc.
+# Copyright (C) 2010-2014 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -87,8 +87,8 @@ for part_dev in $partitions; do
   # Removal of mounted partition must fail.
   parted -s $scsi_dev rm $n > out 2>&1 && fail=1
 
-  echo "Error: Partition $part_dev is being used." \
-	  'You must unmount it before you modify it with Parted.' \
+  echo "Warning: Partition $part_dev is being used." \
+          'Are you sure you want to continue?' \
     > exp-error || framework_failure_
 
   # expect error

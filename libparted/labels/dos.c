@@ -1,6 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 1999-2001, 2004-2005, 2007-2012 Free Software Foundation,
+    Copyright (C) 1999-2001, 2004-2005, 2007-2014 Free Software Foundation,
     Inc.
 
     This program is free software; you can redistribute it and/or modify
@@ -85,12 +85,14 @@ static const char MBR_BOOT_CODE[] = {
 #define PARTITION_LDM		0x42
 #define PARTITION_LINUX_SWAP	0x82
 #define PARTITION_LINUX		0x83
+#define PARTITION_IRST		0x84
 #define PARTITION_LINUX_EXT	0x85
 #define PARTITION_LINUX_LVM	0x8e
 #define PARTITION_HFS		0xaf
 #define PARTITION_SUN_UFS	0xbf
 #define PARTITION_DELL_DIAG	0xde
 #define PARTITION_GPT		0xee
+#define PARTITION_ESP		0xef
 #define PARTITION_PALO		0xf0
 #define PARTITION_PREP		0x41
 #define PARTITION_LINUX_RAID	0xfd
@@ -159,6 +161,8 @@ typedef struct {
 	int		palo;
 	int		prep;
 	int		diag;
+	int		irst;
+	int		esp;
 	OrigState*	orig;			/* used for CHS stuff */
 } DosPartitionData;
 
@@ -231,12 +235,23 @@ maybe_FAT (unsigned char const *s)
   return true;
 }
 
+PedGeometry*
+fat_probe_fat16 (PedGeometry* geom);
+
+PedGeometry*
+fat_probe_fat32 (PedGeometry* geom);
+
+PedGeometry*
+ntfs_probe (PedGeometry* geom);
+
 static int
 msdos_probe (const PedDevice *dev)
 {
 	PedDiskType*	disk_type;
 	DosRawTable*	part_table;
 	int		i;
+	PedGeometry *geom = NULL;
+	PedGeometry *fsgeom = NULL;
 
 	PED_ASSERT (dev != NULL);
 
@@ -252,6 +267,20 @@ msdos_probe (const PedDevice *dev)
 	/* check magic */
 	if (PED_LE16_TO_CPU (part_table->magic) != MSDOS_MAGIC)
 		goto probe_fail;
+
+	geom = ped_geometry_new (dev, 0, dev->length);
+	PED_ASSERT (geom);
+	fsgeom = fat_probe_fat16 (geom);
+	if (fsgeom)
+		goto probe_fail; /* fat fs looks like dos mbr */
+	fsgeom = fat_probe_fat32 (geom);
+	if (fsgeom)
+		goto probe_fail; /* fat fs looks like dos mbr */
+	fsgeom = ntfs_probe (geom);
+	if (fsgeom)
+		goto probe_fail; /* ntfs fs looks like dos mbr */
+	ped_geometry_destroy (geom);
+	geom = NULL;
 
 	/* If this is a FAT fs, fail here.  Checking for the FAT signature
 	 * has some false positives; instead, do what the Linux kernel does
@@ -299,6 +328,10 @@ msdos_probe (const PedDevice *dev)
 	return 1;
 
  probe_fail:
+	if (geom)
+		ped_geometry_destroy (geom);
+	if (fsgeom)
+		ped_geometry_destroy (fsgeom);
 	free (label);
 	return 0;
 }
@@ -924,6 +957,8 @@ raw_part_parse (const PedDisk* disk, const DosRawPartition* raw_part,
 	dos_data->lba = raw_part_is_lba (raw_part);
 	dos_data->palo = raw_part->type == PARTITION_PALO;
 	dos_data->prep = raw_part->type == PARTITION_PREP;
+	dos_data->irst = raw_part->type == PARTITION_IRST;
+	dos_data->esp = raw_part->type == PARTITION_ESP;
 	dos_data->orig = ped_malloc (sizeof (OrigState));
 	if (!dos_data->orig) {
 		ped_partition_destroy (part);
@@ -1236,16 +1271,6 @@ write_extended_partitions (const PedDisk* disk)
 		return write_empty_table (disk, ext_part->geom.start);
 }
 
-static inline uint32_t generate_random_id (void)
-{
-	struct timeval tv;
-	int rc;
-	rc = gettimeofday(&tv, NULL);
-	if (rc == -1)
-		return 0;
-	return (uint32_t)(tv.tv_usec & 0xFFFFFFFFUL);
-}
-
 static int
 msdos_write (const PedDisk* disk)
 {
@@ -1267,7 +1292,7 @@ msdos_write (const PedDisk* disk)
 
 	/* If there is no unique identifier, generate a random one */
 	if (!table->mbr_signature)
-		table->mbr_signature = generate_random_id();
+		table->mbr_signature = generate_random_uint32 ();
 
 	memset (table->partitions, 0, sizeof (table->partitions));
 	table->magic = PED_CPU_TO_LE16 (MSDOS_MAGIC);
@@ -1326,6 +1351,8 @@ msdos_partition_new (const PedDisk* disk, PedPartitionType part_type,
 		dos_data->lba = 0;
 		dos_data->palo = 0;
 		dos_data->prep = 0;
+		dos_data->irst = 0;
+		dos_data->esp = 0;
 	} else {
 		part->disk_specific = NULL;
 	}
@@ -1361,6 +1388,8 @@ msdos_partition_duplicate (const PedPartition* part)
 	new_dos_data->lba = old_dos_data->lba;
 	new_dos_data->palo = old_dos_data->palo;
 	new_dos_data->prep = old_dos_data->prep;
+	new_dos_data->irst = old_dos_data->irst;
+	new_dos_data->esp = old_dos_data->esp;
 
 	if (old_dos_data->orig) {
 		new_dos_data->orig = ped_malloc (sizeof (OrigState));
@@ -1409,6 +1438,8 @@ msdos_partition_set_system (PedPartition* part,
 		dos_data->lvm = 0;
 		dos_data->palo = 0;
 		dos_data->prep = 0;
+		dos_data->irst = 0;
+		dos_data->esp = 0;
 		if (dos_data->lba)
 			dos_data->system = PARTITION_EXT_LBA;
 		else
@@ -1439,6 +1470,14 @@ msdos_partition_set_system (PedPartition* part,
 	}
 	if (dos_data->prep) {
 		dos_data->system = PARTITION_PREP;
+		return 1;
+	}
+	if (dos_data->irst) {
+		dos_data->system = PARTITION_IRST;
+		return 1;
+	}
+	if (dos_data->esp) {
+		dos_data->system = PARTITION_ESP;
 		return 1;
 	}
 
@@ -1477,6 +1516,8 @@ clear_flags (DosPartitionData *dos_data)
   dos_data->lvm = 0;
   dos_data->palo = 0;
   dos_data->prep = 0;
+  dos_data->irst = 0;
+  dos_data->esp = 0;
   dos_data->raid = 0;
 }
 
@@ -1555,6 +1596,18 @@ msdos_partition_set_flag (PedPartition* part,
 		dos_data->prep = state;
 		return ped_partition_set_system (part, part->fs_type);
 
+	case PED_PARTITION_IRST:
+		if (state)
+			clear_flags (dos_data);
+		dos_data->irst = state;
+		return ped_partition_set_system (part, part->fs_type);
+
+	case PED_PARTITION_ESP:
+		if (state)
+			clear_flags (dos_data);
+		dos_data->esp = state;
+		return ped_partition_set_system (part, part->fs_type);
+
 	default:
 		return 0;
 	}
@@ -1597,6 +1650,12 @@ msdos_partition_get_flag (const PedPartition* part, PedPartitionFlag flag)
 	case PED_PARTITION_PREP:
 		return dos_data->prep;
 
+	case PED_PARTITION_IRST:
+		return dos_data->irst;
+
+	case PED_PARTITION_ESP:
+		return dos_data->esp;
+
 	default:
 		return 0;
 	}
@@ -1619,6 +1678,8 @@ msdos_partition_is_flag_available (const PedPartition* part,
 	case PED_PARTITION_LBA:
 	case PED_PARTITION_PALO:
 	case PED_PARTITION_PREP:
+	case PED_PARTITION_IRST:
+	case PED_PARTITION_ESP:
 	case PED_PARTITION_DIAG:
 		return 1;
 

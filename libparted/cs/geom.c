@@ -1,6 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 1999-2000, 2005, 2007-2012 Free Software Foundation, Inc.
+    Copyright (C) 1999-2000, 2005, 2007-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -153,6 +153,7 @@ ped_geometry_set (PedGeometry* geom, PedSector start, PedSector length)
 {
 	PED_ASSERT (geom != NULL);
 	PED_ASSERT (geom->dev != NULL);
+	PED_ASSERT (start >= 0);
 
 	if (length < 1) {
 		ped_exception_throw (
@@ -162,13 +163,6 @@ ped_geometry_set (PedGeometry* geom, PedSector start, PedSector length)
                           " (start sector=%jd length=%jd)"), start, length);
 		return 0;
 	}
-	if (start < 0 || start + length - 1 >= geom->dev->length) {
-		ped_exception_throw (
-			PED_EXCEPTION_ERROR,
-			PED_EXCEPTION_CANCEL,
-			_("Can't have a partition outside the disk!"));
-		return 0;
- 	}
 
 	geom->start = start;
 	geom->length = length;

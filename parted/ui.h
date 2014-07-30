@@ -1,6 +1,6 @@
 /*
     parted - a frontend to libparted
-    Copyright (C) 1999-2001, 2007-2012 Free Software Foundation, Inc.
+    Copyright (C) 1999-2001, 2007-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,9 +31,11 @@ extern const char *prog_name;
 
 extern int init_ui ();
 extern int init_readline ();
-extern int non_interactive_mode (PedDevice** dev, Command* cmd_list[],
-				 int argc, char* argv[]);
-extern int interactive_mode (PedDevice** dev, Command* cmd_list[]);
+extern int non_interactive_mode (PedDevice** dev, PedDisk **disk,
+				 Command* cmd_list[], int argc,
+				 char* argv[]);
+extern int interactive_mode (PedDevice** dev, PedDisk **disk,
+			     Command* cmd_list[]);
 extern void done_ui ();
 
 extern int screen_width ();

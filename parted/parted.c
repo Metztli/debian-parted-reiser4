@@ -1,6 +1,6 @@
 /*
     parted - a frontend to libparted
-    Copyright (C) 1999-2003, 2005-2012 Free Software Foundation, Inc.
+    Copyright (C) 1999-2003, 2005-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -144,6 +144,7 @@ static const char* number_msg = N_(
 
 static const char* label_type_msg_start = N_("LABEL-TYPE is one of: ");
 static const char* flag_msg_start =   N_("FLAG is one of: ");
+static const char* disk_flag_msg_start =   N_("FLAG is one of: ");
 static const char* unit_msg_start =   N_("UNIT is one of: ");
 static const char* min_or_opt_msg = N_("desired alignment: minimum or optimal");
 static const char* part_type_msg =    N_("PART-TYPE is one of: primary, logical, "
@@ -151,6 +152,9 @@ static const char* part_type_msg =    N_("PART-TYPE is one of: primary, logical,
 static const char* fs_type_msg_start = N_("FS-TYPE is one of: ");
 static const char* start_end_msg =    N_("START and END are disk locations, such as "
                 "4GB or 10%.  Negative values count from the end of the disk.  "
+                "For example, -1s specifies exactly the last sector.\n");
+static const char* end_msg =          N_("END is disk location, such as "
+                "4GB or 10%.  Negative value counts from the end of the disk.  "
                 "For example, -1s specifies exactly the last sector.\n");
 static const char* state_msg =        N_("STATE is one of: on, off\n");
 static const char* device_msg =       N_("DEVICE is usually /dev/hda or /dev/sda\n");
@@ -167,6 +171,7 @@ static const char* copyright_msg = N_(
 
 static char* label_type_msg;
 static char* flag_msg;
+static char* disk_flag_msg;
 static char* unit_msg;
 
 static char* mkpart_fs_type_msg;
@@ -176,7 +181,7 @@ static PedTimer* g_timer;
 static TimerContext timer_context;
 
 static int _print_list ();
-static void _done (PedDevice* dev);
+static void _done (PedDevice* dev, PedDisk *diskp);
 static bool partition_align_check (PedDisk const *disk,
                         PedPartition const *part, enum AlignmentType a_type);
 
@@ -219,14 +224,17 @@ _partition_warn_busy (PedPartition* part)
 
         if (ped_partition_is_busy (part)) {
                 path = ped_partition_get_path (part);
-                ped_exception_throw (
-                        PED_EXCEPTION_ERROR,
-                        PED_EXCEPTION_CANCEL,
-                        _("Partition %s is being used. You must unmount it "
-                          "before you modify it with Parted."),
-                        path);
+                if (ped_exception_throw (
+                            PED_EXCEPTION_WARNING,
+                            PED_EXCEPTION_YES_NO,
+                            _("Partition %s is being used. Are you sure you " \
+                              "want to continue?"),
+                            path) != PED_EXCEPTION_YES)
+                {
+                        free (path);
+                        return 0;
+                }
                 free (path);
-                return 0;
         }
         return 1;
 }
@@ -435,6 +443,21 @@ constraint_from_start_end (PedDevice* dev, PedGeometry* range_start,
                 range_start, range_end, 1, dev->length);
 }
 
+
+static PedConstraint*
+constraint_from_start_end_fixed_start (PedDevice* dev, PedSector start_sector,
+                           PedGeometry* range_end)
+{
+        PedGeometry range_start;
+        range_start.dev = dev;
+        range_start.start = start_sector;
+        range_start.end = start_sector;
+        range_start.length = 1;
+
+        return ped_constraint_new (ped_alignment_any, ped_alignment_any,
+                &range_start, range_end, 1, dev->length);
+}
+
 void
 help_on (char* topic)
 {
@@ -469,7 +492,7 @@ print_options_help ()
 }
 
 int
-do_help (PedDevice** dev)
+do_help (PedDevice** dev, PedDisk** diskp)
 {
         if (command_line_get_word_count ()) {
                 char*   word = command_line_pop_word ();
@@ -484,26 +507,28 @@ do_help (PedDevice** dev)
 }
 
 static int
-do_mklabel (PedDevice** dev)
+do_mklabel (PedDevice** dev, PedDisk** diskp)
 {
         PedDisk*                disk;
         const PedDiskType*      type = NULL;
 
-        ped_exception_fetch_all ();
-        disk = ped_disk_new (*dev);
-        if (!disk) ped_exception_catch ();
-        ped_exception_leave_all ();
+        if (*diskp)
+                disk = *diskp;
+        else {
+                ped_exception_fetch_all ();
+                disk = ped_disk_new (*dev);
+                if (!disk) ped_exception_catch ();
+                ped_exception_leave_all ();
+        }
 
         if (!command_line_get_disk_type (_("New disk label type?"), &type))
                 goto error;
 
         if (disk) {
                 if (!_disk_warn_busy (disk))
-                        goto error_destroy_disk;
+                        goto error;
                 if (!opt_script_mode && !_disk_warn_loss (disk))
-                        goto error_destroy_disk;
-
-                ped_disk_destroy (disk);
+                        goto error;
         }
 
         disk = ped_disk_new_fresh (*dev, type);
@@ -512,15 +537,17 @@ do_mklabel (PedDevice** dev)
 
         if (!ped_disk_commit (disk))
                 goto error_destroy_disk;
-        ped_disk_destroy (disk);
 
         if ((*dev)->type != PED_DEVICE_FILE)
                 disk_is_modified = 1;
-
+        if (*diskp)
+                ped_disk_destroy (*diskp);
+        *diskp = disk;
         return 1;
 
 error_destroy_disk:
         ped_disk_destroy (disk);
+        *diskp = 0;
 error:
         return 0;
 }
@@ -598,7 +625,7 @@ _adjust_end_if_iec (PedSector* start, PedSector* end,
 }
 
 static int
-do_mkpart (PedDevice** dev)
+do_mkpart (PedDevice** dev, PedDisk** diskp)
 {
         PedDisk*                 disk;
         PedPartition*            part;
@@ -614,21 +641,26 @@ do_mkpart (PedDevice** dev)
         char                     *start_usr = NULL, *end_usr = NULL;
         char                     *start_sol = NULL, *end_sol = NULL;
 
-        disk = ped_disk_new (*dev);
+        if (*diskp)
+                disk = *diskp;
+        else {
+                disk = ped_disk_new (*dev);
+                *diskp = disk;
+        }
         if (!disk)
                 goto error;
 
         if (ped_disk_is_flag_available(disk, PED_DISK_CYLINDER_ALIGNMENT))
                 if (!ped_disk_set_flag(disk, PED_DISK_CYLINDER_ALIGNMENT,
                                        alignment == ALIGNMENT_CYLINDER))
-                        goto error_destroy_disk;
+                        goto error;
 
         if (!ped_disk_type_check_feature (disk->type, PED_DISK_TYPE_EXTENDED)) {
                 part_type = PED_PARTITION_NORMAL;
         } else {
                 if (!command_line_get_part_type (_("Partition type?"),
                                                 disk, &part_type))
-                        goto error_destroy_disk;
+                        goto error;
         }
 
         /* The undocumented feature that mkpart sometimes takes a
@@ -654,15 +686,15 @@ do_mkpart (PedDevice** dev)
         } else {
                 if (!command_line_get_fs_type (_("File system type?"),
                                                &fs_type))
-                        goto error_destroy_disk;
+                        goto error;
         }
         free (peek_word);
 
         if (!command_line_get_sector (_("Start?"), *dev, &start, &range_start, NULL))
-                goto error_destroy_disk;
+                goto error;
         char *end_input;
         if (!command_line_get_sector (_("End?"), *dev, &end, &range_end, &end_input))
-                goto error_destroy_disk;
+                goto error;
 
         _adjust_end_if_iec(&start, &end, range_end, end_input);
         free(end_input);
@@ -670,7 +702,7 @@ do_mkpart (PedDevice** dev)
         /* processing starts here */
         part = ped_partition_new (disk, part_type, fs_type, start, end);
         if (!part)
-                goto error_destroy_disk;
+                goto error;
 
         snap_to_boundaries (&part->geom, NULL, disk, range_start, range_end);
 
@@ -778,16 +810,14 @@ do_mkpart (PedDevice** dev)
         free (part_name);  /* avoid double-free upon failure */
         part_name = NULL;
         if (!ped_partition_set_system (part, fs_type))
-                goto error_destroy_disk;
+                goto error;
         if (ped_partition_is_flag_available (part, PED_PARTITION_LBA))
                 ped_partition_set_flag (part, PED_PARTITION_LBA, 1);
 
         if (!ped_disk_commit (disk))
-                goto error_destroy_disk;
+                goto error;
 
         /* clean up */
-        ped_disk_destroy (disk);
-
         if (range_start != NULL)
                 ped_geometry_destroy (range_start);
         if (range_end != NULL)
@@ -807,10 +837,8 @@ error_remove_part:
         ped_disk_remove_partition (disk, part);
 error_destroy_simple_constraints:
         ped_partition_destroy (part);
-error_destroy_disk:
-        free (part_name);
-        ped_disk_destroy (disk);
 error:
+        free (part_name);
         if (range_start != NULL)
                 ped_geometry_destroy (range_start);
         if (range_end != NULL)
@@ -825,36 +853,33 @@ error:
 }
 
 static int
-do_name (PedDevice** dev)
+do_name (PedDevice** dev, PedDisk** diskp)
 {
-        PedDisk*        disk;
         PedPartition*   part = NULL;
         char*           name;
 
-        disk = ped_disk_new (*dev);
-        if (!disk)
+        if (!*diskp)
+                *diskp = ped_disk_new (*dev);
+        if (!diskp)
                 goto error;
 
-        if (!command_line_get_partition (_("Partition number?"), disk, &part))
-                goto error_destroy_disk;
+        if (!command_line_get_partition (_("Partition number?"), *diskp, &part))
+                goto error;
 
         name = command_line_get_word (_("Partition name?"),
                         ped_partition_get_name (part), NULL, 0);
         if (!name)
-                goto error_destroy_disk;
+                goto error;
         if (!ped_partition_set_name (part, name))
                 goto error_free_name;
         free (name);
 
-        if (!ped_disk_commit (disk))
-                goto error_destroy_disk;
-        ped_disk_destroy (disk);
+        if (!ped_disk_commit (*diskp))
+                goto error;
         return 1;
 
 error_free_name:
         free (name);
-error_destroy_disk:
-        ped_disk_destroy (disk);
 error:
         return 0;
 }
@@ -941,7 +966,7 @@ _print_disk_geometry (const PedDevice *dev)
 }
 
 static void
-_print_disk_info (const PedDevice *dev, const PedDisk *disk)
+_print_disk_info (const PedDevice *dev, const PedDisk *diskp)
 {
         char const *const transport[] = {"unknown", "scsi", "ide", "dac960",
                                          "cpqarray", "file", "ataraid", "i2o",
@@ -955,8 +980,8 @@ _print_disk_info (const PedDevice *dev, const PedDisk *disk)
                                     - (default_unit == PED_UNIT_CHS ||
                                        default_unit == PED_UNIT_CYLINDER));
 
-        const char* pt_name = disk ? disk->type->name : "unknown";
-        char *disk_flags = disk_print_flags (disk);
+        const char* pt_name = diskp ? diskp->type->name : "unknown";
+        char *disk_flags = disk_print_flags (diskp);
 
         if (opt_machine_mode) {
             switch (default_unit) {
@@ -995,9 +1020,8 @@ _print_disk_info (const PedDevice *dev, const PedDisk *disk)
 }
 
 static int
-do_print (PedDevice** dev)
+do_print (PedDevice** dev, PedDisk** diskp)
 {
-        PedDisk*        disk = NULL;
         Table*          table;
         int             has_extended;
         int             has_name;
@@ -1039,22 +1063,23 @@ do_print (PedDevice** dev)
         }
 
         if (!has_devices_arg && !has_list_arg) {
-                disk = ped_disk_new (*dev);
+                if (!*diskp)
+                        *diskp = ped_disk_new (*dev);
                 /* Returning NULL here is an indication of failure, when in
                    script mode.  Otherwise (interactive mode) it may indicate
                    a real error, but it may also indicate that the user
                    declined when asked to perform some operation.  FIXME:
                    what this really needs is an API change, but a reliable
                    exit code is less important in interactive mode.  */
-                if (disk == NULL && opt_script_mode)
+                if (*diskp == NULL && opt_script_mode)
                         ok = 0;
         }
 
-        if (disk &&
-            ped_disk_is_flag_available(disk, PED_DISK_CYLINDER_ALIGNMENT))
-                if (!ped_disk_set_flag(disk, PED_DISK_CYLINDER_ALIGNMENT,
+        if (*diskp &&
+            ped_disk_is_flag_available(*diskp, PED_DISK_CYLINDER_ALIGNMENT))
+                if (!ped_disk_set_flag(*diskp, PED_DISK_CYLINDER_ALIGNMENT,
                                        alignment == ALIGNMENT_CYLINDER))
-                        goto error_destroy_disk;
+                        return 0;
 
         if (has_devices_arg) {
                 char*           dev_name;
@@ -1087,24 +1112,23 @@ do_print (PedDevice** dev)
         else if (has_list_arg)
                 return _print_list ();
 
-        else if (disk && has_num_arg) {
+        else if (*diskp && has_num_arg) {
                 PedPartition*   part = NULL;
                 int             status = 0;
-                if (command_line_get_partition ("", disk, &part))
+                if (command_line_get_partition ("", *diskp, &part))
                         status = partition_print (part);
-                ped_disk_destroy (disk);
                 return status;
         }
 
-        _print_disk_info (*dev, disk);
-        if (!disk)
+        _print_disk_info (*dev, *diskp);
+        if (!*diskp)
                 goto nopt;
         if (!opt_machine_mode)
                 putchar ('\n');
 
-        has_extended = ped_disk_type_check_feature (disk->type,
+        has_extended = ped_disk_type_check_feature ((*diskp)->type,
                                          PED_DISK_TYPE_EXTENDED);
-        has_name = ped_disk_type_check_feature (disk->type,
+        has_name = ped_disk_type_check_feature ((*diskp)->type,
                                          PED_DISK_TYPE_PARTITION_NAME);
 
         PedPartition* part;
@@ -1134,8 +1158,8 @@ do_print (PedDevice** dev)
 
             table_add_row_from_strlist (table, row1);
 
-            for (part = ped_disk_next_partition (disk, NULL); part;
-                 part = ped_disk_next_partition (disk, part)) {
+            for (part = ped_disk_next_partition (*diskp, NULL); part;
+                 part = ped_disk_next_partition (*diskp, part)) {
 
                     if ((!has_free_arg && !ped_partition_is_active(part)) ||
                         part->type & PED_PARTITION_METADATA)
@@ -1210,8 +1234,8 @@ do_print (PedDevice** dev)
 
         } else {
 
-            for (part = ped_disk_next_partition (disk, NULL); part;
-                 part = ped_disk_next_partition (disk, part)) {
+            for (part = ped_disk_next_partition (*diskp, NULL); part;
+                 part = ped_disk_next_partition (*diskp, part)) {
 
                 if ((!has_free_arg && !ped_partition_is_active(part)) ||
                         part->type & PED_PARTITION_METADATA)
@@ -1259,13 +1283,8 @@ do_print (PedDevice** dev)
             }
         }
 
-        ped_disk_destroy (disk);
-
         return ok;
 
-error_destroy_disk:
-        ped_disk_destroy (disk);
-        return 0;
 nopt:
         return ok;
 }
@@ -1274,11 +1293,15 @@ static int
 _print_list ()
 {
         PedDevice *current_dev = NULL;
+        PedDisk *diskp = NULL;
 
         ped_device_probe_all();
 
         while ((current_dev = ped_device_get_next(current_dev))) {
-                do_print (&current_dev);
+                do_print (&current_dev, &diskp);
+                if (diskp)
+                        ped_disk_destroy (diskp);
+                diskp = 0;
                 putchar ('\n');
         }
 
@@ -1286,9 +1309,9 @@ _print_list ()
 }
 
 static int
-do_quit (PedDevice** dev)
+do_quit (PedDevice** dev, PedDisk **diskp)
 {
-        _done (*dev);
+        _done (*dev, *diskp);
         exit (EXIT_SUCCESS);
 }
 
@@ -1434,7 +1457,7 @@ error_remove_partition:
 }
 
 static int
-do_rescue (PedDevice** dev)
+do_rescue (PedDevice** dev, PedDisk** diskp)
 {
         PedDisk*                disk;
         PedSector               start = 0, end = 0;
@@ -1442,6 +1465,10 @@ do_rescue (PedDevice** dev)
         PedGeometry             probe_start_region;
         PedGeometry             probe_end_region;
 
+        if (*diskp) {
+                ped_disk_destroy (*diskp);
+                *diskp = 0;
+        }
         disk = ped_disk_new (*dev);
         if (!disk)
                 goto error;
@@ -1478,37 +1505,104 @@ error:
 }
 
 static int
-do_rm (PedDevice** dev)
+do_resize (PedDevice **dev, PedDisk** diskp)
 {
-        PedDisk*                disk;
-        PedPartition*           part = NULL;
+        ped_exception_throw (
+                PED_EXCEPTION_ERROR,
+                PED_EXCEPTION_CANCEL,
+                _("The resize command has been removed in parted 3.0"));
+        return 0;
+}
 
-        disk = ped_disk_new (*dev);
+static int
+do_resizepart (PedDevice** dev, PedDisk** diskp)
+{
+        PedDisk                 *disk = *diskp;
+        PedPartition            *part = NULL;
+        PedSector               start, end, oldend;
+        PedGeometry             *range_end = NULL;
+        PedConstraint*          constraint;
+        int rc = 0;
+
+        if (!disk) {
+                disk = ped_disk_new (*dev);
+                *diskp = disk;
+        }
         if (!disk)
                 goto error;
 
-        if (!command_line_get_partition (_("Partition number?"), disk, &part))
-                goto error_destroy_disk;
-        if (!_partition_warn_busy (part))
-                goto error_destroy_disk;
+        if (ped_disk_is_flag_available(disk, PED_DISK_CYLINDER_ALIGNMENT))
+                if (!ped_disk_set_flag(disk, PED_DISK_CYLINDER_ALIGNMENT,
+                                       alignment == ALIGNMENT_CYLINDER))
+                        goto error;
 
-        ped_disk_delete_partition (disk, part);
+        if (!command_line_get_partition (_("Partition number?"), disk, &part))
+                goto error;
+        if (!_partition_warn_busy (part))
+                goto error;
+
+        start = part->geom.start;
+        end = oldend = part->geom.end;
+        if (!command_line_get_sector (_("End?"), *dev, &end, &range_end, NULL))
+                goto error;
+        /* Do not move start of the partition */
+        constraint = constraint_from_start_end_fixed_start (*dev, start, range_end);
+        if (!ped_disk_set_partition_geom (disk, part, constraint,
+                                          start, end))
+                goto error_destroy_constraint;
+        /* warn when shrinking partition - might lose data */
+        if (part->geom.end < oldend)
+                if (ped_exception_throw (
+                            PED_EXCEPTION_WARNING,
+                            PED_EXCEPTION_YES_NO,
+                            _("Shrinking a partition can cause data loss, " \
+                              "are you sure you want to continue?")) != PED_EXCEPTION_YES)
+                        goto error_destroy_constraint;
         ped_disk_commit (disk);
-        ped_disk_destroy (disk);
+
+        if ((*dev)->type != PED_DEVICE_FILE)
+                disk_is_modified = 1;
+
+        rc = 1;
+
+error_destroy_constraint:
+        ped_constraint_destroy (constraint);
+error:
+        if (range_end != NULL)
+                ped_geometry_destroy (range_end);
+        return rc;
+}
+
+
+static int
+do_rm (PedDevice** dev, PedDisk** diskp)
+{
+        PedPartition*           part = NULL;
+
+        if (!*diskp)
+                *diskp = ped_disk_new (*dev);
+        if (!*diskp)
+                goto error;
+
+        if (!command_line_get_partition (_("Partition number?"), *diskp, &part))
+                goto error;
+        if (!_partition_warn_busy (part))
+                goto error;
+
+        ped_disk_delete_partition (*diskp, part);
+        ped_disk_commit (*diskp);
 
         if ((*dev)->type != PED_DEVICE_FILE)
                 disk_is_modified = 1;
 
         return 1;
 
-error_destroy_disk:
-        ped_disk_destroy (disk);
 error:
         return 0;
 }
 
 static int
-do_select (PedDevice** dev)
+do_select (PedDevice** dev, PedDisk** diskp)
 {
         PedDevice*      new_dev = *dev;
 
@@ -1518,6 +1612,10 @@ do_select (PedDevice** dev)
                 return 0;
 
         ped_device_close (*dev);
+        if (*diskp) {
+                ped_disk_destroy (*diskp);
+                *diskp = 0;
+        }
         *dev = new_dev;
         print_using_dev (*dev);
         return 1;
@@ -1548,25 +1646,24 @@ partition_align_check (PedDisk const *disk, PedPartition const *part,
 }
 
 static int
-do_align_check (PedDevice **dev)
+do_align_check (PedDevice **dev, PedDisk** diskp)
 {
-  PedDisk *disk = ped_disk_new (*dev);
-  if (!disk)
+  if (!*diskp)
+    *diskp = ped_disk_new (*dev);
+  if (!*diskp)
     goto error;
 
   enum AlignmentType align_type = PA_OPTIMUM;
   PedPartition *part = NULL;
 
   if (!command_line_get_align_type (_("alignment type(min/opt)"), &align_type))
-    goto error_destroy_disk;
-  if (!command_line_get_partition (_("Partition number?"), disk, &part))
-    goto error_destroy_disk;
+    goto error;
+  if (!command_line_get_partition (_("Partition number?"), *diskp, &part))
+    goto error;
 
-  bool aligned = partition_align_check (disk, part, align_type);
+  bool aligned = partition_align_check (*diskp, part, align_type);
   if (!opt_script_mode)
     printf(aligned ? _("%d aligned\n") : _("%d not aligned\n"), part->num);
-
-  ped_disk_destroy (disk);
 
   if (opt_script_mode)
     return aligned ? 1 : 0;
@@ -1575,115 +1672,107 @@ do_align_check (PedDevice **dev)
      with the other modes.  */
   return 1;
 
-error_destroy_disk:
-  ped_disk_destroy (disk);
 error:
   return 0;
 }
 
 static int
-do_disk_set (PedDevice** dev)
+do_disk_set (PedDevice** dev, PedDisk** diskp)
 {
-    PedDisk*    disk;
     PedDiskFlag flag;
     int         state;
 
-    disk = ped_disk_new (*dev);
-    if (!disk)
+    if (!*diskp)
+            *diskp = ped_disk_new (*dev);
+    if (!diskp)
         goto error;
 
-    if (!command_line_get_disk_flag (_("Flag to Invert?"), disk, &flag))
-        goto error_destroy_disk;
-    state = (ped_disk_get_flag (disk, flag) == 0 ? 1 : 0);
+    if (!command_line_get_disk_flag (_("Flag to Invert?"), *diskp, &flag))
+        goto error;
+    state = (ped_disk_get_flag (*diskp, flag) == 0 ? 1 : 0);
 
     if (!is_toggle_mode) {
         if (!command_line_get_state (_("New state?"), &state))
-            goto error_destroy_disk;
+            goto error;
     }
 
-    if (!ped_disk_set_flag (disk, flag, state))
-        goto error_destroy_disk;
-    if (!ped_disk_commit (disk))
-        goto error_destroy_disk;
-    ped_disk_destroy (disk);
+    if (!ped_disk_set_flag (*diskp, flag, state))
+        goto error;
+    if (!ped_disk_commit (*diskp))
+        goto error;
 
     if ((*dev)->type != PED_DEVICE_FILE)
         disk_is_modified = 1;
 
     return 1;
 
-error_destroy_disk:
-    ped_disk_destroy (disk);
 error:
     return 0;
 }
 
 static int
-do_set (PedDevice** dev)
+do_set (PedDevice** dev, PedDisk **diskp)
 {
-        PedDisk*                disk;
         PedPartition*           part = NULL;
         PedPartitionFlag        flag;
         int                     state;
 
-        disk = ped_disk_new (*dev);
-        if (!disk)
+        if (*diskp == 0)
+                *diskp = ped_disk_new (*dev);
+        if (!*diskp)
                 goto error;
 
-        if (!command_line_get_partition (_("Partition number?"), disk, &part))
-                goto error_destroy_disk;
+        if (!command_line_get_partition (_("Partition number?"), *diskp, &part))
+                goto error;
         if (!command_line_get_part_flag (_("Flag to Invert?"), part, &flag))
-                goto error_destroy_disk;
+                goto error;
         state = (ped_partition_get_flag (part, flag) == 0 ? 1 : 0);
 
         if (!is_toggle_mode) {
                 if (!command_line_get_state (_("New state?"), &state))
-		            goto error_destroy_disk;
+                        goto error;
         }
 
         if (!ped_partition_set_flag (part, flag, state))
-	        	goto error_destroy_disk;
-    	if (!ped_disk_commit (disk))
-	        	goto error_destroy_disk;
-    	ped_disk_destroy (disk);
+                goto error;
+        if (!ped_disk_commit (*diskp))
+                goto error;
 
         if ((*dev)->type != PED_DEVICE_FILE)
                 disk_is_modified = 1;
 
-	    return 1;
+        return 1;
 
-error_destroy_disk:
-        ped_disk_destroy (disk);
 error:
         return 0;
 }
 
 static int
-do_disk_toggle (PedDevice **dev)
+do_disk_toggle (PedDevice **dev, PedDisk** diskp)
 {
     int result;
 
     is_toggle_mode = 1;
-    result = do_disk_set (dev);
+    result = do_disk_set (dev, diskp);
     is_toggle_mode = 0;
 
     return result;
 }
 
 static int
-do_toggle (PedDevice **dev)
+do_toggle (PedDevice **dev, PedDisk** diskp)
 {
         int result;
 
         is_toggle_mode = 1;
-        result = do_set (dev);
+        result = do_set (dev, diskp);
         is_toggle_mode = 0;
 
         return result;
 }
 
 static int
-do_unit (PedDevice** dev)
+do_unit (PedDevice** dev, PedDisk** diskp)
 {
         PedUnit unit = ped_unit_get_default ();
         if (!command_line_get_unit (_("Unit?"), &unit))
@@ -1710,6 +1799,7 @@ _init_messages ()
         PedFileSystemAlias*     fs_alias;
         PedDiskType*            disk_type;
         PedPartitionFlag        part_flag;
+        PedDiskFlag             disk_flag;
         PedUnit                 unit;
 
 /* flags */
@@ -1727,6 +1817,22 @@ _init_messages ()
         str_list_append (list, "\n");
 
         flag_msg = str_list_convert (list);
+        str_list_destroy (list);
+/* disk flags */
+        first = 1;
+        list = str_list_create (_(disk_flag_msg_start), NULL);
+        for (disk_flag = ped_disk_flag_next (0); disk_flag;
+                        disk_flag = ped_disk_flag_next (disk_flag)) {
+                if (first)
+                        first = 0;
+                else
+                        str_list_append (list, ", ");
+                str_list_append (list,
+                                 _(ped_disk_flag_get_name (disk_flag)));
+        }
+        str_list_append (list, "\n");
+
+        disk_flag_msg = str_list_convert (list);
         str_list_destroy (list);
 
 /* units */
@@ -1891,6 +1997,20 @@ NULL),
         str_list_create (_(start_end_msg), NULL), 1));
 
 command_register (commands, command_create (
+        str_list_create_unique ("resize", _("resize"), NULL),
+        do_resize,
+        NULL,
+        str_list_create (_(N_("The resize command was removed in parted 3.0\n")), NULL), 1));
+
+command_register (commands, command_create (
+        str_list_create_unique ("resizepart", _("resizepart"), NULL),
+        do_resizepart,
+        str_list_create (
+_("resizepart NUMBER END                    resize partition NUMBER"),
+NULL),
+        str_list_create (_(number_msg), _(end_msg), NULL), 1));
+
+command_register (commands, command_create (
         str_list_create_unique ("rm", _("rm"), NULL),
         do_rm,
         str_list_create (
@@ -1912,7 +2032,7 @@ command_register (commands, command_create (
         str_list_create (
 _("disk_set FLAG STATE                      change the FLAG on selected device"),
 NULL),
-        str_list_create (flag_msg, _(state_msg), NULL), 1));
+        str_list_create (disk_flag_msg, _(state_msg), NULL), 1));
 
 command_register (commands, command_create (
         str_list_create_unique ("disk_toggle", _("disk_toggle"), NULL),
@@ -1921,7 +2041,7 @@ command_register (commands, command_create (
 _("disk_toggle [FLAG]                       toggle the state of FLAG on "
 "selected device"),
 NULL),
-        str_list_create (flag_msg, NULL), 1));
+        str_list_create (disk_flag_msg, NULL), 1));
 
 command_register (commands, command_create (
 		str_list_create_unique ("set", _("set"), NULL),
@@ -2131,20 +2251,22 @@ return NULL;
 }
 
 static void
-_done (PedDevice* dev)
+_done (PedDevice* dev, PedDisk* diskp)
 {
-if (dev->boot_dirty && dev->type != PED_DEVICE_FILE) {
-        ped_exception_throw (
-                PED_EXCEPTION_WARNING,
-                PED_EXCEPTION_OK,
-        _("You should reinstall your boot loader before "
-          "rebooting.  Read section 4 of the Parted User "
-          "documentation for more information."));
-}
-if (!opt_script_mode && !opt_machine_mode && disk_is_modified) {
-        ped_exception_throw (
-                PED_EXCEPTION_INFORMATION, PED_EXCEPTION_OK,
-                _("You may need to update /etc/fstab.\n"));
+        if (diskp)
+                ped_disk_destroy (diskp);
+        if (dev->boot_dirty && dev->type != PED_DEVICE_FILE) {
+                ped_exception_throw (
+                        PED_EXCEPTION_WARNING,
+                        PED_EXCEPTION_OK,
+                        _("You should reinstall your boot loader before "
+                          "rebooting.  Read section 4 of the Parted User "
+                          "documentation for more information."));
+        }
+        if (!opt_script_mode && !opt_machine_mode && disk_is_modified) {
+                ped_exception_throw (
+                        PED_EXCEPTION_INFORMATION, PED_EXCEPTION_OK,
+                        _("You may need to update /etc/fstab.\n"));
 }
 
 ped_device_close (dev);
@@ -2159,6 +2281,7 @@ int
 main (int argc, char** argv)
 {
         PedDevice*      dev;
+	PedDisk*        diskp = 0;
         int             status;
 
         set_program_name (argv[0]);
@@ -2169,11 +2292,11 @@ main (int argc, char** argv)
                 return 1;
 
         if (argc || opt_script_mode)
-                status = non_interactive_mode (&dev, commands, argc, argv);
+                status = non_interactive_mode (&dev, &diskp, commands, argc, argv);
         else
-                status = interactive_mode (&dev, commands);
+                status = interactive_mode (&dev, &diskp, commands);
 
-        _done (dev);
+        _done (dev, diskp);
 
         return !status;
 }

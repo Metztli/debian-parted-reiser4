@@ -1,6 +1,6 @@
 /*
     libparted
-    Copyright (C) 1998-2001, 2007, 2009-2012 Free Software Foundation, Inc.
+    Copyright (C) 1998-2001, 2007, 2009-2014 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -77,8 +77,8 @@ struct __attribute__ ((packed)) _FatDirEntry {
 };
 
 struct _FatSpecific {
-	FatBootSector	boot_sector;    /* structure of boot sector */
-	FatInfoSector	info_sector;    /* fat32-only information sector */
+	FatBootSector	*boot_sector;    /* structure of boot sector */
+	FatInfoSector	*info_sector;    /* fat32-only information sector */
 
 	int		logical_sector_size;	/* illogical sector size :-) */
 	PedSector	sector_count;
