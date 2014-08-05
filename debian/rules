@@ -14,6 +14,7 @@ DEB_HOST_ARCH_OS ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
 export V := 1
 
 CONFFLAGS := --sbindir=/sbin --enable-mtrace --enable-shared
+CONFFLAGS += --disable-gcc-warnings
 
 # Enable device-mapper only on Linux
 ifeq (linux, $(DEB_HOST_ARCH_OS))
