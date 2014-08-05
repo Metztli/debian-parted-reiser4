@@ -1,4 +1,4 @@
-From f0c01051b5ccfb3f211919879811f6d41702bc53 Mon Sep 17 00:00:00 2001
+From 8881181528278f81198f8994deb4188f94a559e9 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Wed, 30 Jul 2014 12:18:55 +0100
 Subject: Remove stray non-512-byte-logical-sector assertion for FAT resizing

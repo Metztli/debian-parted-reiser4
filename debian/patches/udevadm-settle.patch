@@ -1,4 +1,4 @@
-From 7112a968ce3d6eb6a6755d29a1eda5942c2c75d1 Mon Sep 17 00:00:00 2001
+From c090c5950d2ab84dc8f5b2a74b6408cdf2d5e8e5 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:10:16 +0000
 Subject: udev handling
@@ -9,15 +9,15 @@ This should be replaced by a proper completion-notification mechanism
 between the kernel and udev.
 
 Forwarded: no
-Last-Update: 2014-07-07
+Last-Update: 2014-08-05
 
 Patch-Name: udevadm-settle.patch
 ---
- libparted/arch/linux.c | 57 ++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 55 insertions(+), 2 deletions(-)
+ libparted/arch/linux.c | 56 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 54 insertions(+), 2 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index 0f18904..c9c281d 100644
+index 0f18904..703294e 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
 @@ -26,6 +26,7 @@
@@ -81,7 +81,7 @@ index 0f18904..c9c281d 100644
          if (disk->dev->type != PED_DEVICE_FILE) {
  
  		/* We now require BLKPG support.  If this assertion fails,
-@@ -3118,10 +3161,20 @@ linux_disk_commit (PedDisk* disk)
+@@ -3118,10 +3161,19 @@ linux_disk_commit (PedDisk* disk)
  		assert (_have_blkpg ());
  
  		if (!_disk_sync_part_table (disk))
@@ -90,7 +90,6 @@ index 0f18904..c9c281d 100644
          }
  
 -        return 1;
-+out:
 +        /* Now we wait for udevd to finish creating device nodes based on
 +         * the above activity, so that callers can reliably use them.
 +         * TODO: for upstream submission, this should check whether udevadm

@@ -3164,7 +3164,6 @@ linux_disk_commit (PedDisk* disk)
 			ret = 0;
         }
 
-out:
         /* Now we wait for udevd to finish creating device nodes based on
          * the above activity, so that callers can reliably use them.
          * TODO: for upstream submission, this should check whether udevadm

@@ -2,6 +2,7 @@ parted (3.2-2) UNRELEASED; urgency=medium
 
   * Fix gptsync.patch not to try to perform pointer arithmetic on void *
     values.
+  * Remove unused label from udevadm-settle.patch.
 
  -- Colin Watson <cjwatson@debian.org>  Tue, 05 Aug 2014 13:40:26 +0200
 
