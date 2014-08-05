@@ -359,7 +359,7 @@ mem_chunk (size_t base, size_t len)
   void *p;
   int fd;
   size_t mmoffset;
-  void *mmp;
+  char *mmp;
 
   fd = open ("/dev/mem", O_RDONLY);
   if (fd == -1)

@@ -1,4 +1,4 @@
-From 4062764cf36fedb8185872de83e88c6326409e19 Mon Sep 17 00:00:00 2001
+From acd8c65640715e448f6c4183063bed26cd2f460c Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg59@srcf.ucam.org>
 Date: Fri, 28 Mar 2014 17:10:01 +0000
 Subject: GPT syncing for Intel Macs
@@ -7,7 +7,7 @@ On Intel Mac systems, write a synced MBR rather than a protective MBR.
 
 From: Colin Watson <cjwatson@ubuntu.com>
 Forwarded: no
-Last-Update: 2014-07-30
+Last-Update: 2014-08-05
 
 Patch-Name: gptsync.patch
 ---
@@ -18,7 +18,7 @@ Patch-Name: gptsync.patch
  create mode 100644 tests/t0290-gptsync.sh
 
 diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
-index fbb57c3..6ca2923 100644
+index fbb57c3..b199504 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
 @@ -10,6 +10,11 @@
@@ -88,7 +88,7 @@ index fbb57c3..6ca2923 100644
 +  void *p;
 +  int fd;
 +  size_t mmoffset;
-+  void *mmp;
++  char *mmp;
 +
 +  fd = open ("/dev/mem", O_RDONLY);
 +  if (fd == -1)
