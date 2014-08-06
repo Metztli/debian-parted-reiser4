@@ -195,6 +195,7 @@ ped_disk_new (PedDevice* dev)
 		goto error_close_dev;
 	}
 	disk = ped_disk_new_fresh (dev, type);
+	disk->needs_clobber |= 2;
 	if (!disk)
 		goto error_close_dev;
 	if (!type->ops->read (disk))
@@ -919,7 +920,7 @@ _partition_align (PedPartition* part, const PedConstraint* constraint)
 	PED_ASSERT (disk_type->ops->partition_align != NULL);
 	PED_ASSERT (part->disk->update_mode);
 
-	if (part->disk->needs_clobber)
+	if ((part->disk->needs_clobber & 2) != 0)
 		return 1; /* do not attempt to align partitions while reading them */
 	return disk_type->ops->partition_align (part, constraint);
 }

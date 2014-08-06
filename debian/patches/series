@@ -11,3 +11,4 @@ hurd-reread.patch
 gptsync.patch
 udevadm-settle.patch
 fat-resize-large-sectors.patch
+align-new-partitions-on-fresh-disks.patch
