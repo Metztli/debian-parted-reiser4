@@ -1,4 +1,4 @@
-parted (3.2-2) UNRELEASED; urgency=high
+parted (3.2-2) unstable; urgency=high
 
   * Fix gptsync.patch not to try to perform pointer arithmetic on void *
     values.
@@ -7,7 +7,7 @@ parted (3.2-2) UNRELEASED; urgency=high
     Making the build work with -Werror is too painful at the moment.
   * Align new partitions created on fresh disks (LP: #1352252).
 
- -- Colin Watson <cjwatson@debian.org>  Tue, 05 Aug 2014 13:40:26 +0200
+ -- Colin Watson <cjwatson@debian.org>  Wed, 06 Aug 2014 15:21:03 +0100
 
 parted (3.2-1) unstable; urgency=medium
 
