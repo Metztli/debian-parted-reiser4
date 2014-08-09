@@ -1,0 +1,33 @@
+From cc9d4ca97645022c8559df9083edaec778c5d730 Mon Sep 17 00:00:00 2001
+From: Colin Watson <cjwatson@ubuntu.com>
+Date: Sat, 9 Aug 2014 16:23:26 +0200
+Subject: Probe LVM logical volumes again
+
+parted 3.2 stopped probing LVM logical volumes.  This breaks
+debian-installer, which wants to be able to "partition" these, at least
+to the extent of being able to see them in the partitioner and operate
+on them somewhat like ordinary partitions.  Revert to the old behaviour.
+
+Bug-Debian: http://bugs.debian.org/757417
+Forwarded: no
+Last-Update: 2014-08-09
+
+Patch-Name: probe-lvs-again.patch
+---
+ libparted/arch/linux.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
+index 703294e..0f57ea3 100644
+--- a/libparted/arch/linux.c
++++ b/libparted/arch/linux.c
+@@ -597,8 +597,7 @@ _probe_dm_devices ()
+                if (stat (buf, &st) != 0)
+                        continue;
+ 
+-               if (_is_dm_major(major(st.st_rdev)) && _is_dmraid_device (buf)
+-                   && !_dm_is_part(buf))
++               if (_is_dm_major(major(st.st_rdev)) && !_dm_is_part(buf))
+                        _ped_device_probe (buf);
+        }
+        closedir (mapper_dir);

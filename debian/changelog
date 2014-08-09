@@ -1,3 +1,9 @@
+parted (3.2-3) UNRELEASED; urgency=high
+
+  * Probe LVM logical volumes again (closes: #757417).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 09 Aug 2014 15:26:25 +0100
+
 parted (3.2-2) unstable; urgency=high
 
   * Fix gptsync.patch not to try to perform pointer arithmetic on void *
