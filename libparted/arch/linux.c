@@ -597,8 +597,7 @@ _probe_dm_devices ()
                if (stat (buf, &st) != 0)
                        continue;
 
-               if (_is_dm_major(major(st.st_rdev)) && _is_dmraid_device (buf)
-                   && !_dm_is_part(buf))
+               if (_is_dm_major(major(st.st_rdev)) && !_dm_is_part(buf))
                        _ped_device_probe (buf);
        }
        closedir (mapper_dir);
