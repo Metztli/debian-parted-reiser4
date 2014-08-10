@@ -1,8 +1,8 @@
-parted (3.2-3) UNRELEASED; urgency=high
+parted (3.2-3) unstable; urgency=high
 
   * Probe LVM logical volumes again (closes: #757417).
 
- -- Colin Watson <cjwatson@debian.org>  Sat, 09 Aug 2014 15:26:25 +0100
+ -- Colin Watson <cjwatson@debian.org>  Sun, 10 Aug 2014 11:02:32 +0100
 
 parted (3.2-2) unstable; urgency=high
 
