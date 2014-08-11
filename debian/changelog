@@ -1,9 +1,9 @@
-parted (3.2-4) UNRELEASED; urgency=high
+parted (3.2-4) unstable; urgency=high
 
   * Probe LVM logical volumes even when their physical volumes are on
     device-mapper devices (closes: #757750).
 
- -- Colin Watson <cjwatson@debian.org>  Mon, 11 Aug 2014 14:01:39 +0100
+ -- Colin Watson <cjwatson@debian.org>  Mon, 11 Aug 2014 14:02:26 +0100
 
 parted (3.2-3) unstable; urgency=high
 
