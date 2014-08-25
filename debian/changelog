@@ -1,9 +1,9 @@
-parted (3.2-5) UNRELEASED; urgency=medium
+parted (3.2-5) unstable; urgency=medium
 
   * Update freebsd-ufs.patch to handle non-512-byte-sector disks
     (LP: #1355127).
 
- -- Colin Watson <cjwatson@debian.org>  Mon, 25 Aug 2014 19:19:14 +0100
+ -- Colin Watson <cjwatson@debian.org>  Mon, 25 Aug 2014 19:20:11 +0100
 
 parted (3.2-4) unstable; urgency=high
 
