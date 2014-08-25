@@ -285,7 +285,7 @@ static PedGeometry*
 ufs_probe_freebsd (PedGeometry* geom)
 {
 	int offsets[] = { 0, 16, 128, 512 };
-	int8_t buf[512 * 3];
+	char *buf = alloca (3 * geom->dev->sector_size);
 	struct ufs_super_block *sb;
 	PedSector block_size;
 	PedSector block_count;
@@ -303,7 +303,7 @@ ufs_probe_freebsd (PedGeometry* geom)
 
 		/* Little endian is more likely on FreeBSD boxes */
 		if (PED_LE32_TO_CPU(sb->fs_magic) == UFS2_MAGIC) {
-			block_size = PED_LE32_TO_CPU(sb->fs_fsize) / 512;
+			block_size = PED_LE32_TO_CPU(sb->fs_fsize) / geom->dev->sector_size;
 			block_count = PED_LE32_TO_CPU(sb->fs_u11.fs_u2.fs_size);
 			return ped_geometry_new (geom->dev, geom->start,
 						 block_size * block_count);
@@ -311,7 +311,7 @@ ufs_probe_freebsd (PedGeometry* geom)
 
 		/* Then try big endian */
 		if (PED_BE32_TO_CPU(sb->fs_magic) == UFS2_MAGIC) {
-			block_size = PED_BE32_TO_CPU(sb->fs_fsize) / 512;
+			block_size = PED_BE32_TO_CPU(sb->fs_fsize) / geom->dev->sector_size;
 			block_count = PED_BE32_TO_CPU(sb->fs_u11.fs_u2.fs_size);
 			return ped_geometry_new (geom->dev, geom->start,
 						 block_size * block_count);

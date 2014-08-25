@@ -1,4 +1,4 @@
-From 3220775e61750cd9ce4187c8a5e8e4f7ff04c495 Mon Sep 17 00:00:00 2001
+From 03aecd5c7da72ebcbd82b7b8a84109c0319a7424 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:09:53 +0000
 Subject: Fix partition paths on GNU/Hurd
