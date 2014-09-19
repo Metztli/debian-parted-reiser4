@@ -1,12 +1,13 @@
-parted (3.2-6) UNRELEASED; urgency=medium
+parted (3.2-6) unstable; urgency=medium
 
+  [ Steven Chamberlain ]
   * kfreebsd-gnu.patch: (Thanks, Jeff Epler!)
     - Fix detection of /dev/ada as a SCSI disk type (Closes: #693510,
       #757986)
     - Implement detection of drive model, logical and physical sector sizes
       for SCSI disks
 
- -- Steven Chamberlain <steven@pyro.eu.org>  Fri, 19 Sep 2014 15:39:11 +0100
+ -- Colin Watson <cjwatson@debian.org>  Fri, 19 Sep 2014 15:44:36 +0100
 
 parted (3.2-5) unstable; urgency=medium
 
