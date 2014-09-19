@@ -60,6 +60,7 @@ typedef	struct _FreeBSDSpecific	FreeBSDSpecific;
 
 struct _FreeBSDSpecific {
 	int	fd;
+	long long	phys_sector_size;
 };
 
 static char* _device_get_part_path (PedDevice* dev, int num);
@@ -108,7 +109,9 @@ _device_probe_type (PedDevice* dev)
 	}
 	np += 1; /* advance past '/' */
 
-	if(strncmp(np, "ad", 2) == 0) {
+	if (strncmp(np, "ada", 3) == 0) {
+		dev->type = PED_DEVICE_SCSI;
+	} else if (strncmp(np, "ad", 2) == 0) {
 		dev->type = PED_DEVICE_IDE;
 	} else if (strncmp(np, "da", 2) == 0) {
 		dev->type = PED_DEVICE_SCSI;
@@ -145,6 +148,9 @@ _device_set_sector_size (PedDevice* dev)
 	} else {
 		dev->sector_size = (long long)sector_size;;
 	}
+
+	if (arch_specific->phys_sector_size)
+		dev->phys_sector_size = arch_specific->phys_sector_size;
 
 	if (sector_size != PED_SECTOR_SIZE_DEFAULT) {
 		ped_exception_throw (
@@ -288,7 +294,8 @@ _scsi_pass_dev (PedDevice* dev)
 	int		fd;
 	char		result[64];
 
-	if (sscanf (dev->path, "/dev/%2s%u", ccb.cgdl.periph_name, &ccb.cgdl.unit_number) != 2)
+	if (sscanf (dev->path, "/dev/%2s%u", ccb.cgdl.periph_name, &ccb.cgdl.unit_number) != 2 &&
+		sscanf (dev->path, "/dev/%3s%u", ccb.cgdl.periph_name, &ccb.cgdl.unit_number) != 2)
 		goto error;
 
 	if ((fd = open("/dev/xpt0", O_RDWR)) < 0)
@@ -308,9 +315,32 @@ error:
 	return NULL;
 }
 
+static uint32_t
+local_ata_logical_sector_size(struct ata_params *ident_data)
+{
+        if ((ident_data->pss & 0xc000) == 0x4000 &&
+            (ident_data->pss & ATA_PSS_LSSABOVE512)) {
+                return ((u_int32_t)ident_data->lss_1 |
+                    ((u_int32_t)ident_data->lss_2 << 16));
+        }
+        return (512);
+}
+
+static uint64_t
+local_ata_physical_sector_size(struct ata_params *ident_data)
+{
+        if ((ident_data->pss & 0xc000) == 0x4000 &&
+            (ident_data->pss & ATA_PSS_MULTLS)) {
+                return ((uint64_t)local_ata_logical_sector_size(ident_data) *
+                    (1 << (ident_data->pss & ATA_PSS_LSPPS)));
+        }
+        return (512);
+}
+
 static int
 init_scsi (PedDevice* dev)
 {
+	FreeBSDSpecific*	arch_specific = FREEBSD_SPECIFIC (dev);
 	PedExceptionOption 	ex_status;
 	struct stat		dev_stat;
 	char*			pass_dev;
@@ -391,10 +421,16 @@ init_scsi (PedDevice* dev)
 				break;
 		}
 	} else {
-		dev->model = (char*) ped_malloc (8 + 16 + 2);
+		size_t model_length = (8 + 16 + 2);
+		dev->model = (char*) ped_malloc (model_length);
 		if (!dev->model)
 			goto error_close_fd_dev;
-		sprintf (dev->model, "%.8s %.16s", ccb.cgd.inq_data.vendor, ccb.cgd.inq_data.product);
+		if (ccb.cgd.protocol == PROTO_ATA && *ccb.cgd.ident_data.model) {
+			snprintf (dev->model, model_length, "%s", ccb.cgd.ident_data.model);
+			arch_specific->phys_sector_size = local_ata_physical_sector_size(&ccb.cgd.ident_data);
+		} else {
+			snprintf (dev->model, model_length, "%.8s %.16s", ccb.cgd.inq_data.vendor, ccb.cgd.inq_data.product);
+		}
 	}
 
 	if (!_device_probe_geometry (dev))
@@ -533,6 +569,8 @@ freebsd_new (const char* path)
 		= (FreeBSDSpecific*) ped_malloc (sizeof (FreeBSDSpecific));
 	if (!dev->arch_specific)
 		goto error_free_path;
+
+	memset(dev->arch_specific, 0, sizeof(FreeBSDSpecific));
 
 	dev->open_count = 0;
 	dev->read_only = 0;
