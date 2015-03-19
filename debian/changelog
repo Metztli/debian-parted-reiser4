@@ -1,7 +1,12 @@
-parted (3.2-7) unstable; urgency=medium
+parted (3.2-7) UNRELEASED; urgency=medium
 
+  [ Phillip Susi ]
   * Cherry pick upstream patch to fix a crash when resizing fat16
     (LP: #1376051).
+
+  [ Colin Watson ]
+  * Drop libparted2's alternative Suggests on nparted, which has not been in
+    Debian for a decade or so.
 
  -- Phillip Susi <psusi@ubuntu.com>  Mon, 27 Oct 2014 21:10:56 -0400
 
