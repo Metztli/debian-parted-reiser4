@@ -14,3 +14,5 @@ fat-resize-large-sectors.patch
 align-new-partitions-on-fresh-disks.patch
 probe-lvs-again.patch
 fat16-resize-crash.patch
+fdasd-update-geometry-handling.patch
+dasd-enhance-probing.patch
