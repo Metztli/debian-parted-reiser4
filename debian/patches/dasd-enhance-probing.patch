@@ -1,4 +1,4 @@
-From dea6ca46e6748ceb95705365c790e5cfea046a7b Mon Sep 17 00:00:00 2001
+From 0a8af237b2a0ee9abec57e75b380447354d0995e Mon Sep 17 00:00:00 2001
 From: Viktor Mihajlovski <mihajlov@linux.vnet.ibm.com>
 Date: Thu, 17 Sep 2015 15:33:29 +0200
 Subject: dasd: enhance device probing
@@ -27,7 +27,7 @@ Acked-by: Stefan Haberland <stefan.haberland@de.ibm.com>
 Signed-off-by: Hendrik Brueckner <brueckner@linux.vnet.ibm.com>
 Signed-off-by: Brian C. Lane <bcl@redhat.com>
 
-Origin: upstream, http://git.savannah.gnu.org/cgit/parted.git/commit/?id=834713b5aee1edc004f863231dd489ee3a79f536
+Origin: backport, http://git.savannah.gnu.org/cgit/parted.git/commit/?id=834713b5aee1edc004f863231dd489ee3a79f536
 Bug-Debian: https://bugs.debian.org/803333
 Last-Update: 2015-10-29
 
@@ -39,7 +39,7 @@ Patch-Name: dasd-enhance-probing.patch
  3 files changed, 82 insertions(+), 35 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index 186ecd4..b83257f 100644
+index 186ecd4..03c4e0b 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
 @@ -784,9 +784,13 @@ _device_set_sector_size (PedDevice* dev)
@@ -79,9 +79,26 @@ index 186ecd4..b83257f 100644
          }
  
          /* Now we wait for udevd to finish creating device nodes based on
-@@ -3176,6 +3180,59 @@ linux_disk_commit (PedDisk* disk)
-         return ret;
+@@ -3216,15 +3220,10 @@ linux_get_optimum_alignment(const PedDevice *dev)
+ 		&& PED_DEFAULT_ALIGNMENT % optimal_io == 0)
+ 	    || (!optimal_io && minimum_io
+ 		&& PED_DEFAULT_ALIGNMENT % minimum_io == 0)
+-           ) {
+-            /* DASD needs to use minimum alignment */
+-            if (dev->type == PED_DEVICE_DASD)
+-                return linux_get_minimum_alignment(dev);
+-
++           )
+             return ped_alignment_new(
+                     blkid_topology_get_alignment_offset(tp) / dev->sector_size,
+                     PED_DEFAULT_ALIGNMENT / dev->sector_size);
+-        }
+ 
+         /* If optimal_io_size is 0 and we don't meet the other criteria
+            for using the device.c default, return the minimum alignment. */
+@@ -3237,6 +3236,59 @@ linux_get_optimum_alignment(const PedDevice *dev)
  }
+ #endif
  
 +#if defined __s390__ || defined __s390x__
 +/**
@@ -136,26 +153,9 @@ index 186ecd4..b83257f 100644
 +}
 +#endif
 +
- #if USE_BLKID
- static PedAlignment*
- linux_get_minimum_alignment(const PedDevice *dev)
-@@ -3216,15 +3273,10 @@ linux_get_optimum_alignment(const PedDevice *dev)
- 		&& PED_DEFAULT_ALIGNMENT % optimal_io == 0)
- 	    || (!optimal_io && minimum_io
- 		&& PED_DEFAULT_ALIGNMENT % minimum_io == 0)
--           ) {
--            /* DASD needs to use minimum alignment */
--            if (dev->type == PED_DEVICE_DASD)
--                return linux_get_minimum_alignment(dev);
--
-+           )
-             return ped_alignment_new(
-                     blkid_topology_get_alignment_offset(tp) / dev->sector_size,
-                     PED_DEFAULT_ALIGNMENT / dev->sector_size);
--        }
- 
-         /* If optimal_io_size is 0 and we don't meet the other criteria
-            for using the device.c default, return the minimum alignment. */
+ static PedDeviceArchOps linux_dev_ops = {
+         _new:           linux_new,
+         destroy:        linux_destroy,
 @@ -3251,7 +3303,10 @@ static PedDeviceArchOps linux_dev_ops = {
          sync:           linux_sync,
          sync_fast:      linux_sync_fast,
