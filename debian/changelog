@@ -1,8 +1,8 @@
-parted (3.2-9) UNRELEASED; urgency=medium
+parted (3.2-9) unstable; urgency=medium
 
   * dasd-enhance-probing.patch: Fix function ordering.
 
- -- Colin Watson <cjwatson@debian.org>  Thu, 29 Oct 2015 14:52:13 +0000
+ -- Colin Watson <cjwatson@debian.org>  Thu, 29 Oct 2015 14:52:41 +0000
 
 parted (3.2-8) unstable; urgency=medium
 
