@@ -1,9 +1,9 @@
-parted (3.2-8) UNRELEASED; urgency=medium
+parted (3.2-8) unstable; urgency=medium
 
   * Cherry-pick upstream patches to support virtio-attached DASD (thanks,
     Viktor Mihajlovski; closes: #803333).
 
- -- Colin Watson <cjwatson@debian.org>  Thu, 29 Oct 2015 11:55:51 +0000
+ -- Colin Watson <cjwatson@debian.org>  Thu, 29 Oct 2015 12:26:08 +0000
 
 parted (3.2-7) unstable; urgency=medium
 
