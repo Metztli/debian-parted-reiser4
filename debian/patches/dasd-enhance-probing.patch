@@ -1,4 +1,4 @@
-From 0a8af237b2a0ee9abec57e75b380447354d0995e Mon Sep 17 00:00:00 2001
+From a775deb7550563cf06d49498b1125619130747be Mon Sep 17 00:00:00 2001
 From: Viktor Mihajlovski <mihajlov@linux.vnet.ibm.com>
 Date: Thu, 17 Sep 2015 15:33:29 +0200
 Subject: dasd: enhance device probing

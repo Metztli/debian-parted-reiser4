@@ -1,4 +1,4 @@
-From 65b1d0965acf387aaa4318bfca958a61815e6263 Mon Sep 17 00:00:00 2001
+From 525e020e9552354d183b7135ec84a024ce2365bc Mon Sep 17 00:00:00 2001
 From: Viktor Mihajlovski <mihajlov@linux.vnet.ibm.com>
 Date: Thu, 17 Sep 2015 15:33:28 +0200
 Subject: fdasd: geometry handling updated from upstream s390-tools
@@ -27,14 +27,37 @@ Signed-off-by: Brian C. Lane <bcl@redhat.com>
 
 Origin: upstream, http://git.savannah.gnu.org/cgit/parted.git/commit/?id=4d480d980a9b69b432b8d60df3c4397ba8cdc965
 Bug-Debian: https://bugs.debian.org/803333
-Last-Update: 2015-10-29
+Last-Update: 2015-11-05
 
 Patch-Name: fdasd-update-geometry-handling.patch
 ---
+ include/parted/fdasd.h    |   4 +-
  include/parted/fdasd.in.h |   4 +-
  libparted/labels/fdasd.c  | 166 ++++++++++++++++++++++++++++++++--------------
- 2 files changed, 119 insertions(+), 51 deletions(-)
+ 3 files changed, 122 insertions(+), 52 deletions(-)
 
+diff --git a/include/parted/fdasd.h b/include/parted/fdasd.h
+index 6f6a7e0..4e351c4 100644
+--- a/include/parted/fdasd.h
++++ b/include/parted/fdasd.h
+@@ -190,6 +190,8 @@ typedef struct format_data_t {
+ #define BLKRRPART  _IO(0x12,95)
+ /* get block device sector size */
+ #define BLKSSZGET  _IO(0x12,104)
++/* device size in bytes (u64 *arg)*/
++#define BLKGETSIZE64 _IOR(0x12,114,size_t)
+ /* get device geometry */
+ #define HDIO_GETGEO		0x0301
+ 
+@@ -285,7 +287,7 @@ enum fdasd_failure {
+ 
+ void fdasd_cleanup (fdasd_anchor_t *anchor);
+ void fdasd_initialize_anchor (fdasd_anchor_t * anc);
+-void fdasd_get_geometry (const PedDevice *dev, fdasd_anchor_t *anc, int fd);
++int fdasd_get_geometry (const PedDevice *dev, fdasd_anchor_t *anc, int fd);
+ void fdasd_check_api_version (fdasd_anchor_t *anc, int fd);
+ int fdasd_check_volume (fdasd_anchor_t *anc, int fd);
+ int fdasd_write_labels (fdasd_anchor_t *anc, int fd);
 diff --git a/include/parted/fdasd.in.h b/include/parted/fdasd.in.h
 index 6f6a7e0..4e351c4 100644
 --- a/include/parted/fdasd.in.h
