@@ -1,10 +1,10 @@
-parted (3.2-10) UNRELEASED; urgency=medium
+parted (3.2-10) unstable; urgency=medium
 
   * fdasd-update-geometry-handling.patch: Update include/parted/fdasd.h as
     well as include/parted/fdasd.in.h, since the former doesn't seem to be
     rebuilt automatically.
 
- -- Colin Watson <cjwatson@debian.org>  Thu, 05 Nov 2015 16:59:27 +0000
+ -- Colin Watson <cjwatson@debian.org>  Thu, 05 Nov 2015 17:01:38 +0000
 
 parted (3.2-9) unstable; urgency=medium
 
