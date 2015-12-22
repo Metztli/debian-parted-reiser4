@@ -16,3 +16,4 @@ probe-lvs-again.patch
 fat16-resize-crash.patch
 fdasd-update-geometry-handling.patch
 dasd-enhance-probing.patch
+dm-512b-sectors.patch

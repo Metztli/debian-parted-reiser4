@@ -1,3 +1,13 @@
+parted (3.2-12) UNRELEASED; urgency=medium
+
+  * Cherry-pick upstream patch to use 512-byte sector size when
+    communicating with device-mapper; previously partitions could be created
+    eight times smaller than expected on DM devices with 4096-byte sectors
+    (thanks, Mauricio Faria de Oliveira and Mathieu Trudel-Lapierre;
+    LP: #1441930).
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 22 Dec 2015 13:35:24 +0000
+
 parted (3.2-11) unstable; urgency=medium
 
   * Drop *-dbg packages in favour of ddebs.
