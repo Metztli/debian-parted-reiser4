@@ -174,38 +174,6 @@ Description: disk partition manipulator - transitional package
  This is a transitional package to ease the migration to the new
  unversioned libparted-dev package, which should be used in preference.
 
-Package: libparted2-dbg
-Architecture: any
-Section: debug
-Priority: extra
-Depends: libparted2 (= ${binary:Version}), ${misc:Depends}
-Conflicts: libparted-dbg
-Replaces: libparted-dbg, libparted0-dbg (<< 2.2-4)
-Provides: libparted-dbg
-Description: disk partition manipulator - debugging symbols
- GNU Parted is a program that allows you to create, destroy, resize,
- move, and copy disk partitions. This is useful for creating space
- for new operating systems, reorganizing disk usage, and copying data
- to new hard disks.
- .
- This package contains debugging symbols for libparted, which are really
- only of interest to parted developers who need to debug their programs.
-
-Package: libparted-fs-resize0-dbg
-Architecture: any
-Section: debug
-Priority: extra
-Depends: libparted-fs-resize0 (= ${binary:Version}), ${misc:Depends}
-Description: disk partition manipulator - FS resizing debugging symbols
- GNU Parted is a program that allows you to create, destroy, resize,
- move, and copy disk partitions. This is useful for creating space
- for new operating systems, reorganizing disk usage, and copying data
- to new hard disks.
- .
- This package contains debugging symbols for libparted-fs-resize, which
- are really only of interest to parted developers who need to debug
- their programs.
-
 Package: parted-doc
 Architecture: all
 Section: doc

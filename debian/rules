@@ -72,8 +72,9 @@ override_dh_install:
 	dh_install -pparted-udeb -plibparted2-udeb -plibparted-fs-resize0-udeb --sourcedir=debian/tmp-udeb --fail-missing
 
 override_dh_strip:
-	dh_strip -plibparted2 --dbg-package=libparted2-dbg
-	dh_strip -plibparted-fs-resize0 --dbg-package=libparted-fs-resize0-dbg
+	dh_strip -plibparted2 --ddeb-migration='libparted2-dbg (<< 3.2-11~)'
+	dh_strip -plibparted-fs-resize0 \
+		--ddeb-migration='libparted-fs-resize0-dbg (<< 3.2-11~)'
 	dh_strip -Nlibparted2 -Nlibparted-fs-resize0
 
 override_dh_makeshlibs:

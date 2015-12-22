@@ -1,3 +1,9 @@
+parted (3.2-11) UNRELEASED; urgency=medium
+
+  * Drop *-dbg packages in favour of ddebs.
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 22 Dec 2015 00:50:02 +0000
+
 parted (3.2-10) unstable; urgency=medium
 
   * fdasd-update-geometry-handling.patch: Update include/parted/fdasd.h as
