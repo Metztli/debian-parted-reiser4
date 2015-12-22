@@ -1,4 +1,4 @@
-parted (3.2-12) UNRELEASED; urgency=medium
+parted (3.2-12) unstable; urgency=medium
 
   * Cherry-pick upstream patch to use 512-byte sector size when
     communicating with device-mapper; previously partitions could be created
@@ -6,7 +6,7 @@ parted (3.2-12) UNRELEASED; urgency=medium
     (thanks, Mauricio Faria de Oliveira and Mathieu Trudel-Lapierre;
     LP: #1441930).
 
- -- Colin Watson <cjwatson@debian.org>  Tue, 22 Dec 2015 13:35:24 +0000
+ -- Colin Watson <cjwatson@debian.org>  Tue, 22 Dec 2015 13:41:02 +0000
 
 parted (3.2-11) unstable; urgency=medium
 
