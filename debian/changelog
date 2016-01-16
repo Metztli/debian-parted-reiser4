@@ -2,6 +2,8 @@ parted (3.2-13) UNRELEASED; urgency=medium
 
   * Simplify unnecessary use of dh-exec in debian/libparted-dev.install.
   * Remove no-longer-necessary Conflicts/Replaces from libparted2.
+  * Replace versioned Conflicts on old versions of parted in libparted-dev
+    with Breaks+Replaces.
 
  -- Colin Watson <cjwatson@debian.org>  Mon, 04 Jan 2016 13:29:59 +0000
 
