@@ -1,4 +1,4 @@
-parted (3.2-13) UNRELEASED; urgency=medium
+parted (3.2-13) unstable; urgency=medium
 
   * Simplify unnecessary use of dh-exec in debian/libparted-dev.install.
   * Remove no-longer-necessary Conflicts/Replaces from libparted2.
@@ -6,7 +6,7 @@ parted (3.2-13) UNRELEASED; urgency=medium
     with Breaks+Replaces.
   * Add OpenPGP signature checking configuration to watch file.
 
- -- Colin Watson <cjwatson@debian.org>  Mon, 04 Jan 2016 13:29:59 +0000
+ -- Colin Watson <cjwatson@debian.org>  Sat, 16 Jan 2016 23:01:07 +0000
 
 parted (3.2-12) unstable; urgency=medium
 
