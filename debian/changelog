@@ -1,9 +1,9 @@
-parted (3.2-14) UNRELEASED; urgency=medium
+parted (3.2-14) unstable; urgency=medium
 
   * Use HTTPS for Vcs-* URLs, and link to cgit rather than gitweb.
   * Build with all hardening options.
 
- -- Colin Watson <cjwatson@debian.org>  Wed, 27 Jan 2016 13:05:33 +0000
+ -- Colin Watson <cjwatson@debian.org>  Wed, 27 Jan 2016 13:24:01 +0000
 
 parted (3.2-13) unstable; urgency=medium
 
