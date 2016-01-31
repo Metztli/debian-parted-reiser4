@@ -1,3 +1,10 @@
+parted (3.2-14.1) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+  * Reiser4-probe-enabled parted 1/10 differentiation from maintainers' version 
+
+ -- Jose R Rodriguez <jose@mictlantecuhtli.metztli-it.com>  Sun, 31 Jan 2016 06:54:37 -0800
+
 parted (3.2-14) unstable; urgency=medium
 
   * Use HTTPS for Vcs-* URLs, and link to cgit rather than gitweb.
