@@ -1,3 +1,10 @@
+parted (3.2-15) UNRELEASED; urgency=medium
+
+  * Cherry-pick upstream patch to check DASD geometry more carefully to
+    avoid problems with LVM (closes: #814076, LP: #1541510).
+
+ -- Colin Watson <cjwatson@debian.org>  Wed, 10 Feb 2016 14:25:15 +0000
+
 parted (3.2-14) unstable; urgency=medium
 
   * Use HTTPS for Vcs-* URLs, and link to cgit rather than gitweb.
