@@ -146,8 +146,8 @@ libparted.so.2 libparted2 #MINVER#
  ped_file_system_ntfs_init@Base 3.1
  ped_file_system_probe@Base 3.1
  ped_file_system_probe_specific@Base 3.1
- ped_file_system_reiser4_done@Base 3.2-14
- ped_file_system_reiser4_init@Base 3.2-14
+ ped_file_system_reiser4_done@Base 3.2-15
+ ped_file_system_reiser4_init@Base 3.2-15
  ped_file_system_reiserfs_done@Base 3.1
  ped_file_system_reiserfs_init@Base 3.1
  ped_file_system_type_get@Base 3.1
