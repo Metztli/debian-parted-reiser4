@@ -37,7 +37,7 @@ Patch-Name: fdasd-update-geometry-handling.patch
  3 files changed, 122 insertions(+), 52 deletions(-)
 
 diff --git a/include/parted/fdasd.h b/include/parted/fdasd.h
-index 6f6a7e0..4e351c4 100644
+index 6f6a7e0a..4e351c4e 100644
 --- a/include/parted/fdasd.h
 +++ b/include/parted/fdasd.h
 @@ -190,6 +190,8 @@ typedef struct format_data_t {
@@ -59,7 +59,7 @@ index 6f6a7e0..4e351c4 100644
  int fdasd_check_volume (fdasd_anchor_t *anc, int fd);
  int fdasd_write_labels (fdasd_anchor_t *anc, int fd);
 diff --git a/include/parted/fdasd.in.h b/include/parted/fdasd.in.h
-index 6f6a7e0..4e351c4 100644
+index 6f6a7e0a..4e351c4e 100644
 --- a/include/parted/fdasd.in.h
 +++ b/include/parted/fdasd.in.h
 @@ -190,6 +190,8 @@ typedef struct format_data_t {
@@ -81,7 +81,7 @@ index 6f6a7e0..4e351c4 100644
  int fdasd_check_volume (fdasd_anchor_t *anc, int fd);
  int fdasd_write_labels (fdasd_anchor_t *anc, int fd);
 diff --git a/libparted/labels/fdasd.c b/libparted/labels/fdasd.c
-index 1f87937..7e6a77a 100644
+index 1f879373..7e6a77a2 100644
 --- a/libparted/labels/fdasd.c
 +++ b/libparted/labels/fdasd.c
 @@ -210,27 +210,7 @@ fdasd_initialize_anchor (fdasd_anchor_t * anc)

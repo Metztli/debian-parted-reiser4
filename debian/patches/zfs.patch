@@ -14,7 +14,7 @@ Patch-Name: zfs.patch
  create mode 100644 libparted/fs/zfs/zfs.c
 
 diff --git a/libparted/fs/Makefile.am b/libparted/fs/Makefile.am
-index d3cc8bc..de607a2 100644
+index d3cc8bcc..de607a29 100644
 --- a/libparted/fs/Makefile.am
 +++ b/libparted/fs/Makefile.am
 @@ -48,7 +48,8 @@ libfs_la_SOURCES =		\
@@ -29,7 +29,7 @@ index d3cc8bc..de607a2 100644
  
 diff --git a/libparted/fs/zfs/zfs.c b/libparted/fs/zfs/zfs.c
 new file mode 100644
-index 0000000..47cd677
+index 00000000..47cd6773
 --- /dev/null
 +++ b/libparted/fs/zfs/zfs.c
 @@ -0,0 +1,77 @@
@@ -111,7 +111,7 @@ index 0000000..47cd677
 +	ped_file_system_type_unregister (&zfs_type);
 +}
 diff --git a/libparted/libparted.c b/libparted/libparted.c
-index d5cbb3a..fe0c7fe 100644
+index d5cbb3a4..fe0c7feb 100644
 --- a/libparted/libparted.c
 +++ b/libparted/libparted.c
 @@ -110,6 +110,7 @@ extern void ped_file_system_fat_init (void);

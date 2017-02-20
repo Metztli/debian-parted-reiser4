@@ -18,3 +18,5 @@ fdasd-update-geometry-handling.patch
 dasd-enhance-probing.patch
 dm-512b-sectors.patch
 fdasd-check-geometry.patch
+tests-move-get-sector-size.patch
+atari.patch

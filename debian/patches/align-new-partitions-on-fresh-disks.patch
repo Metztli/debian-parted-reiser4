@@ -23,7 +23,7 @@ Patch-Name: align-new-partitions-on-fresh-disks.patch
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/libparted/disk.c b/libparted/disk.c
-index fe82f44..60e9c44 100644
+index fe82f449..60e9c440 100644
 --- a/libparted/disk.c
 +++ b/libparted/disk.c
 @@ -195,6 +195,7 @@ ped_disk_new (PedDevice* dev)

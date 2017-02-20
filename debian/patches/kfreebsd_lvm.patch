@@ -9,7 +9,7 @@ Patch-Name: kfreebsd_lvm.patch
  1 file changed, 27 insertions(+)
 
 diff --git a/libparted/arch/freebsd.c b/libparted/arch/freebsd.c
-index b78d2bb..f7061c7 100644
+index b78d2bb0..f7061c74 100644
 --- a/libparted/arch/freebsd.c
 +++ b/libparted/arch/freebsd.c
 @@ -1178,6 +1178,31 @@ _probe_zfs_volumes ()

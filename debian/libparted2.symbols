@@ -53,10 +53,12 @@ libparted.so.2 libparted2 #MINVER#
  ped_device_sync_fast@Base 3.1
  ped_device_write@Base 3.1
  ped_disk_add_partition@Base 3.1
- ped_disk_amiga_done@Base 3.1
- ped_disk_amiga_init@Base 3.1
  ped_disk_aix_done@Base 3.1
  ped_disk_aix_init@Base 3.1
+ ped_disk_amiga_done@Base 3.1
+ ped_disk_amiga_init@Base 3.1
+ ped_disk_atari_done@Base 3.2-17~
+ ped_disk_atari_init@Base 3.2-17~
  ped_disk_bsd_done@Base 3.1
  ped_disk_bsd_init@Base 3.1
  ped_disk_check@Base 3.1
@@ -146,8 +148,8 @@ libparted.so.2 libparted2 #MINVER#
  ped_file_system_ntfs_init@Base 3.1
  ped_file_system_probe@Base 3.1
  ped_file_system_probe_specific@Base 3.1
- ped_file_system_reiser4_done@Base 3.2-15
- ped_file_system_reiser4_init@Base 3.2-15
+ ped_file_system_reiser4_done@Base 3.2-17
+ ped_file_system_reiser4_init@Base 3.2-17
  ped_file_system_reiserfs_done@Base 3.1
  ped_file_system_reiserfs_init@Base 3.1
  ped_file_system_type_get@Base 3.1

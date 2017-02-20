@@ -24,7 +24,7 @@ Patch-Name: kfreebsd-gnu.patch
  create mode 100644 libparted/arch/freebsd.c
 
 diff --git a/configure.ac b/configure.ac
-index 436d0e2..038ebdc 100644
+index 436d0e21..038ebdc8 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -61,6 +61,7 @@ case "$host_os" in
@@ -64,7 +64,7 @@ index 436d0e2..038ebdc 100644
  
  dnl NOTE: We need to remove the gl_cv_ignore_unused_libraries flag if we
 diff --git a/libparted/Makefile.am b/libparted/Makefile.am
-index edc5f2e..b410e64 100644
+index edc5f2e4..b410e644 100644
 --- a/libparted/Makefile.am
 +++ b/libparted/Makefile.am
 @@ -47,7 +47,8 @@ libparted_la_SOURCES  = debug.c			\
@@ -79,7 +79,7 @@ index edc5f2e..b410e64 100644
    fs/libfs.la		\
 diff --git a/libparted/arch/freebsd.c b/libparted/arch/freebsd.c
 new file mode 100644
-index 0000000..4c690e5
+index 00000000..4c690e5f
 --- /dev/null
 +++ b/libparted/arch/freebsd.c
 @@ -0,0 +1,1292 @@
@@ -1376,7 +1376,7 @@ index 0000000..4c690e5
 +	disk_ops:	&freebsd_disk_ops
 +};
 diff --git a/libparted/architecture.c b/libparted/architecture.c
-index df0f381..8c31fba 100644
+index df0f381b..8c31fba8 100644
 --- a/libparted/architecture.c
 +++ b/libparted/architecture.c
 @@ -34,6 +34,9 @@ ped_set_architecture ()
@@ -1390,7 +1390,7 @@ index df0f381..8c31fba 100644
  	extern PedArchitecture ped_gnu_arch;
  	const PedArchitecture* arch = &ped_gnu_arch;
 diff --git a/libparted/fs/xfs/platform_defs.h b/libparted/fs/xfs/platform_defs.h
-index 2b55752..01a06df 100644
+index 2b557520..01a06df7 100644
 --- a/libparted/fs/xfs/platform_defs.h
 +++ b/libparted/fs/xfs/platform_defs.h
 @@ -37,7 +37,11 @@
@@ -1407,7 +1407,7 @@ index 2b55752..01a06df 100644
  #include <stdlib.h>
  #include <string.h>
 diff --git a/libparted/labels/bsd.c b/libparted/labels/bsd.c
-index a8525a4..16dba31 100644
+index a8525a4a..16dba317 100644
 --- a/libparted/labels/bsd.c
 +++ b/libparted/labels/bsd.c
 @@ -26,6 +26,7 @@
@@ -1419,7 +1419,7 @@ index a8525a4..16dba31 100644
  #if ENABLE_NLS
  #  include <libintl.h>
 diff --git a/libparted/labels/sun.c b/libparted/labels/sun.c
-index b23ff86..0fc514c 100644
+index b23ff865..0fc514c6 100644
 --- a/libparted/labels/sun.c
 +++ b/libparted/labels/sun.c
 @@ -25,6 +25,7 @@

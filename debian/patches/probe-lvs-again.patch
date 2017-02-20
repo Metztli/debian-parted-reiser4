@@ -18,7 +18,7 @@ Patch-Name: probe-lvs-again.patch
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index 703294e..186ecd4 100644
+index 703294e3..186ecd4d 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
 @@ -597,8 +597,8 @@ _probe_dm_devices ()

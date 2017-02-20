@@ -26,7 +26,7 @@ Patch-Name: freebsd-ufs.patch
  create mode 100644 tests/t2500-freebsd-ufs.sh
 
 diff --git a/libparted/fs/ufs/ufs.c b/libparted/fs/ufs/ufs.c
-index cf0f441..54c5bd5 100644
+index cf0f4414..54c5bd5c 100644
 --- a/libparted/fs/ufs/ufs.c
 +++ b/libparted/fs/ufs/ufs.c
 @@ -44,6 +44,7 @@
@@ -180,7 +180,7 @@ index cf0f441..54c5bd5 100644
  	ped_file_system_type_unregister (&ufs_type_sun);
  }
 diff --git a/libparted/labels/dos.c b/libparted/labels/dos.c
-index 4781c05..4b95675 100644
+index 4781c05f..4b95675d 100644
 --- a/libparted/labels/dos.c
 +++ b/libparted/labels/dos.c
 @@ -88,6 +88,7 @@ static const char MBR_BOOT_CODE[] = {
@@ -201,7 +201,7 @@ index 4781c05..4b95675 100644
  		dos_data->system = PARTITION_LINUX_SWAP;
  	else
 diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
-index d69377a..fbb57c3 100644
+index d69377a4..fbb57c38 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
 @@ -156,6 +156,10 @@ typedef struct
@@ -228,7 +228,7 @@ index d69377a..fbb57c3 100644
  
    gpt_part_data->type = PARTITION_LINUX_DATA_GUID;
 diff --git a/tests/Makefile.am b/tests/Makefile.am
-index b726366..f9ec6a5 100644
+index b7263665..f9ec6a5a 100644
 --- a/tests/Makefile.am
 +++ b/tests/Makefile.am
 @@ -48,6 +48,7 @@ TESTS = \
@@ -241,7 +241,7 @@ index b726366..f9ec6a5 100644
    t3200-resize-partition.sh \
 diff --git a/tests/t2500-freebsd-ufs.sh b/tests/t2500-freebsd-ufs.sh
 new file mode 100644
-index 0000000..5a46263
+index 00000000..5a46263d
 --- /dev/null
 +++ b/tests/t2500-freebsd-ufs.sh
 @@ -0,0 +1,44 @@

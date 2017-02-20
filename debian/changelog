@@ -1,9 +1,30 @@
-parted (3.2-15.1) UNRELEASED; urgency=medium
+parted (3.2-17.1) UNRELEASED; urgency=medium
 
   * Non-maintainer upload.
-  * Reiser4-probe-enabled parted 1/10 differentiation from maintainers' version 
+  * Added reiser4, Software Format Release Number (SFRN) 4.0.1, probe only to Parted 
 
- -- Jose R Rodriguez <jose@mictlantecuhtli.metztli-it.com>  Sat, 13 Feb 2016 05:57:28 -0800
+ -- Jose R Rodriguez <jose@metztli-it.com>  Mon, 20 Feb 2017 06:58:54 -0800
+
+parted (3.2-17) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Remove Otavio Salvador from Uploaders, with thanks for their previous
+    contributions (closes: #847255).
+  * Build-depend on gperf so that we can regenerate pt-limit.c.
+  * Policy version 3.9.8: no changes required.
+
+  [ John Paul Adrian Glaubitz ]
+  * Add support for atari partition tables (closes: #239816).
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 09 Dec 2016 12:55:53 +0000
+
+parted (3.2-16) unstable; urgency=medium
+
+  * Remove Xavier Oswald from Uploaders as they have retired, with thanks
+    for their previous contributions (closes: #824328).
+  * Remove outdated README.Debian (closes: #838986).
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 27 Sep 2016 14:34:23 +0100
 
 parted (3.2-15) unstable; urgency=medium
 
@@ -11,13 +32,6 @@ parted (3.2-15) unstable; urgency=medium
     avoid problems with LVM (closes: #814076, LP: #1541510).
 
  -- Colin Watson <cjwatson@debian.org>  Wed, 10 Feb 2016 14:26:23 +0000
-
-parted (3.2-14.1) UNRELEASED; urgency=medium
-
-  * Non-maintainer upload.
-  * Reiser4-probe-enabled parted 1/10 differentiation from maintainers' version 
-
- -- Jose R Rodriguez <jose@mictlantecuhtli.metztli-it.com>  Sun, 31 Jan 2016 06:54:37 -0800
 
 parted (3.2-14) unstable; urgency=medium
 

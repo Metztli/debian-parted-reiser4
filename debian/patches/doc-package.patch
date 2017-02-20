@@ -11,7 +11,7 @@ Patch-Name: doc-package.patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/doc/C/parted.8 b/doc/C/parted.8
-index 689011c..e2d864b 100644
+index 689011c6..e2d864b7 100644
 --- a/doc/C/parted.8
 +++ b/doc/C/parted.8
 @@ -134,7 +134,7 @@ The \fIparted\fP program is fully documented in the

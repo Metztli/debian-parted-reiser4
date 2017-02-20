@@ -30,7 +30,7 @@ Patch-Name: fat16-resize-crash.patch
  1 file changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/libparted/fs/r/fat/resize.c b/libparted/fs/r/fat/resize.c
-index 919acf0..bfe60a0 100644
+index 919acf0e..bfe60a0d 100644
 --- a/libparted/fs/r/fat/resize.c
 +++ b/libparted/fs/r/fat/resize.c
 @@ -668,11 +668,17 @@ create_resize_context (PedFileSystem* fs, const PedGeometry* new_geom)

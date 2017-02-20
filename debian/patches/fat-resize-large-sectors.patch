@@ -14,7 +14,7 @@ Patch-Name: fat-resize-large-sectors.patch
  1 file changed, 12 deletions(-)
 
 diff --git a/libparted/fs/r/fat/bootsector.c b/libparted/fs/r/fat/bootsector.c
-index 1d2b601..683b986 100644
+index 1d2b601e..683b986d 100644
 --- a/libparted/fs/r/fat/bootsector.c
 +++ b/libparted/fs/r/fat/bootsector.c
 @@ -125,18 +125,6 @@ fat_boot_sector_analyse (FatBootSector* bs, PedFileSystem* fs)

@@ -9,7 +9,7 @@ Patch-Name: hurd-partition-path.patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/libparted/arch/gnu.c b/libparted/arch/gnu.c
-index a17a738..5a1c73e 100644
+index a17a7388..5a1c73e9 100644
 --- a/libparted/arch/gnu.c
 +++ b/libparted/arch/gnu.c
 @@ -845,7 +845,7 @@ gnu_partition_get_path (const PedPartition* part)

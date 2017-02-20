@@ -18,7 +18,7 @@ Patch-Name: freebsd-zvol.patch
  1 file changed, 40 insertions(+)
 
 diff --git a/libparted/arch/freebsd.c b/libparted/arch/freebsd.c
-index 4c690e5..a60b43f 100644
+index 4c690e5f..a60b43f8 100644
 --- a/libparted/arch/freebsd.c
 +++ b/libparted/arch/freebsd.c
 @@ -23,6 +23,7 @@

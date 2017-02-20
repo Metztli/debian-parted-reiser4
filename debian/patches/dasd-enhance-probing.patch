@@ -39,7 +39,7 @@ Patch-Name: dasd-enhance-probing.patch
  3 files changed, 82 insertions(+), 35 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index 186ecd4..03c4e0b 100644
+index 186ecd4d..03c4e0b4 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
 @@ -784,9 +784,13 @@ _device_set_sector_size (PedDevice* dev)
@@ -169,7 +169,7 @@ index 186ecd4..03c4e0b 100644
          get_optimum_alignment:	linux_get_optimum_alignment,
  #endif
 diff --git a/libparted/device.c b/libparted/device.c
-index cdcc117..36fecd2 100644
+index cdcc117a..36fecd26 100644
 --- a/libparted/device.c
 +++ b/libparted/device.c
 @@ -550,16 +550,10 @@ ped_device_get_optimum_alignment(const PedDevice *dev)
@@ -194,7 +194,7 @@ index cdcc117..36fecd2 100644
  
          return align;
 diff --git a/libparted/labels/dasd.c b/libparted/labels/dasd.c
-index fa9414f..bb32d66 100644
+index fa9414f2..bb32d66c 100644
 --- a/libparted/labels/dasd.c
 +++ b/libparted/labels/dasd.c
 @@ -214,19 +214,13 @@ dasd_probe (const PedDevice *dev)

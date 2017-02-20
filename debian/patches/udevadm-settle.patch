@@ -17,7 +17,7 @@ Patch-Name: udevadm-settle.patch
  1 file changed, 54 insertions(+), 2 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index 0f18904..703294e 100644
+index 0f18904d..703294e3 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
 @@ -26,6 +26,7 @@

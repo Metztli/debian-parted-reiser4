@@ -9,7 +9,7 @@ Patch-Name: hurd-reread.patch
  1 file changed, 78 insertions(+), 6 deletions(-)
 
 diff --git a/libparted/arch/gnu.c b/libparted/arch/gnu.c
-index 5a1c73e..ba384fb 100644
+index 5a1c73e9..ba384fbc 100644
 --- a/libparted/arch/gnu.c
 +++ b/libparted/arch/gnu.c
 @@ -185,7 +185,7 @@ _init_device (const char *path)

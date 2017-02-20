@@ -18,7 +18,7 @@ Patch-Name: gptsync.patch
  create mode 100644 tests/t0290-gptsync.sh
 
 diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
-index fbb57c3..b199504 100644
+index fbb57c38..b199504e 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
 @@ -10,6 +10,11 @@
@@ -511,7 +511,7 @@ index fbb57c3..b199504 100644
  
  void
 diff --git a/tests/Makefile.am b/tests/Makefile.am
-index f9ec6a5..e14610b 100644
+index f9ec6a5a..e14610b8 100644
 --- a/tests/Makefile.am
 +++ b/tests/Makefile.am
 @@ -32,6 +32,7 @@ TESTS = \
@@ -524,7 +524,7 @@ index f9ec6a5..e14610b 100644
    t0350-mac-PT-increases-sector-size.sh \
 diff --git a/tests/t0290-gptsync.sh b/tests/t0290-gptsync.sh
 new file mode 100644
-index 0000000..367d61b
+index 00000000..367d61bd
 --- /dev/null
 +++ b/tests/t0290-gptsync.sh
 @@ -0,0 +1,175 @@

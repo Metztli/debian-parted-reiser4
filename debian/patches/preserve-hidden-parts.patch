@@ -18,7 +18,7 @@ Patch-Name: preserve-hidden-parts.patch
  1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/libparted/labels/dos.c b/libparted/labels/dos.c
-index fa53020..4781c05 100644
+index fa530204..4781c05f 100644
 --- a/libparted/labels/dos.c
 +++ b/libparted/labels/dos.c
 @@ -1294,13 +1294,18 @@ msdos_write (const PedDisk* disk)

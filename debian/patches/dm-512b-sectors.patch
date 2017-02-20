@@ -17,7 +17,7 @@ Patch-Name: dm-512b-sectors.patch
  1 file changed, 17 insertions(+), 4 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index 03c4e0b..d91ad9a 100644
+index 03c4e0b4..d91ad9a0 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
 @@ -2768,6 +2768,12 @@ _dm_get_partition_start_and_length(PedPartition const *part,

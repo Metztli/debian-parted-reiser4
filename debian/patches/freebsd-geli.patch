@@ -13,7 +13,7 @@ Patch-Name: freebsd-geli.patch
  1 file changed, 6 insertions(+)
 
 diff --git a/libparted/arch/freebsd.c b/libparted/arch/freebsd.c
-index a60b43f..b78d2bb 100644
+index a60b43f8..b78d2bb0 100644
 --- a/libparted/arch/freebsd.c
 +++ b/libparted/arch/freebsd.c
 @@ -1096,6 +1096,8 @@ _probe_kern_disks ()

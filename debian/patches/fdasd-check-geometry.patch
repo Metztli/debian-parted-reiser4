@@ -24,7 +24,7 @@ Patch-Name: fdasd-check-geometry.patch
  1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/libparted/labels/fdasd.c b/libparted/labels/fdasd.c
-index 7e6a77a..968b332 100644
+index 7e6a77a2..968b3320 100644
 --- a/libparted/labels/fdasd.c
 +++ b/libparted/labels/fdasd.c
 @@ -1021,13 +1021,20 @@ fdasd_get_geometry (const PedDevice *dev, fdasd_anchor_t *anc, int f)
