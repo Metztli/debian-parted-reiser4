@@ -1,4 +1,4 @@
-From a775deb7550563cf06d49498b1125619130747be Mon Sep 17 00:00:00 2001
+From 2fbed2aa91c9a689b5a1846bf121e461443d7b1a Mon Sep 17 00:00:00 2001
 From: Viktor Mihajlovski <mihajlov@linux.vnet.ibm.com>
 Date: Thu, 17 Sep 2015 15:33:29 +0200
 Subject: dasd: enhance device probing
@@ -33,9 +33,9 @@ Last-Update: 2015-10-29
 
 Patch-Name: dasd-enhance-probing.patch
 ---
- libparted/arch/linux.c  | 85 ++++++++++++++++++++++++++++++++++++++++---------
- libparted/device.c      | 14 +++-----
- libparted/labels/dasd.c | 18 +++++------
+ libparted/arch/linux.c  | 85 +++++++++++++++++++++++++++++++++--------
+ libparted/device.c      | 14 ++-----
+ libparted/labels/dasd.c | 18 ++++-----
  3 files changed, 82 insertions(+), 35 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c

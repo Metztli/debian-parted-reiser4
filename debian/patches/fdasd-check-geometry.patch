@@ -1,4 +1,4 @@
-From 056d2d93505e5d96273517524721e4cb45c30e9f Mon Sep 17 00:00:00 2001
+From 7768a61aff7e6337b018b637c7347ac0897e670d Mon Sep 17 00:00:00 2001
 From: Viktor Mihajlovski <mihajlov@linux.vnet.ibm.com>
 Date: Fri, 5 Feb 2016 14:47:11 +0100
 Subject: fdasd.c: Safeguard against geometry misprobing

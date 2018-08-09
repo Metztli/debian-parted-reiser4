@@ -20,3 +20,10 @@ dm-512b-sectors.patch
 fdasd-check-geometry.patch
 tests-move-get-sector-size.patch
 atari.patch
+nvme-devices.patch
+libparted-dasd-unify-vtoc-handling-for-cdl-ldl.patch
+libparted-dasd-update-and-improve-fdasd-functions.patch
+libparted-dasd-add-new-fdasd-functions.patch
+libparted-dasd-add-test-cases-for-the-new-fdasd-func.patch
+fat-resize-long-path.patch
+fat-resize-retain-boot-code.patch

@@ -1,4 +1,4 @@
-From 525e020e9552354d183b7135ec84a024ce2365bc Mon Sep 17 00:00:00 2001
+From 5535fb6b081322e7bde3742935d43ed0cbc848ae Mon Sep 17 00:00:00 2001
 From: Viktor Mihajlovski <mihajlov@linux.vnet.ibm.com>
 Date: Thu, 17 Sep 2015 15:33:28 +0200
 Subject: fdasd: geometry handling updated from upstream s390-tools
@@ -33,7 +33,7 @@ Patch-Name: fdasd-update-geometry-handling.patch
 ---
  include/parted/fdasd.h    |   4 +-
  include/parted/fdasd.in.h |   4 +-
- libparted/labels/fdasd.c  | 166 ++++++++++++++++++++++++++++++++--------------
+ libparted/labels/fdasd.c  | 166 ++++++++++++++++++++++++++------------
  3 files changed, 122 insertions(+), 52 deletions(-)
 
 diff --git a/include/parted/fdasd.h b/include/parted/fdasd.h
@@ -143,10 +143,11 @@ index 1f879373..7e6a77a2 100644
  		}
  
  		p->f1 = malloc(sizeof(format1_label_t));
-@@ -947,15 +921,77 @@ fdasd_check_api_version (fdasd_anchor_t *anc, int f)
+@@ -946,16 +920,78 @@ fdasd_check_api_version (fdasd_anchor_t *anc, int f)
+ 	}
  }
  
- /*
++/*
 + * The following two functions match those in the DASD ECKD device driver.
 + * They are used to compute how many records of a given size can be stored
 + * in one track.
@@ -207,7 +208,7 @@ index 1f879373..7e6a77a2 100644
 +	return 0;
 +}
 +
-+/*
+ /*
   * reads dasd geometry data
   */
 -void

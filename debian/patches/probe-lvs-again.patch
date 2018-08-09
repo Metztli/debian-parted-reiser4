@@ -1,4 +1,4 @@
-From 5e4e122454ac8ecf5b5fc006c0b03f0e8adc6c7c Mon Sep 17 00:00:00 2001
+From a6e2d62b1aa9cb65b76bd9ca2f36dd728331bc18 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Sat, 9 Aug 2014 16:23:26 +0200
 Subject: Probe LVM logical volumes again

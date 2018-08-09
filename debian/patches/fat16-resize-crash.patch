@@ -1,4 +1,4 @@
-From bdfd201a2f5b8090c7ba1208fe5531d0dceecf49 Mon Sep 17 00:00:00 2001
+From 2373a5bfc635d20babba2a1292e74eba7e44b4e2 Mon Sep 17 00:00:00 2001
 From: Mike Fleetwood <mike.fleetwood@googlemail.com>
 Date: Sun, 28 Sep 2014 16:15:48 +0100
 Subject: lib-fs-resize: Prevent crash resizing FAT16 file systems

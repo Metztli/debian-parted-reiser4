@@ -5,7 +5,7 @@ Subject: Implement partition table rereading on GNU/Hurd
 
 Patch-Name: hurd-reread.patch
 ---
- libparted/arch/gnu.c | 84 ++++++++++++++++++++++++++++++++++++++++++++++++----
+ libparted/arch/gnu.c | 84 ++++++++++++++++++++++++++++++++++++++++----
  1 file changed, 78 insertions(+), 6 deletions(-)
 
 diff --git a/libparted/arch/gnu.c b/libparted/arch/gnu.c

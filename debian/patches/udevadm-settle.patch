@@ -1,4 +1,4 @@
-From 0dd58cc5ac1cd5419bc1a6b45bf3acf4e13308de Mon Sep 17 00:00:00 2001
+From a1a11cde9b08ed4398bba366cdeb7962c3105d8d Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:10:16 +0000
 Subject: udev handling
@@ -13,7 +13,7 @@ Last-Update: 2014-08-05
 
 Patch-Name: udevadm-settle.patch
 ---
- libparted/arch/linux.c | 56 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ libparted/arch/linux.c | 56 ++++++++++++++++++++++++++++++++++++++++--
  1 file changed, 54 insertions(+), 2 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c

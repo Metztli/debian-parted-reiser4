@@ -15,7 +15,7 @@ Patch-Name: kfreebsd-gnu.patch
 ---
  configure.ac                     |    8 +-
  libparted/Makefile.am            |    3 +-
- libparted/arch/freebsd.c         | 1292 ++++++++++++++++++++++++++++++++++++++
+ libparted/arch/freebsd.c         | 1292 ++++++++++++++++++++++++++++++
  libparted/architecture.c         |    3 +
  libparted/fs/xfs/platform_defs.h |    6 +-
  libparted/labels/bsd.c           |    1 +

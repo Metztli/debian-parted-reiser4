@@ -1,4 +1,4 @@
-From ff8c1acab7041113768d76d52c7954b68d6a72a8 Mon Sep 17 00:00:00 2001
+From b5d5f6ead7c9f40e3cf7bd605dda5432732fe7e5 Mon Sep 17 00:00:00 2001
 From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Date: Sun, 4 Dec 2016 17:12:45 +0100
 Subject: libparted:tests: Move get_sector_size() to common.c

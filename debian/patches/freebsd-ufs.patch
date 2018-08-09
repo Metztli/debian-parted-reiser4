@@ -17,11 +17,11 @@ Last-Update: 2014-08-25
 
 Patch-Name: freebsd-ufs.patch
 ---
- libparted/fs/ufs/ufs.c     | 103 ++++++++++++++++++++++++++++++++++++++++++---
+ libparted/fs/ufs/ufs.c     | 103 ++++++++++++++++++++++++++++++++++---
  libparted/labels/dos.c     |   3 ++
  libparted/labels/gpt.c     |   9 ++++
  tests/Makefile.am          |   1 +
- tests/t2500-freebsd-ufs.sh |  44 +++++++++++++++++++
+ tests/t2500-freebsd-ufs.sh |  44 ++++++++++++++++
  5 files changed, 153 insertions(+), 7 deletions(-)
  create mode 100644 tests/t2500-freebsd-ufs.sh
 

@@ -8,7 +8,7 @@ Last-Update: 2014-07-30
 Patch-Name: zfs.patch
 ---
  libparted/fs/Makefile.am |  3 +-
- libparted/fs/zfs/zfs.c   | 77 ++++++++++++++++++++++++++++++++++++++++++++++++
+ libparted/fs/zfs/zfs.c   | 77 ++++++++++++++++++++++++++++++++++++++++
  libparted/libparted.c    |  4 +++
  3 files changed, 83 insertions(+), 1 deletion(-)
  create mode 100644 libparted/fs/zfs/zfs.c

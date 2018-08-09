@@ -1,4 +1,4 @@
-From 9b9611d9855502e0543cb20d5039dcc4721c1c68 Mon Sep 17 00:00:00 2001
+From 3ee5037ae7c2ae8dc8edd46ab4c076fdcc5f9e94 Mon Sep 17 00:00:00 2001
 From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Date: Sun, 4 Dec 2016 17:12:46 +0100
 Subject: libparted: Add support for atari partition tables
@@ -7,18 +7,18 @@ Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
 Bug: https://debbugs.gnu.org/cgi/bugreport.cgi?bug=16134
 Bug-Debian: https://bugs.debian.org/239816
-Last-Update: 2016-12-09
+Last-Update: 2017-10-11
 
 Patch-Name: atari.patch
 ---
  libparted/labels/Makefile.am    |    1 +
- libparted/labels/atari.c        | 1969 +++++++++++++++++++++++++++++++++++++++
+ libparted/labels/atari.c        | 1968 +++++++++++++++++++++++++++++++
  libparted/labels/pt-limit.gperf |    1 +
  libparted/libparted.c           |    4 +
  libparted/tests/common.c        |    3 +
  po/POTFILES.in                  |    1 +
  tests/t9021-maxima.sh           |    5 +-
- 7 files changed, 1983 insertions(+), 1 deletion(-)
+ 7 files changed, 1982 insertions(+), 1 deletion(-)
  create mode 100644 libparted/labels/atari.c
 
 diff --git a/libparted/labels/Makefile.am b/libparted/labels/Makefile.am
@@ -35,10 +35,10 @@ index c996f818..3327c8cb 100644
    dvh.c		\
 diff --git a/libparted/labels/atari.c b/libparted/labels/atari.c
 new file mode 100644
-index 00000000..8ed0dfbe
+index 00000000..fc41035a
 --- /dev/null
 +++ b/libparted/labels/atari.c
-@@ -0,0 +1,1969 @@
+@@ -0,0 +1,1968 @@
 +/* -*- Mode: c; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*-
 +
 +    libparted - a library for manipulating disk partitions
@@ -78,7 +78,6 @@ index 00000000..8ed0dfbe
 +#include <parted/endian.h>
 +#include <string.h>
 +#include <locale.h>
-+#include <xlocale.h>
 +#include <stdint.h>
 +#include <ctype.h>
 +#include <stddef.h>

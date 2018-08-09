@@ -1,4 +1,4 @@
-From 3e2326836f64c81ebe50a4cd78eda4bca008bf1d Mon Sep 17 00:00:00 2001
+From 9f29397aacc5e43425562dab3dbf588a06e4573c Mon Sep 17 00:00:00 2001
 From: "Brian C. Lane" <bcl@redhat.com>
 Date: Wed, 4 Feb 2015 16:46:07 -0800
 Subject: libparted: device mapper uses 512b sectors

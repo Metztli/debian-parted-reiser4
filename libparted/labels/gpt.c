@@ -10,11 +10,6 @@
     Per Intel EFI Specification v1.02
     http://developer.intel.com/technology/efi/efi.htm
 
-    DMI handling from dmidecode:
-      (C) 2000-2002 Alan Cox <alan@redhat.com>
-      (C) 2002-2005 Jean Delvare <khali@linux-fr.org>
-      Reduced for Intel Mac detection by Colin Watson <cjwatson@ubuntu.com>
-
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3 of the License, or
@@ -39,8 +34,6 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <uuid/uuid.h>
@@ -318,7 +311,7 @@ typedef struct _GPTPartitionData
 static PedDiskType gpt_disk_type;
 
 
-#if (defined(__i386__) || defined(__x86_64__)) && !defined(__GNU__)
+#if (defined(__i386__) || defined(__x86_64__)) && defined(__linux__)
 # define USE_DMI
 #endif
 
@@ -326,243 +319,25 @@ static PedDiskType gpt_disk_type;
 #define APPLE_DMI_2 "Apple Inc."
 static int is_apple = 0;
 
-#ifdef USE_DMI
-
-#define WORD(x) (*(const uint16_t *)(x))
-#define DWORD(x) (*(const uint32_t *)(x))
-
-struct dmi_header
-{
-  uint8_t type;
-  uint8_t length;
-  uint16_t handle;
-};
-
-
-static int
-checksum (const uint8_t *buf, size_t len)
-{
-  uint8_t sum = 0;
-  size_t a;
-
-  for (a = 0; a < len; a++)
-    sum += buf[a];
-  return (sum == 0);
-}
-
-/* Copy a physical memory chunk into a memory buffer.
- * This function allocates memory.
- */
-static void *
-mem_chunk (size_t base, size_t len)
-{
-  void *p;
-  int fd;
-  size_t mmoffset;
-  char *mmp;
-
-  fd = open ("/dev/mem", O_RDONLY);
-  if (fd == -1)
-    return NULL;
-
-  p = malloc (len);
-  if (p == NULL)
-  {
-    close (fd);
-    return NULL;
-  }
-
-#ifdef _SC_PAGESIZE
-  mmoffset = base % sysconf (_SC_PAGESIZE);
-#else
-  mmoffset = base % getpagesize ();
-#endif
-  /* Please note that we don't use mmap() for performance reasons here, but
-   * to workaround problems many people encountered when trying to read from
-   * /dev/mem using regular read() calls.
-   */
-  mmp = mmap (0, mmoffset + len, PROT_READ, MAP_SHARED, fd, base - mmoffset);
-  if (mmp == MAP_FAILED) {
-    free (p);
-    close (fd);
-    return NULL;
-  }
-
-  memcpy (p, mmp + mmoffset, len);
-
-  munmap (mmp, mmoffset + len);
-
-  close (fd);
-
-  return p;
-}
-
-static const char *
-dmi_string (struct dmi_header *dm, uint8_t s)
-{
-  char *bp = (char *) dm;
-  size_t i, len;
-
-  if (s == 0)
-    return "Not Specified";
-
-  bp += dm->length;
-  while (s > 1 && *bp)
-  {
-    bp += strlen (bp);
-    bp++;
-    s--;
-  }
-
-  if (!*bp)
-    return "<BAD INDEX>";
-
-  /* ASCII filtering */
-  len = strlen (bp);
-  for (i = 0; i < len; i++)
-    if (bp[i] < 32 || bp[i] == 127)
-      bp[i] = '.';
-
-  return bp;
-}
-
-static char *
-dmi_table (uint32_t base, uint16_t len, uint16_t num)
-{
-  uint8_t *buf;
-  uint8_t *data;
-  int i = 0;
-  char *ret = NULL;
-
-  buf = mem_chunk (base, len);
-  if (buf == NULL)
-    return NULL;
-
-  data = buf;
-  while (i < num && data + sizeof (struct dmi_header) <= buf + len) {
-    uint8_t *next;
-    struct dmi_header *h = (struct dmi_header *) data;
-
-    /* Stop decoding at end of table marker */
-    if (h->type == 127)
-      break;
-
-    /* Look for the next handle */
-    next = data + h->length;
-    while (next - buf + 1 < len && (next[0] != 0 || next[1] != 0))
-      next++;
-    next += 2;
-    /* system-manufacturer */
-    if (h->type == 1 && h->length > 0x04) {
-      ret = strdup (dmi_string (h, data[0x04]));
-      break;
-    }
-
-    data = next;
-    i++;
-  }
-
-  free (buf);
-  return ret;
-}
-
-#define EFI_NOT_FOUND (-1)
-#define EFI_NO_SMBIOS (-2)
-static int
-address_from_efi (size_t *address)
-{
-  FILE *efi_systab;
-  char linebuf[64];
-  int ret;
-
-  *address = 0; /* Prevent compiler warning */
-
-  efi_systab = fopen ("/sys/firmware/efi/systab", "r");
-  if (efi_systab == NULL)
-    /* No EFI interface, fallback to memory scan */
-    return EFI_NOT_FOUND;
-
-  ret = EFI_NO_SMBIOS;
-  while ((fgets (linebuf, sizeof (linebuf) - 1, efi_systab)) != NULL) {
-    char *addrp = strchr (linebuf, '=');
-    *(addrp++) = '\0';
-    if (strcmp (linebuf, "SMBIOS") == 0) {
-      *address = strtoul (addrp, NULL, 0);
-      ret = 0;
-      break;
-    }
-  }
-  fclose (efi_systab);
-
-  return ret;
-}
-
-static char *
-smbios_decode (uint8_t *buf)
-{
-  if (checksum (buf, buf[0x05]) &&
-      memcmp (buf + 0x10, "_DMI_", 5) == 0 &&
-      checksum (buf + 0x10, 0x0F))
-    return dmi_table (DWORD (buf + 0x18), WORD (buf + 0x16),
-                      WORD (buf + 0x1C));
-
-  return NULL;
-}
-
-static char *
-legacy_decode (uint8_t *buf)
-{
-  if (checksum (buf, 0x0F))
-    return dmi_table (DWORD (buf + 0x08), WORD (buf + 0x06),
-                      WORD (buf + 0x0C));
-
-  return NULL;
-}
-
-#endif /* USE_DMI */
-
 static char *
 dmi_system_manufacturer (void)
 {
 #ifdef USE_DMI
-  uint8_t *buf;
-  size_t fp;
-  char *ret = NULL;
-  int efi;
+  FILE *dmidecode;
+  char *manufacturer = NULL;
+  size_t manufacturer_len = 0;
 
-  efi = address_from_efi (&fp);
-  if (efi == EFI_NO_SMBIOS)
-    return NULL;
-
-  if (efi != EFI_NOT_FOUND) {
-    buf = mem_chunk (fp, 0x20);
-    if (buf == NULL)
-      return NULL;
-    ret = smbios_decode (buf);
-    if (ret)
-      goto out;
+  dmidecode = popen ("dmidecode -s system-manufacturer", "r");
+  if (getline (&manufacturer, &manufacturer_len, dmidecode) < 0) {
+    /* ignore; will return NULL */
   }
-
-  buf = mem_chunk (0xF0000, 0x10000);
-  if (buf == NULL)
-    return NULL;
-
-  for (fp = 0; fp <= 0xFFF0; fp += 16) {
-    if (memcmp (buf + fp, "_SM_", 4) == 0 && fp <= 0xFFE0) {
-      ret = smbios_decode (buf + fp);
-      if (ret)
-        break;
-      fp += 16;
-    } else if (memcmp (buf + fp, "_DMI_", 5) == 0) {
-      ret = legacy_decode (buf + fp);
-      if (ret)
-        break;
-    }
+  pclose (dmidecode);
+  if (manufacturer) {
+    char *newline = strchr (manufacturer, '\n');
+    if (newline)
+      *newline = '\0';
   }
-
-out:
-  free (buf);
-  return ret;
+  return manufacturer;
 #else /* !USE_DMI */
   return NULL;
 #endif /* USE_DMI */
