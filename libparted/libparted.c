@@ -1,6 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 1999-2001, 2007-2014 Free Software Foundation, Inc.
+    Copyright (C) 1999-2001, 2007-2014, 2019 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -80,12 +80,13 @@ extern void ped_disk_atari_init ();
 static void
 init_disk_types ()
 {
+	/* Note that probing is done in the reverse order of init */
 	ped_disk_loop_init ();	/* must be last in the probe list */
 
 #if defined __s390__ || defined __s390x__
 	ped_disk_dasd_init();
 #endif
-
+	ped_disk_atari_init (); /* easy false positives, so probe others first */
 	ped_disk_sun_init ();
 #ifdef ENABLE_PC98
 	ped_disk_pc98_init ();
@@ -97,7 +98,6 @@ init_disk_types ()
 	ped_disk_bsd_init ();
 	ped_disk_amiga_init ();
 	ped_disk_aix_init ();
-	ped_disk_atari_init ();
 }
 
 extern void ped_file_system_amiga_init (void);
@@ -110,10 +110,9 @@ extern void ped_file_system_jfs_init (void);
 extern void ped_file_system_hfs_init (void);
 extern void ped_file_system_fat_init (void);
 extern void ped_file_system_ext2_init (void);
-extern void ped_file_system_reiser4_init (void);
 extern void ped_file_system_nilfs2_init (void);
 extern void ped_file_system_btrfs_init (void);
-extern void ped_file_system_zfs_init (void);
+extern void ped_file_system_udf_init (void);
 
 static void
 init_file_system_types ()
@@ -128,10 +127,9 @@ init_file_system_types ()
 	ped_file_system_hfs_init ();
 	ped_file_system_fat_init ();
 	ped_file_system_ext2_init ();
-	ped_file_system_reiser4_init ();
 	ped_file_system_nilfs2_init ();
 	ped_file_system_btrfs_init ();
-	ped_file_system_zfs_init ();
+	ped_file_system_udf_init ();
 }
 
 extern void ped_disk_aix_done ();
@@ -195,15 +193,13 @@ extern void ped_file_system_ntfs_done (void);
 extern void ped_file_system_reiserfs_done (void);
 extern void ped_file_system_ufs_done (void);
 extern void ped_file_system_xfs_done (void);
-extern void ped_file_system_reiser4_done (void);
 extern void ped_file_system_amiga_done (void);
 extern void ped_file_system_btrfs_done (void);
-extern void ped_file_system_zfs_done (void);
+extern void ped_file_system_udf_done (void);
 
 static void
 done_file_system_types ()
 {
-	ped_file_system_zfs_done ();
 	ped_file_system_nilfs2_done ();
 	ped_file_system_ext2_done ();
 	ped_file_system_fat_done ();
@@ -214,9 +210,9 @@ done_file_system_types ()
 	ped_file_system_reiserfs_done ();
 	ped_file_system_ufs_done ();
 	ped_file_system_xfs_done ();
-	ped_file_system_reiser4_done ();
 	ped_file_system_amiga_done ();
 	ped_file_system_btrfs_done ();
+	ped_file_system_udf_done ();
 }
 
 static void _done() __attribute__ ((destructor));

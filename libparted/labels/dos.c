@@ -1,7 +1,7 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 1999-2001, 2004-2005, 2007-2014 Free Software Foundation,
-    Inc.
+    Copyright (C) 1999-2001, 2004-2005, 2007-2014, 2019 Free Software
+    Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,6 +65,7 @@ static const char MBR_BOOT_CODE[] = {
 #define PARTITION_FAT16		0x06
 #define PARTITION_NTFS		0x07
 #define PARTITION_HPFS		0x07
+#define PARTITION_UDF		0x07
 #define PARTITION_FAT32		0x0b
 #define PARTITION_FAT32_LBA	0x0c
 #define PARTITION_FAT16_LBA	0x0e
@@ -88,7 +89,6 @@ static const char MBR_BOOT_CODE[] = {
 #define PARTITION_IRST		0x84
 #define PARTITION_LINUX_EXT	0x85
 #define PARTITION_LINUX_LVM	0x8e
-#define PARTITION_FREEBSD_UFS	0xa5
 #define PARTITION_HFS		0xaf
 #define PARTITION_SUN_UFS	0xbf
 #define PARTITION_DELL_DIAG	0xde
@@ -156,6 +156,7 @@ typedef struct {
 	unsigned char	system;
 	int		boot;
 	int		hidden;
+	int		msftres;
 	int		raid;
 	int		lvm;
 	int		lba;
@@ -218,7 +219,7 @@ maybe_FAT (unsigned char const *s)
   if (! (s[0] == 0xeb || s[0] == 0xe9))
     return false;
 
-  unsigned int sector_size = PED_LE16_TO_CPU (*(uint16_t *) (s + 11));
+  uint16_t sector_size = (s[12] << 8) | s[11];
   switch (sector_size)
     {
     case 512:
@@ -949,8 +950,8 @@ raw_part_parse (const PedDisk* disk, const DosRawPartition* raw_part,
 	dos_data->system = raw_part->type;
 	dos_data->boot = raw_part->boot_ind != 0;
 	dos_data->diag = raw_part->type == PARTITION_COMPAQ_DIAG ||
-			 raw_part->type == PARTITION_MSFT_RECOVERY ||
 			 raw_part->type == PARTITION_DELL_DIAG;
+	dos_data->msftres = raw_part->type == PARTITION_MSFT_RECOVERY;
 	dos_data->hidden = raw_part_is_hidden (raw_part);
 	dos_data->raid = raw_part->type == PARTITION_LINUX_RAID;
 	dos_data->lvm = raw_part->type == PARTITION_LINUX_LVM_OLD
@@ -1295,18 +1296,13 @@ msdos_write (const PedDisk* disk)
 	if (!table->mbr_signature)
 		table->mbr_signature = generate_random_uint32 ();
 
-	if (table->magic != PED_CPU_TO_LE16 (MSDOS_MAGIC)) {
-		memset (table->partitions, 0, sizeof (table->partitions));
-		table->magic = PED_CPU_TO_LE16 (MSDOS_MAGIC);
-	}
+	memset (table->partitions, 0, sizeof (table->partitions));
+	table->magic = PED_CPU_TO_LE16 (MSDOS_MAGIC);
 
 	for (i=1; i<=DOS_N_PRI_PARTITIONS; i++) {
 		part = ped_disk_get_partition (disk, i);
-		if (!part) {
-			if (table->partitions [i - 1].type != PARTITION_EMPTY)
-				memset (&table->partitions [i - 1], 0, sizeof (DosRawPartition));
+		if (!part)
 			continue;
-		}
 
 		if (!fill_raw_part (&table->partitions [i - 1], part, 0))
 			goto write_fail;
@@ -1350,6 +1346,7 @@ msdos_partition_new (const PedDisk* disk, PedPartitionType part_type,
 		dos_data->orig = NULL;
 		dos_data->system = PARTITION_LINUX;
 		dos_data->hidden = 0;
+		dos_data->msftres = 0;
 		dos_data->boot = 0;
 		dos_data->diag = 0;
 		dos_data->raid = 0;
@@ -1389,6 +1386,7 @@ msdos_partition_duplicate (const PedPartition* part)
 	new_dos_data->boot = old_dos_data->boot;
 	new_dos_data->diag = old_dos_data->diag;
 	new_dos_data->hidden = old_dos_data->hidden;
+	new_dos_data->msftres = old_dos_data->msftres;
 	new_dos_data->raid = old_dos_data->raid;
 	new_dos_data->lvm = old_dos_data->lvm;
 	new_dos_data->lba = old_dos_data->lba;
@@ -1438,6 +1436,11 @@ msdos_partition_set_system (PedPartition* part,
 		    && strcmp (fs_type->name, "ntfs") != 0)
 		dos_data->hidden = 0;
 
+	if (dos_data->msftres
+		    && fs_type
+		    && strcmp (fs_type->name, "ntfs") != 0)
+		dos_data->msftres = 0;
+
 	if (part->type & PED_PARTITION_EXTENDED) {
 		dos_data->diag = 0;
 		dos_data->raid = 0;
@@ -1457,9 +1460,12 @@ msdos_partition_set_system (PedPartition* part,
 		/* Don't change the system if it already is a diag type,
 		   otherwise use Compaq as almost all vendors use that. */
 		if (dos_data->system != PARTITION_COMPAQ_DIAG &&
-		    dos_data->system != PARTITION_MSFT_RECOVERY &&
 		    dos_data->system != PARTITION_DELL_DIAG)
 			dos_data->system = PARTITION_COMPAQ_DIAG;
+		return 1;
+	}
+	if (dos_data->msftres) {
+		dos_data->system = PARTITION_MSFT_RECOVERY;
 		return 1;
 	}
 	if (dos_data->lvm) {
@@ -1504,10 +1510,10 @@ msdos_partition_set_system (PedPartition* part,
 	} else if (!strcmp (fs_type->name, "hfs")
 		   || !strcmp (fs_type->name, "hfs+"))
 		dos_data->system = PARTITION_HFS;
+	else if (!strcmp (fs_type->name, "udf"))
+		dos_data->system = PARTITION_UDF;
 	else if (!strcmp (fs_type->name, "sun-ufs"))
 		dos_data->system = PARTITION_SUN_UFS;
-	else if (!strcmp (fs_type->name, "freebsd-ufs"))
-		dos_data->system = PARTITION_FREEBSD_UFS;
 	else if (is_linux_swap (fs_type->name))
 		dos_data->system = PARTITION_LINUX_SWAP;
 	else
@@ -1521,6 +1527,7 @@ clear_flags (DosPartitionData *dos_data)
 {
   dos_data->diag = 0;
   dos_data->hidden = 0;
+  dos_data->msftres = 0;
   dos_data->lvm = 0;
   dos_data->palo = 0;
   dos_data->prep = 0;
@@ -1555,6 +1562,18 @@ msdos_partition_set_flag (PedPartition* part,
 			return 0;
 		}
 		dos_data->hidden = state;
+		return ped_partition_set_system (part, part->fs_type);
+
+	case PED_PARTITION_MSFT_RESERVED:
+		if (part->type == PED_PARTITION_EXTENDED) {
+			ped_exception_throw (
+				PED_EXCEPTION_ERROR,
+				PED_EXCEPTION_CANCEL,
+				_("Extended partitions cannot be recovery partitions on "
+				  "msdos disk labels."));
+			return 0;
+		}
+		dos_data->msftres = state;
 		return ped_partition_set_system (part, part->fs_type);
 
 	case PED_PARTITION_BOOT:
@@ -1637,6 +1656,12 @@ msdos_partition_get_flag (const PedPartition* part, PedPartitionFlag flag)
 		else
 			return dos_data->hidden;
 
+	case PED_PARTITION_MSFT_RESERVED:
+		if (part->type == PED_PARTITION_EXTENDED)
+			return 0;
+		else
+			return dos_data->msftres;
+
 	case PED_PARTITION_BOOT:
 		return dos_data->boot;
 
@@ -1675,6 +1700,12 @@ msdos_partition_is_flag_available (const PedPartition* part,
 {
 	switch (flag) {
 	case PED_PARTITION_HIDDEN:
+		if (part->type == PED_PARTITION_EXTENDED)
+			return 0;
+		else
+			return 1;
+
+	case PED_PARTITION_MSFT_RESERVED:
 		if (part->type == PED_PARTITION_EXTENDED)
 			return 0;
 		else
@@ -1739,8 +1770,8 @@ _best_solution (const PedPartition* part, const PedCHSGeometry* bios_geom,
 		PedSector	a_delta;
 		PedSector	b_delta;
 
-		a_delta = abs (part->geom.start - a->start);
-		b_delta = abs (part->geom.start - b->start);
+		a_delta = llabs (part->geom.start - a->start);
+		b_delta = llabs (part->geom.start - b->start);
 
 		if (a_delta < b_delta)
 			goto choose_a;

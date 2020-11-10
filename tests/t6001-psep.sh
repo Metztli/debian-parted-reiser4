@@ -1,7 +1,7 @@
 #!/bin/sh
 # ensure that parted names partitions on dm disks correctly
 
-# Copyright (C) 2011-2014 Free Software Foundation, Inc.
+# Copyright (C) 2011-2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 . "${srcdir=.}/init.sh"; path_prepend_ ../parted
 
 require_root_
+require_udevadm_settle_
+
 (dmsetup --help) > /dev/null 2>&1 || skip_test_ "No dmsetup installed"
 
 # Device maps names - should be random to not conflict with existing ones on
@@ -54,7 +56,7 @@ parted -s $dev mklabel msdos mkpart primary fat32 1m 5m > out 2>&1 || fail=1
 compare /dev/null out || fail=1
 
 #make sure device name is correct
-test -e ${dev}p1 || fail=1
+wait_for_dev_to_appear_ ${dev}p1 || fail=1
 
 #repeat on name not ending in a digit
 # setup: create a mapping
@@ -66,7 +68,7 @@ parted -s $dev mklabel msdos mkpart primary fat32 1m 5m > out 2>&1 || fail=1
 compare /dev/null out || fail=1
 
 #make sure device name is correct
-test -e ${dev}1 || fail=1
+wait_for_dev_to_appear_ ${dev}1 || fail=1
 
 if [ -n "$fail" ]; then
     ls /dev/mapper

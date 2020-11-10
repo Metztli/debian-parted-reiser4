@@ -1,9 +1,7 @@
 # This file is part of GNU Parted
-# Copyright (C) 1999-2001, 2007, 2009-2014 Free Software Foundation, Inc.
+# Copyright (C) 1999-2001, 2007, 2009-2014, 2019 Free Software Foundation, Inc.
 #
 # This file may be modified and/or distributed without restriction.
-
-AUTOMAKE_OPTIONS = subdir-objects
 
 partedincludedir = -I$(top_builddir)/include -I$(top_srcdir)/include
 
@@ -46,13 +44,12 @@ libfs_la_SOURCES =		\
   ntfs/ntfs.c			\
   reiserfs/reiserfs.c		\
   reiserfs/reiserfs.h		\
-  reiser4/reiser4.c		\
+  udf/udf.c			\
   ufs/ufs.c			\
   xfs/platform_defs.h		\
   xfs/xfs.c			\
   xfs/xfs_sb.h			\
-  xfs/xfs_types.h		\
-  zfs/zfs.c
+  xfs/xfs_types.h
 
 lib_LTLIBRARIES = libparted-fs-resize.la
 
@@ -65,7 +62,7 @@ EXTRA_DIST =			\
 # For details, see the "Updating library version information" section of
 # "info libtool".
 CURRENT = 0
-REVISION = 1
+REVISION = 2
 AGE = 0
 
 sym_file = $(srcdir)/fsresize.sym

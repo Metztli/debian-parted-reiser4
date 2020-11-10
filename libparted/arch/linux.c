@@ -1,5 +1,5 @@
 /* libparted - a library for manipulating disk partitions
-    Copyright (C) 1999-2014 Free Software Foundation, Inc.
+    Copyright (C) 1999-2014, 2019 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 #include <parted/fdasd.h>
 #endif
 
-#include <stdlib.h>
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -42,6 +41,7 @@
 #include <sys/utsname.h>        /* for uname() */
 #include <scsi/scsi.h>
 #include <assert.h>
+#include <sys/sysmacros.h>
 #ifdef ENABLE_DEVICE_MAPPER
 #include <libdevmapper.h>
 #endif
@@ -280,6 +280,7 @@ struct blkdev_ioctl_param {
 #define LOOP_MAJOR              7
 #define MD_MAJOR                9
 #define BLKEXT_MAJOR            259
+#define RAM_MAJOR               1
 
 #define SCSI_BLK_MAJOR(M) (                                             \
                 (M) == SCSI_DISK0_MAJOR                                 \
@@ -293,7 +294,9 @@ struct blkdev_ioctl_param {
 static char* _device_get_part_path (PedDevice const *dev, int num);
 static int _partition_is_mounted_by_path (const char* path);
 static unsigned int _device_get_partition_range(PedDevice const* dev);
-
+static int _device_open (PedDevice* dev, int flags);
+static int _device_open_ro (PedDevice* dev);
+static int _device_close (PedDevice* dev);
 
 static int
 _read_fd (int fd, char **buf)
@@ -604,8 +607,8 @@ _probe_dm_devices ()
                if (stat (buf, &st) != 0)
                        continue;
 
-               if (_is_dm_major(major(st.st_rdev))
-                   && !(_is_dmraid_device(buf) && _dm_is_part(buf)))
+               if (_is_dm_major(major(st.st_rdev)) && _is_dmraid_device (buf)
+                   && !_dm_is_part(buf))
                        _ped_device_probe (buf);
        }
        closedir (mapper_dir);
@@ -700,6 +703,10 @@ _device_probe_type (PedDevice* dev)
                 dev->type = PED_DEVICE_MD;
         } else if (_is_blkext_major(dev_major) && dev->path && strstr(dev->path, "nvme")) {
                 dev->type = PED_DEVICE_NVME;
+        } else if (dev_major == RAM_MAJOR) {
+                dev->type = PED_DEVICE_RAM;
+        } else if (_is_blkext_major(dev_major) && dev->path && strstr(dev->path, "pmem")) {
+                dev->type = PED_DEVICE_PMEM;
         } else {
                 dev->type = PED_DEVICE_UNKNOWN;
         }
@@ -860,6 +867,8 @@ _device_probe_geometry (PedDevice* dev)
         LinuxSpecific*          arch_specific = LINUX_SPECIFIC (dev);
         struct stat             dev_stat;
         struct hd_geometry      geometry;
+        int                     geometry_is_valid = 0;
+        int                     sector_size = 0;
 
         if (!_device_stat (dev, &dev_stat))
                 return 0;
@@ -871,26 +880,41 @@ _device_probe_geometry (PedDevice* dev)
         if (!dev->length)
                 return 0;
 
-        /* The GETGEO ioctl is no longer useful (as of linux 2.6.x).  We could
-         * still use it in 2.4.x, but this is contentious.  Perhaps we should
-         * move to EDD. */
-        dev->bios_geom.sectors = 63;
-        dev->bios_geom.heads = 255;
-        dev->bios_geom.cylinders
-                = dev->length / (63 * 255);
+        /* initialize the bios_geom values to something */
+        dev->bios_geom.sectors = 0;
+        dev->bios_geom.heads = 0;
+        dev->bios_geom.cylinders = 0;
 
-        /* FIXME: what should we put here?  (TODO: discuss on linux-kernel) */
-        if (!ioctl (arch_specific->fd, HDIO_GETGEO, &geometry)
-                        && geometry.sectors && geometry.heads) {
-                dev->hw_geom.sectors = geometry.sectors;
-                dev->hw_geom.heads = geometry.heads;
-                dev->hw_geom.cylinders
-                        = dev->length / (dev->hw_geom.heads
-                                         * dev->hw_geom.sectors);
+        geometry_is_valid = !ioctl (arch_specific->fd, HDIO_GETGEO, &geometry)
+                            && geometry.sectors && geometry.heads;
+
+#if defined __s390__ || defined __s390x__
+        if (geometry_is_valid) {
+#else
+        if (!ioctl (arch_specific->fd, BLKSSZGET, &sector_size)) {
+                /* get the sector count first */
+                dev->bios_geom.sectors = 1 + (sector_size / PED_SECTOR_SIZE_DEFAULT);
+                dev->bios_geom.heads = 255;
+        } else if (geometry_is_valid) {
+                /* if BLKSSZGET failed, use deprecated HDIO_GETGEO result */
+#endif
+                dev->bios_geom.sectors = geometry.sectors;
+                dev->bios_geom.heads = geometry.heads;
         } else {
-                dev->hw_geom = dev->bios_geom;
+                ped_exception_throw (
+                        PED_EXCEPTION_WARNING,
+                        PED_EXCEPTION_OK,
+                        _("Could not determine sector size for %s: %s.\n"
+                          "Using the default sector size (%lld)."),
+                        dev->path, strerror (errno), PED_SECTOR_SIZE_DEFAULT);
+                dev->bios_geom.sectors = 2;
+                dev->bios_geom.heads = 255;
         }
 
+        dev->bios_geom.cylinders
+                = dev->length / (dev->bios_geom.heads
+                                 * dev->bios_geom.sectors);
+        dev->hw_geom = dev->bios_geom;
         return 1;
 }
 
@@ -920,14 +944,19 @@ init_ide (PedDevice* dev)
         PedExceptionOption      ex_status;
         char                    hdi_buf[41];
         int                     sector_multiplier = 0;
+        int                     r;
 
         if (!_device_stat (dev, &dev_stat))
                 goto error;
 
-        if (!ped_device_open (dev))
+        if (!_device_open_ro (dev))
                 goto error;
 
-        if (ioctl (arch_specific->fd, HDIO_GET_IDENTITY, &hdi)) {
+        r = ioctl (arch_specific->fd, HDIO_GET_IDENTITY, &hdi);
+        if (r && errno == EINVAL) {
+                /* silently ignore unsupported ioctl */
+                dev->model = strdup(_("Generic IDE"));
+        } else if (r) {
                 ex_status = ped_exception_throw (
                                 PED_EXCEPTION_WARNING,
                                 PED_EXCEPTION_IGNORE_CANCEL,
@@ -939,6 +968,7 @@ init_ide (PedDevice* dev)
 
                         case PED_EXCEPTION_UNHANDLED:
                                 ped_exception_catch ();
+                                /* FALLTHROUGH */
                         case PED_EXCEPTION_IGNORE:
                                 dev->model = strdup(_("Generic IDE"));
                                 break;
@@ -976,6 +1006,7 @@ init_ide (PedDevice* dev)
 
                                 case PED_EXCEPTION_UNHANDLED:
                                         ped_exception_catch ();
+                                        /* FALLTHROUGH */
                                 case PED_EXCEPTION_IGNORE:
                                         break;
                                 default:
@@ -993,11 +1024,11 @@ init_ide (PedDevice* dev)
         if (!_device_probe_geometry (dev))
                 goto error_close_dev;
 
-        ped_device_close (dev);
+        _device_close (dev);
         return 1;
 
 error_close_dev:
-        ped_device_close (dev);
+        _device_close (dev);
 error:
         return 0;
 }
@@ -1130,7 +1161,7 @@ init_scsi (PedDevice* dev)
         char* vendor;
         char* product;
 
-        if (!ped_device_open (dev))
+        if (!_device_open_ro (dev))
                 goto error;
 
         if (ioctl (arch_specific->fd, SCSI_IOCTL_GET_IDLUN, &idlun) < 0) {
@@ -1144,7 +1175,7 @@ init_scsi (PedDevice* dev)
                         goto error_close_dev;
                 if (!_device_probe_geometry (dev))
                         goto error_close_dev;
-                ped_device_close (dev);
+                _device_close (dev);
                 return 1;
         }
 
@@ -1166,11 +1197,11 @@ init_scsi (PedDevice* dev)
         if (!_device_probe_geometry (dev))
                 goto error_close_dev;
 
-        ped_device_close (dev);
+        _device_close (dev);
         return 1;
 
 error_close_dev:
-        ped_device_close (dev);
+        _device_close (dev);
 error:
         return 0;
 }
@@ -1182,7 +1213,7 @@ init_file (PedDevice* dev)
 
         if (!_device_stat (dev, &dev_stat))
                 goto error;
-        if (!ped_device_open (dev))
+        if (!_device_open_ro (dev))
                 goto error;
 
         dev->sector_size = PED_SECTOR_SIZE_DEFAULT;
@@ -1209,7 +1240,7 @@ init_file (PedDevice* dev)
                 goto error_close_dev;
         }
 
-        ped_device_close (dev);
+        _device_close (dev);
 
         dev->bios_geom.cylinders = dev->length / 4 / 32;
         dev->bios_geom.heads = 4;
@@ -1220,7 +1251,7 @@ init_file (PedDevice* dev)
         return 1;
 
 error_close_dev:
-        ped_device_close (dev);
+        _device_close (dev);
 error:
         return 0;
 }
@@ -1236,7 +1267,7 @@ init_dasd (PedDevice* dev, const char* model_name)
         if (!_device_stat (dev, &dev_stat))
                 goto error;
 
-        if (!ped_device_open (dev))
+        if (!_device_open_ro (dev))
                 goto error;
 
         LinuxSpecific* arch_specific = LINUX_SPECIFIC (dev);
@@ -1276,11 +1307,11 @@ init_dasd (PedDevice* dev, const char* model_name)
 
         dev->model = strdup (model_name);
 
-        ped_device_close (dev);
+        _device_close (dev);
         return 1;
 
 error_close_dev:
-        ped_device_close (dev);
+        _device_close (dev);
 error:
         return 0;
 }
@@ -1295,7 +1326,7 @@ init_generic (PedDevice* dev, const char* model_name)
         if (!_device_stat (dev, &dev_stat))
                 goto error;
 
-        if (!ped_device_open (dev))
+        if (!_device_open_ro (dev))
                 goto error;
 
         ped_exception_fetch_all ();
@@ -1325,6 +1356,7 @@ init_generic (PedDevice* dev, const char* model_name)
 
                         case PED_EXCEPTION_UNHANDLED:
                                 ped_exception_catch ();
+                                /* FALLTHROUGH */
                         case PED_EXCEPTION_IGNORE:
                                 break;
                         default:
@@ -1343,11 +1375,11 @@ init_generic (PedDevice* dev, const char* model_name)
 
         dev->model = strdup (model_name);
 
-        ped_device_close (dev);
+        _device_close (dev);
         return 1;
 
 error_close_dev:
-        ped_device_close (dev);
+        _device_close (dev);
 error:
         return 0;
 }
@@ -1378,6 +1410,22 @@ init_sdmmc (PedDevice* dev)
                           _("Generic SD/MMC Storage Card"));
         }
         return init_generic(dev, id);
+}
+
+static int
+init_nvme (PedDevice* dev)
+{
+        int ret;
+        char *model = read_device_sysfs_file (dev, "model");
+
+        if (!model)
+                ret = init_generic (dev, _("NVMe Device"));
+        else {
+                ret = init_generic (dev, model);
+                free (model);
+        }
+
+        return ret;
 }
 
 static PedDevice*
@@ -1464,7 +1512,12 @@ linux_new (const char* path)
                 break;
 
         case PED_DEVICE_NVME:
-                if (!init_generic (dev, _("NVMe Device")))
+                if (!init_nvme (dev))
+                        goto error_free_arch_specific;
+                break;
+
+        case PED_DEVICE_PMEM:
+                if (!init_generic (dev, _("NVDIMM Device")))
                         goto error_free_arch_specific;
                 break;
 
@@ -1528,6 +1581,11 @@ linux_new (const char* path)
 
         case PED_DEVICE_MD:
                 if (!init_generic(dev, _("Linux Software RAID Array")))
+                        goto error_free_arch_specific;
+                break;
+
+        case PED_DEVICE_RAM:
+                if (!init_generic (dev, _("RAM Drive")))
                         goto error_free_arch_specific;
                 break;
 
@@ -1603,9 +1661,9 @@ _flush_cache (PedDevice* dev)
 {
         LinuxSpecific*  arch_specific = LINUX_SPECIFIC (dev);
         int             i;
-	int             lpn = _device_get_partition_range(dev);
+        int             lpn = _device_get_partition_range(dev);
 
-        if (dev->read_only)
+        if (dev->read_only || dev->type == PED_DEVICE_RAM)
                 return;
         dev->dirty = 0;
 
@@ -1639,12 +1697,27 @@ retry:
 }
 
 static int
+_device_open_ro (PedDevice* dev)
+{
+    int rc = _device_open (dev, RD_MODE);
+    if (rc)
+        dev->open_count++;
+    return rc;
+}
+
+static int
 linux_open (PedDevice* dev)
+{
+    return _device_open (dev, RW_MODE);
+}
+
+static int
+_device_open (PedDevice* dev, int flags)
 {
         LinuxSpecific*  arch_specific = LINUX_SPECIFIC (dev);
 
 retry:
-        arch_specific->fd = open (dev->path, RW_MODE);
+        arch_specific->fd = open (dev->path, flags);
 
         if (arch_specific->fd == -1) {
                 char*   rw_error_msg = strerror (errno);
@@ -1711,6 +1784,15 @@ linux_refresh_close (PedDevice* dev)
         if (dev->dirty)
                 _flush_cache (dev);
         return 1;
+}
+
+static int
+_device_close (PedDevice* dev)
+{
+    int rc = linux_close (dev);
+    if (dev->open_count > 0)
+        dev->open_count--;
+    return rc;
 }
 
 #if SIZEOF_OFF_T < 8
@@ -1834,6 +1916,7 @@ linux_read (const PedDevice* dev, void* buffer, PedSector start,
 
                         case PED_EXCEPTION_UNHANDLED:
                                 ped_exception_catch ();
+                                /* FALLTHROUGH */
                         case PED_EXCEPTION_CANCEL:
                                 return 0;
                         default:
@@ -1877,6 +1960,7 @@ linux_read (const PedDevice* dev, void* buffer, PedSector start,
 
                         case PED_EXCEPTION_UNHANDLED:
                                 ped_exception_catch ();
+                                /* FALLTHROUGH */
                         case PED_EXCEPTION_CANCEL:
                                 free(diobuf);
                                 return 0;
@@ -1976,6 +2060,7 @@ linux_write (PedDevice* dev, const void* buffer, PedSector start,
 
                         case PED_EXCEPTION_UNHANDLED:
                                 ped_exception_catch ();
+                                /* FALLTHROUGH */
                         case PED_EXCEPTION_CANCEL:
                                 return 0;
                         default:
@@ -2019,6 +2104,7 @@ linux_write (PedDevice* dev, const void* buffer, PedSector start,
 
                         case PED_EXCEPTION_UNHANDLED:
                                 ped_exception_catch ();
+                                /* FALLTHROUGH */
                         case PED_EXCEPTION_CANCEL:
                                 free(diobuf_start);
                                 return 0;
@@ -2090,6 +2176,7 @@ _do_fsync (PedDevice* dev)
 
                         case PED_EXCEPTION_UNHANDLED:
                                 ped_exception_catch ();
+                                /* FALLTHROUGH */
                         case PED_EXCEPTION_CANCEL:
                                 return 0;
                         default:
@@ -2254,9 +2341,9 @@ _probe_sys_block ()
 
 		strcpy (dev_name, "/dev/");
 		strcat (dev_name, dirent->d_name);
-		/* in /sys/block, '/'s are replaced with '!' or '.' */
+		/* in /sys/block, '/'s are replaced with '!' */
 		for (ptr = dev_name; *ptr != '\0'; ptr++) {
-			if (*ptr == '!' || *ptr == '.')
+			if (*ptr == '!')
 				*ptr = '/';
 		}
 		_ped_device_probe (dev_name);
@@ -2323,6 +2410,7 @@ zasprintf (const char *format, ...)
   return r < 0 ? NULL : resultp;
 }
 
+#ifdef ENABLE_DEVICE_MAPPER
 static char *
 dm_canonical_path (PedDevice const *dev)
 {
@@ -2345,14 +2433,21 @@ dm_canonical_path (PedDevice const *dev)
 err:
         return NULL;
 }
+#endif
 
 static char*
 _device_get_part_path (PedDevice const *dev, int num)
 {
-        char *devpath = (dev->type == PED_DEVICE_DM
-                         ? dm_canonical_path (dev) : dev->path);
-        size_t path_len = strlen (devpath);
+        char *devpath;
+        size_t path_len;
         char *result;
+#ifdef ENABLE_DEVICE_MAPPER
+        devpath = (dev->type == PED_DEVICE_DM
+                         ? dm_canonical_path (dev) : dev->path);
+#else
+        devpath = dev->path;
+#endif
+        path_len = strlen (devpath);
         /* Check for devfs-style /disc => /partN transformation
            unconditionally; the system might be using udev with devfs rules,
            and if not the test is harmless. */
@@ -2368,8 +2463,10 @@ _device_get_part_path (PedDevice const *dev, int num)
                                  ? "p" : "");
                 result = zasprintf ("%s%s%d", devpath, p, num);
         }
+#ifdef ENABLE_DEVICE_MAPPER
         if (dev->type == PED_DEVICE_DM)
                 free (devpath);
+#endif
         return result;
 }
 
@@ -2516,9 +2613,12 @@ _blkpg_add_partition (PedDisk* disk, const PedPartition *part)
                 linux_part.length = part->geom.length * disk->dev->sector_size;
         }
         linux_part.pno = part->num;
-        strncpy (linux_part.devname, dev_name, BLKPG_DEVNAMELTH);
-        if (vol_name)
-                strncpy (linux_part.volname, vol_name, BLKPG_VOLNAMELTH);
+        strncpy (linux_part.devname, dev_name, BLKPG_DEVNAMELTH-1);
+        linux_part.devname[BLKPG_DEVNAMELTH-1] = '\0';
+        if (vol_name) {
+                strncpy (linux_part.volname, vol_name, BLKPG_VOLNAMELTH-1);
+                linux_part.volname[BLKPG_VOLNAMELTH-1] = '\0';
+        }
 
         free (dev_name);
 
@@ -2566,12 +2666,16 @@ static int _blkpg_resize_partition (PedDisk* disk, const PedPartition *part)
                                 if (walk->geom.start == part->geom.start+1)
                                         linux_part.length = 1;
                         }
-                } else linux_part.length = 1;
+                } else {
+                        linux_part.length = 1;
+                }
+                linux_part.length *= disk->dev->sector_size;
         }
         else
                 linux_part.length = part->geom.length * disk->dev->sector_size;
         linux_part.pno = part->num;
-        strncpy (linux_part.devname, dev_name, BLKPG_DEVNAMELTH);
+        strncpy (linux_part.devname, dev_name, BLKPG_DEVNAMELTH-1);
+        linux_part.devname[BLKPG_DEVNAMELTH-1] = '\0';
 
         free (dev_name);
 
@@ -2671,6 +2775,7 @@ _kernel_get_partition_start_and_length(PedPartition const *part,
                 int dev_fd = open (dev_name, O_RDONLY);
                 if (dev_fd != -1 && ioctl (dev_fd, HDIO_GETGEO, &geom)) {
                         *start = geom.start;
+                        close (dev_fd);
                         ok = true;
                 } else {
                         if (dev_fd != -1)
@@ -2881,6 +2986,7 @@ _dm_resize_partition (PedDisk* disk, const PedPartition* part)
         char*           vol_name = NULL;
         const char*     dev_name = NULL;
         uint32_t        cookie = 0;
+        int             rc = 0;
 
         /* Get map name from devicemapper */
         struct dm_task *task = dm_task_create (DM_DEVICE_INFO);
@@ -2921,8 +3027,9 @@ _dm_resize_partition (PedDisk* disk, const PedPartition* part)
         /* device-mapper uses 512b units, not the device's sector size */
         dm_task_add_target (task, 0, part->geom.length * (disk->dev->sector_size / PED_SECTOR_SIZE_DEFAULT),
                 "linear", params);
-        if (!dm_task_set_cookie (task, &cookie, 0))
-                goto err;
+        /* NOTE: DM_DEVICE_RELOAD doesn't generate udev events, so no cookie is needed (it will freeze).
+         *       DM_DEVICE_RESUME does, so get a cookie and synchronize with udev.
+         */
         if (dm_task_run (task)) {
                 dm_task_destroy (task);
                 task = dm_task_create (DM_DEVICE_RESUME);
@@ -2931,10 +3038,8 @@ _dm_resize_partition (PedDisk* disk, const PedPartition* part)
                 dm_task_set_name (task, vol_name);
                 if (!dm_task_set_cookie (task, &cookie, 0))
                         goto err;
-                if (dm_task_run (task)) {
-                        free (params);
-                        free (vol_name);
-                        return 1;
+                if (_dm_task_run_wait (task, cookie)) {
+                        rc = 1;
                 }
         }
 err:
@@ -2943,7 +3048,7 @@ err:
                 dm_task_destroy (task);
         free (params);
         free (vol_name);
-        return 0;
+        return rc;
 }
 
 #endif
@@ -2977,12 +3082,15 @@ _disk_sync_part_table (PedDisk* disk)
                                                unsigned long long *length);
 
 
+#ifdef ENABLE_DEVICE_MAPPER
         if (disk->dev->type == PED_DEVICE_DM) {
                 add_partition = _dm_add_partition;
                 remove_partition = _dm_remove_partition;
                 resize_partition = _dm_resize_partition;
                 get_partition_start_and_length = _dm_get_partition_start_and_length;
-        } else {
+        } else
+#endif
+        {
                 add_partition = _blkpg_add_partition;
                 remove_partition = _blkpg_remove_partition;
 #ifdef BLKPG_RESIZE_PARTITION
@@ -3137,52 +3245,10 @@ _have_blkpg ()
         return have_blkpg = kver >= KERNEL_VERSION (2,4,0) ? 1 : 0;
 }
 
-static int
-_chrooted ()
-{
-        static int cached = -1;
-        struct stat root, init_root;
-
-        if (cached != -1)
-                return cached;
-
-        if (stat ("/", &root) || stat ("/proc/1/root", &init_root))
-                /* We can't tell, but are unlikely to be able to tell in the
-                 * future either.
-                 */
-                cached = 0;
-        else if (root.st_dev == init_root.st_dev &&
-                 root.st_ino == init_root.st_ino)
-                /* / has the same dev/ino as /sbin/init's root, so we're not
-                 * in a chroot.
-                 */
-                cached = 0;
-        else
-                /* We must be in a chroot. */
-                cached = 1;
-
-        return cached;
-}
-
 /* Return nonzero upon success, 0 if something fails.  */
 static int
 linux_disk_commit (PedDisk* disk)
 {
-        int ret = 1;
-
-        /* Modern versions of udev may notice the write activity on
-         * partition devices caused by _flush_cache, and may decide to
-         * synthesise some change events as a result. These may in turn run
-         * programs that open partition devices, which will race with us
-         * trying to remove those devices. To avoid this, we need to wait
-         * until udevd has finished processing its event queue.
-         * TODO: for upstream submission, this should check whether udevadm
-         * exists on $PATH.
-         */
-        if (!_chrooted () && system ("udevadm settle") != 0) {
-                /* ignore failures */
-        }
-
         if (disk->dev->type != PED_DEVICE_FILE) {
 
                 /* We now require BLKPG support.  If this assertion fails,
@@ -3192,19 +3258,10 @@ linux_disk_commit (PedDisk* disk)
                 assert (_have_blkpg ());
 
                 if (!_disk_sync_part_table (disk))
-                        ret = 0;
+                        return 0;
         }
 
-        /* Now we wait for udevd to finish creating device nodes based on
-         * the above activity, so that callers can reliably use them.
-         * TODO: for upstream submission, this should check whether udevadm
-         * exists on $PATH.
-         */
-        if (!_chrooted () && system ("udevadm settle") != 0) {
-                /* ignore failures */
-        }
-
-        return ret;
+        return 1;
 }
 
 #if USE_BLKID

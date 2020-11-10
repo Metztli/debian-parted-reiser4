@@ -1,6 +1,6 @@
 #!/bin/sh
 # Test unicode partition names
-# Copyright (C) 2013-2014 Free Software Foundation, Inc.
+# Copyright (C) 2013-2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +22,11 @@ dev=loop-file
 # create zeroed device
 truncate -s 10m $dev || fail=1
 
-export LC_ALL=C.UTF-8
+LC_ALL=$(locale -a | grep en_US.utf8)
+if [ -z "$LC_ALL" ]; then
+   LC_ALL=C.UTF-8
+fi
+export LC_ALL="$LC_ALL"
 # create gpt label with named partition
 part_name=$(printf 'foo\341\264\244')
 parted -s $dev mklabel gpt mkpart primary ext2 1MiB 2MiB name 1 $part_name > empty 2>&1 || fail=1

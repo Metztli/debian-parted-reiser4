@@ -1,6 +1,6 @@
 /*
     libparted
-    Copyright (C) 1998-2001, 2007-2014 Free Software Foundation, Inc.
+    Copyright (C) 1998-2001, 2007-2014, 2019 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -305,7 +305,7 @@ fat_create (PedGeometry* geom, FatType fat_type, PedTimer* timer)
 		memset (fs_info->buffer, 0, fs_info->cluster_size);
 		if (!fat_write_cluster (fs, fs_info->buffer,
 					fs_info->root_cluster))
-			return 0;
+			goto error_free_buffers;
 	}
 
 	fs_info->serial_number = generate_random_uint32 ();

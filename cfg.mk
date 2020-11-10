@@ -1,5 +1,5 @@
 # Customize maint.mk                           -*- makefile -*-
-# Copyright (C) 2003-2014 Free Software Foundation, Inc.
+# Copyright (C) 2003-2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,12 +38,14 @@ local-checks-to-skip = \
   sc_prohibit_atoi_atof \
   sc_require_test_exit_idiom \
   sc_space_tab \
-  sc_texinfo_acronym
+  sc_texinfo_acronym \
+  sc_prohibit_gnu_make_extensions
 
 # Now that we have better (check.mk) tests, make this the default.
 export VERBOSE = yes
 
-old_NEWS_hash = bd453bcf049e292a9677c094d24a29dd
+# Hash of lines 42-208 for release 3.2
+old_NEWS_hash = 662c01eb5a757da59d219a79c06d6495
 
 include $(srcdir)/dist-check.mk
 

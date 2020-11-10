@@ -25,6 +25,7 @@ TESTS = \
   t0210-gpt-resized-partition-entry-array.sh \
   t0211-gpt-rewrite-header.sh \
   t0212-gpt-many-partitions.sh \
+  t0213-mkpart-start-negative.sh \
   t0220-gpt-msftres.sh \
   t0250-gpt.sh \
   t0251-gpt-unicode.sh \
@@ -32,7 +33,6 @@ TESTS = \
   t0281-gpt-grow.sh \
   t0282-gpt-move-backup.sh \
   t0283-overlap-partitions.sh \
-  t0290-gptsync.sh \
   t0300-dos-on-gpt.sh \
   t0301-overwrite-gpt-pmbr.sh \
   t0350-mac-PT-increases-sector-size.sh \
@@ -44,12 +44,14 @@ TESTS = \
   t1102-loop-label.sh \
   t1104-remove-and-add-partition.sh \
   t1700-probe-fs.sh \
+  t1701-rescue-fs.sh \
   t2200-dos-label-recog.sh \
   t2201-pc98-label-recog.sh \
   t2300-dos-label-extended-bootcode.sh \
   t2310-dos-extended-2-sector-min-offset.sh \
+  t2320-dos-extended-noclobber.sh \
   t2400-dos-hfs-partition-type.sh \
-  t2500-freebsd-ufs.sh \
+  t2410-dos-udf-partition-type.sh \
   t2500-probe-corrupt-hfs.sh \
   t3000-resize-fs.sh \
   t3200-resize-partition.sh \
@@ -64,6 +66,8 @@ TESTS = \
   t4100-msdos-starting-sector.sh \
   t4200-partprobe.sh \
   t4300-nilfs2-tiny.sh \
+  t4301-nilfs2-badsb2.sh \
+  t4302-nilfs2-lessbadsb2.sh \
   t5000-tags.sh \
   t6000-dm.sh \
   t6001-psep.sh \
@@ -71,6 +75,7 @@ TESTS = \
   t6003-dm-hide.sh \
   t6004-dm-many-partitions.sh \
   t6005-dm-uuid.sh \
+  t6006-dm-512b-sectors.sh \
   t6100-mdraid-partitions.sh \
   t7000-scripting.sh \
   t8000-loop.sh \
@@ -91,7 +96,8 @@ EXTRA_DIST = \
   init.cfg init.sh t-lib-helpers.sh gpt-header-munge \
   gpt-header-move msdos-overlap
 
-check_PROGRAMS = print-align print-max dup-clobber duplicate fs-resize
+check_PROGRAMS = print-align print-flags print-max dup-clobber duplicate \
+  fs-resize
 fs_resize_LDADD = \
   $(top_builddir)/libparted/fs/libparted-fs-resize.la \
   $(top_builddir)/libparted/libparted.la

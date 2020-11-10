@@ -8,11 +8,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: parted 3.1.90\n"
 "Report-Msgid-Bugs-To: bug-parted@gnu.org\n"
-"POT-Creation-Date: 2014-07-28 23:04-0400\n"
+"POT-Creation-Date: 2014-06-21 14:00-0400\n"
 "PO-Revision-Date: 2014-07-04 08:03+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
 "Language: uk\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -237,19 +238,15 @@ msgstr "(C)"
 #: lib/version-etc.c:86
 msgid ""
 "\n"
-"License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl."
-"html>.\n"
+"License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n"
 "This is free software: you are free to change and redistribute it.\n"
 "There is NO WARRANTY, to the extent permitted by law.\n"
 "\n"
 msgstr ""
 "\n"
-"Умови ліцензування викладено у GPLv3+: GNU GPL версії 3 або новішій, <http://"
-"gnu.org/licenses/gpl.html>\n"
-"Це вільне програмне забезпечення: ви можете вільно змінювати і поширювати "
-"його.\n"
-"Вам не надається ЖОДНИХ ГАРАНТІЙ, окрім гарантій передбачених "
-"законодавством.\n"
+"Умови ліцензування викладено у GPLv3+: GNU GPL версії 3 або новішій, <http://gnu.org/licenses/gpl.html>\n"
+"Це вільне програмне забезпечення: ви можете вільно змінювати і поширювати його.\n"
+"Вам не надається ЖОДНИХ ГАРАНТІЙ, окрім гарантій передбачених законодавством.\n"
 
 #. TRANSLATORS: %s denotes an author name.
 #: lib/version-etc.c:102
@@ -424,9 +421,7 @@ msgstr "Помилка відкривання %s: %s"
 #: libparted/arch/linux.c:1650
 #, c-format
 msgid "Unable to open %s read-write (%s).  %s has been opened read-only."
-msgstr ""
-"Не вдається відкрити %s для читання-запису (%s). %s відкрито у режимі лише-"
-"читання."
+msgstr "Не вдається відкрити %s для читання-запису (%s). %s відкрито у режимі лише-читання."
 
 #: libparted/arch/beos.c:419 libparted/arch/linux.c:1806
 #, c-format
@@ -511,39 +506,17 @@ msgid "Unable to probe store."
 msgstr "Не вдається визначити сховище."
 
 #: libparted/arch/gnu.c:368
-msgid ""
-"The partition table cannot be re-read.  This means you need to reboot before "
-"mounting any modified partitions.  You also need to reinstall your boot "
-"loader before you reboot (which may require mounting modified partitions).  "
-"It is impossible do both things!  So you'll need to boot off a rescue disk, "
-"and reinstall your boot loader from the rescue disk.  Read section 4 of the "
-"Parted User documentation for more information."
-msgstr ""
-"Не вдається перечитати таблицю розділів, слід перезавантажитись перш ніж "
-"підключати змінені розділи. Також перед перезавантаженням необхідно "
-"перевстановити завантажувач (що вимагає підключення змінених розділів). "
-"Неможливо виконати одночасно обидві дії! Тому слід завантажитись з "
-"завантажувального диска, та перевстановити завантажувач. Додаткову "
-"інформацію знайдете у розділі 4 документації з Parted."
+msgid "The partition table cannot be re-read.  This means you need to reboot before mounting any modified partitions.  You also need to reinstall your boot loader before you reboot (which may require mounting modified partitions).  It is impossible do both things!  So you'll need to boot off a rescue disk, and reinstall your boot loader from the rescue disk.  Read section 4 of the Parted User documentation for more information."
+msgstr "Не вдається перечитати таблицю розділів, слід перезавантажитись перш ніж підключати змінені розділи. Також перед перезавантаженням необхідно перевстановити завантажувач (що вимагає підключення змінених розділів). Неможливо виконати одночасно обидві дії! Тому слід завантажитись з завантажувального диска, та перевстановити завантажувач. Додаткову інформацію знайдете у розділі 4 документації з Parted."
 
 #: libparted/arch/gnu.c:385
 #, c-format
-msgid ""
-"The partition table on %s cannot be re-read (%s).  This means the Hurd knows "
-"nothing about any modifications you made.  You should reboot your computer "
-"before doing anything with %s."
-msgstr ""
-"Таблицю розділів на %s не вдається перечитати (%s). Це означає, що Hurd "
-"нічого не знає про внесені вами зміни. Необхідно перезавантажити ваш "
-"комп'ютер перед виконанням будь-яких дій з %s."
+msgid "The partition table on %s cannot be re-read (%s).  This means the Hurd knows nothing about any modifications you made.  You should reboot your computer before doing anything with %s."
+msgstr "Таблицю розділів на %s не вдається перечитати (%s). Це означає, що Hurd нічого не знає про внесені вами зміни. Необхідно перезавантажити ваш комп'ютер перед виконанням будь-яких дій з %s."
 
 #: libparted/arch/gnu.c:396 parted/parted.c:2262
-msgid ""
-"You should reinstall your boot loader before rebooting.  Read section 4 of "
-"the Parted User documentation for more information."
-msgstr ""
-"Необхідно перевстановити ваш завантажувач перед перезавантаженням. Додаткову "
-"інформацію знайдете у розділі 4 документації з Parted."
+msgid "You should reinstall your boot loader before rebooting.  Read section 4 of the Parted User documentation for more information."
+msgstr "Необхідно перевстановити ваш завантажувач перед перезавантаженням. Додаткову інформацію знайдете у розділі 4 документації з Parted."
 
 #: libparted/arch/gnu.c:788
 #, c-format
@@ -596,13 +569,11 @@ msgstr "Загальний IDE"
 #, c-format
 msgid ""
 "Device %s has multiple (%d) logical sectors per physical sector.\n"
-"GNU Parted supports this EXPERIMENTALLY for some special disk label/file "
-"system combinations, e.g. GPT and ext2/3.\n"
+"GNU Parted supports this EXPERIMENTALLY for some special disk label/file system combinations, e.g. GPT and ext2/3.\n"
 "Please consult the web site for up-to-date information."
 msgstr ""
 "Пристрій %s має декілька (%d) логічних серверів на фізичний сектор.\n"
-"Підтримка цього у GNU Parted є ЕКСПЕРИМЕНТАЛЬНОЮ для деяких спеціальних "
-"комбінацій  позначка диска/файлова система, наприклад. GPT та ext2/3.\n"
+"Підтримка цього у GNU Parted є ЕКСПЕРИМЕНТАЛЬНОЮ для деяких спеціальних комбінацій  позначка диска/файлова система, наприклад. GPT та ext2/3.\n"
 "Додаткову інформацію шукайте на веб-сайті."
 
 #: libparted/arch/linux.c:1127
@@ -612,21 +583,13 @@ msgstr "Помилка ініціалізації SCSI пристрою %s - %s"
 
 #: libparted/arch/linux.c:1191
 #, c-format
-msgid ""
-"The device %s is so small that it cannot possibly store a file system or "
-"partition table.  Perhaps you selected the wrong device?"
-msgstr ""
-"Пристрій %s є замалим для зберігання файлової системи або таблиці розділів. "
-"Можливо, ви вибрали неправильний пристрій?"
+msgid "The device %s is so small that it cannot possibly store a file system or partition table.  Perhaps you selected the wrong device?"
+msgstr "Пристрій %s є замалим для зберігання файлової системи або таблиці розділів. Можливо, ви вибрали неправильний пристрій?"
 
 #: libparted/arch/linux.c:1304
 #, c-format
-msgid ""
-"Unable to determine geometry of file/device %s.  You should not use Parted "
-"unless you REALLY know what you're doing!"
-msgstr ""
-"Не вдається визначити геометрію файлу/пристрою %s. Не слід використовувати "
-"Parted, хіба що ви ДІЙСНО знаєте, що ви робите!"
+msgid "Unable to determine geometry of file/device %s.  You should not use Parted unless you REALLY know what you're doing!"
+msgstr "Не вдається визначити геометрію файлу/пристрою %s. Не слід використовувати Parted, хіба що ви ДІЙСНО знаєте, що ви робите!"
 
 #: libparted/arch/linux.c:1364
 msgid "Generic SD/MMC Storage Card"
@@ -709,15 +672,8 @@ msgstr "%0.0sкінець файла під час читання %s"
 
 #: libparted/arch/linux.c:2564
 #, c-format
-msgid ""
-"Error informing the kernel about modifications to partition %s -- %s.  This "
-"means Linux won't know about any changes you made to %s until you reboot -- "
-"so you shouldn't mount it or use it in any way before rebooting."
-msgstr ""
-"Помилка сповіщення ядра про зміни у розділі %s -- %s. Це означає, що Linux "
-"не враховуватиме внесені у %s зміни до перезавантаження - тому до "
-"перезавантаження не слід підключати розділ чи використовувати будь-яким "
-"іншим чином."
+msgid "Error informing the kernel about modifications to partition %s -- %s.  This means Linux won't know about any changes you made to %s until you reboot -- so you shouldn't mount it or use it in any way before rebooting."
+msgstr "Помилка сповіщення ядра про зміни у розділі %s -- %s. Це означає, що Linux не враховуватиме внесені у %s зміни до перезавантаження - тому до перезавантаження не слід підключати розділ чи використовувати будь-яким іншим чином."
 
 #: libparted/arch/linux.c:2683
 #, c-format
@@ -726,23 +682,13 @@ msgstr "Не вдалося визначити початок і довжину 
 
 #: libparted/arch/linux.c:3080
 #, c-format
-msgid ""
-"Partition(s) %s on %s have been written, but we have been unable to inform "
-"the kernel of the change, probably because it/they are in use.  As a result, "
-"the old partition(s) will remain in use.  You should reboot now before "
-"making further changes."
-msgstr ""
-"Розділи %s було записано на %s, але надати інформацію щодо них ядру не "
-"вдалося, ймовірно, через те, що ці розділи використовуються. Через це "
-"система продовжуватиме використовувати застарілі дані щодо розділів. Перш "
-"ніж вносити подальші зміни, вам слід перезавантажити операційну систему."
+msgid "Partition(s) %s on %s have been written, but we have been unable to inform the kernel of the change, probably because it/they are in use.  As a result, the old partition(s) will remain in use.  You should reboot now before making further changes."
+msgstr "Розділи %s було записано на %s, але надати інформацію щодо них ядру не вдалося, ймовірно, через те, що ці розділи використовуються. Через це система продовжуватиме використовувати застарілі дані щодо розділів. Перш ніж вносити подальші зміни, вам слід перезавантажити операційну систему."
 
 #: libparted/cs/geom.c:162
 #, c-format
 msgid "Can't have the end before the start! (start sector=%jd length=%jd)"
-msgstr ""
-"Неприпустимо, щоб кінець розділу був перед початком! (початковий сектор=%jd, "
-"довжина=%jd)"
+msgstr "Неприпустимо, щоб кінець розділу був перед початком! (початковий сектор=%jd, довжина=%jd)"
 
 #: libparted/cs/geom.c:378
 #, c-format
@@ -770,12 +716,8 @@ msgstr "%s: непридатна до розпізнавання мітка ди
 
 #: libparted/disk.c:486
 #, c-format
-msgid ""
-"This libparted doesn't have write support for %s.  Perhaps it was compiled "
-"read-only."
-msgstr ""
-"Ця версія libparted не підтримує запис на %s. Можливо програму зібрано з "
-"підтримкою лише для читання."
+msgid "This libparted doesn't have write support for %s.  Perhaps it was compiled read-only."
+msgstr "Ця версія libparted не підтримує запис на %s. Можливо програму зібрано з підтримкою лише для читання."
 
 #: libparted/disk.c:631
 #, c-format
@@ -803,8 +745,7 @@ msgstr "%s етикетки дисків для розширених розді�
 #: libparted/disk.c:1820
 #, c-format
 msgid "%s disk labels don't support logical or extended partitions."
-msgstr ""
-"%s етикетки дисків для логічних або розширених розділів не підтримуються."
+msgstr "%s етикетки дисків для логічних або розширених розділів не підтримуються."
 
 #: libparted/disk.c:1833
 msgid "Too many primary partitions."
@@ -812,10 +753,8 @@ msgstr "Занадто багато основних розділів."
 
 #: libparted/disk.c:1842
 #, c-format
-msgid ""
-"Can't add a logical partition to %s, because there is no extended partition."
-msgstr ""
-"Не вдається додати логічний розділ до %s, тому що немає розширеного розділу."
+msgid "Can't add a logical partition to %s, because there is no extended partition."
+msgstr "Не вдається додати логічний розділ до %s, тому що немає розширеного розділу."
 
 #: libparted/disk.c:1866
 #, c-format
@@ -829,8 +768,7 @@ msgstr "Не вдається розширити логічний розділ �
 #: libparted/disk.c:1901
 #, c-format
 msgid "Can't have a logical partition outside of the extended partition on %s."
-msgstr ""
-"Не вдається розширити логічний розділ за межі розширеного розділу на %s."
+msgstr "Не вдається розширити логічний розділ за межі розширеного розділу на %s."
 
 #: libparted/disk.c:1911
 msgid "Can't have a primary partition inside an extended partition."
@@ -995,17 +933,10 @@ msgstr "Скасувати"
 
 #: libparted/exception.c:133
 #, c-format
-msgid ""
-"A bug has been detected in GNU Parted.  Refer to the web site of parted "
-"http://www.gnu.org/software/parted/parted.html for more information of what "
-"could be useful for bug submitting!  Please email a bug report to %s "
-"containing at least the version (%s) and the following message:  "
+msgid "A bug has been detected in GNU Parted.  Refer to the web site of parted http://www.gnu.org/software/parted/parted.html for more information of what could be useful for bug submitting!  Please email a bug report to %s containing at least the version (%s) and the following message:  "
 msgstr ""
-"Ви зіткнулися з помилкою у GNU parted. На веб-сайті http://www.gnu.org/"
-"software/parted/parted.html можна знайти дані щодо того, яка інформація "
-"знадобиться розробникам для її усування. Будь ласка, \n"
-"надішліть звіт щодо помилки електронною поштою на адресу %s, не забудьте "
-"вказати версію (%s) та додати таке повідомлення:"
+"Ви зіткнулися з помилкою у GNU parted. На веб-сайті http://www.gnu.org/software/parted/parted.html можна знайти дані щодо того, яка інформація знадобиться розробникам для її усування. Будь ласка, \n"
+"надішліть звіт щодо помилки електронною поштою на адресу %s, не забудьте вказати версію (%s) та додати таке повідомлення:"
 
 #: libparted/labels/aix.c:103
 msgid "Support for reading AIX disk labels is is not implemented yet."
@@ -1016,32 +947,20 @@ msgid "Support for writing AIX disk labels is is not implemented yet."
 msgstr "Підтримка запису позначок дисків у стилі AIX ще не реалізована."
 
 #: libparted/labels/aix.c:127
-msgid ""
-"Support for adding partitions to AIX disk labels is not implemented yet."
-msgstr ""
-"Підтримка додавання розділів для позначок дисків у стилі AIX ще не "
-"реалізована."
+msgid "Support for adding partitions to AIX disk labels is not implemented yet."
+msgstr "Підтримка додавання розділів для позначок дисків у стилі AIX ще не реалізована."
 
 #: libparted/labels/aix.c:137
-msgid ""
-"Support for duplicating partitions in AIX disk labels is not implemented yet."
-msgstr ""
-"Підтримка дублювання розділів для позначок дисків у стилі AIX ще не "
-"реалізована."
+msgid "Support for duplicating partitions in AIX disk labels is not implemented yet."
+msgstr "Підтримка дублювання розділів для позначок дисків у стилі AIX ще не реалізована."
 
 #: libparted/labels/aix.c:155
-msgid ""
-"Support for setting system type of partitions in AIX disk labels is not "
-"implemented yet."
-msgstr ""
-"Підтримка встановлення типу розділів для позначок дисків у стилі AIX ще не "
-"реалізована."
+msgid "Support for setting system type of partitions in AIX disk labels is not implemented yet."
+msgstr "Підтримка встановлення типу розділів для позначок дисків у стилі AIX ще не реалізована."
 
 #: libparted/labels/aix.c:165
 msgid "Support for setting flags in AIX disk labels is not implemented yet."
-msgstr ""
-"Підтримка встановлення ознак для позначок дисків у стилі AIX ще не "
-"реалізована."
+msgstr "Підтримка встановлення ознак для позначок дисків у стилі AIX ще не реалізована."
 
 #: libparted/labels/bsd.c:571 libparted/labels/dasd.c:874
 #: libparted/labels/dos.c:2237 libparted/labels/dvh.c:769
@@ -1088,8 +1007,7 @@ msgstr "%s не містить розширеного розділу (розді
 
 #: libparted/labels/dvh.c:308
 msgid "Checksum is wrong, indicating the partition table is corrupt."
-msgstr ""
-"Неправильна контрольна сума, це означає, що таблиця розділів пошкоджена."
+msgstr "Неправильна контрольна сума, це означає, що таблиця розділів пошкоджена."
 
 #: libparted/labels/dvh.c:613
 msgid "Only primary partitions can be root partitions."
@@ -1194,11 +1112,8 @@ msgstr "Не вдалося отримати дані щодо версії пр
 
 #: libparted/labels/fdasd.c:941
 #, c-format
-msgid ""
-"The current API version '%d' doesn't match dasd driver API version '%d'!"
-msgstr ""
-"Поточна версія програмного інтерфейсу, «%d», не збігається з версією "
-"програмного інтерфейсу драйвера dasd, «%d»!"
+msgid "The current API version '%d' doesn't match dasd driver API version '%d'!"
+msgstr "Поточна версія програмного інтерфейсу, «%d», не збігається з версією програмного інтерфейсу драйвера dasd, «%d»!"
 
 #: libparted/labels/fdasd.c:984
 msgid "Could not retrieve disk geometry information."
@@ -1218,58 +1133,29 @@ msgstr "пристрій є замалим для GPT"
 
 #: libparted/labels/gpt.c:734
 #, c-format
-msgid ""
-"The format of the GPT partition table is version %x, which is newer than "
-"what Parted can recognise.  Please report this!"
-msgstr ""
-"Маємо формат таблиці розділів GPT версії %x. Ця версія є новішою за ту, "
-"підтримку якої передбачено у Parted. Будь ласка, повідомте нам про цю "
-"помилку!"
+msgid "The format of the GPT partition table is version %x, which is newer than what Parted can recognise.  Please report this!"
+msgstr "Маємо формат таблиці розділів GPT версії %x. Ця версія є новішою за ту, підтримку якої передбачено у Parted. Будь ласка, повідомте нам про цю помилку!"
 
 #: libparted/labels/gpt.c:770
 #, c-format
-msgid ""
-"Not all of the space available to %s appears to be used, you can fix the GPT "
-"to use all of the space (an extra %llu blocks) or continue with the current "
-"setting? "
-msgstr ""
-"На %s використовується не весь доступний простір, виправити GPT, щоб "
-"використовувався весь простір (додатково %llu блоків) або продовжити з "
-"вказаними параметрами?."
+msgid "Not all of the space available to %s appears to be used, you can fix the GPT to use all of the space (an extra %llu blocks) or continue with the current setting? "
+msgstr "На %s використовується не весь доступний простір, виправити GPT, щоб використовувався весь простір (додатково %llu блоків) або продовжити з вказаними параметрами?."
 
 #: libparted/labels/gpt.c:1006
-msgid ""
-"The backup GPT table is not at the end of the disk, as it should be.  Fix, "
-"by moving the backup to the end (and removing the old backup)?"
-msgstr ""
-"Резервна GPT-таблиця не знаходиться наприкінці диска, хоча повинна там "
-"знаходитись. Виправити це шляхом переміщення копії таблиці у кінець (та "
-"видалити стару копію)?"
+msgid "The backup GPT table is not at the end of the disk, as it should be.  Fix, by moving the backup to the end (and removing the old backup)?"
+msgstr "Резервна GPT-таблиця не знаходиться наприкінці диска, хоча повинна там знаходитись. Виправити це шляхом переміщення копії таблиці у кінець (та видалити стару копію)?"
 
 #: libparted/labels/gpt.c:1024
-msgid ""
-"Both the primary and backup GPT tables are corrupt.  Try making a fresh "
-"table, and using Parted's rescue feature to recover partitions."
-msgstr ""
-"Пошкоджено як головну, так і резервну таблицю GPT. Спробуйте створити чисту "
-"таблицю, та використовуйте функцію відновлення програми Parted, щоб "
-"повернути розділи."
+msgid "Both the primary and backup GPT tables are corrupt.  Try making a fresh table, and using Parted's rescue feature to recover partitions."
+msgstr "Пошкоджено як головну, так і резервну таблицю GPT. Спробуйте створити чисту таблицю, та використовуйте функцію відновлення програми Parted, щоб повернути розділи."
 
 #: libparted/labels/gpt.c:1035
-msgid ""
-"The backup GPT table is corrupt, but the primary appears OK, so that will be "
-"used."
-msgstr ""
-"Резервну таблицю GPT пошкоджено, основна, здається є правильною, тому буде "
-"використано основну таблицю."
+msgid "The backup GPT table is corrupt, but the primary appears OK, so that will be used."
+msgstr "Резервну таблицю GPT пошкоджено, основна, здається є правильною, тому буде використано основну таблицю."
 
 #: libparted/labels/gpt.c:1047
-msgid ""
-"The primary GPT table is corrupt, but the backup appears OK, so that will be "
-"used."
-msgstr ""
-"Основна GPT-таблиця пошкоджена, але резервна виглядає правильною, тому буде "
-"використовуватись саме вона."
+msgid "The primary GPT table is corrupt, but the backup appears OK, so that will be used."
+msgstr "Основна GPT-таблиця пошкоджена, але резервна виглядає правильною, тому буде використовуватись саме вона."
 
 #: libparted/labels/gpt.c:1071
 msgid "primary partition table array CRC mismatch"
@@ -1321,19 +1207,13 @@ msgstr "Область даних розділу не займає весь ро
 
 #: libparted/labels/mac.c:648
 #, c-format
-msgid ""
-"Weird block size on device descriptor: %d bytes is not divisible by 512."
-msgstr ""
-"Дивний розмір блоку у дескрипторі пристрою: %d байт не ділиться на 512."
+msgid "Weird block size on device descriptor: %d bytes is not divisible by 512."
+msgstr "Дивний розмір блоку у дескрипторі пристрою: %d байт не ділиться на 512."
 
 #: libparted/labels/mac.c:661
 #, c-format
-msgid ""
-"The driver descriptor says the physical block size is %d bytes, but Linux "
-"says it is %d bytes."
-msgstr ""
-"У дескрипторі драйвера зазначено, що розмір фізичного блоку дорівнює %d "
-"байтів, але Linux вважає, що він %d байтів."
+msgid "The driver descriptor says the physical block size is %d bytes, but Linux says it is %d bytes."
+msgstr "У дескрипторі драйвера зазначено, що розмір фізичного блоку дорівнює %d байтів, але Linux вважає, що він %d байтів."
 
 #: libparted/labels/mac.c:714
 msgid "No valid partition map found."
@@ -1341,24 +1221,16 @@ msgstr "Не знайдено правильної карти розділів."
 
 #: libparted/labels/mac.c:787
 #, c-format
-msgid ""
-"Conflicting partition map entry sizes!  Entry 1 says it is %d, but entry %d "
-"says it is %d!"
-msgstr ""
-"Конфлікт розмірів у елементах карти розділів! У елементі 1 вказано %d, але у "
-"елементі %d вказано %d!"
+msgid "Conflicting partition map entry sizes!  Entry 1 says it is %d, but entry %d says it is %d!"
+msgstr "Конфлікт розмірів у елементах карти розділів! У елементі 1 вказано %d, але у елементі %d вказано %d!"
 
 #: libparted/labels/mac.c:818
 msgid "Weird!  There are 2 partitions map entries!"
 msgstr "Фатально! Дивна помилка - 2 елементи карти розділів!"
 
 #: libparted/labels/mac.c:1356
-msgid ""
-"Changing the name of a root or swap partition will prevent Linux from "
-"recognising it as such."
-msgstr ""
-"Зміна назви кореневого розділу чи розділу підкачки заважатиме Linux "
-"розпізнати їх."
+msgid "Changing the name of a root or swap partition will prevent Linux from recognising it as such."
+msgstr "Зміна назви кореневого розділу чи розділу підкачки заважатиме Linux розпізнати їх."
 
 #: libparted/labels/mac.c:1455
 msgid "Can't add another partition -- the partition map is too small!"
@@ -1371,12 +1243,8 @@ msgstr "Неправильна таблиця розділів у %s."
 
 #: libparted/labels/pc98.c:337 libparted/labels/pc98.c:415
 #, c-format
-msgid ""
-"Partition %d isn't aligned to cylinder boundaries.  This is still "
-"unsupported."
-msgstr ""
-"Розділ %d не вирівняний на межі циліндру. Необхідно додати підтримку для "
-"цього випадку."
+msgid "Partition %d isn't aligned to cylinder boundaries.  This is still unsupported."
+msgstr "Розділ %d не вирівняний на межі циліндру. Необхідно додати підтримку для цього випадку."
 
 #: libparted/labels/pc98.c:733
 msgid "Can't add another partition."
@@ -1384,21 +1252,13 @@ msgstr "Не вдається додати інший розділ."
 
 #: libparted/labels/pt-tools.c:133
 #, c-format
-msgid ""
-"partition length of %jd sectors exceeds the %s-partition-table-imposed "
-"maximum of %jd"
-msgstr ""
-"довжина розділу у секторах, %jd, перевищує максимум для таблиці розділу %s, "
-"%jd"
+msgid "partition length of %jd sectors exceeds the %s-partition-table-imposed maximum of %jd"
+msgstr "довжина розділу у секторах, %jd, перевищує максимум для таблиці розділу %s, %jd"
 
 #: libparted/labels/pt-tools.c:146
 #, c-format
-msgid ""
-"starting sector number, %jd exceeds the %s-partition-table-imposed maximum "
-"of %jd"
-msgstr ""
-"номер початкового сектора, %jd, перевищує максимум для таблиці розділу %s, "
-"%jd"
+msgid "starting sector number, %jd exceeds the %s-partition-table-imposed maximum of %jd"
+msgstr "номер початкового сектора, %jd, перевищує максимум для таблиці розділу %s, %jd"
 
 #: libparted/labels/rdb.c:169
 #, c-format
@@ -1455,12 +1315,8 @@ msgstr "Знайдено пошкоджену Sun-етикетку диска."
 
 #: libparted/labels/sun.c:276
 #, c-format
-msgid ""
-"The disk CHS geometry (%d,%d,%d) reported by the operating system does not "
-"match the geometry stored on the disk label (%d,%d,%d)."
-msgstr ""
-"ЦГС(CHS) геометрія диска (%d,%d,%d) яку видає операційна система не "
-"відповідає геометрії, що зберігається у позначці диска (%d,%d,%d)."
+msgid "The disk CHS geometry (%d,%d,%d) reported by the operating system does not match the geometry stored on the disk label (%d,%d,%d)."
+msgstr "ЦГС(CHS) геометрія диска (%d,%d,%d) яку видає операційна система не відповідає геометрії, що зберігається у позначці диска (%d,%d,%d)."
 
 #: libparted/labels/sun.c:298
 #, c-format
@@ -1473,15 +1329,8 @@ msgid "The disk has %d cylinders, which is greater than the maximum of 65536."
 msgstr "Диск має %d циліндрів, що більше ніж максимальне значення 65536."
 
 #: libparted/labels/sun.c:812
-msgid ""
-"The Whole Disk partition is the only available one left.  Generally, it is "
-"not a good idea to overwrite this partition with a real one.  Solaris may "
-"not be able to boot without it, and SILO (the sparc boot loader) appreciates "
-"it as well."
-msgstr ""
-"Розділ \"Весь диск\" - єдиний наявний. Зазвичай, небажано перезаписувати цей "
-"розділ реальним розділом. Solaris, можливо, не буде здатний завантажитись "
-"без нього, це також вплине на SILO (завантажувач sparc)."
+msgid "The Whole Disk partition is the only available one left.  Generally, it is not a good idea to overwrite this partition with a real one.  Solaris may not be able to boot without it, and SILO (the sparc boot loader) appreciates it as well."
+msgstr "Розділ \"Весь диск\" - єдиний наявний. Зазвичай, небажано перезаписувати цей розділ реальним розділом. Solaris, можливо, не буде здатний завантажитись без нього, це також вплине на SILO (завантажувач sparc)."
 
 #: libparted/labels/sun.c:827
 msgid "Sun disk label is full."
@@ -1651,12 +1500,8 @@ msgid "%s : Failed to read partition block %llu\n"
 msgstr "%s : Не вдається прочитати блок розділу %llu\n"
 
 #: libparted/fs/fat/fat.c:148 libparted/fs/r/fat/fat.c:811
-msgid ""
-"GNU Parted was miscompiled: the FAT boot sector should be 512 bytes.  FAT "
-"support will be disabled."
-msgstr ""
-"GNU parted зібрано неправильно: завантажувальний сектор FAT повинен мати "
-"розмір 512 байтів. Підтримка FAT вимкнена."
+msgid "GNU Parted was miscompiled: the FAT boot sector should be 512 bytes.  FAT support will be disabled."
+msgstr "GNU parted зібрано неправильно: завантажувальний сектор FAT повинен мати розмір 512 байтів. Підтримка FAT вимкнена."
 
 #: libparted/fs/fat/bootsector.c:50 libparted/fs/r/fat/bootsector.c:49
 msgid "File system has an invalid signature for a FAT file system."
@@ -1671,8 +1516,7 @@ msgid "File system has an invalid cluster size for a FAT file system."
 msgstr "Файлова система має неправильний розмір кластера файлової системи FAT."
 
 #: libparted/fs/fat/bootsector.c:72 libparted/fs/r/fat/bootsector.c:71
-msgid ""
-"File system has an invalid number of reserved sectors for a FAT file system."
+msgid "File system has an invalid number of reserved sectors for a FAT file system."
 msgstr "У файловій системі неправильна кількість резервних секторів FAT."
 
 #: libparted/fs/fat/bootsector.c:79 libparted/fs/r/fat/bootsector.c:78
@@ -1681,31 +1525,20 @@ msgstr "У файловій системі неправильне число к�
 
 #: libparted/fs/fat/bootsector.c:162
 #, c-format
-msgid ""
-"The file system's CHS geometry is (%d, %d, %d), which is invalid.  The "
-"partition table's CHS geometry is (%d, %d, %d)."
-msgstr ""
-"Геометрія CHS файлової системи становить (%d, %d, %d), що є неправильним.  "
-"Геометрія CHS таблиці розділів становить (%d, %d, %d).  Якщо ви виберете "
-"Ігнорувати, геометрію CHS файлової системи буде залишено без змін."
+msgid "The file system's CHS geometry is (%d, %d, %d), which is invalid.  The partition table's CHS geometry is (%d, %d, %d)."
+msgstr "Геометрія CHS файлової системи становить (%d, %d, %d), що є неправильним.  Геометрія CHS таблиці розділів становить (%d, %d, %d).  Якщо ви виберете Ігнорувати, геометрію CHS файлової системи буде залишено без змін."
 
 #: libparted/fs/fat/bootsector.c:197 libparted/fs/r/fat/bootsector.c:206
 msgid "FAT boot sector says logical sector size is 0.  This is weird. "
-msgstr ""
-"Завантажувальний сектор FAT містить розмір логічного сектора, що дорівнює 0. "
-"Це дивно."
+msgstr "Завантажувальний сектор FAT містить розмір логічного сектора, що дорівнює 0. Це дивно."
 
 #: libparted/fs/fat/bootsector.c:203 libparted/fs/r/fat/bootsector.c:212
 msgid "FAT boot sector says there are no FAT tables.  This is weird. "
-msgstr ""
-"У завантажувальному секторі FAT не міститься інформація про таблиці FAT. Це "
-"дивно."
+msgstr "У завантажувальному секторі FAT не міститься інформація про таблиці FAT. Це дивно."
 
 #: libparted/fs/fat/bootsector.c:209 libparted/fs/r/fat/bootsector.c:218
 msgid "FAT boot sector says clusters are 0 sectors.  This is weird. "
-msgstr ""
-"У відповідності до завантажувального сектора FAT, кластер містить 0 "
-"секторів. Це дивно."
+msgstr "У відповідності до завантажувального сектора FAT, кластер містить 0 секторів. Це дивно."
 
 #: libparted/fs/fat/bootsector.c:219 libparted/fs/r/fat/bootsector.c:228
 msgid "File system is FAT12, which is unsupported."
@@ -1728,94 +1561,53 @@ msgstr "Невідома сигнатура '%10s' розділу swsusp під�
 
 #: libparted/fs/hfs/probe.c:50 libparted/fs/r/hfs/probe.c:50
 #, c-format
-msgid ""
-"Parted can't use HFS file systems on disks with a sector size not equal to "
-"%d bytes."
-msgstr ""
-"Parted не може використовувати файлові системи HFS на дисках з розміром "
-"сектора, що некратний %d байтів."
+msgid "Parted can't use HFS file systems on disks with a sector size not equal to %d bytes."
+msgstr "Parted не може використовувати файлові системи HFS на дисках з розміром сектора, що некратний %d байтів."
 
 #: libparted/fs/r/fat/bootsector.c:132
 #, c-format
-msgid ""
-"This file system has a logical sector size of %d.  GNU Parted is known not "
-"to work properly with sector sizes other than 512 bytes."
-msgstr ""
-"Файлова система має логічний розмір сектора %d. Вважається, що GNU Parted "
-"працює неправильно з секторами, розмір яких не дорівнює 512 байт."
+msgid "This file system has a logical sector size of %d.  GNU Parted is known not to work properly with sector sizes other than 512 bytes."
+msgstr "Файлова система має логічний розмір сектора %d. Вважається, що GNU Parted працює неправильно з секторами, розмір яких не дорівнює 512 байт."
 
 #: libparted/fs/r/fat/bootsector.c:157
 #, c-format
-msgid ""
-"The file system's CHS geometry is (%d, %d, %d), which is invalid.  The "
-"partition table's CHS geometry is (%d, %d, %d).  If you select Ignore, the "
-"file system's CHS geometry will be left unchanged.  If you select Fix, the "
-"file system's CHS geometry will be set to match the partition table's CHS "
-"geometry."
-msgstr ""
-"Геометрія CHS файлової системи становить (%d, %d, %d), що є неправильним.  "
-"Геометрія CHS таблиці розділів становить (%d, %d, %d).  Якщо ви виберете "
-"«Ігнорувати», геометрію CHS файлової системи буде залишено без змін. Якщо ви "
-"виберете «Виправити» (Fix), геометрію CHS файлової системи буде приведено у "
-"відповідність до геометрії таблиці розділів CHS."
+msgid "The file system's CHS geometry is (%d, %d, %d), which is invalid.  The partition table's CHS geometry is (%d, %d, %d).  If you select Ignore, the file system's CHS geometry will be left unchanged.  If you select Fix, the file system's CHS geometry will be set to match the partition table's CHS geometry."
+msgstr "Геометрія CHS файлової системи становить (%d, %d, %d), що є неправильним.  Геометрія CHS таблиці розділів становить (%d, %d, %d).  Якщо ви виберете «Ігнорувати», геометрію CHS файлової системи буде залишено без змін. Якщо ви виберете «Виправити» (Fix), геометрію CHS файлової системи буде приведено у відповідність до геометрії таблиці розділів CHS."
 
 #: libparted/fs/r/fat/bootsector.c:406
 #, c-format
-msgid ""
-"The information sector has the wrong signature (%x).  Select cancel for now, "
-"and send in a bug report.  If you're desperate, it's probably safe to ignore."
-msgstr ""
-"Інформаційний сектор містить неправильну сигнатуру (%x). Виберіть \"Скасувати"
-"\" та відправте повідомлення про помилку. Якщо ви втратили надію, тоді можна "
-"проігнорувати цю проблему."
+msgid "The information sector has the wrong signature (%x).  Select cancel for now, and send in a bug report.  If you're desperate, it's probably safe to ignore."
+msgstr "Інформаційний сектор містить неправильну сигнатуру (%x). Виберіть \"Скасувати\" та відправте повідомлення про помилку. Якщо ви втратили надію, тоді можна проігнорувати цю проблему."
 
 #: libparted/fs/r/fat/calc.c:134
 #, c-format
-msgid ""
-"You need %s of free disk space to shrink this partition to this size.  "
-"Currently, only %s is free."
-msgstr ""
-"Необхідно %s вільного простору, щоб зменшити розділ до такого розміру (зараз "
-"у вас вільно лише %s)."
+msgid "You need %s of free disk space to shrink this partition to this size.  Currently, only %s is free."
+msgstr "Необхідно %s вільного простору, щоб зменшити розділ до такого розміру (зараз у вас вільно лише %s)."
 
 #: libparted/fs/r/fat/context.c:55
 #, c-format
-msgid ""
-"Cluster start delta = %d, which is not a multiple of the cluster size %d."
-msgstr ""
-"Кластер починається зі зсувом %d, що не є цілим числом кластерів розміру %d."
+msgid "Cluster start delta = %d, which is not a multiple of the cluster size %d."
+msgstr "Кластер починається зі зсувом %d, що не є цілим числом кластерів розміру %d."
 
 #: libparted/fs/r/fat/count.c:143
 #, c-format
 msgid "Bad directory entry for %s: first cluster is the end of file marker."
-msgstr ""
-"Неправильний елемент каталогу %s: перший кластер є кінцем маркера файла."
+msgstr "Неправильний елемент каталогу %s: перший кластер є кінцем маркера файла."
 
 #: libparted/fs/r/fat/count.c:156
 #, c-format
-msgid ""
-"Bad FAT: unterminated chain for %s.  You should run dosfsck or scandisk."
-msgstr ""
-"Помилка у FAT: незавершений ланцюг для %s. Потрібно запустити dosfsck або "
-"scandisk."
+msgid "Bad FAT: unterminated chain for %s.  You should run dosfsck or scandisk."
+msgstr "Помилка у FAT: незавершений ланцюг для %s. Потрібно запустити dosfsck або scandisk."
 
 #: libparted/fs/r/fat/count.c:165
 #, c-format
-msgid ""
-"Bad FAT: cluster %d outside file system in chain for %s.  You should run "
-"dosfsck or scandisk."
-msgstr ""
-"Помилка у FAT: кластер %d знаходиться поза межами файлової системи у ланцюгу "
-"для %s. Потрібно запустити dosfsck або scandisk."
+msgid "Bad FAT: cluster %d outside file system in chain for %s.  You should run dosfsck or scandisk."
+msgstr "Помилка у FAT: кластер %d знаходиться поза межами файлової системи у ланцюгу для %s. Потрібно запустити dosfsck або scandisk."
 
 #: libparted/fs/r/fat/count.c:175
 #, c-format
-msgid ""
-"Bad FAT: cluster %d is cross-linked for %s.  You should run dosfsck or "
-"scandisk."
-msgstr ""
-"Помилка у FAT: перехресне посилання у кластері %d для %s. Потрібно запустити "
-"dosfsck або scandisk."
+msgid "Bad FAT: cluster %d is cross-linked for %s.  You should run dosfsck or scandisk."
+msgstr "Помилка у FAT: перехресне посилання у кластері %d для %s. Потрібно запустити dosfsck або scandisk."
 
 #: libparted/fs/r/fat/count.c:194
 #, c-format
@@ -1824,12 +1616,8 @@ msgstr "%s дорівнює %dk, але має %d кластерів (%dk)."
 
 #: libparted/fs/r/fat/count.c:257
 #, c-format
-msgid ""
-"The file %s is marked as a system file.  This means moving it could cause "
-"some programs to stop working."
-msgstr ""
-"Файл %s позначений як системний файл. Це означає, що його переміщення може "
-"призвести до припинення роботи деяких програм."
+msgid "The file %s is marked as a system file.  This means moving it could cause some programs to stop working."
+msgstr "Файл %s позначений як системний файл. Це означає, що його переміщення може призвести до припинення роботи деяких програм."
 
 #: libparted/fs/r/fat/fat.c:243
 #, c-format
@@ -1837,13 +1625,8 @@ msgid "Partition too big/small for a %s file system."
 msgstr "Розділ надто великий/малий для файлової системи типу %s."
 
 #: libparted/fs/r/fat/fat.c:409
-msgid ""
-"The FATs don't match.  If you don't know what this means, then select "
-"cancel, run scandisk on the file system, and then come back."
-msgstr ""
-"Копії FAT не збігаються. Якщо ви не знаєте, що це означає, виберіть "
-"\"Скасувати\", запустіть scandisk для файлової системи, а потім повторіть цю "
-"команду."
+msgid "The FATs don't match.  If you don't know what this means, then select cancel, run scandisk on the file system, and then come back."
+msgstr "Копії FAT не збігаються. Якщо ви не знаєте, що це означає, виберіть \"Скасувати\", запустіть scandisk для файлової системи, а потім повторіть цю команду."
 
 #: libparted/fs/r/fat/fat.c:449
 msgid "There are no possible configurations for this FAT type."
@@ -1851,30 +1634,17 @@ msgstr "Для цього типу FAT немає допустимих конф�
 
 #: libparted/fs/r/fat/fat.c:461
 #, c-format
-msgid ""
-"File system doesn't have expected sizes for Windows to like it.  Cluster "
-"size is %dk (%dk expected); number of clusters is %d (%d expected); size of "
-"FATs is %d sectors (%d expected)."
-msgstr ""
-"Windows не підтримує файлову систему, що має такі розміри. Розмір кластера "
-"%dk (очікувалось %dk); кількість кластерів %d (очікувалось %d); розмір FAT "
-"%d секторів (очікувалось %d)."
+msgid "File system doesn't have expected sizes for Windows to like it.  Cluster size is %dk (%dk expected); number of clusters is %d (%d expected); size of FATs is %d sectors (%d expected)."
+msgstr "Windows не підтримує файлову систему, що має такі розміри. Розмір кластера %dk (очікувалось %dk); кількість кластерів %d (очікувалось %d); розмір FAT %d секторів (очікувалось %d)."
 
 #: libparted/fs/r/fat/fat.c:484
 #, c-format
-msgid ""
-"File system is reporting the free space as %d clusters, not %d clusters."
-msgstr ""
-"Файлова система повідомляє про вільний простір %d кластерів, а не %d "
-"кластерів."
+msgid "File system is reporting the free space as %d clusters, not %d clusters."
+msgstr "Файлова система повідомляє про вільний простір %d кластерів, а не %d кластерів."
 
 #: libparted/fs/r/fat/resize.c:158
-msgid ""
-"There's not enough room in the root directory for all of the files.  Either "
-"cancel, or ignore to lose the files."
-msgstr ""
-"Не вистачає простору для всіх файлів в кореневому каталозі. Виберіть "
-"\"Скасувати\", якщо проігноруєте, це призведе до втрати  файлів."
+msgid "There's not enough room in the root directory for all of the files.  Either cancel, or ignore to lose the files."
+msgstr "Не вистачає простору для всіх файлів в кореневому каталозі. Виберіть \"Скасувати\", якщо проігноруєте, це призведе до втрати  файлів."
 
 #: libparted/fs/r/fat/resize.c:299
 msgid "Error writing to the root directory."
@@ -1882,40 +1652,19 @@ msgstr "Помилка записування у кореневий катало
 
 #: libparted/fs/r/fat/resize.c:488
 msgid "If you leave your file system as FAT16, then you will have no problems."
-msgstr ""
-"Якщо залишити файлову систему як FAT16, тоді у вас не виникатиме проблем."
+msgstr "Якщо залишити файлову систему як FAT16, тоді у вас не виникатиме проблем."
 
 #: libparted/fs/r/fat/resize.c:491
-msgid ""
-"If you convert to FAT16, and MS Windows is installed on this partition, then "
-"you must re-install the MS Windows boot loader.  If you want to do this, you "
-"should consult the Parted manual (or your distribution's manual)."
-msgstr ""
-"Якщо ви перетворюєте файлову систему розділу з Windows у розділ FAT16, буде "
-"потрібно перевстановити завантажувач MS Windows. Для цього слід переглянути "
-"довідку з Parted (або посібник з вашого дистрибутиву)."
+msgid "If you convert to FAT16, and MS Windows is installed on this partition, then you must re-install the MS Windows boot loader.  If you want to do this, you should consult the Parted manual (or your distribution's manual)."
+msgstr "Якщо ви перетворюєте файлову систему розділу з Windows у розділ FAT16, буде потрібно перевстановити завантажувач MS Windows. Для цього слід переглянути довідку з Parted (або посібник з вашого дистрибутиву)."
 
 #: libparted/fs/r/fat/resize.c:499
-msgid ""
-"If you leave your file system as FAT32, then you will not introduce any new "
-"problems."
-msgstr ""
-"Якщо ви залишаєте файлову систему як FAT32, тоді не виникне ніяких нових "
-"проблем."
+msgid "If you leave your file system as FAT32, then you will not introduce any new problems."
+msgstr "Якщо ви залишаєте файлову систему як FAT32, тоді не виникне ніяких нових проблем."
 
 #: libparted/fs/r/fat/resize.c:503
-msgid ""
-"If you convert to FAT32, and MS Windows is installed on this partition, then "
-"you must re-install the MS Windows boot loader.  If you want to do this, you "
-"should consult the Parted manual (or your distribution's manual).  Also, "
-"converting to FAT32 will make the file system unreadable by MS DOS, MS "
-"Windows 95a, and MS Windows NT."
-msgstr ""
-"Якщо ви перетворите файлову систему розділу з MS Windows у розділ FAT32,буде "
-"потрібно перевстановити завантажувач MS Windows. Для цього слід переглянути "
-"довідку з Parted (або посібник з вашого дистрибутиву). Перетворення у FAT32 "
-"унеможливить читання файлової системи під MS DOS, MS Windows 95a, та MS "
-"Windows NT."
+msgid "If you convert to FAT32, and MS Windows is installed on this partition, then you must re-install the MS Windows boot loader.  If you want to do this, you should consult the Parted manual (or your distribution's manual).  Also, converting to FAT32 will make the file system unreadable by MS DOS, MS Windows 95a, and MS Windows NT."
+msgstr "Якщо ви перетворите файлову систему розділу з MS Windows у розділ FAT32,буде потрібно перевстановити завантажувач MS Windows. Для цього слід переглянути довідку з Parted (або посібник з вашого дистрибутиву). Перетворення у FAT32 унеможливить читання файлової системи під MS DOS, MS Windows 95a, та MS Windows NT."
 
 #: libparted/fs/r/fat/resize.c:517
 #, c-format
@@ -1932,34 +1681,21 @@ msgid "%s  %s"
 msgstr "%s  %s"
 
 #: libparted/fs/r/fat/resize.c:550
-msgid ""
-"The file system can only be resized to this size by converting to FAT16."
-msgstr ""
-"Змінити розмір файлової системи на вказаний розмір можна лише при "
-"перетворенні на FAT16."
+msgid "The file system can only be resized to this size by converting to FAT16."
+msgstr "Змінити розмір файлової системи на вказаний розмір можна лише при перетворенні на FAT16."
 
 #: libparted/fs/r/fat/resize.c:566
-msgid ""
-"The file system can only be resized to this size by converting to FAT32."
-msgstr ""
-"Змінити розмір файлової системи на вказаний розмір можна лише при "
-"перетворенні на FAT32."
+msgid "The file system can only be resized to this size by converting to FAT32."
+msgstr "Змінити розмір файлової системи на вказаний розмір можна лише при перетворенні на FAT32."
 
 #: libparted/fs/r/fat/resize.c:579
-msgid ""
-"GNU Parted cannot resize this partition to this size.  We're working on it!"
-msgstr ""
-"GNU Parted нездатний змінити розмір розділу на вказане значення. Ми над цим "
-"працюємо!"
+msgid "GNU Parted cannot resize this partition to this size.  We're working on it!"
+msgstr "GNU Parted нездатний змінити розмір розділу на вказане значення. Ми над цим працюємо!"
 
 #: libparted/fs/r/fat/table.c:136
 #, c-format
-msgid ""
-"FAT %d media %x doesn't match the boot sector's media %x.  You should "
-"probably run scandisk."
-msgstr ""
-"FAT %d носій %x не відповідає завантажувальним секторам носія %x. Потрібно "
-"запустити dosfsck або scandisk."
+msgid "FAT %d media %x doesn't match the boot sector's media %x.  You should probably run scandisk."
+msgstr "FAT %d носій %x не відповідає завантажувальним секторам носія %x. Потрібно запустити dosfsck або scandisk."
 
 #: libparted/fs/r/fat/table.c:268
 #, c-format
@@ -2001,21 +1737,13 @@ msgstr "Пошкоджені блоки не вдається прочитати
 
 #: libparted/fs/r/hfs/cache.c:136
 #, c-format
-msgid ""
-"Trying to register an extent starting at block 0x%X, but another one already "
-"exists at this position.  You should check the file system!"
-msgstr ""
-"Спроба зареєструвати екстент, о починається з блоку 0x%X, але в цій позиції "
-"вже існує інший. Слід перевірити файлову систему!"
+msgid "Trying to register an extent starting at block 0x%X, but another one already exists at this position.  You should check the file system!"
+msgstr "Спроба зареєструвати екстент, о починається з блоку 0x%X, але в цій позиції вже існує інший. Слід перевірити файлову систему!"
 
 #: libparted/fs/r/hfs/cache.c:213
 #, c-format
-msgid ""
-"Trying to move an extent from block Ox%X to block Ox%X, but another one "
-"already exists at this position.  This should not happen!"
-msgstr ""
-"Спроба перемістити екстент з блоку Ox%X у блок Ox%X, але в цій позиції вже "
-"існує інший.  Цього не повинно бути!"
+msgid "Trying to move an extent from block Ox%X to block Ox%X, but another one already exists at this position.  This should not happen!"
+msgstr "Спроба перемістити екстент з блоку Ox%X у блок Ox%X, але в цій позиції вже існує інший.  Цього не повинно бути!"
 
 #: libparted/fs/r/hfs/file.c:142
 #, c-format
@@ -2112,12 +1840,8 @@ msgid "An error occurred while looking for the mandatory bad blocks file."
 msgstr "Помилка пошуку файлу відомих пошкоджених блоків."
 
 #: libparted/fs/r/hfs/hfs.c:904
-msgid ""
-"It seems there is an error in the HFS wrapper: the bad blocks file doesn't "
-"contain the embedded HFS+ volume."
-msgstr ""
-"Помилка у обробнику HFS: файл пошкоджених блоків не містить вбудований том "
-"HFS+."
+msgid "It seems there is an error in the HFS wrapper: the bad blocks file doesn't contain the embedded HFS+ volume."
+msgstr "Помилка у обробнику HFS: файл пошкоджених блоків не містить вбудований том HFS+."
 
 #: libparted/fs/r/hfs/hfs.c:940
 msgid "Sorry, HFS+ cannot be resized that way yet."
@@ -2141,12 +1865,8 @@ msgstr "оновлення помилка оболонки HFS."
 
 #: libparted/fs/r/hfs/hfs.c:1109 libparted/fs/r/hfs/hfs.c:1194
 #, c-format
-msgid ""
-"This is not a real %s check.  This is going to extract special low level "
-"files for debugging purposes."
-msgstr ""
-"Це не справжня перевірка %s. Відбувається лише отримання спеціальних "
-"ньзькорівневих файлів для налагодження."
+msgid "This is not a real %s check.  This is going to extract special low level files for debugging purposes."
+msgstr "Це не справжня перевірка %s. Відбувається лише отримання спеціальних ньзькорівневих файлів для налагодження."
 
 #: libparted/fs/r/hfs/journal.c:154
 msgid "Bad block list header checksum."
@@ -2154,19 +1874,12 @@ msgstr "Неправильна контрольна сума заголовка 
 
 #: libparted/fs/r/hfs/journal.c:167
 #, c-format
-msgid ""
-"Invalid size of a transaction block while replaying the journal (%i bytes)."
-msgstr ""
-"Неправильний розмір блоку транзакції при повторному накладанні журналу (%i "
-"байтів)."
+msgid "Invalid size of a transaction block while replaying the journal (%i bytes)."
+msgstr "Неправильний розмір блоку транзакції при повторному накладанні журналу (%i байтів)."
 
 #: libparted/fs/r/hfs/journal.c:259
-msgid ""
-"Journal stored outside of the volume are not supported.  Try to desactivate "
-"the journal and run Parted again."
-msgstr ""
-"Журнал розміщено поза межами тому не підтримується. Слід вимкнути журнал та "
-"перезапустити Parted."
+msgid "Journal stored outside of the volume are not supported.  Try to desactivate the journal and run Parted again."
+msgstr "Журнал розміщено поза межами тому не підтримується. Слід вимкнути журнал та перезапустити Parted."
 
 #: libparted/fs/r/hfs/journal.c:270
 msgid "Journal offset or size is not multiple of the sector size."
@@ -2178,53 +1891,35 @@ msgstr "Неправильні сигнатури у заголовку журн
 
 #: libparted/fs/r/hfs/journal.c:301
 msgid "Journal size mismatch between journal info block and journal header."
-msgstr ""
-"Розмір журналу не відповідає значенню у інформаційному блоці журналу та "
-"заголовку журналу."
+msgstr "Розмір журналу не відповідає значенню у інформаційному блоці журналу та заголовку журналу."
 
 #: libparted/fs/r/hfs/journal.c:313
 msgid "Some header fields are not multiple of the sector size."
 msgstr "Розмір деяких полів заголовку не складає ціле число секторів."
 
 #: libparted/fs/r/hfs/journal.c:322
-msgid ""
-"The sector size stored in the journal is not 512 bytes.  Parted only "
-"supports 512 bytes length sectors."
-msgstr ""
-"Розмір сектора, що зберігається у журналі, не дорівнює 512 байтам.  Parted "
-"підтримує лише сектори розміром 512 байтів."
+msgid "The sector size stored in the journal is not 512 bytes.  Parted only supports 512 bytes length sectors."
+msgstr "Розмір сектора, що зберігається у журналі, не дорівнює 512 байтам.  Parted підтримує лише сектори розміром 512 байтів."
 
 #: libparted/fs/r/hfs/journal.c:334
 msgid "Bad journal checksum."
 msgstr "Неправильна контрольна сума журналу."
 
 #: libparted/fs/r/hfs/journal.c:352
-msgid ""
-"The journal is not empty.  Parted must replay the transactions before "
-"opening the file system.  This will modify the file system."
-msgstr ""
-"Журнал не порожній. Parted маж накласти транзакції перед відкривання "
-"файлової системи. Це призведе до зміни файлової системи."
+msgid "The journal is not empty.  Parted must replay the transactions before opening the file system.  This will modify the file system."
+msgstr "Журнал не порожній. Parted маж накласти транзакції перед відкривання файлової системи. Це призведе до зміни файлової системи."
 
 #: libparted/fs/r/hfs/journal.c:380
-msgid ""
-"The volume header or the master directory block has changed while replaying "
-"the journal.  You should restart Parted."
-msgstr ""
-"При накладанні журналу змінився заголовок тому чи блок головного каталогу. "
-"Слід перезапустити Parted."
+msgid "The volume header or the master directory block has changed while replaying the journal.  You should restart Parted."
+msgstr "При накладанні журналу змінився заголовок тому чи блок головного каталогу. Слід перезапустити Parted."
 
 #: libparted/fs/r/hfs/reloc.c:150 libparted/fs/r/hfs/reloc_plus.c:154
 msgid "An extent has not been relocated."
 msgstr "Екстент не був переміщений."
 
 #: libparted/fs/r/hfs/reloc.c:249 libparted/fs/r/hfs/reloc_plus.c:306
-msgid ""
-"A reference to an extent comes from a place it should not.  You should check "
-"the file system!"
-msgstr ""
-"Посилання на екстент з місця, з якого не має бути посилання. Слід перевірити "
-"файлову систему!"
+msgid "A reference to an extent comes from a place it should not.  You should check the file system!"
+msgstr "Посилання на екстент з місця, з якого не має бути посилання. Слід перевірити файлову систему!"
 
 #: libparted/fs/r/hfs/reloc.c:379
 msgid "This HFS volume has no catalog file.  This is very unusual!"
@@ -2235,12 +1930,8 @@ msgid "This HFS volume has no extents overflow file.  This is quite unusual!"
 msgstr "Цей том HFS не містить файлу перекривання екстентів. Досить дивно!"
 
 #: libparted/fs/r/hfs/reloc.c:515 libparted/fs/r/hfs/reloc_plus.c:665
-msgid ""
-"The extents overflow file should not contain its own extents!  You should "
-"check the file system."
-msgstr ""
-"Файл перекривання екстентів не має містить власних екстентів! Слід "
-"перевірити файлову систему."
+msgid "The extents overflow file should not contain its own extents!  You should check the file system."
+msgstr "Файл перекривання екстентів не має містить власних екстентів! Слід перевірити файлову систему."
 
 #: libparted/fs/r/hfs/reloc.c:572 libparted/fs/r/hfs/reloc_plus.c:843
 msgid "Could not cache the file system in memory."
@@ -2287,12 +1978,8 @@ msgid "alignment for new partitions"
 msgstr "вирівнювання для нових розділів"
 
 #: parted/parted.c:142
-msgid ""
-"NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the "
-"primary partitions number from 1 to 4, logical partitions from 5 onwards.\n"
-msgstr ""
-"НОМЕР - це номер розділу, що використовується Linux.  У етикетках диска MS-"
-"DOS, основні розділи мають номери 1-4, а логічні - 5 та далі.\n"
+msgid "NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the primary partitions number from 1 to 4, logical partitions from 5 onwards.\n"
+msgstr "НОМЕР - це номер розділу, що використовується Linux.  У етикетках диска MS-DOS, основні розділи мають номери 1-4, а логічні - 5 та далі.\n"
 
 #: parted/parted.c:145
 msgid "LABEL-TYPE is one of: "
@@ -2319,23 +2006,12 @@ msgid "FS-TYPE is one of: "
 msgstr "ТИП-ФС один з: "
 
 #: parted/parted.c:153
-msgid ""
-"START and END are disk locations, such as 4GB or 10%.  Negative values count "
-"from the end of the disk.  For example, -1s specifies exactly the last "
-"sector.\n"
-msgstr ""
-"ПОЧАТОК та КІНЕЦЬ - це місця на диску, наприклад 4GB чи 10%.  Від'ємні "
-"значення відраховуються від кінця диска. Наприклад, -1s вказує на останній "
-"сектор диска.\n"
+msgid "START and END are disk locations, such as 4GB or 10%.  Negative values count from the end of the disk.  For example, -1s specifies exactly the last sector.\n"
+msgstr "ПОЧАТОК та КІНЕЦЬ - це місця на диску, наприклад 4GB чи 10%.  Від'ємні значення відраховуються від кінця диска. Наприклад, -1s вказує на останній сектор диска.\n"
 
 #: parted/parted.c:156
-msgid ""
-"END is disk location, such as 4GB or 10%.  Negative value counts from the "
-"end of the disk.  For example, -1s specifies exactly the last sector.\n"
-msgstr ""
-"КІНЕЦЬ - це місце на диску, наприклад 4GB чи 10%.  Від'ємні значення "
-"відраховуються від кінця диска. Наприклад, -1s вказує на останній сектор "
-"диска.\n"
+msgid "END is disk location, such as 4GB or 10%.  Negative value counts from the end of the disk.  For example, -1s specifies exactly the last sector.\n"
+msgstr "КІНЕЦЬ - це місце на диску, наприклад 4GB чи 10%.  Від'ємні значення відраховуються від кінця диска. Наприклад, -1s вказує на останній сектор диска.\n"
 
 #: parted/parted.c:159
 msgid "STATE is one of: on, off\n"
@@ -2385,12 +2061,8 @@ msgstr "Розділи на %s наразі зайняті."
 
 #: parted/parted.c:263
 #, c-format
-msgid ""
-"The existing disk label on %s will be destroyed and all data on this disk "
-"will be lost. Do you want to continue?"
-msgstr ""
-"Існуюча позначка диска на %s буде знищена разом з усіма даними на ній. "
-"Продовжити?"
+msgid "The existing disk label on %s will be destroyed and all data on this disk will be lost. Do you want to continue?"
+msgstr "Існуюча позначка диска на %s буде знищена разом з усіма даними на ній. Продовжити?"
 
 #: parted/parted.c:524
 msgid "New disk label type?"
@@ -2423,8 +2095,7 @@ msgid ""
 "The closest location we can manage is %s to %s (sectors %llu..%llu).%s"
 msgstr ""
 "Ви вказали межі розділу від %s до %s (сектори від %llu до %llu).\n"
-"Найближчим придатним відповідником вказаних значень можуть бути межі від %s "
-"до %s (сектори від %llu до %llu).%s"
+"Найближчим придатним відповідником вказаних значень можуть бути межі від %s до %s (сектори від %llu до %llu).%s"
 
 #: parted/parted.c:773
 msgid ""
@@ -2436,8 +2107,7 @@ msgstr ""
 
 #: parted/parted.c:795
 msgid "The resulting partition is not properly aligned for best performance."
-msgstr ""
-"Отриманий у результаті розділ не буде вирівняно з метою підвищення швидкодії."
+msgstr "Отриманий у результаті розділ не буде вирівняно з метою підвищення швидкодії."
 
 #: parted/parted.c:866 parted/parted.c:1539 parted/parted.c:1587
 #: parted/parted.c:1661 parted/parted.c:1725
@@ -2512,12 +2182,8 @@ msgstr "Вільний простір"
 
 #: parted/parted.c:1371
 #, c-format
-msgid ""
-"A %s %s partition was found at %s -> %s.  Do you want to add it to the "
-"partition table?"
-msgstr ""
-"Знайдено розділ %s %s у межах від %s -> %s. Бажаєте додати його до таблиці "
-"розділів?"
+msgid "A %s %s partition was found at %s -> %s.  Do you want to add it to the partition table?"
+msgstr "Знайдено розділ %s %s у межах від %s -> %s. Бажаєте додати його до таблиці розділів?"
 
 #: parted/parted.c:1410
 msgid "searching for file systems"
@@ -2528,11 +2194,8 @@ msgid "The resize command has been removed in parted 3.0"
 msgstr "Команду resize було усунуто починаючи з версії parted 3.0"
 
 #: parted/parted.c:1558
-msgid ""
-"Shrinking a partition can cause data loss, are you sure you want to continue?"
-msgstr ""
-"Зменшення розмірів розділу може призвести до втрат даних. Ви справді хочете "
-"виконати цю дію?"
+msgid "Shrinking a partition can cause data loss, are you sure you want to continue?"
+msgstr "Зменшення розмірів розділу може призвести до втрат даних. Ви справді хочете виконати цю дію?"
 
 #: parted/parted.c:1609
 msgid "New device?"
@@ -2569,24 +2232,16 @@ msgid "align-check"
 msgstr "align-check"
 
 #: parted/parted.c:1916
-msgid ""
-"align-check TYPE N                        check partition N for TYPE(min|"
-"opt) alignment"
-msgstr ""
-"align-check ТИП N                         перевірити розділ N щодо ТИПу(min|"
-"opt) вирівнювання"
+msgid "align-check TYPE N                        check partition N for TYPE(min|opt) alignment"
+msgstr "align-check ТИП N                         перевірити розділ N щодо ТИПу(min|opt) вирівнювання"
 
 #: parted/parted.c:1924
 msgid "help"
 msgstr "help"
 
 #: parted/parted.c:1927
-msgid ""
-"help [COMMAND]                           print general help, or help on "
-"COMMAND"
-msgstr ""
-"help [КОМАНДА]                вивести загальну довідку, або довідку про "
-"КОМАНДА"
+msgid "help [COMMAND]                           print general help, or help on COMMAND"
+msgstr "help [КОМАНДА]                вивести загальну довідку, або довідку про КОМАНДА"
 
 #: parted/parted.c:1933
 msgid "mklabel"
@@ -2597,11 +2252,8 @@ msgid "mktable"
 msgstr "mktable"
 
 #: parted/parted.c:1936
-msgid ""
-"mklabel,mktable LABEL-TYPE               create a new disklabel (partition "
-"table)"
-msgstr ""
-"mklabel,mktable ТИП_ЕТИКЕТКИ  створити нову позначку диска (таблицю розділів)"
+msgid "mklabel,mktable LABEL-TYPE               create a new disklabel (partition table)"
+msgstr "mklabel,mktable ТИП_ЕТИКЕТКИ  створити нову позначку диска (таблицю розділів)"
 
 #: parted/parted.c:1942
 msgid "mkpart"
@@ -2612,12 +2264,8 @@ msgid "mkpart PART-TYPE [FS-TYPE] START END     make a partition"
 msgstr "mkpart ТИП-РОЗДІЛУ [ТИП-ФС] ПОЧАТОК КІНЕЦЬ    створити розділ"
 
 #: parted/parted.c:1951
-msgid ""
-"'mkpart' makes a partition without creating a new file system on the "
-"partition.  FS-TYPE may be specified to set an appropriate partition ID.\n"
-msgstr ""
-"'mkpart' створити розділ без створення нової файлової системи у ньому. Можна "
-"вказати ТИП-ФС для встановлення відповідного ідентифікатора розділу.\n"
+msgid "'mkpart' makes a partition without creating a new file system on the partition.  FS-TYPE may be specified to set an appropriate partition ID.\n"
+msgstr "'mkpart' створити розділ без створення нової файлової системи у ньому. Можна вказати ТИП-ФС для встановлення відповідного ідентифікатора розділу.\n"
 
 #: parted/parted.c:1956
 msgid "name"
@@ -2632,48 +2280,28 @@ msgid "print"
 msgstr "print"
 
 #: parted/parted.c:1967
-msgid ""
-"print [devices|free|list,all|NUMBER]     display the partition table, "
-"available devices, free space, all found partitions, or a particular "
-"partition"
-msgstr ""
-"print [devices|free|list,all|ЧИСЛО]     відображає таблицю розділів, наявні "
-"пристрої, вільний простір, всі знайдені розділи, або певний розділ"
+msgid "print [devices|free|list,all|NUMBER]     display the partition table, available devices, free space, all found partitions, or a particular partition"
+msgstr "print [devices|free|list,all|ЧИСЛО]     відображає таблицю розділів, наявні пристрої, вільний простір, всі знайдені розділи, або певний розділ"
 
 #: parted/parted.c:1972
-msgid ""
-"Without arguments, 'print' displays the entire partition table. However with "
-"the following arguments it performs various other actions.\n"
-msgstr ""
-"Без аргументів, 'print' відображає всю таблицю розділів. Проте, з наступними "
-"аргументами виконуються інші дії.\n"
+msgid "Without arguments, 'print' displays the entire partition table. However with the following arguments it performs various other actions.\n"
+msgstr "Без аргументів, 'print' відображає всю таблицю розділів. Проте, з наступними аргументами виконуються інші дії.\n"
 
 #: parted/parted.c:1974
 msgid "  devices   : display all active block devices\n"
 msgstr "  devices   : відображаються всі активні блочні пристрої\n"
 
 #: parted/parted.c:1975
-msgid ""
-"  free      : display information about free unpartitioned space on the "
-"current block device\n"
-msgstr ""
-"  free      : відображається інформація про нерозподілений простір на "
-"поточному блочному пристрої\n"
+msgid "  free      : display information about free unpartitioned space on the current block device\n"
+msgstr "  free      : відображається інформація про нерозподілений простір на поточному блочному пристрої\n"
 
 #: parted/parted.c:1977
-msgid ""
-"  list, all : display the partition tables of all active block devices\n"
-msgstr ""
-"  list, all : відображаються таблиці розділів на всіх активних блочних "
-"пристроях\n"
+msgid "  list, all : display the partition tables of all active block devices\n"
+msgstr "  list, all : відображаються таблиці розділів на всіх активних блочних пристроях\n"
 
 #: parted/parted.c:1978
-msgid ""
-"  NUMBER    : display more detailed information about this particular "
-"partition\n"
-msgstr ""
-"  ЧИСЛО     : відображається докладна інформація про розділ з вказаним "
-"номером\n"
+msgid "  NUMBER    : display more detailed information about this particular partition\n"
+msgstr "  ЧИСЛО     : відображається докладна інформація про розділ з вказаним номером\n"
 
 #: parted/parted.c:1983
 msgid "quit"
@@ -2688,11 +2316,8 @@ msgid "rescue"
 msgstr "rescue"
 
 #: parted/parted.c:1994
-msgid ""
-"rescue START END                         rescue a lost partition near START "
-"and END"
-msgstr ""
-"rescue ПОЧАТОК КІНЕЦЬ         знайти втрачені розділи між ПОЧАТОК та КІНЕЦЬ"
+msgid "rescue START END                         rescue a lost partition near START and END"
+msgstr "rescue ПОЧАТОК КІНЕЦЬ         знайти втрачені розділи між ПОЧАТОК та КІНЕЦЬ"
 
 #: parted/parted.c:2000
 msgid "resize"
@@ -2708,9 +2333,7 @@ msgstr "resizepart"
 
 #: parted/parted.c:2009
 msgid "resizepart NUMBER END                    resize partition NUMBER"
-msgstr ""
-"resizepart НОМЕР КІНЕЦЬ                  змінити розмір розділу з номером "
-"НОМЕР"
+msgstr "resizepart НОМЕР КІНЕЦЬ                  змінити розмір розділу з номером НОМЕР"
 
 #: parted/parted.c:2014
 msgid "rm"
@@ -2733,31 +2356,23 @@ msgid "disk_set"
 msgstr "набір_дисків"
 
 #: parted/parted.c:2033
-msgid ""
-"disk_set FLAG STATE                      change the FLAG on selected device"
-msgstr ""
-"disk_set ПРАПОРЕЦЬ СТАН                  змінити значення ПРАПОРЦЯ для "
-"вибраного пристрою"
+msgid "disk_set FLAG STATE                      change the FLAG on selected device"
+msgstr "disk_set ПРАПОРЕЦЬ СТАН                  змінити значення ПРАПОРЦЯ для вибраного пристрою"
 
 #: parted/parted.c:2038
 msgid "disk_toggle"
 msgstr "disk_toggle"
 
 #: parted/parted.c:2041
-msgid ""
-"disk_toggle [FLAG]                       toggle the state of FLAG on "
-"selected device"
-msgstr ""
-"disk_toggle [ПРАПОРЕЦЬ]                  перемкнути стан ПРАПОРЦЯ на "
-"вибраному пристрої"
+msgid "disk_toggle [FLAG]                       toggle the state of FLAG on selected device"
+msgstr "disk_toggle [ПРАПОРЕЦЬ]                  перемкнути стан ПРАПОРЦЯ на вибраному пристрої"
 
 #: parted/parted.c:2047
 msgid "set"
 msgstr "set"
 
 #: parted/parted.c:2050
-msgid ""
-"set NUMBER FLAG STATE                    change the FLAG on partition NUMBER"
+msgid "set NUMBER FLAG STATE                    change the FLAG on partition NUMBER"
 msgstr "set НОМЕР ОЗНАКА СТАН         змінити ознаку розділу з номером НОМЕР"
 
 #: parted/parted.c:2056
@@ -2765,12 +2380,8 @@ msgid "toggle"
 msgstr "toggle"
 
 #: parted/parted.c:2059
-msgid ""
-"toggle [NUMBER [FLAG]]                   toggle the state of FLAG on "
-"partition NUMBER"
-msgstr ""
-"toggle [НОМЕР [ОЗНАКА]]       перемикнути ознаку ОЗНАКА розділу з номером "
-"НОМЕР"
+msgid "toggle [NUMBER [FLAG]]                   toggle the state of FLAG on partition NUMBER"
+msgstr "toggle [НОМЕР [ОЗНАКА]]       перемикнути ознаку ОЗНАКА розділу з номером НОМЕР"
 
 #: parted/parted.c:2065
 msgid "unit"
@@ -2778,34 +2389,24 @@ msgstr "unit"
 
 #: parted/parted.c:2068
 msgid "unit UNIT                                set the default unit to UNIT"
-msgstr ""
-"unit БЛОК                     встановити для типового блоку значення БЛОК"
+msgstr "unit БЛОК                     встановити для типового блоку значення БЛОК"
 
 #: parted/parted.c:2073
 msgid "version"
 msgstr "version"
 
 #: parted/parted.c:2076
-msgid ""
-"version                                  display the version number and "
-"copyright information of GNU Parted"
-msgstr ""
-"version                       вивести поточну версію GNU Parted та "
-"інформацію про авторське право"
+msgid "version                                  display the version number and copyright information of GNU Parted"
+msgstr "version                       вивести поточну версію GNU Parted та інформацію про авторське право"
 
 #: parted/parted.c:2080
-msgid ""
-"'version' displays copyright and version information corresponding to this "
-"copy of GNU Parted\n"
-msgstr ""
-"команда version виводить інформацію про версію цієї програми GNU Parted\n"
+msgid "'version' displays copyright and version information corresponding to this copy of GNU Parted\n"
+msgstr "команда version виводить інформацію про версію цієї програми GNU Parted\n"
 
 #: parted/parted.c:2148
 #, c-format
 msgid "Usage: %s [-hlmsv] [-a<align>] [DEVICE [COMMAND [PARAMETERS]]...]\n"
-msgstr ""
-"Користування: %s [-hlmsv] [-a<вирівнювання>] [ПРИСТРІЙ [КОМАНДА "
-"[ПАРАМЕТРИ]]...]\n"
+msgstr "Користування: %s [-hlmsv] [-a<вирівнювання>] [ПРИСТРІЙ [КОМАНДА [ПАРАМЕТРИ]]...]\n"
 
 #: parted/parted.c:2192
 msgid "No device found"
@@ -2813,9 +2414,7 @@ msgstr "Пристрій не знайдено"
 
 #: parted/parted.c:2229
 msgid "WARNING: You are not superuser.  Watch out for permissions.\n"
-msgstr ""
-"ПОПЕРЕДЖЕННЯ: у вас немає адміністративних прав доступу. Спочатку вам слід "
-"отримати ці права.\n"
+msgstr "ПОПЕРЕДЖЕННЯ: у вас немає адміністративних прав доступу. Спочатку вам слід отримати ці права.\n"
 
 #: parted/parted.c:2269
 msgid "You may need to update /etc/fstab.\n"
@@ -2823,14 +2422,12 @@ msgstr "Не забудьте оновити /etc/fstab, якщо це необ�
 
 #: parted/ui.c:162
 msgid "Welcome to GNU Parted! Type 'help' to view a list of commands.\n"
-msgstr ""
-"Ласкаво просимо до GNU Parted! Перелік команд виводиться командою 'help'.\n"
+msgstr "Ласкаво просимо до GNU Parted! Перелік команд виводиться командою 'help'.\n"
 
 #: parted/ui.c:165
 msgid ""
 "Usage: parted [OPTION]... [DEVICE [COMMAND [PARAMETERS]...]...]\n"
-"Apply COMMANDs with PARAMETERS to DEVICE.  If no COMMAND(s) are given, run "
-"in\n"
+"Apply COMMANDs with PARAMETERS to DEVICE.  If no COMMAND(s) are given, run in\n"
 "interactive mode.\n"
 msgstr ""
 "Використання: parted [КЛЮЧ]... [ПРИСТРІЙ [КОМАНДА [ПАРАМЕТРИ]...]...]\n"
@@ -3152,26 +2749,11 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgid "Failed to add partition %d (%s)"
 #~ msgstr "Не вдалося додати розділ %d (%s)"
 
-#~ msgid ""
-#~ "parted was unable to re-read the partition table on %s (%s).  This means "
-#~ "Linux won't know anything about the modifications you made. "
-#~ msgstr ""
-#~ "parted не може перечитати таблицю розділів на %s (%s). Це означає, що "
-#~ "Linux не враховуватиме внесені зміни. "
+#~ msgid "parted was unable to re-read the partition table on %s (%s).  This means Linux won't know anything about the modifications you made. "
+#~ msgstr "parted не може перечитати таблицю розділів на %s (%s). Це означає, що Linux не враховуватиме внесені зміни. "
 
-#~ msgid ""
-#~ "%s contains GPT signatures, indicating that it has a GPT table.  However, "
-#~ "it does not have a valid fake msdos partition table, as it should.  "
-#~ "Perhaps it was corrupted -- possibly by a program that doesn't understand "
-#~ "GPT partition tables.  Or perhaps you deleted the GPT table, and are now "
-#~ "using an msdos partition table.  Is this a GPT partition table?"
-#~ msgstr ""
-#~ "%s містить GPT сигнатуру, це означає, що він містить GPT-таблицю. Але, "
-#~ "він не містить правильної імітації msdos-сумісної таблиці розділів, хоча "
-#~ "і повинен містити. Можливо він пошкоджений програмою яка не розуміє GPT-"
-#~ "таблиці розділів. Або, можливо, ви видалили GPT-таблицю, а тепер "
-#~ "використовуєте msdos-сумісну таблицю розділів. На цьому розділі є GPT-"
-#~ "таблиця?"
+#~ msgid "%s contains GPT signatures, indicating that it has a GPT table.  However, it does not have a valid fake msdos partition table, as it should.  Perhaps it was corrupted -- possibly by a program that doesn't understand GPT partition tables.  Or perhaps you deleted the GPT table, and are now using an msdos partition table.  Is this a GPT partition table?"
+#~ msgstr "%s містить GPT сигнатуру, це означає, що він містить GPT-таблицю. Але, він не містить правильної імітації msdos-сумісної таблиці розділів, хоча і повинен містити. Можливо він пошкоджений програмою яка не розуміє GPT-таблиці розділів. Або, можливо, ви видалили GPT-таблицю, а тепер використовуєте msdos-сумісну таблицю розділів. На цьому розділі є GPT-таблиця?"
 
 #~ msgid "%s: illegal option -- %c\n"
 #~ msgstr "%s: неправильний ключ -- %c\n"
@@ -3187,16 +2769,14 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ "Clear unused space on a FAT partition (a GNU Parted testing tool).\n"
 #~ "\n"
 #~ msgstr ""
-#~ "Очистити невикористаний простір у розділі FAT (інструменті тестування GNU "
-#~ "Parted).\n"
+#~ "Очистити невикористаний простір у розділі FAT (інструменті тестування GNU Parted).\n"
 #~ "\n"
 
 #~ msgid "      --help     display this help and exit\n"
 #~ msgstr "      --help                  вивести довідку та завершити роботу\n"
 
 #~ msgid "      --version  output version information and exit\n"
-#~ msgstr ""
-#~ "      --version               вивести інформацію про версію та вийти\n"
+#~ msgstr "      --version               вивести інформацію про версію та вийти\n"
 
 #~ msgid "too few arguments"
 #~ msgstr "надто мало параметрів"
@@ -3204,22 +2784,11 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgid "too many arguments"
 #~ msgstr "надто багато аргументів"
 
-#~ msgid ""
-#~ "Device %s has a logical sector size of %lld.  Not all parts of GNU Parted "
-#~ "support this at the moment, and the working code is HIGHLY EXPERIMENTAL.\n"
-#~ msgstr ""
-#~ "Розмір логічного сектору для %s складає %lld. Наразі не всі компоненти "
-#~ "GNU Parted це підтримують.\n"
+#~ msgid "Device %s has a logical sector size of %lld.  Not all parts of GNU Parted support this at the moment, and the working code is HIGHLY EXPERIMENTAL.\n"
+#~ msgstr "Розмір логічного сектору для %s складає %lld. Наразі не всі компоненти GNU Parted це підтримують.\n"
 
-#~ msgid ""
-#~ "The kernel was unable to re-read the partition table on %s (%s).  This "
-#~ "means Linux won't know anything about the modifications you made until "
-#~ "you reboot.  You should reboot your computer before doing anything with "
-#~ "%s."
-#~ msgstr ""
-#~ "Ядро не може перечитати таблицю розділів на %s (%s). Це означає, що Linux "
-#~ "не враховуватиме внесені зміни до перезавантаження. Необхідно "
-#~ "перезавантажити ваш комп'ютер перш ніж якось використовувати %s."
+#~ msgid "The kernel was unable to re-read the partition table on %s (%s).  This means Linux won't know anything about the modifications you made until you reboot.  You should reboot your computer before doing anything with %s."
+#~ msgstr "Ядро не може перечитати таблицю розділів на %s (%s). Це означає, що Linux не враховуватиме внесені зміни до перезавантаження. Необхідно перезавантажити ваш комп'ютер перш ніж якось використовувати %s."
 
 #~ msgid "Support for opening %s file systems is not implemented yet."
 #~ msgstr "Підтримка відкривання %s файлових систем ще не реалізована."
@@ -3239,18 +2808,8 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgid "Can't copy onto an overlapping partition."
 #~ msgstr "Не можна копіювати на розділи, що перекриваються."
 
-#~ msgid ""
-#~ "Direct support for copying file systems is not yet implemented for %s.  "
-#~ "However, support for resizing is implemented.  Therefore, the file system "
-#~ "can be copied if the new partition is at least as big as the old one.  "
-#~ "So, either shrink the partition you are trying to copy, or copy to a "
-#~ "bigger partition."
-#~ msgstr ""
-#~ "Безпосередня підтримка файлових систем ще не реалізована для %s. Але, "
-#~ "реалізована підтримка зміни розміру. Таким чином файлову систему можна "
-#~ "скопіювати на новий розділ більшого розміру ніж існуючий. Тому або "
-#~ "зменшіть розділ, який ви намагаєтесь скопіювати, або копіюйте на більший "
-#~ "розділ."
+#~ msgid "Direct support for copying file systems is not yet implemented for %s.  However, support for resizing is implemented.  Therefore, the file system can be copied if the new partition is at least as big as the old one.  So, either shrink the partition you are trying to copy, or copy to a bigger partition."
+#~ msgstr "Безпосередня підтримка файлових систем ще не реалізована для %s. Але, реалізована підтримка зміни розміру. Таким чином файлову систему можна скопіювати на новий розділ більшого розміру ніж існуючий. Тому або зменшіть розділ, який ви намагаєтесь скопіювати, або копіюйте на більший розділ."
 
 #~ msgid "Support for copying %s file systems is not implemented yet."
 #~ msgstr "Підтримка копіювання файлових систем типу %s ще не підтримується."
@@ -3265,30 +2824,22 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgstr "Файлова система має старий формат (зміна розміру не підтримується)."
 
 #~ msgid "Invalid free blocks count.  Run reiserfsck --check first."
-#~ msgstr ""
-#~ "Неправильна кількість вільних блоків.  Спочатку запустіть reiserfsck --"
-#~ "check"
+#~ msgstr "Неправильна кількість вільних блоків.  Спочатку запустіть reiserfsck --check"
 
 #~ msgid "checking"
 #~ msgstr "перевірка"
 
 #~ msgid "Reiserfs tree seems to be corrupted.  Run reiserfsck --check first."
-#~ msgstr ""
-#~ "Дерево Reiserfs схоже пошкоджене.  Спочатку запустіть reiserfsck --check"
+#~ msgstr "Дерево Reiserfs схоже пошкоджене.  Спочатку запустіть reiserfsck --check"
 
-#~ msgid ""
-#~ "The reiserfs file system passed a basic check.  For a more comprehensive "
-#~ "check, run reiserfsck --check."
-#~ msgstr ""
-#~ "Файлова система reiserfs пройшла загальну перевірку. Для більш докладної "
-#~ "перевірки запустіть reiserfsck --check."
+#~ msgid "The reiserfs file system passed a basic check.  For a more comprehensive check, run reiserfsck --check."
+#~ msgstr "Файлова система reiserfs пройшла загальну перевірку. Для більш докладної перевірки запустіть reiserfsck --check."
 
 #~ msgid "Sorry, can't move the start of reiserfs partitions yet."
 #~ msgstr "Переміщення початку розділів типу reiserfs ще не підтримується."
 
 #~ msgid "Couldn't reopen device abstraction layer for read/write."
-#~ msgstr ""
-#~ "Не вдається повторно відкрити шар абстракції пристроїв для читання/запису."
+#~ msgstr "Не вдається повторно відкрити шар абстракції пристроїв для читання/запису."
 
 #~ msgid "expanding"
 #~ msgstr "розширення"
@@ -3305,12 +2856,8 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgid "GNU Parted found an invalid libreiserfs library."
 #~ msgstr "GNU Parted виявив некоректну бібліотеку libreiserfs."
 
-#~ msgid ""
-#~ "GNU Parted has detected libreiserfs interface version mismatch.  Found %d-"
-#~ "%d, required %d. ReiserFS support will be disabled."
-#~ msgstr ""
-#~ "GNU Parted виявив невідповідність версій libreiserfs.  Виявлено %d-%d, "
-#~ "потрібна %d. Підтримку ReiserFS вимкнено."
+#~ msgid "GNU Parted has detected libreiserfs interface version mismatch.  Found %d-%d, required %d. ReiserFS support will be disabled."
+#~ msgstr "GNU Parted виявив невідповідність версій libreiserfs.  Виявлено %d-%d, потрібна %d. Підтримку ReiserFS вимкнено."
 
 #~ msgid "Unable to determine the block size of this dasd"
 #~ msgstr "Не вдається визначити розмір блоку для цього dasd"
@@ -3364,19 +2911,13 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgstr "Файлова система повна!"
 
 #~ msgid "Invalid superblock.  Are you sure this is an ext2 file system?"
-#~ msgstr ""
-#~ "Неправильний суперблок. Ви впевнені, що це файлова система типу ext2?"
+#~ msgstr "Неправильний суперблок. Ви впевнені, що це файлова система типу ext2?"
 
 #~ msgid "File system has errors!  You should run e2fsck."
 #~ msgstr "Файлова система містить помилки! Необхідно запустити e2fsck."
 
-#~ msgid ""
-#~ "File system was not cleanly unmounted!  You should run e2fsck.  Modifying "
-#~ "an unclean file system could cause severe corruption."
-#~ msgstr ""
-#~ "Файлова система не була правильно відключена! Необхідно запустити e2fsck. "
-#~ "Зміни до нецілісної файлової системи можуть призвести до серйозних "
-#~ "пошкоджень."
+#~ msgid "File system was not cleanly unmounted!  You should run e2fsck.  Modifying an unclean file system could cause severe corruption."
+#~ msgstr "Файлова система не була правильно відключена! Необхідно запустити e2fsck. Зміни до нецілісної файлової системи можуть призвести до серйозних пошкоджень."
 
 #~ msgid "File system has an incompatible feature enabled."
 #~ msgstr "У файловій системі ввімкнено несумісну властивість."
@@ -3384,11 +2925,8 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgid "Error allocating buffer cache."
 #~ msgstr "Помилка розподілу буфера кеша."
 
-#~ msgid ""
-#~ "Found an inode with a incorrect link count.  Better go run e2fsck first!"
-#~ msgstr ""
-#~ "Знайдено вузол (inode) з неправильною кількістю посилань. Рекомендується "
-#~ "спочатку запустити e2fsck."
+#~ msgid "Found an inode with a incorrect link count.  Better go run e2fsck first!"
+#~ msgstr "Знайдено вузол (inode) з неправильною кількістю посилань. Рекомендується спочатку запустити e2fsck."
 
 #~ msgid "Not enough free inodes!"
 #~ msgstr "Недостатньо вільних вузлів (inode)!"
@@ -3397,9 +2935,7 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgstr "Файлова система надто заповнена, щоб видалити групу!"
 
 #~ msgid "File system has too many allocated inodes to remove a group!"
-#~ msgstr ""
-#~ "У файловій системі виділено надто багато вузлів (inode), щоб видалити "
-#~ "групу!"
+#~ msgstr "У файловій системі виділено надто багато вузлів (inode), щоб видалити групу!"
 
 #~ msgid "adding groups"
 #~ msgstr "додавання груп"
@@ -3407,33 +2943,19 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgid "Your file system is too full to resize it to %i blocks.  Sorry."
 #~ msgstr "Файлова система надто заповнена щоб змінити її розмір до %i блоків."
 
-#~ msgid ""
-#~ "Your file system has too many occupied inodes to resize it to %i blocks.  "
-#~ "Sorry."
-#~ msgstr ""
-#~ "У файловій системі надто багато зайнятих i-вузлів, щоб змінити її розмір "
-#~ "до %i блоків."
+#~ msgid "Your file system has too many occupied inodes to resize it to %i blocks.  Sorry."
+#~ msgstr "У файловій системі надто багато зайнятих i-вузлів, щоб змінити її розмір до %i блоків."
 
 #~ msgid "File system was not cleanly unmounted!  You should run e2fsck."
-#~ msgstr ""
-#~ "Файлова система була неправильно відключена! Необхідно запустити e2fsck."
+#~ msgstr "Файлова система була неправильно відключена! Необхідно запустити e2fsck."
 
-#~ msgid ""
-#~ "The file system has the 'dir_index' feature enabled.  Parted can only "
-#~ "resize the file system if it disables this feature.  You can enable it "
-#~ "later by running 'tune2fs -O dir_index DEVICE' and then 'e2fsck -fD "
-#~ "DEVICE'."
-#~ msgstr ""
-#~ "У файловій системі ввімкнено властивість 'dir_index'. Parted може "
-#~ "змінювати розмір лише у файлових систем, у яких ця властивість вимкнена. "
-#~ "Ви можете увімкнути її пізніше, командою 'tune2fs -O dir_index DEVICE', "
-#~ "після чого слід запустити 'e2fsck -fD DEVICE'."
+#~ msgid "The file system has the 'dir_index' feature enabled.  Parted can only resize the file system if it disables this feature.  You can enable it later by running 'tune2fs -O dir_index DEVICE' and then 'e2fsck -fD DEVICE'."
+#~ msgstr "У файловій системі ввімкнено властивість 'dir_index'. Parted може змінювати розмір лише у файлових систем, у яких ця властивість вимкнена. Ви можете увімкнути її пізніше, командою 'tune2fs -O dir_index DEVICE', після чого слід запустити 'e2fsck -fD DEVICE'."
 
 #~ msgid ""
 #~ "A resize operation on this file system will use EXPERIMENTAL code\n"
 #~ "that MAY CORRUPT it (although no one has reported any such damage yet).\n"
-#~ "You should at least backup your data first, and run 'e2fsck -f' "
-#~ "afterwards."
+#~ "You should at least backup your data first, and run 'e2fsck -f' afterwards."
 #~ msgstr ""
 #~ "Операція зміни розміру на цій файловій системі використовує\n"
 #~ "ЕКСПЕРИМЕНТАЛЬНИЙ код та МОЖЕ ПОШКОДИТИ її (хоча цього досі не було\n"
@@ -3441,9 +2963,7 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ "'e2fsck -f' після завершення зміни розміру."
 
 #~ msgid "Cross-linked blocks found!  Better go run e2fsck first!"
-#~ msgstr ""
-#~ "Виявлено блоки з перехресними посиланнями! Краще спочатку запустити "
-#~ "e2fsck!"
+#~ msgstr "Виявлено блоки з перехресними посиланнями! Краще спочатку запустити e2fsck!"
 
 #~ msgid "Block %i has no reference?  Weird."
 #~ msgstr "Блок %i не має посилання? Дивно"
@@ -3451,12 +2971,8 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgid "Block %i shouldn't have been marked (%d, %d)!"
 #~ msgstr "Блок %i не повинен бути відміченим (%d, %d)!"
 
-#~ msgid ""
-#~ "The ext2 file system passed a basic check.  For a more comprehensive "
-#~ "check, use the e2fsck program."
-#~ msgstr ""
-#~ "Файлова система ext2 пройшла загальну перевірку. Для більш докладної "
-#~ "перевірки користуйтесь програмою e2fsck."
+#~ msgid "The ext2 file system passed a basic check.  For a more comprehensive check, use the e2fsck program."
+#~ msgstr "Файлова система ext2 пройшла загальну перевірку. Для більш докладної перевірки користуйтесь програмою e2fsck."
 
 #~ msgid "Sorry, can't move the start of ext2 partitions yet!"
 #~ msgstr "Переміщення початку розділів типу ext2 ще не підтримується!"
@@ -3476,12 +2992,8 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgid "The partition must have one of the following FS-TYPEs: "
 #~ msgstr "Розділ повинен мати один з наступних типів FS-TYPE: "
 
-#~ msgid ""
-#~ "The existing file system will be destroyed and all data on the partition "
-#~ "will be lost. Do you want to continue?"
-#~ msgstr ""
-#~ "Існуюча файлова система буде знищена разом з усіма даними на ній. "
-#~ "Продовжити?"
+#~ msgid "The existing file system will be destroyed and all data on the partition will be lost. Do you want to continue?"
+#~ msgstr "Існуюча файлова система буде знищена разом з усіма даними на ній. Продовжити?"
 
 #~ msgid "Source partition number?"
 #~ msgstr "Номер вихідного розділу?"
@@ -3495,8 +3007,7 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgid "File system?"
 #~ msgstr "Файлова система?"
 
-#~ msgid ""
-#~ "An extended partition cannot hold a file system.  Did you want mkpart?"
+#~ msgid "An extended partition cannot hold a file system.  Did you want mkpart?"
 #~ msgstr "Розширений розділ не може мати файлову систему. Виконати mkpart?"
 
 #~ msgid "Can't move an extended partition."
@@ -3523,46 +3034,29 @@ msgstr "Ця команда не має сенсу у неінтерактивн
 #~ msgid "Maximum size: "
 #~ msgstr "Максимальний розмір: "
 
-#~ msgid ""
-#~ "check NUMBER                             do a simple check on the file "
-#~ "system"
-#~ msgstr ""
-#~ "check НОМЕР                   виконати просту перевірку файлової системи"
+#~ msgid "check NUMBER                             do a simple check on the file system"
+#~ msgstr "check НОМЕР                   виконати просту перевірку файлової системи"
 
 #~ msgid "cp"
 #~ msgstr "cp"
 
-#~ msgid ""
-#~ "cp [FROM-DEVICE] FROM-NUMBER TO-NUMBER   copy file system to another "
-#~ "partition"
-#~ msgstr ""
-#~ "cp [З-ПРИСТРОЮ] З-НОМЕР У-НОМЕР     копіювати файлову систему у інший "
-#~ "розділ"
+#~ msgid "cp [FROM-DEVICE] FROM-NUMBER TO-NUMBER   copy file system to another partition"
+#~ msgstr "cp [З-ПРИСТРОЮ] З-НОМЕР У-НОМЕР     копіювати файлову систему у інший розділ"
 
 #~ msgid "mkfs"
 #~ msgstr "mkfs"
 
-#~ msgid ""
-#~ "mkfs NUMBER FS-TYPE                      make a FS-TYPE file system on "
-#~ "partititon NUMBER"
-#~ msgstr ""
-#~ "mkfs НОМЕР ТИП-ФС             створити файлову систему ТИП-ФС у розділі "
-#~ "НОМЕР"
+#~ msgid "mkfs NUMBER FS-TYPE                      make a FS-TYPE file system on partititon NUMBER"
+#~ msgstr "mkfs НОМЕР ТИП-ФС             створити файлову систему ТИП-ФС у розділі НОМЕР"
 
 #~ msgid "mkpartfs"
 #~ msgstr "mkpartfs"
 
-#~ msgid ""
-#~ "mkpartfs PART-TYPE FS-TYPE START END     make a partition with a file "
-#~ "system"
-#~ msgstr ""
-#~ "mkpartfs ТИП-РОЗДІЛУ ТИП-ФС ПОЧАТОК КІНЕЦЬ    створити розділ з файловою "
-#~ "системою"
+#~ msgid "mkpartfs PART-TYPE FS-TYPE START END     make a partition with a file system"
+#~ msgstr "mkpartfs ТИП-РОЗДІЛУ ТИП-ФС ПОЧАТОК КІНЕЦЬ    створити розділ з файловою системою"
 
 #~ msgid "move"
 #~ msgstr "move"
 
-#~ msgid ""
-#~ "resize NUMBER START END                  resize partition NUMBER and its "
-#~ "file system"
+#~ msgid "resize NUMBER START END                  resize partition NUMBER and its file system"
 #~ msgstr "resize НОМЕР ПОЧАТОК КІНЕЦЬ   змінити розмір розділу НОМЕР"

@@ -1,7 +1,7 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 2000, 2003-2005, 2007, 2009-2014 Free Software Foundation,
-    Inc.
+    Copyright (C) 2000, 2003-2005, 2007, 2009-2014, 2019 Free Software
+    Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -985,6 +985,7 @@ hfsplus_resize (PedFileSystem* fs, PedGeometry* geom, PedTimer* timer)
 	/* Resize the HFS+ volume */
 	if (!hfsplus_volume_resize (fs, embedded_geom, timer_plus)) {
 		if (timer_plus != timer) ped_timer_destroy_nested (timer_plus);
+		if (priv_data->wrapper) ped_geometry_destroy (embedded_geom);
 		ped_exception_throw (
 			PED_EXCEPTION_ERROR,
 			PED_EXCEPTION_CANCEL,

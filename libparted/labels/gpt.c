@@ -156,10 +156,6 @@ typedef struct
     ((efi_guid_t) { PED_CPU_TO_LE32 (0xD3BFE2DE), PED_CPU_TO_LE16 (0x3DAF), \
                     PED_CPU_TO_LE16 (0x11DF), 0xba, 0x40, \
                     { 0xE3, 0xA5, 0x56, 0xD8, 0x95, 0x93 }})
-#define PARTITION_FREEBSD_UFS_GUID \
-    ((efi_guid_t) { PED_CPU_TO_LE32 (0x516e7cb6), PED_CPU_TO_LE16 (0x6ecf), \
-                    PED_CPU_TO_LE16 (0x11d6), 0x8f, 0xf8, \
-                    { 0x00, 0x02, 0x2d, 0x09, 0x71, 0x2b }})
 
 struct __attribute__ ((packed)) _GuidPartitionTableHeader_t
 {
@@ -277,7 +273,7 @@ struct __attribute__ ((packed)) _LegacyMBR_t
 };
 
 /* uses libparted's disk_specific field in PedDisk, to store our info */
-struct __attribute__ ((packed)) _GPTDiskData
+struct __attribute__ ((packed, aligned(8))) _GPTDiskData
 {
   PedGeometry data_area;
   int entry_count;
@@ -294,6 +290,7 @@ typedef struct _GPTPartitionData
   efi_char16_t name[37];
   char *translated_name;
   int lvm;
+  int swap;
   int raid;
   int boot;
   int bios_grub;
@@ -309,40 +306,6 @@ typedef struct _GPTPartitionData
 } GPTPartitionData;
 
 static PedDiskType gpt_disk_type;
-
-
-#if (defined(__i386__) || defined(__x86_64__)) && defined(__linux__)
-# define USE_DMI
-#endif
-
-#define APPLE_DMI "Apple Computer, Inc."
-#define APPLE_DMI_2 "Apple Inc."
-static int is_apple = 0;
-
-static char *
-dmi_system_manufacturer (void)
-{
-#ifdef USE_DMI
-  FILE *dmidecode;
-  char *manufacturer = NULL;
-  size_t manufacturer_len = 0;
-
-  dmidecode = popen ("dmidecode -s system-manufacturer", "r");
-  if (getline (&manufacturer, &manufacturer_len, dmidecode) < 0) {
-    /* ignore; will return NULL */
-  }
-  pclose (dmidecode);
-  if (manufacturer) {
-    char *newline = strchr (manufacturer, '\n');
-    if (newline)
-      *newline = '\0';
-  }
-  return manufacturer;
-#else /* !USE_DMI */
-  return NULL;
-#endif /* USE_DMI */
-}
-
 
 static inline uint32_t
 pth_get_size (const PedDevice *dev)
@@ -447,11 +410,9 @@ pth_get_raw (const PedDevice *dev, const GuidPartitionTableHeader_t *pth)
  * Blame Intel.
  */
 static void
-swap_uuid_and_efi_guid (uuid_t uuid)
+swap_uuid_and_efi_guid (efi_guid_t *guid)
 {
-  efi_guid_t *guid = (efi_guid_t *) uuid;
-
-  PED_ASSERT (uuid != NULL);
+  PED_ASSERT (guid != NULL);
   guid->time_low = PED_SWAP32 (guid->time_low);
   guid->time_mid = PED_SWAP16 (guid->time_mid);
   guid->time_hi_and_version = PED_SWAP16 (guid->time_hi_and_version);
@@ -521,19 +482,16 @@ gpt_probe (const PedDevice *dev)
   if (dev->length <= 1)
     return 0;
 
-  if (!is_apple)
-    {
-      void *label;
-      if (!ptt_read_sector (dev, 0, &label))
-        return 0;
+  void *label;
+  if (!ptt_read_sector (dev, 0, &label))
+    return 0;
 
-      if (!_pmbr_is_valid (label))
-        {
-          free (label);
-          return 0;
-        }
+  if (!_pmbr_is_valid (label))
+    {
       free (label);
+      return 0;
     }
+  free (label);
 
   void *pth_raw = ped_malloc (pth_get_size (dev));
   if (ped_device_read (dev, pth_raw, 1, GPT_HEADER_SECTORS)
@@ -583,7 +541,7 @@ gpt_alloc (const PedDevice *dev)
                      data_end - data_start + 1);
   gpt_disk_data->entry_count = GPT_DEFAULT_PARTITION_ENTRIES;
   uuid_generate ((unsigned char *) &gpt_disk_data->uuid);
-  swap_uuid_and_efi_guid ((unsigned char *) (&gpt_disk_data->uuid));
+  swap_uuid_and_efi_guid (&gpt_disk_data->uuid);
   gpt_disk_data->pmbr_boot = 0;
   return disk;
 
@@ -859,7 +817,8 @@ _parse_part_entry (PedDisk *disk, GuidPartitionEntry_t *pte)
   gpt_part_data->name[i] = 0;
   gpt_part_data->translated_name = 0;
 
-  gpt_part_data->lvm = gpt_part_data->raid
+  gpt_part_data->lvm = gpt_part_data->swap
+    = gpt_part_data->raid
     = gpt_part_data->boot = gpt_part_data->hp_service
     = gpt_part_data->hidden = gpt_part_data->msftres
     = gpt_part_data->msftdata
@@ -882,6 +841,8 @@ _parse_part_entry (PedDisk *disk, GuidPartitionEntry_t *pte)
     gpt_part_data->raid = 1;
   else if (!guid_cmp (gpt_part_data->type, PARTITION_LVM_GUID))
     gpt_part_data->lvm = 1;
+  else if (!guid_cmp (gpt_part_data->type, PARTITION_SWAP_GUID))
+    gpt_part_data->swap = 1;
   else if (!guid_cmp (gpt_part_data->type, PARTITION_HPSERVICE_GUID))
     gpt_part_data->hp_service = 1;
   else if (!guid_cmp (gpt_part_data->type, PARTITION_MSFT_RESERVED_GUID))
@@ -990,10 +951,6 @@ gpt_read_headers (PedDisk const *disk,
  *  warn if it's not there, and treat the disk as MSDOS, with a note
  *  for users to use Parted to "fix up" their disk if they
  *  really want it to be considered GPT.
- *
- *  Of course, this is incompatible with how Apple handle things. For
- *  legacy BIOS compatibility on Apple machines, we need a valid legacy MBR
- *  rather than a protective one. Aren't standards wonderful?
  ************************************************************/
 static int
 gpt_read (PedDisk *disk)
@@ -1184,8 +1141,8 @@ _write_pmbr (PedDevice *dev, bool pmbr_boot)
 
   pmbr->Signature = PED_CPU_TO_LE16 (MSDOS_MBR_SIGNATURE);
   pmbr->PartitionRecord[0].OSType = EFI_PMBR_OSTYPE_EFI;
-  pmbr->PartitionRecord[0].StartSector = 1;
-  pmbr->PartitionRecord[0].EndHead = 0xFE;
+  pmbr->PartitionRecord[0].StartSector = 2;
+  pmbr->PartitionRecord[0].EndHead = 0xFF;
   pmbr->PartitionRecord[0].EndSector = 0xFF;
   pmbr->PartitionRecord[0].EndTrack = 0xFF;
   pmbr->PartitionRecord[0].StartingLBA = PED_CPU_TO_LE32 (1);
@@ -1200,129 +1157,6 @@ _write_pmbr (PedDevice *dev, bool pmbr_boot)
                                    GPT_PMBR_SECTORS);
   free (s0);
   return write_ok;
-}
-
-static void
-fill_raw_part (PartitionRecord_t* raw_part, PedPartition *part, PedSector offset, int number)
-{
-  GPTPartitionData* gpt_part_data = part->disk_specific;
-
-  if (part->fs_type) {
-    if (strncmp (part->fs_type->name, "fat", 3) == 0)
-      raw_part->OSType = 0x0b;
-    else if (strncmp (part->fs_type->name, "ntfs", 4) == 0)
-      raw_part->OSType = 0x07;
-    else if (strncmp (part->fs_type->name, "hfs", 3) == 0)
-      raw_part->OSType = 0xaf;
-    else if (strncmp (part->fs_type->name, "linux-swap", 10) == 0)
-      raw_part->OSType = 0x82;
-    else
-      raw_part->OSType = 0x83;
-  } else
-    raw_part->OSType = 0xda;
-
-  /* Apple's firmware appears to become unhappy if the second partition
-     isn't bootable */
-
-  if (number == 2)
-    raw_part->BootIndicator = 0x80;
-
-  raw_part->StartingLBA = PED_CPU_TO_LE32 ((part->geom.start - offset)
-                            / (part->disk->dev->sector_size / 512));
-
-  raw_part->SizeInLBA = PED_CPU_TO_LE32 (part->geom.length
-                            / (part->disk->dev->sector_size / 512));
-
-  /* EFI system partitions will have a FAT filesystem and
-     PARTITION_SYSTEM_GUID; however, it is not wise to rely on filesystem
-     probing */
-
-  if (number == 1) {
-    if (!guid_cmp (gpt_part_data->type, PARTITION_SYSTEM_GUID) ||
-        !guid_cmp (gpt_part_data->type, PARTITION_BIOS_GRUB_GUID)) {
-      raw_part->OSType = EFI_PMBR_OSTYPE_EFI;
-      raw_part->OSType = EFI_PMBR_OSTYPE_EFI;
-    }
-  }
-
-  /* Apple's firmware also appears to be unhappy if the EFI system
-     partition doesn't extend all the way to the start of the disk */
-
-  if (number == 1 && raw_part->OSType == EFI_PMBR_OSTYPE_EFI) {
-    raw_part->StartSector = 1;
-    raw_part->SizeInLBA += raw_part->StartingLBA - 1;
-    raw_part->StartingLBA = 1;
-  } else {
-    raw_part->StartHead = 0xfe;
-    raw_part->StartSector = 0xff;
-    raw_part->StartTrack = 0xff;
-  }
-
-  raw_part->EndHead = 0xfe;
-  raw_part->EndSector = 0xff;
-  raw_part->EndTrack = 0xff;
-}
-
-static int
-_gptsync (const PedDisk *disk)
-{
-  void *s0;
-  PedPartition* part;
-  int i;
-
-  if (!ptt_read_sector (disk->dev, GPT_PMBR_LBA, &s0))
-    return 0;
-  LegacyMBR_t *pmbr = s0;
-
-  int ok = 0;
-
-  memset(&pmbr->PartitionRecord, 0, sizeof(pmbr->PartitionRecord));
-  pmbr->Signature = PED_CPU_TO_LE16(MSDOS_MBR_SIGNATURE);
-
-  bool prot = false; /* have we found a protective partition? */
-  for (i=1; i<=4; i++) {
-    part = ped_disk_get_partition (disk, i);
-    if (!part)
-      continue;
-
-    fill_raw_part (&pmbr->PartitionRecord [i - 1], part, 0, i);
-    if (pmbr->PartitionRecord[i - 1].OSType == EFI_PMBR_OSTYPE_EFI)
-      prot = true;
-  }
-
-  if (!prot) { /* create one covering the gpt entries */
-    uint32_t prot_size;
-    for (i=2; i>=0; i--)
-      pmbr->PartitionRecord[i + 1] = pmbr->PartitionRecord[i];
-    memset (&pmbr->PartitionRecord[0], 0, sizeof pmbr->PartitionRecord[0]);
-    pmbr->PartitionRecord[0].OSType = EFI_PMBR_OSTYPE_EFI;
-    pmbr->PartitionRecord[0].StartSector = 1;
-    pmbr->PartitionRecord[0].EndHead = 0xfe;
-    pmbr->PartitionRecord[0].EndSector = 0xff;
-    pmbr->PartitionRecord[0].EndTrack = 0xff;
-    pmbr->PartitionRecord[0].StartingLBA = PED_CPU_TO_LE32 (1);
-    if ((disk->dev->length - 1ULL) > 0xFFFFFFFFULL)
-      prot_size = 0xFFFFFFFF;
-    else
-      prot_size = disk->dev->length - 1UL;
-    for (i=1; i<=3; i++) {
-      if (pmbr->PartitionRecord[i].StartingLBA) {
-        uint32_t starting_lba =
-          PED_LE32_TO_CPU (pmbr->PartitionRecord[i].StartingLBA);
-        if (starting_lba - 1 < prot_size)
-          prot_size = starting_lba - 1;
-      }
-    }
-    pmbr->PartitionRecord[0].SizeInLBA = PED_CPU_TO_LE32 (prot_size);
-  }
-
-  if (!ped_device_write (disk->dev, pmbr, GPT_PMBR_LBA, GPT_PMBR_SECTORS))
-    goto error;
-
-  ok = ped_device_sync (disk->dev);
-error:
-  free (s0);
-  return ok;
 }
 
 static int
@@ -1436,15 +1270,9 @@ gpt_write (const PedDisk *disk)
 
   ptes_crc = efi_crc32 (ptes, ptes_bytes);
 
-  if (is_apple) {
-    /* Write synced MBR */
-    if (!_gptsync (disk))
-      goto error_free_ptes;
-  } else {
-    /* Write protective MBR */
-    if (!_write_pmbr (disk->dev, gpt_disk_data->pmbr_boot))
-      goto error_free_ptes;
-  }
+  /* Write protective MBR */
+  if (!_write_pmbr (disk->dev, gpt_disk_data->pmbr_boot))
+    goto error_free_ptes;
 
   /* Write PTH and PTEs */
   /* FIXME: Caution: this code is nearly identical to what's just below. */
@@ -1535,6 +1363,7 @@ gpt_partition_new (const PedDisk *disk,
 
   gpt_part_data->type = PARTITION_LINUX_DATA_GUID;
   gpt_part_data->lvm = 0;
+  gpt_part_data->swap = 0;
   gpt_part_data->raid = 0;
   gpt_part_data->boot = 0;
   gpt_part_data->bios_grub = 0;
@@ -1549,7 +1378,7 @@ gpt_partition_new (const PedDisk *disk,
   gpt_part_data->translated_name = 0;
   gpt_part_data->irst = 0;
   uuid_generate ((unsigned char *) &gpt_part_data->uuid);
-  swap_uuid_and_efi_guid ((unsigned char *) (&gpt_part_data->uuid));
+  swap_uuid_and_efi_guid (&gpt_part_data->uuid);
   memset (gpt_part_data->name, 0, sizeof gpt_part_data->name);
   return part;
 
@@ -1623,6 +1452,11 @@ gpt_partition_set_system (PedPartition *part,
       gpt_part_data->type = PARTITION_LVM_GUID;
       return 1;
     }
+  if (gpt_part_data->swap)
+    {
+      gpt_part_data->type = PARTITION_SWAP_GUID;
+      return 1;
+    }
   if (gpt_part_data->raid)
     {
       gpt_part_data->type = PARTITION_RAID_GUID;
@@ -1677,6 +1511,7 @@ gpt_partition_set_system (PedPartition *part,
   if (fs_type)
     {
       if (strncmp (fs_type->name, "fat", 3) == 0
+          || strcmp (fs_type->name, "udf") == 0
           || strcmp (fs_type->name, "ntfs") == 0)
         {
           gpt_part_data->type = PARTITION_BASIC_DATA_GUID;
@@ -1690,11 +1525,6 @@ gpt_partition_set_system (PedPartition *part,
       if (strstr (fs_type->name, "swap"))
         {
           gpt_part_data->type = PARTITION_SWAP_GUID;
-          return 1;
-        }
-      if (strstr (fs_type->name, "freebsd-ufs"))
-        {
-          gpt_part_data->type = PARTITION_FREEBSD_UFS_GUID;
           return 1;
         }
     }
@@ -1815,6 +1645,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
       if (state)
         gpt_part_data->raid
           = gpt_part_data->lvm
+          = gpt_part_data->swap
           = gpt_part_data->bios_grub
           = gpt_part_data->hp_service
           = gpt_part_data->msftres
@@ -1829,6 +1660,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
       if (state)
         gpt_part_data->raid
           = gpt_part_data->lvm
+          = gpt_part_data->swap
           = gpt_part_data->boot
           = gpt_part_data->hp_service
           = gpt_part_data->msftres
@@ -1843,6 +1675,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
       if (state)
         gpt_part_data->boot
           = gpt_part_data->lvm
+          = gpt_part_data->swap
           = gpt_part_data->bios_grub
           = gpt_part_data->hp_service
           = gpt_part_data->msftres
@@ -1856,6 +1689,22 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
       gpt_part_data->lvm = state;
       if (state)
         gpt_part_data->boot
+          = gpt_part_data->swap
+          = gpt_part_data->raid
+          = gpt_part_data->bios_grub
+          = gpt_part_data->hp_service
+          = gpt_part_data->msftres
+          = gpt_part_data->msftdata
+          = gpt_part_data->msftrecv
+          = gpt_part_data->prep
+          = gpt_part_data->irst
+          = gpt_part_data->atvrecv = 0;
+      return gpt_partition_set_system (part, part->fs_type);
+    case PED_PARTITION_SWAP:
+      gpt_part_data->swap = state;
+      if (state)
+        gpt_part_data->boot
+          = gpt_part_data->lvm
           = gpt_part_data->raid
           = gpt_part_data->bios_grub
           = gpt_part_data->hp_service
@@ -1872,6 +1721,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
         gpt_part_data->boot
           = gpt_part_data->raid
           = gpt_part_data->lvm
+          = gpt_part_data->swap
           = gpt_part_data->bios_grub
           = gpt_part_data->msftres
           = gpt_part_data->msftdata
@@ -1886,6 +1736,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
         gpt_part_data->boot
           = gpt_part_data->raid
           = gpt_part_data->lvm
+          = gpt_part_data->swap
           = gpt_part_data->bios_grub
           = gpt_part_data->hp_service
           = gpt_part_data->msftdata
@@ -1900,6 +1751,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
         gpt_part_data->boot
           = gpt_part_data->raid
           = gpt_part_data->lvm
+          = gpt_part_data->swap
           = gpt_part_data->bios_grub
           = gpt_part_data->hp_service
           = gpt_part_data->msftres
@@ -1918,6 +1770,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
         gpt_part_data->boot
           = gpt_part_data->raid
           = gpt_part_data->lvm
+          = gpt_part_data->swap
           = gpt_part_data->bios_grub
           = gpt_part_data->hp_service
           = gpt_part_data->msftdata
@@ -1932,6 +1785,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
         gpt_part_data->boot
           = gpt_part_data->raid
           = gpt_part_data->lvm
+          = gpt_part_data->swap
           = gpt_part_data->bios_grub
           = gpt_part_data->hp_service
           = gpt_part_data->msftres
@@ -1945,6 +1799,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
         gpt_part_data->boot
           = gpt_part_data->raid
           = gpt_part_data->lvm
+          = gpt_part_data->swap
           = gpt_part_data->bios_grub
           = gpt_part_data->hp_service
           = gpt_part_data->msftres
@@ -1958,6 +1813,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
         gpt_part_data->boot
           = gpt_part_data->raid
           = gpt_part_data->lvm
+          = gpt_part_data->swap
           = gpt_part_data->bios_grub
           = gpt_part_data->hp_service
           = gpt_part_data->msftres
@@ -1972,7 +1828,6 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
     case PED_PARTITION_LEGACY_BOOT:
       gpt_part_data->legacy_boot = state;
       return 1;
-    case PED_PARTITION_SWAP:
     case PED_PARTITION_ROOT:
     case PED_PARTITION_LBA:
     default:
@@ -2018,6 +1873,7 @@ gpt_partition_get_flag (const PedPartition *part, PedPartitionFlag flag)
     case PED_PARTITION_IRST:
       return gpt_part_data->irst;
     case PED_PARTITION_SWAP:
+	return gpt_part_data->swap;
     case PED_PARTITION_LBA:
     case PED_PARTITION_ROOT:
     default:
@@ -2034,6 +1890,7 @@ gpt_partition_is_flag_available (const PedPartition *part,
     {
     case PED_PARTITION_RAID:
     case PED_PARTITION_LVM:
+    case PED_PARTITION_SWAP:
     case PED_PARTITION_BOOT:
     case PED_PARTITION_BIOS_GRUB:
     case PED_PARTITION_HPSERVICE:
@@ -2047,7 +1904,6 @@ gpt_partition_is_flag_available (const PedPartition *part,
     case PED_PARTITION_IRST:
     case PED_PARTITION_ESP:
       return 1;
-    case PED_PARTITION_SWAP:
     case PED_PARTITION_ROOT:
     case PED_PARTITION_LBA:
     default:
@@ -2225,21 +2081,6 @@ void
 ped_disk_gpt_init ()
 {
   ped_disk_type_register (&gpt_disk_type);
-
-  char *force_gpt_apple = getenv ("PARTED_GPT_APPLE");
-  if (force_gpt_apple) {
-    if (strcmp (force_gpt_apple, "1") == 0)
-      is_apple = 1;
-  } else {
-    char *manufacturer = dmi_system_manufacturer ();
-    if (manufacturer &&
-        (strncasecmp (APPLE_DMI, manufacturer,
-                      strlen (APPLE_DMI)) == 0 ||
-         strncasecmp (APPLE_DMI_2, manufacturer,
-                      strlen (APPLE_DMI_2)) == 0))
-      is_apple = 1;
-    free (manufacturer);
-  }
 }
 
 void

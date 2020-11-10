@@ -1,15 +1,16 @@
 Source: parted
 Section: admin
 Priority: optional
-Maintainer: Parted Maintainer Team <parted-maintainers@lists.alioth.debian.org>
+Maintainer: Parted Maintainer Team <parted-maintainers@alioth-lists.debian.net>
 Uploaders: Bastian Blank <waldi@debian.org>, Colin Watson <cjwatson@debian.org>
 Standards-Version: 3.9.8
-Vcs-Git: https://salsa.debian.org/parted-team/parted
+Vcs-Git: https://salsa.debian.org/parted-team/parted.git
 Vcs-Browser: https://salsa.debian.org/parted-team/parted
 Homepage: http://www.gnu.org/software/parted
 Build-Depends:
  dpkg-dev (>= 1.15.7~),
- debhelper (>= 9~),
+ debhelper (>= 9.20150501~),
+ debhelper-compat (= 10),
  dh-exec,
  libncurses-dev | libncurses5-dev,
  libreadline-dev | libreadline6-dev,
@@ -26,6 +27,7 @@ Build-Depends:
  automake (>= 1:1.11.6),
  autopoint,
  gperf
+Rules-Requires-Root: no
 
 Package: parted
 Architecture: any
@@ -33,6 +35,7 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, libparted2 (= ${binary:Version})
 Suggests: parted-doc
 Conflicts: fsresize, parted1.6
 Replaces: fsresize, parted1.6
+Multi-Arch: foreign
 Description: disk partition manipulator
  GNU Parted is a program that allows you to create, destroy, resize,
  move, and copy disk partitions. This is useful for creating space
@@ -154,19 +157,6 @@ Description: disk partition manipulator - development files
  .
  This package contains the static library and header files for
  libparted, which are really only of interest to parted developers.
-
-Package: libparted0-dev
-Architecture: all
-Section: oldlibs
-Depends: ${misc:Depends}, libparted-dev (>= ${source:Version})
-Description: disk partition manipulator - transitional package
- GNU Parted is a program that allows you to create, destroy, resize,
- move, and copy disk partitions. This is useful for creating space
- for new operating systems, reorganizing disk usage, and copying data
- to new hard disks.
- .
- This is a transitional package to ease the migration to the new
- unversioned libparted-dev package, which should be used in preference.
 
 Package: parted-doc
 Architecture: all

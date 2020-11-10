@@ -1,4 +1,4 @@
-From 116bf42f262f0516b5d659805ac4bbfee36d0b0c Mon Sep 17 00:00:00 2001
+From 227daee3979fef94a75087c0ad0c377c133b23b4 Mon Sep 17 00:00:00 2001
 From: Viktor Vasilev <Viktor Vasilev>
 Date: Fri, 28 Mar 2014 17:09:42 +0000
 Subject: Add GNU/kFreeBSD support
@@ -9,33 +9,35 @@ Author: Jeff Epler <jepler@unpythonic.net>
 Bug-Debian: http://bugs.debian.org/363381
 Bug-Debian: http://bugs.debian.org/693510
 Forwarded: no
-Last-Update: 2014-09-19
+Last-Update: 2019-10-11
 
 Patch-Name: kfreebsd-gnu.patch
 ---
- configure.ac                     |    8 +-
+ configure.ac                     |   10 +-
  libparted/Makefile.am            |    3 +-
  libparted/arch/freebsd.c         | 1292 ++++++++++++++++++++++++++++++
  libparted/architecture.c         |    3 +
  libparted/fs/xfs/platform_defs.h |    6 +-
  libparted/labels/bsd.c           |    1 +
  libparted/labels/sun.c           |    1 +
- 7 files changed, 1310 insertions(+), 4 deletions(-)
+ 7 files changed, 1311 insertions(+), 5 deletions(-)
  create mode 100644 libparted/arch/freebsd.c
 
 diff --git a/configure.ac b/configure.ac
-index 436d0e21..038ebdc8 100644
+index c46a3ffa..66f17d54 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -61,6 +61,7 @@ case "$host_os" in
- 	linux*) OS=linux ;;
+@@ -61,7 +61,8 @@ case "$host_os" in
+ 	linux*|uclinux*) OS=linux ;;
  	gnu*)	OS=gnu ;;
  	beos*)	OS=beos ;;
+-	*)	AC_MSG_ERROR([Unknown or unsupported OS "$host_os".  Only "linux", "uclinux", "gnu" and "beos" are supported in this version of GNU Parted.]) ;;
 +	freebsd* | kfreebsd*-gnu)	OS=freebsd ;;
- 	*)	AC_MSG_ERROR([Unknown or unsupported OS "$host_os".  Only "linux", "gnu" and "beos" are supported in this version of GNU Parted.]) ;;
++	*)	AC_MSG_ERROR([Unknown or unsupported OS "$host_os".  Only "linux", "gnu" and "beos" are supported in this version of GNU Parted.]) ;;
  esac
  AC_SUBST([OS])
-@@ -273,6 +274,7 @@ AC_CHECK_SIZEOF([off_t], [64], [
+ 
+@@ -260,6 +261,7 @@ AC_CHECK_SIZEOF([off_t], [64], [
  	#include <sys/types.h>
  	#include <unistd.h>
  ])
@@ -43,7 +45,7 @@ index 436d0e21..038ebdc8 100644
  
  AM_ENABLE_SHARED
  if test "$OS" = linux && test $ac_cv_sizeof_off_t -lt 8; then
-@@ -511,7 +513,7 @@ If you can't find one try:
+@@ -465,7 +467,7 @@ If you can't find one try:
          http://web.mit.edu/tytso/www/linux/e2fsprogs.html])]
  )
  
@@ -52,7 +54,7 @@ index 436d0e21..038ebdc8 100644
  AC_CHECK_HEADERS([linux/ext2_fs.h])
  
  dnl required for libparted/llseek.c  (TODO: make linux-x86 only)
-@@ -570,7 +572,9 @@ AC_C_CONST
+@@ -524,7 +526,9 @@ AC_C_CONST
  AC_C_RESTRICT
  
  dnl Checks for library functions.
@@ -64,7 +66,7 @@ index 436d0e21..038ebdc8 100644
  
  dnl NOTE: We need to remove the gl_cv_ignore_unused_libraries flag if we
 diff --git a/libparted/Makefile.am b/libparted/Makefile.am
-index edc5f2e4..b410e644 100644
+index bcdde774..5a3c4f5d 100644
 --- a/libparted/Makefile.am
 +++ b/libparted/Makefile.am
 @@ -47,7 +47,8 @@ libparted_la_SOURCES  = debug.c			\
@@ -1376,7 +1378,7 @@ index 00000000..4c690e5f
 +	disk_ops:	&freebsd_disk_ops
 +};
 diff --git a/libparted/architecture.c b/libparted/architecture.c
-index df0f381b..8c31fba8 100644
+index f43d1fca..b2374cfe 100644
 --- a/libparted/architecture.c
 +++ b/libparted/architecture.c
 @@ -34,6 +34,9 @@ ped_set_architecture ()
@@ -1390,7 +1392,7 @@ index df0f381b..8c31fba8 100644
  	extern PedArchitecture ped_gnu_arch;
  	const PedArchitecture* arch = &ped_gnu_arch;
 diff --git a/libparted/fs/xfs/platform_defs.h b/libparted/fs/xfs/platform_defs.h
-index 2b557520..01a06df7 100644
+index a6ec8fb8..47a3a55f 100644
 --- a/libparted/fs/xfs/platform_defs.h
 +++ b/libparted/fs/xfs/platform_defs.h
 @@ -37,7 +37,11 @@
@@ -1403,11 +1405,11 @@ index 2b557520..01a06df7 100644
 +#elif HAVE_SYS_ENDIAN_H
 +# include <sys/endian.h>
 +#endif
+ #include <fcntl.h>
  #include <stddef.h>
  #include <stdlib.h>
- #include <string.h>
 diff --git a/libparted/labels/bsd.c b/libparted/labels/bsd.c
-index a8525a4a..16dba317 100644
+index 6946563a..f561ef4b 100644
 --- a/libparted/labels/bsd.c
 +++ b/libparted/labels/bsd.c
 @@ -26,6 +26,7 @@
@@ -1419,10 +1421,10 @@ index a8525a4a..16dba317 100644
  #if ENABLE_NLS
  #  include <libintl.h>
 diff --git a/libparted/labels/sun.c b/libparted/labels/sun.c
-index b23ff865..0fc514c6 100644
+index 9b9c2c05..688f6040 100644
 --- a/libparted/labels/sun.c
 +++ b/libparted/labels/sun.c
-@@ -25,6 +25,7 @@
+@@ -26,6 +26,7 @@
  #include <parted/debug.h>
  #include <parted/endian.h>
  #include <stdbool.h>

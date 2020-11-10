@@ -1,7 +1,7 @@
 /* -*- Mode: c; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*-
 
     libparted - a library for manipulating disk partitions
-    Copyright (C) 2000-2001, 2007-2014 Free Software Foundation, Inc.
+    Copyright (C) 2000-2001, 2007-2014, 2019 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -619,8 +619,12 @@ dasd_write (const PedDisk* disk)
 	PDEBUG;
 
 	/* If not formated in CDL, don't write anything. */
-	if (disk_specific->format_type == 1)
+	if (disk_specific->format_type == 1) {
+		ped_exception_throw (PED_EXCEPTION_ERROR,
+				     PED_EXCEPTION_CANCEL,
+				     _("The partition table of DASD-LDL device cannot be changed.\n"));
 		return 1;
+	}
 
 	/* initialize the anchor */
 	fdasd_initialize_anchor(&anchor);
@@ -773,10 +777,24 @@ dasd_partition_get_flag (const PedPartition* part, PedPartitionFlag flag)
 	}
 }
 
+/*
+ * The DASD-LDL does not support flags now.
+ * So just return 0.
+*/
 static int
 dasd_partition_is_flag_available (const PedPartition* part,
                                   PedPartitionFlag flag)
 {
+	DasdDiskSpecific* disk_specific;
+	PED_ASSERT (part != NULL);
+	PED_ASSERT (part->disk != NULL);
+	PED_ASSERT (part->disk->disk_specific != NULL);
+
+	disk_specific = part->disk->disk_specific;
+
+	if (disk_specific->format_type == 1)
+		return 0;
+
 	switch (flag) {
 		case PED_PARTITION_RAID:
 			return 1;
@@ -827,6 +845,7 @@ _primary_constraint (PedDisk* disk)
 	PedSector sector_size;
 	LinuxSpecific* arch_specific;
 	DasdDiskSpecific* disk_specific;
+	PedSector start;
 
 	PDEBUG;
 
@@ -840,7 +859,12 @@ _primary_constraint (PedDisk* disk)
 	if (!ped_alignment_init (&end_align, -1,
 						     disk->dev->hw_geom.sectors * sector_size))
 		return NULL;
-	if (!ped_geometry_init (&max_geom, disk->dev, 0, disk->dev->length))
+
+	start = (FIRST_USABLE_TRK * (long long) disk->dev->hw_geom.sectors
+			    * (long long) arch_specific->real_sector_size
+			    / (long long) disk->dev->sector_size);
+
+	if (!ped_geometry_init (&max_geom, disk->dev, start, disk->dev->length))
 		return NULL;
 
 	return ped_constraint_new(&start_align, &end_align, &max_geom,
@@ -946,7 +970,6 @@ dasd_alloc_metadata (PedDisk* disk)
 	PedPartition* part = NULL; /* initialize solely to placate gcc */
 	PedPartition* new_part2;
 	PedSector trailing_meta_start, trailing_meta_end;
-	struct fdasd_anchor anchor;
 
 	PED_ASSERT (disk != NULL);
 	PED_ASSERT (disk->dev != NULL);
@@ -996,10 +1019,7 @@ dasd_alloc_metadata (PedDisk* disk)
 	      backed up, then restored to a larger size disk, etc.
 	   */
 	   trailing_meta_start = part->geom.end + 1;
-	   fdasd_initialize_anchor(&anchor);
-	   fdasd_get_geometry(disk->dev, &anchor, arch_specific->fd);
 	   trailing_meta_end = (long long) disk->dev->length - 1;
-	   fdasd_cleanup(&anchor);
 	   if (trailing_meta_end >= trailing_meta_start) {
 		new_part2 = ped_partition_new (disk,PED_PARTITION_METADATA,
 		   NULL, trailing_meta_start, trailing_meta_end);

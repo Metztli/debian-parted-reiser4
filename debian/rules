@@ -12,9 +12,6 @@ DEB_HOST_ARCH_OS ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
 
 export DEB_BUILD_MAINT_OPTIONS := hardening=+all
 
-# Tell automake to produce verbose build logs.
-export V := 1
-
 CONFFLAGS := --sbindir=/sbin --enable-mtrace --enable-shared
 CONFFLAGS += --disable-gcc-warnings
 

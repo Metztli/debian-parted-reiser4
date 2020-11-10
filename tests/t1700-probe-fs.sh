@@ -1,7 +1,7 @@
 #!/bin/sh
 # Probe Ext2, Ext3 and Ext4 file systems
 
-# Copyright (C) 2008-2014 Free Software Foundation, Inc.
+# Copyright (C) 2008-2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@ require_512_byte_sector_size_
 
 dev=loop-file
 ss=$sector_size_
-n_sectors=$((257*1024))
+n_sectors=$((512*1024))
 
-for type in ext2 ext3 ext4 btrfs xfs nilfs2 ntfs vfat hfsplus; do
+for type in ext2 ext3 ext4 btrfs xfs nilfs2 ntfs vfat hfsplus udf; do
 
   ( mkfs.$type 2>&1 | grep -i '^usage' ) > /dev/null \
       || { warn_ "$ME: no $type support"; continue; }
@@ -39,13 +39,13 @@ for type in ext2 ext3 ext4 btrfs xfs nilfs2 ntfs vfat hfsplus; do
       hfsplus) fsname=hfs+;;
   esac
 
-  # create an $type file system
+  # create an $type file system, creation failures are not parted bugs,
+  # skip the filesystem instead of failing the test.
   if [ "$type" = "xfs" ]; then
-      # Work around a problem with s390
-      mkfs.xfs -ssize=$ss -dfile,name=$dev,size=${n_sectors}s || fail=1
+      mkfs.xfs -ssize=$ss -dfile,name=$dev,size=${n_sectors}s || { warn_ "$ME: mkfs.$type failed, skipping"; continue; }
   else
-      dd if=/dev/null of=$dev bs=$ss seek=$n_sectors >/dev/null || fail=1
-      mkfs.$type $force $dev || { warn_ $ME: mkfs.$type failed; fail=1; continue; }
+      dd if=/dev/null of=$dev bs=$ss seek=$n_sectors >/dev/null || { warn_ "$ME: dd failed, skipping $type"; continue; }
+      mkfs.$type $force $dev || { warn_ "$ME: mkfs.$type failed skipping"; continue; }
   fi
 
   # probe the $type file system
@@ -57,7 +57,7 @@ done
 # Some features should indicate ext4 by themselves.
 for feature in uninit_bg flex_bg; do
   # create an ext3 file system
-  dd if=/dev/null of=$dev bs=1024 seek=4096 >/dev/null || fail=1
+  dd if=/dev/null of=$dev bs=1024 seek=4096 >/dev/null || skip_ "dd failed"
   mkfs.ext3 -F $dev >/dev/null || skip_ "mkfs.ext3 failed"
 
   # set the feature

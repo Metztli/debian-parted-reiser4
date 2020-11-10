@@ -1,4 +1,4 @@
-From 38ae72f19e9b209f7906db665226414d9d1542c0 Mon Sep 17 00:00:00 2001
+From 11208a176278986082ebacfeeb8f93ae8c24e4a9 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:09:53 +0000
 Subject: Fix partition paths on GNU/Hurd
@@ -9,7 +9,7 @@ Patch-Name: hurd-partition-path.patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/libparted/arch/gnu.c b/libparted/arch/gnu.c
-index a17a7388..5a1c73e9 100644
+index 321b70a2..f475c4ce 100644
 --- a/libparted/arch/gnu.c
 +++ b/libparted/arch/gnu.c
 @@ -845,7 +845,7 @@ gnu_partition_get_path (const PedPartition* part)

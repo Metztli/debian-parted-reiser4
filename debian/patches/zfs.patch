@@ -1,9 +1,9 @@
-From 8d5016bf8866a94438f4822d67e32a78422b4287 Mon Sep 17 00:00:00 2001
+From 2a53e8fc13e090ad506ad46a4912cb57bffabd23 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:09:48 +0000
 Subject: Add ZFS support
 
-Last-Update: 2014-07-30
+Last-Update: 2019-10-11
 
 Patch-Name: zfs.patch
 ---
@@ -14,10 +14,10 @@ Patch-Name: zfs.patch
  create mode 100644 libparted/fs/zfs/zfs.c
 
 diff --git a/libparted/fs/Makefile.am b/libparted/fs/Makefile.am
-index d3cc8bcc..de607a29 100644
+index 74f275a3..7f27f664 100644
 --- a/libparted/fs/Makefile.am
 +++ b/libparted/fs/Makefile.am
-@@ -48,7 +48,8 @@ libfs_la_SOURCES =		\
+@@ -49,7 +49,8 @@ libfs_la_SOURCES =		\
    xfs/platform_defs.h		\
    xfs/xfs.c			\
    xfs/xfs_sb.h			\
@@ -111,29 +111,29 @@ index 00000000..47cd6773
 +	ped_file_system_type_unregister (&zfs_type);
 +}
 diff --git a/libparted/libparted.c b/libparted/libparted.c
-index d5cbb3a4..fe0c7feb 100644
+index 00f5ff8f..c3f00b40 100644
 --- a/libparted/libparted.c
 +++ b/libparted/libparted.c
-@@ -110,6 +110,7 @@ extern void ped_file_system_fat_init (void);
- extern void ped_file_system_ext2_init (void);
+@@ -113,6 +113,7 @@ extern void ped_file_system_ext2_init (void);
  extern void ped_file_system_nilfs2_init (void);
  extern void ped_file_system_btrfs_init (void);
+ extern void ped_file_system_udf_init (void);
 +extern void ped_file_system_zfs_init (void);
  
  static void
  init_file_system_types ()
-@@ -126,6 +127,7 @@ init_file_system_types ()
- 	ped_file_system_ext2_init ();
+@@ -130,6 +131,7 @@ init_file_system_types ()
  	ped_file_system_nilfs2_init ();
  	ped_file_system_btrfs_init ();
+ 	ped_file_system_udf_init ();
 +	ped_file_system_zfs_init ();
  }
  
  extern void ped_disk_aix_done ();
-@@ -189,10 +191,12 @@ extern void ped_file_system_ufs_done (void);
- extern void ped_file_system_xfs_done (void);
+@@ -196,10 +198,12 @@ extern void ped_file_system_xfs_done (void);
  extern void ped_file_system_amiga_done (void);
  extern void ped_file_system_btrfs_done (void);
+ extern void ped_file_system_udf_done (void);
 +extern void ped_file_system_zfs_done (void);
  
  static void

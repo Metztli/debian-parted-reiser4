@@ -1,6 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 2001, 2007, 2009-2014 Free Software Foundation, Inc.
+    Copyright (C) 2001, 2007, 2009-2014, 2019 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,7 +44,6 @@
 #define UFS_MAGIC_LFN	0x00095014
 #define UFS_MAGIC_FEA	0x00195612
 #define UFS_MAGIC_4GB	0x05231994
-#define UFS2_MAGIC	0x19540119
 
 struct ufs_csum {
 	uint32_t	cs_ndir;	/* number of directories */
@@ -98,7 +97,7 @@ struct ufs_super_block {
 			uint32_t	fs_npsect;	/* # sectors/track including spares */
 		} fs_sun;
 		struct {
-			int32_t		fs_state;	/* file system state time stamp */
+			int32_t		fs_state;	/* file system state timestamp */
 		} fs_sunx86;
 	} fs_u1;
 	uint32_t	fs_interleave;	/* hardware sector interleave */
@@ -129,56 +128,19 @@ struct ufs_super_block {
 	int8_t		fs_clean;	/* file system is clean flag */
 	int8_t		fs_ronly;	/* mounted read-only flag */
 	int8_t		fs_flags;	/* currently unused flag */
-	union {
-		struct {
-			int8_t		fs_fsmnt[UFS_MAXMNTLEN];	/* name mounted on */
-			/* these fields retain the current block allocation info */
-			uint32_t	fs_cgrotor;	/* last cg searched */
-			uint32_t	fs_csp[UFS_MAXCSBUFS];	/* list of fs_cs info buffers */
-			uint32_t	fs_maxcluster;
-			uint32_t	fs_cpc;		/* cyl per cycle in postbl */
-			uint16_t	fs_opostbl[16][8];	/* old rotation block list head */
-		} fs_u1;
-		struct {
-			int8_t		fs_fsmnt[468];
-			uint8_t		fs_volname[32];
-			uint64_t	fs_swuid;
-			int32_t		fs_pad;
-			uint32_t	fs_cgrotor;
-			uint32_t	fs_ocsp[28];
-			uint32_t	fs_contigdirs;
-			uint32_t	fs_csp;
-			uint32_t	fs_maxcluster;
-			uint32_t	fs_active;
-			int32_t		fs_old_cpc;
-			int32_t		fs_maxbsize;
-			int64_t		fs_sparecon64[17];
-			int64_t		fs_sblockloc;
-			struct ufs2_csum_total {
-				uint64_t	cs_ndir;
-				uint64_t	cs_nbfree;
-				uint64_t	cs_nifree;
-				uint64_t	cs_nffree;
-				uint64_t	cs_numclusters;
-				uint64_t	cs_spare[3];
-			} fs_cstotal;
-			struct ufs_timeval {
-				int32_t	 tv_sec;
-				int32_t	 tv_usec;
-			} fs_time;
-			int64_t		fs_size;
-			int64_t		fs_dsize;
-			uint64_t	fs_csaddr;
-			int64_t		fs_pendingblocks;
-			int32_t		fs_pendinginodes;
-		} __attribute__((packed)) fs_u2;
-	} fs_u11;
+	int8_t		fs_fsmnt[UFS_MAXMNTLEN];	/* name mounted on */
+/* these fields retain the current block allocation info */
+	uint32_t	fs_cgrotor;	/* last cg searched */
+	uint32_t	fs_csp[UFS_MAXCSBUFS];	/* list of fs_cs info buffers */
+	uint32_t	fs_maxcluster;
+	uint32_t	fs_cpc;		/* cyl per cycle in postbl */
+	uint16_t	fs_opostbl[16][8];	/* old rotation block list head */
 	union {
 		struct {
 			int32_t		fs_sparecon[53];/* reserved for future constants */
 			int32_t		fs_reclaim;
 			int32_t		fs_sparecon2[1];
-			int32_t		fs_state;	/* file system state time stamp */
+			int32_t		fs_state;	/* file system state timestamp */
 			uint32_t	fs_qbmask[2];	/* ~usb_bmask */
 			uint32_t	fs_qfmask[2];	/* ~usb_fmask */
 		} fs_sun;
@@ -198,7 +160,7 @@ struct ufs_super_block {
 			uint32_t	fs_maxfilesize[2];	/* max representable file size */
 			uint32_t	fs_qbmask[2];	/* ~usb_bmask */
 			uint32_t	fs_qfmask[2];	/* ~usb_fmask */
-			int32_t		fs_state;	/* file system state time stamp */
+			int32_t		fs_state;	/* file system state timestamp */
 		} fs_44;
 	} fs_u2;
 	int32_t	fs_postblformat;	/* format of positional layout tables */
@@ -281,55 +243,12 @@ ufs_probe_hp (PedGeometry* geom)
 	return NULL;
 }
 
-static PedGeometry*
-ufs_probe_freebsd (PedGeometry* geom)
-{
-	int offsets[] = { 0, 16, 128, 512 };
-	char *buf = alloca (3 * geom->dev->sector_size);
-	struct ufs_super_block *sb;
-	PedSector block_size;
-	PedSector block_count;
-	int i;
-
-	if (geom->length < 5)
-		return 0;
-
-	/* The UFS superblock could be on four different positions */
-	for (i = 0; i < 4; i++) {
-		if (!ped_geometry_read (geom, buf, offsets[i], 3))
-			return 0;
-
-		sb = (struct ufs_super_block *)buf;
-
-		/* Little endian is more likely on FreeBSD boxes */
-		if (PED_LE32_TO_CPU(sb->fs_magic) == UFS2_MAGIC) {
-			block_size = PED_LE32_TO_CPU(sb->fs_fsize) / geom->dev->sector_size;
-			block_count = PED_LE32_TO_CPU(sb->fs_u11.fs_u2.fs_size);
-			return ped_geometry_new (geom->dev, geom->start,
-						 block_size * block_count);
-		}
-
-		/* Then try big endian */
-		if (PED_BE32_TO_CPU(sb->fs_magic) == UFS2_MAGIC) {
-			block_size = PED_BE32_TO_CPU(sb->fs_fsize) / geom->dev->sector_size;
-			block_count = PED_BE32_TO_CPU(sb->fs_u11.fs_u2.fs_size);
-			return ped_geometry_new (geom->dev, geom->start,
-						 block_size * block_count);
-		}
-	}
-	return NULL;
-}
-
 static PedFileSystemOps ufs_ops_sun = {
 	probe:		ufs_probe_sun,
 };
 
 static PedFileSystemOps ufs_ops_hp = {
 	probe:		ufs_probe_hp,
-};
-
-static PedFileSystemOps ufs_ops_freebsd = {
-	probe:		ufs_probe_freebsd,
 };
 
 static PedFileSystemType ufs_type_sun = {
@@ -344,12 +263,6 @@ static PedFileSystemType ufs_type_hp = {
 	name:   "hp-ufs",
 };
 
-static PedFileSystemType ufs_type_freebsd_ufs = {
-	next:   NULL,
-	ops:    &ufs_ops_freebsd,
-	name:   "freebsd-ufs"
-};
-
 void
 ped_file_system_ufs_init ()
 {
@@ -357,13 +270,11 @@ ped_file_system_ufs_init ()
 
 	ped_file_system_type_register (&ufs_type_sun);
 	ped_file_system_type_register (&ufs_type_hp);
-	ped_file_system_type_register (&ufs_type_freebsd_ufs);
 }
 
 void
 ped_file_system_ufs_done ()
 {
-	ped_file_system_type_unregister (&ufs_type_freebsd_ufs);
 	ped_file_system_type_unregister (&ufs_type_hp);
 	ped_file_system_type_unregister (&ufs_type_sun);
 }

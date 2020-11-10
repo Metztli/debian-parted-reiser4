@@ -1,6 +1,7 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 2004-2005, 2007, 2009-2014 Free Software Foundation, Inc.
+    Copyright (C) 2004-2005, 2007, 2009-2014, 2019 Free Software Foundation,
+    Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -210,8 +211,8 @@ hfsc_cache_move_extent(HfsCPrivateCache* cache, uint32_t old_start,
 		ped_exception_throw (
 			PED_EXCEPTION_BUG,
 			PED_EXCEPTION_CANCEL,
-			_("Trying to move an extent from block Ox%X to block "
-			  "Ox%X, but another one already exists at this "
+			_("Trying to move an extent from block 0x%X to block "
+			  "0x%X, but another one already exists at this "
 			  "position.  This should not happen!"),
 			old_start, new_start);
 		return NULL;

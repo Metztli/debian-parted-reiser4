@@ -1,5 +1,5 @@
 # This file is part of GNU Parted
-# Copyright (C) 1999-2001, 2007-2014 Free Software Foundation, Inc.
+# Copyright (C) 1999-2001, 2007-2014, 2019 Free Software Foundation, Inc.
 #
 # This file may be modified and/or distributed without restriction.
 
@@ -35,5 +35,4 @@ $(TEST_LOGS): prereq
 TESTS_ENVIRONMENT = \
   top_srcdir='$(top_srcdir)' \
   abs_top_srcdir='$(abs_top_srcdir)' \
-  DYNAMIC_LOADING=$(DYNAMIC_LOADING) \
   ENABLE_DEVICE_MAPPER=$(ENABLE_DEVICE_MAPPER)

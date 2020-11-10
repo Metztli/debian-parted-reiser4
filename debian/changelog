@@ -1,9 +1,90 @@
-parted (3.2-21+reiser4.0.2) metztli; urgency=medium
+parted (3.3-5) metztli; urgency=medium
 
-  * Non-maintainer upload.
-  * Reiser4 probe only 
+  * Reiser4 -enabled GNU Parted v3.3 
 
- -- Metztli Information Technology <jose@metztli-it.com>  Wed, 08 Aug 2018 21:41:09 -0700
+ -- Metztli Information Technology <jose@metztli.it>  Mon, 09 Nov 2020 09:11:45 -0800
+
+parted (3.3-4) unstable; urgency=medium
+
+  * gptsync.patch: Silence stderr output from dmidecode, since only stdout
+    is considered anyway (fixes
+    https://github.com/martijnvanbrummelen/nwipe/issues/111; thanks, louib).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 08 Feb 2020 09:56:05 +0000
+
+parted (3.3-3) unstable; urgency=medium
+
+  * Fix chromeos-kernel-flag.patch to patch include/parted/disk.h too.
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 19 Jan 2020 22:35:35 +0000
+
+parted (3.3-2) unstable; urgency=medium
+
+  * Cherry-pick upstream patch to add a GPT-only chromeos_kernel partition
+    type flag (closes: #949316).
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 19 Jan 2020 21:37:10 +0000
+
+parted (3.3-1) unstable; urgency=medium
+
+  * New upstream release (closes: #942159):
+    - mkpart: Allow negative start value when FS-TYPE is not given (closes:
+      #880035).
+    - Fix atari label false positives (closes: #896171).
+    - libparted: Fix MacOS boot support (closes: #930742).
+  * Add Brian C. Lane's GPG key to debian/upstream/signing-key.asc.
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 11 Oct 2019 10:59:03 +0100
+
+parted (3.2-27) unstable; urgency=medium
+
+  * Cherry-pick upstream patch to remove output to stdout from affs that
+    confused d-i (closes: #941777).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 05 Oct 2019 11:19:43 +0100
+
+parted (3.2-26) unstable; urgency=medium
+
+  * libparted-dasd-add-test-cases-for-the-new-fdasd-func.patch: Add missing
+    files (the original upstream commit was incomplete).
+  * Use debhelper-compat instead of debian/compat.
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 27 Aug 2019 14:57:08 +0100
+
+parted (3.2-25) unstable; urgency=medium
+
+  * Cherry-pick from upstream:
+    - libparted: BLKPG_RESIZE_PARTITION uses bytes, not sectors (closes:
+      #926735, LP: #1641308).
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 15 Apr 2019 15:38:11 +0100
+
+parted (3.2-24) unstable; urgency=medium
+
+  * Set Rules-Requires-Root: no.
+  * Mark parted as Multi-Arch: foreign (closes: #918794).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 12 Jan 2019 16:45:45 +0000
+
+parted (3.2-23) unstable; urgency=medium
+
+  * Cherry-pick upstream patch to read NVMe model names from sysfs (closes:
+    #911273).
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 22 Oct 2018 11:28:00 +0100
+
+parted (3.2-22) unstable; urgency=medium
+
+  * Change Maintainer to parted-maintainers@alioth-lists.debian.net,
+    following Alioth lists migration.
+  * Stop building with V=1; debhelper configures with --disable-silent-rules
+    as of 9.20150501.
+  * Remove libparted0-dev transitional package, since nothing build-depends
+    on it any more (closes: #878660).
+  * Include sys/sysmacros.h to account for the user of major() and minor()
+    macros (thanks, Mathieu Trudel-Lapierre; closes: #910326).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 06 Oct 2018 00:01:48 +0100
 
 parted (3.2-21) unstable; urgency=medium
 

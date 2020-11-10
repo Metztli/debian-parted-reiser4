@@ -1,0 +1,305 @@
+From c100cf111f94637955cb803b25ec6bd2c1ebde38 Mon Sep 17 00:00:00 2001
+From: Alper Nebi Yasak <alpernebiyasak@gmail.com>
+Date: Thu, 10 Oct 2019 21:03:22 +0300
+Subject: libparted: Add ChromeOS Kernel partition flag
+
+This adds a GPT-only partition type flag, chromeos_kernel, for use on
+Chrome OS machines, with GUID FE3A2A5D-4F32-41A7-B725-ACCC3285A309.
+
+The firmware/bootloader in these machines relies on special images being
+written to partitions of this type. Among multiple such partitions, it
+decides which one it will boot from based on the GUID-specific partition
+attributes. This patch is not intended to and does not manipulate these
+bits.
+
+Google refers to these partitions as "ChromeOS kernel" partitions. They
+also define partitions for rootfs, firmware, and a reserved one; but
+these are not necessary for the boot flow and are not included here.
+
+Relevant ChromiumOS documentation:
+https://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format
+
+Signed-off-by: Alper Nebi Yasak <alpernebiyasak@gmail.com>
+
+Origin: upstream, https://git.savannah.gnu.org/cgit/parted.git/commit/?id=08256913c307e0313ee014e0f292fa335cc18f1d
+Bug-Debian: https://bugs.debian.org/949316
+Last-Update: 2020-01-19
+
+Patch-Name: chromeos-kernel-flag.patch
+---
+ doc/C/parted.8           |  2 +-
+ doc/parted.texi          |  4 ++++
+ include/parted/disk.h    |  5 +++--
+ include/parted/disk.in.h |  5 +++--
+ libparted/disk.c         |  2 ++
+ libparted/labels/gpt.c   | 45 ++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 58 insertions(+), 5 deletions(-)
+
+diff --git a/doc/C/parted.8 b/doc/C/parted.8
+index 5ed1362e..adde35c2 100644
+--- a/doc/C/parted.8
++++ b/doc/C/parted.8
+@@ -112,7 +112,7 @@ or an LVM logical volume if necessary.
+ .B set \fIpartition\fP \fIflag\fP \fIstate\fP
+ Change the state of the \fIflag\fP on \fIpartition\fP to \fIstate\fP.
+ Supported flags are: "boot", "root", "swap", "hidden", "raid", "lvm", "lba",
+-"legacy_boot", "irst", "msftres", "esp" and "palo".
++"legacy_boot", "irst", "msftres", "esp", "chromeos_kernel" and "palo".
+ \fIstate\fP should be either "on" or "off".
+ .TP
+ .B unit \fIunit\fP
+diff --git a/doc/parted.texi b/doc/parted.texi
+index 77c9628c..f983d2c1 100644
+--- a/doc/parted.texi
++++ b/doc/parted.texi
+@@ -874,6 +874,10 @@ partition.
+ (MS-DOS, GPT) - this flag identifies a UEFI System Partition. On GPT
+ it is an alias for boot.
+ 
++@item chromeos_kernel
++(GPT) - this flag indicates a partition that can be used with the Chrome OS
++bootloader and verified boot implementation.
++
+ @item lba
+ (MS-DOS) - this flag can be enabled to tell MS DOS, MS Windows 9x and
+ MS Windows ME based operating systems to use Linear (LBA) mode.
+diff --git a/include/parted/disk.h b/include/parted/disk.h
+index d666985a..f501e0a2 100644
+--- a/include/parted/disk.h
++++ b/include/parted/disk.h
+@@ -75,10 +75,11 @@ enum _PedPartitionFlag {
+         PED_PARTITION_LEGACY_BOOT=15,
+         PED_PARTITION_MSFT_DATA=16,
+         PED_PARTITION_IRST=17,
+-        PED_PARTITION_ESP=18
++        PED_PARTITION_ESP=18,
++        PED_PARTITION_CHROMEOS_KERNEL=19
+ };
+ #define PED_PARTITION_FIRST_FLAG        PED_PARTITION_BOOT
+-#define PED_PARTITION_LAST_FLAG         PED_PARTITION_ESP
++#define PED_PARTITION_LAST_FLAG         PED_PARTITION_CHROMEOS_KERNEL
+ 
+ enum _PedDiskTypeFeature {
+         PED_DISK_TYPE_EXTENDED=1,       /**< supports extended partitions */
+diff --git a/include/parted/disk.in.h b/include/parted/disk.in.h
+index a3b380d9..b257c278 100644
+--- a/include/parted/disk.in.h
++++ b/include/parted/disk.in.h
+@@ -75,10 +75,11 @@ enum _PedPartitionFlag {
+         PED_PARTITION_LEGACY_BOOT=15,
+         PED_PARTITION_MSFT_DATA=16,
+         PED_PARTITION_IRST=17,
+-        PED_PARTITION_ESP=18
++        PED_PARTITION_ESP=18,
++        PED_PARTITION_CHROMEOS_KERNEL=19
+ };
+ #define PED_PARTITION_FIRST_FLAG        PED_PARTITION_BOOT
+-#define PED_PARTITION_LAST_FLAG         PED_PARTITION_ESP
++#define PED_PARTITION_LAST_FLAG         PED_PARTITION_CHROMEOS_KERNEL
+ 
+ enum _PedDiskTypeFeature {
+         PED_DISK_TYPE_EXTENDED=1,       /**< supports extended partitions */
+diff --git a/libparted/disk.c b/libparted/disk.c
+index 2b35648e..7db9e714 100644
+--- a/libparted/disk.c
++++ b/libparted/disk.c
+@@ -2408,6 +2408,8 @@ ped_partition_flag_get_name (PedPartitionFlag flag)
+                 return N_("irst");
+         case PED_PARTITION_ESP:
+                 return N_("esp");
++        case PED_PARTITION_CHROMEOS_KERNEL:
++                return N_("chromeos_kernel");
+ 
+ 	default:
+ 		ped_exception_throw (
+diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
+index dc9fa967..435ceb7a 100644
+--- a/libparted/labels/gpt.c
++++ b/libparted/labels/gpt.c
+@@ -156,6 +156,10 @@ typedef struct
+     ((efi_guid_t) { PED_CPU_TO_LE32 (0xD3BFE2DE), PED_CPU_TO_LE16 (0x3DAF), \
+                     PED_CPU_TO_LE16 (0x11DF), 0xba, 0x40, \
+                     { 0xE3, 0xA5, 0x56, 0xD8, 0x95, 0x93 }})
++#define PARTITION_CHROMEOS_KERNEL_GUID \
++    ((efi_guid_t) { PED_CPU_TO_LE32 (0xfe3a2a5d), PED_CPU_TO_LE16 (0x4f32), \
++                    PED_CPU_TO_LE16 (0x41a7), 0xb7, 0x25, \
++                    { 0xac, 0xcc, 0x32, 0x85, 0xa3, 0x09 }})
+ #define PARTITION_FREEBSD_UFS_GUID \
+     ((efi_guid_t) { PED_CPU_TO_LE32 (0x516e7cb6), PED_CPU_TO_LE16 (0x6ecf), \
+                     PED_CPU_TO_LE16 (0x11d6), 0x8f, 0xf8, \
+@@ -307,6 +311,7 @@ typedef struct _GPTPartitionData
+   int legacy_boot;
+   int prep;
+   int irst;
++  int chromeos_kernel;
+ } GPTPartitionData;
+ 
+ static PedDiskType gpt_disk_type;
+@@ -867,6 +872,7 @@ _parse_part_entry (PedDisk *disk, GuidPartitionEntry_t *pte)
+     = gpt_part_data->legacy_boot
+     = gpt_part_data->prep
+     = gpt_part_data->irst
++    = gpt_part_data->chromeos_kernel
+     = gpt_part_data->bios_grub = gpt_part_data->atvrecv = 0;
+ 
+   if (pte->Attributes.RequiredToFunction & 0x1)
+@@ -898,6 +904,8 @@ _parse_part_entry (PedDisk *disk, GuidPartitionEntry_t *pte)
+     gpt_part_data->prep = 1;
+   else if (!guid_cmp (gpt_part_data->type, PARTITION_IRST_GUID))
+     gpt_part_data->irst = 1;
++  else if (!guid_cmp (gpt_part_data->type, PARTITION_CHROMEOS_KERNEL_GUID))
++    gpt_part_data->chromeos_kernel = 1;
+ 
+   return part;
+ }
+@@ -1551,6 +1559,7 @@ gpt_partition_new (const PedDisk *disk,
+   gpt_part_data->prep = 0;
+   gpt_part_data->translated_name = 0;
+   gpt_part_data->irst = 0;
++  gpt_part_data->chromeos_kernel = 0;
+   uuid_generate ((unsigned char *) &gpt_part_data->uuid);
+   swap_uuid_and_efi_guid (&gpt_part_data->uuid);
+   memset (gpt_part_data->name, 0, sizeof gpt_part_data->name);
+@@ -1681,6 +1690,11 @@ gpt_partition_set_system (PedPartition *part,
+       gpt_part_data->type = PARTITION_IRST_GUID;
+       return 1;
+     }
++  if (gpt_part_data->chromeos_kernel)
++    {
++      gpt_part_data->type = PARTITION_CHROMEOS_KERNEL_GUID;
++      return 1;
++    }
+ 
+   if (fs_type)
+     {
+@@ -1832,6 +1846,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftrecv
+           = gpt_part_data->prep
+           = gpt_part_data->irst
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->atvrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_BIOS_GRUB:
+@@ -1847,6 +1862,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftrecv
+           = gpt_part_data->prep
+           = gpt_part_data->irst
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->atvrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_RAID:
+@@ -1862,6 +1878,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftrecv
+           = gpt_part_data->prep
+           = gpt_part_data->irst
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->atvrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_LVM:
+@@ -1877,6 +1894,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftrecv
+           = gpt_part_data->prep
+           = gpt_part_data->irst
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->atvrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_SWAP:
+@@ -1892,6 +1910,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftrecv
+           = gpt_part_data->prep
+           = gpt_part_data->irst
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->atvrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_HPSERVICE:
+@@ -1907,6 +1926,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftrecv
+           = gpt_part_data->prep
+           = gpt_part_data->irst
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->atvrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_MSFT_RESERVED:
+@@ -1922,6 +1942,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftrecv
+           = gpt_part_data->prep
+           = gpt_part_data->irst
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->atvrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_MSFT_DATA:
+@@ -1937,6 +1958,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftrecv
+           = gpt_part_data->prep
+           = gpt_part_data->irst
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->atvrecv = 0;
+         gpt_part_data->msftdata = 1;
+       } else {
+@@ -1956,6 +1978,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftres
+           = gpt_part_data->prep
+           = gpt_part_data->irst
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->atvrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_APPLE_TV_RECOVERY:
+@@ -1970,6 +1993,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftres
+           = gpt_part_data->msftdata
+           = gpt_part_data->prep
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->msftrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_PREP:
+@@ -1984,6 +2008,7 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftres
+           = gpt_part_data->irst
+           = gpt_part_data->atvrecv
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->msftrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_IRST:
+@@ -1999,8 +2024,25 @@ gpt_partition_set_flag (PedPartition *part, PedPartitionFlag flag, int state)
+           = gpt_part_data->msftdata
+           = gpt_part_data->msftrecv
+           = gpt_part_data->prep
++          = gpt_part_data->chromeos_kernel
+           = gpt_part_data->atvrecv = 0;
+       return gpt_partition_set_system (part, part->fs_type);
++    case PED_PARTITION_CHROMEOS_KERNEL:
++      gpt_part_data->chromeos_kernel = state;
++      if (state)
++        gpt_part_data->boot
++          = gpt_part_data->bios_grub
++          = gpt_part_data->raid
++          = gpt_part_data->lvm
++          = gpt_part_data->swap
++          = gpt_part_data->hp_service
++          = gpt_part_data->msftres
++          = gpt_part_data->msftdata
++          = gpt_part_data->msftrecv
++          = gpt_part_data->atvrecv
++          = gpt_part_data->prep
++          = gpt_part_data->irst = 0;
++      return gpt_partition_set_system (part, part->fs_type);
+     case PED_PARTITION_HIDDEN:
+       gpt_part_data->hidden = state;
+       return 1;
+@@ -2053,6 +2095,8 @@ gpt_partition_get_flag (const PedPartition *part, PedPartitionFlag flag)
+       return gpt_part_data->irst;
+     case PED_PARTITION_SWAP:
+ 	return gpt_part_data->swap;
++    case PED_PARTITION_CHROMEOS_KERNEL:
++      return gpt_part_data->chromeos_kernel;
+     case PED_PARTITION_LBA:
+     case PED_PARTITION_ROOT:
+     default:
+@@ -2082,6 +2126,7 @@ gpt_partition_is_flag_available (const PedPartition *part,
+     case PED_PARTITION_PREP:
+     case PED_PARTITION_IRST:
+     case PED_PARTITION_ESP:
++    case PED_PARTITION_CHROMEOS_KERNEL:
+       return 1;
+     case PED_PARTITION_ROOT:
+     case PED_PARTITION_LBA:

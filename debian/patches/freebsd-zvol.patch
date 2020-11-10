@@ -1,4 +1,4 @@
-From 617ebad58a53309ace504d972f26c96539ec9466 Mon Sep 17 00:00:00 2001
+From 1b898b94d280c4e79883598b2a6addaeaee674ee Mon Sep 17 00:00:00 2001
 From: Robert Millan <rmh@debian.org>
 Date: Fri, 28 Mar 2014 17:09:50 +0000
 Subject: Detection of ZFS volumes (ZVOL)

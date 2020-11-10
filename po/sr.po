@@ -1,21 +1,21 @@
-# Language parted-3 translations for GNU parted package.
-# Copyright (C) 2012 Free Software Foundation, Inc.
+# Serbian translations for GNU parted package.
+# Copyright (C) 2014 Free Software Foundation, Inc.
 # This file is distributed under the same license as the parted package.
-# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011, 2012.
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011—2014.
 msgid ""
 msgstr ""
-"Project-Id-Version: parted-3.1\n"
+"Project-Id-Version: parted-3.1.90\n"
 "Report-Msgid-Bugs-To: bug-parted@gnu.org\n"
-"POT-Creation-Date: 2014-07-28 23:04-0400\n"
-"PO-Revision-Date: 2012-05-02 12:36+0200\n"
+"POT-Creation-Date: 2014-06-21 14:00-0400\n"
+"PO-Revision-Date: 2014-09-14 07:58+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
-"Language-Team: Serbian <gnu@prevod.org>\n"
+"Language-Team: Serbian <(nothing)>\n"
 "Language: sr\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: lib/argmatch.c:133
 #, c-format
@@ -42,7 +42,7 @@ msgstr "Непозната грешка система"
 #: lib/getopt.c:547 lib/getopt.c:576
 #, c-format
 msgid "%s: option '%s' is ambiguous; possibilities:"
-msgstr "%s: опција „%s“ је двосмислена; могућности:"
+msgstr "%s: опција „%s“ је нејасна; могућности:"
 
 #: lib/getopt.c:624 lib/getopt.c:628
 #, c-format
@@ -62,27 +62,27 @@ msgstr "%s: опција „--%s“ захтева аргумент\n"
 #: lib/getopt.c:742 lib/getopt.c:745
 #, c-format
 msgid "%s: unrecognized option '--%s'\n"
-msgstr "%s: непрепознатљива опција „--%s“\n"
+msgstr "%s: непозната опција „--%s“\n"
 
 #: lib/getopt.c:753 lib/getopt.c:756
 #, c-format
 msgid "%s: unrecognized option '%c%s'\n"
-msgstr "%s: непрепознатљива опција „%c%s“\n"
+msgstr "%s: непозната опција „%c%s“\n"
 
 #: lib/getopt.c:805 lib/getopt.c:808
 #, c-format
 msgid "%s: invalid option -- '%c'\n"
-msgstr "%s: неисправна опција —— „%c“\n"
+msgstr "%s: неисправна опција -- „%c“\n"
 
 #: lib/getopt.c:861 lib/getopt.c:878 lib/getopt.c:1088 lib/getopt.c:1106
 #, c-format
 msgid "%s: option requires an argument -- '%c'\n"
-msgstr "%s: опција захтева аргумент —— „%c“\n"
+msgstr "%s: опција захтева аргумент -- „%c“\n"
 
 #: lib/getopt.c:934 lib/getopt.c:950
 #, c-format
 msgid "%s: option '-W %s' is ambiguous\n"
-msgstr "%s: опција „-W %s“ је двосмислена\n"
+msgstr "%s: опција „-W %s“ је нејасна\n"
 
 #: lib/getopt.c:974 lib/getopt.c:992
 #, c-format
@@ -149,7 +149,7 @@ msgstr "Водећа контра коса црта"
 
 #: lib/regcomp.c:149
 msgid "Invalid back reference"
-msgstr "Неисправна повратна референца"
+msgstr "Неисправна повратна упута"
 
 #: lib/regcomp.c:152
 msgid "Unmatched [ or [^"
@@ -235,15 +235,13 @@ msgstr "(C)"
 #: lib/version-etc.c:86
 msgid ""
 "\n"
-"License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl."
-"html>.\n"
+"License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n"
 "This is free software: you are free to change and redistribute it.\n"
 "There is NO WARRANTY, to the extent permitted by law.\n"
 "\n"
 msgstr ""
 "\n"
-"Лиценца ОЈЛв3+: ГНУ ОЈЛ издање 3 или касније <http://gnu.org/licenses/gpl."
-"html>.\n"
+"Лиценца ОЈЛв3+: ГНУ ОЈЛ издање 3 или новије <http://gnu.org/licenses/gpl.html>.\n"
 "Ово је слободан софтвер: слободни сте да га мењате и расподељујете.\n"
 "Не постоји НИКАКВА ГАРАНЦИЈА, у оквирима дозвољеним законом.\n"
 "\n"
@@ -421,8 +419,7 @@ msgstr "Грешка у отварању %s: %s"
 #: libparted/arch/linux.c:1650
 #, c-format
 msgid "Unable to open %s read-write (%s).  %s has been opened read-only."
-msgstr ""
-"Не могу да отворим %s само за читање (%s).  %s је отворен само за читање."
+msgstr "Не могу да отворим %s само за читање (%s).  %s је отворен само за читање."
 
 #: libparted/arch/beos.c:419 libparted/arch/linux.c:1806
 #, c-format
@@ -495,7 +492,7 @@ msgid ""
 "Report bugs to <%s>.\n"
 msgstr ""
 "\n"
-"Грешке пријавите на <%s>\n"
+"Грешке пријавите на <%s>.\n"
 
 #: libparted/arch/gnu.c:110
 #, c-format
@@ -507,41 +504,17 @@ msgid "Unable to probe store."
 msgstr "Не могу да испитам складиште."
 
 #: libparted/arch/gnu.c:368
-msgid ""
-"The partition table cannot be re-read.  This means you need to reboot before "
-"mounting any modified partitions.  You also need to reinstall your boot "
-"loader before you reboot (which may require mounting modified partitions).  "
-"It is impossible do both things!  So you'll need to boot off a rescue disk, "
-"and reinstall your boot loader from the rescue disk.  Read section 4 of the "
-"Parted User documentation for more information."
-msgstr ""
-"Табела партиција не може бити прочитана. Ово значи да морате поново да "
-"учитате пре него што монтирате било коју измењену партицију. Морате такође "
-"поново да инсталирате покретачки програм пре него што поново покренете (који "
-"може затражити монтирање измењених партиција). Није могуће урадити обе "
-"ствари! Тако да морате да избаците диск за спашавање, и да поново "
-"инсталирате покретачки програм са диска за спашавање. Прочитајте одељак 4 из "
-"корисничке документације Партеда за више података."
+msgid "The partition table cannot be re-read.  This means you need to reboot before mounting any modified partitions.  You also need to reinstall your boot loader before you reboot (which may require mounting modified partitions).  It is impossible do both things!  So you'll need to boot off a rescue disk, and reinstall your boot loader from the rescue disk.  Read section 4 of the Parted User documentation for more information."
+msgstr "Табела партиција не може бити прочитана. Ово значи да морате поново да учитате пре него што монтирате било коју измењену партицију. Морате такође поново да инсталирате покретачки програм пре него што поново покренете (који може затражити монтирање измењених партиција). Није могуће урадити обе ствари! Тако да морате да избаците диск за спашавање, и да поново инсталирате покретачки програм са диска за спашавање. Прочитајте одељак 4 из корисничке документације Партеда за више података."
 
 #: libparted/arch/gnu.c:385
 #, c-format
-msgid ""
-"The partition table on %s cannot be re-read (%s).  This means the Hurd knows "
-"nothing about any modifications you made.  You should reboot your computer "
-"before doing anything with %s."
-msgstr ""
-"Табела партиција на %s не може бити прочитана (%s). Ово значи да Хурд не зна "
-"ништа о изменама које сте начинили. Треба да поново покренете ваш рачунар "
-"пре него што урадите било шта са %s."
+msgid "The partition table on %s cannot be re-read (%s).  This means the Hurd knows nothing about any modifications you made.  You should reboot your computer before doing anything with %s."
+msgstr "Табела партиција на %s не може бити прочитана (%s).  Ово значи да Хурд не зна ништа о изменама које сте начинили. Треба да поново покренете ваш рачунар пре него што урадите било шта са %s."
 
 #: libparted/arch/gnu.c:396 parted/parted.c:2262
-msgid ""
-"You should reinstall your boot loader before rebooting.  Read section 4 of "
-"the Parted User documentation for more information."
-msgstr ""
-"Треба да поново инсталирате покретачки програм пре него што поново "
-"покренете. Прочитајте одељак 4 корисничке документације Партеда за више "
-"података."
+msgid "You should reinstall your boot loader before rebooting.  Read section 4 of the Parted User documentation for more information."
+msgstr "Треба да поново инсталирате покретачки програм пре него што поново покренете. Прочитајте одељак 4 корисничке документације Партеда за више података."
 
 #: libparted/arch/gnu.c:788
 #, c-format
@@ -594,13 +567,11 @@ msgstr "Општи ИДЕ"
 #, c-format
 msgid ""
 "Device %s has multiple (%d) logical sectors per physical sector.\n"
-"GNU Parted supports this EXPERIMENTALLY for some special disk label/file "
-"system combinations, e.g. GPT and ext2/3.\n"
+"GNU Parted supports this EXPERIMENTALLY for some special disk label/file system combinations, e.g. GPT and ext2/3.\n"
 "Please consult the web site for up-to-date information."
 msgstr ""
 "Уређај %s има више (%d) логичких сектора по физичком сектору.\n"
-"ГНУ Партед подржава ово ЕКСПЕРИМЕНТАЛНО за неке посебне комбинације натписа "
-"диска/система датотека, нпр. ГПТ и екст2/3.\n"
+"ГНУ Партед подржава ово ЕКСПЕРИМЕНТАЛНО за неке посебне комбинације натписа диска/система датотека, нпр. ГПТ и екст2/3.\n"
 "Молим потражите на веб сајту најсвежије податке."
 
 #: libparted/arch/linux.c:1127
@@ -610,21 +581,13 @@ msgstr "Грешка при покретању СЦСИ уређаја %s — %s
 
 #: libparted/arch/linux.c:1191
 #, c-format
-msgid ""
-"The device %s is so small that it cannot possibly store a file system or "
-"partition table.  Perhaps you selected the wrong device?"
-msgstr ""
-"Уређај %s је премали тако да не може да садржи систем датотека или табелу "
-"партиција. Можда сте изабрали погрешан уређај?"
+msgid "The device %s is so small that it cannot possibly store a file system or partition table.  Perhaps you selected the wrong device?"
+msgstr "Уређај %s је премали тако да не може да садржи систем датотека или табелу партиција.  Можда сте изабрали погрешан уређај?"
 
 #: libparted/arch/linux.c:1304
 #, c-format
-msgid ""
-"Unable to determine geometry of file/device %s.  You should not use Parted "
-"unless you REALLY know what you're doing!"
-msgstr ""
-"Не могу да одредим геометрију датотеке/уређаја %s. Не бисте требали да "
-"користите Партед осим ако СТВАРНО знате шта радите."
+msgid "Unable to determine geometry of file/device %s.  You should not use Parted unless you REALLY know what you're doing!"
+msgstr "Не могу да одредим геометрију датотеке/уређаја %s.  Не бисте требали да користите Партед осим ако СТВАРНО знате шта радите!"
 
 #: libparted/arch/linux.c:1364
 msgid "Generic SD/MMC Storage Card"
@@ -707,15 +670,8 @@ msgstr "%0.0sкрај датотеке за време читања %s"
 
 #: libparted/arch/linux.c:2564
 #, c-format
-msgid ""
-"Error informing the kernel about modifications to partition %s -- %s.  This "
-"means Linux won't know about any changes you made to %s until you reboot -- "
-"so you shouldn't mount it or use it in any way before rebooting."
-msgstr ""
-"Грешка приликом обавештавања језгра о изменама на партицији %s —— %s. Ово "
-"значи да Линукс неће знати о изменама које сте направили на %s све док "
-"поново не учитате —— зато не бисте требали да је монтирате или да је "
-"користите на било који начин пре него што поново учитате систем."
+msgid "Error informing the kernel about modifications to partition %s -- %s.  This means Linux won't know about any changes you made to %s until you reboot -- so you shouldn't mount it or use it in any way before rebooting."
+msgstr "Грешка приликом обавештавања језгра о изменама на партицији %s —— %s. Ово значи да Линукс неће знати о изменама које сте направили на %s све док поново не учитате —— зато не бисте требали да је монтирате или да је користите на било који начин пре него што поново учитате систем."
 
 #: libparted/arch/linux.c:2683
 #, c-format
@@ -724,16 +680,8 @@ msgstr "Не могу да одредим почетак и дужину %s."
 
 #: libparted/arch/linux.c:3080
 #, c-format
-msgid ""
-"Partition(s) %s on %s have been written, but we have been unable to inform "
-"the kernel of the change, probably because it/they are in use.  As a result, "
-"the old partition(s) will remain in use.  You should reboot now before "
-"making further changes."
-msgstr ""
-"Партиција %s на %s је записана, али нисмо били у могућности да обавестимо "
-"језгро о измени, вероватно зато што је у употреби. Као резултат, стара "
-"партиција ће остати у употреби. Требате поново да учитате пре него што "
-"начините додатне измене."
+msgid "Partition(s) %s on %s have been written, but we have been unable to inform the kernel of the change, probably because it/they are in use.  As a result, the old partition(s) will remain in use.  You should reboot now before making further changes."
+msgstr "Партиција „%s“ на „%s“ је записана, али нисмо били у могућности да обавестимо језгро о измени, вероватно зато што је у употреби. Као резултат, стара партиција ће остати у употреби. Требате поново да учитате пре него што начините додатне измене."
 
 #: libparted/cs/geom.c:162
 #, c-format
@@ -766,12 +714,8 @@ msgstr "%s: непрепознатљив натпис диска"
 
 #: libparted/disk.c:486
 #, c-format
-msgid ""
-"This libparted doesn't have write support for %s.  Perhaps it was compiled "
-"read-only."
-msgstr ""
-"Овај либпартед нема подршку писања за %s. Вероватно је преведен само за "
-"читање."
+msgid "This libparted doesn't have write support for %s.  Perhaps it was compiled read-only."
+msgstr "Овај либпартед нема подршку писања за %s. Вероватно је преведен само за читање."
 
 #: libparted/disk.c:631
 #, c-format
@@ -807,11 +751,8 @@ msgstr "Превише примарних партиција."
 
 #: libparted/disk.c:1842
 #, c-format
-msgid ""
-"Can't add a logical partition to %s, because there is no extended partition."
-msgstr ""
-"Не могу да додам логичку партицију на %s, зато што не постоји проширена "
-"партиција."
+msgid "Can't add a logical partition to %s, because there is no extended partition."
+msgstr "Не могу да додам логичку партицију на %s, зато што не постоји проширена партиција."
 
 #: libparted/disk.c:1866
 #, c-format
@@ -908,9 +849,8 @@ msgid "msftres"
 msgstr "мсфтрес"
 
 #: libparted/disk.c:2398
-#, fuzzy
 msgid "msftdata"
-msgstr "метаподаци"
+msgstr "мсфтподаци"
 
 #: libparted/disk.c:2400
 msgid "atvrecv"
@@ -926,12 +866,11 @@ msgstr "легаси_подизна"
 
 #: libparted/disk.c:2406
 msgid "irst"
-msgstr ""
+msgstr "ирст"
 
 #: libparted/disk.c:2408
-#, fuzzy
 msgid "esp"
-msgstr "Yes"
+msgstr "есп"
 
 #: libparted/disk.c:2414
 #, c-format
@@ -992,48 +931,32 @@ msgstr "Откажи"
 
 #: libparted/exception.c:133
 #, c-format
-msgid ""
-"A bug has been detected in GNU Parted.  Refer to the web site of parted "
-"http://www.gnu.org/software/parted/parted.html for more information of what "
-"could be useful for bug submitting!  Please email a bug report to %s "
-"containing at least the version (%s) and the following message:  "
-msgstr ""
-"Грешка је откривена у ГНУ Партеду. Пријавите је на веб сајту партеда „http://"
-"www.gnu.org/software/parted/parted.html“за више података о томе шта би било "
-"корисно за пријављивање грешке! Молим пошаљите ел. поштом извештај о грешци "
-"%s који ће садржати барем издање (%s) и следећу поруку:"
+msgid "A bug has been detected in GNU Parted.  Refer to the web site of parted http://www.gnu.org/software/parted/parted.html for more information of what could be useful for bug submitting!  Please email a bug report to %s containing at least the version (%s) and the following message:  "
+msgstr "Откривена је грешка у ГНУ Партеду. Погледајте на веб сајту партеда „http://www.gnu.org/software/parted/parted.html“ шта би било корисно за пријављивање грешке! Извештај о грешци пошаљите ел. поштом на „%s“ који ће садржати барем издање (%s) и следећу поруку:  "
 
 #: libparted/labels/aix.c:103
 msgid "Support for reading AIX disk labels is is not implemented yet."
-msgstr "Подршка за читање натписа АИХ диска није још примењена."
+msgstr "Подршка за читање натписа АИКС диска није још примењена."
 
 #: libparted/labels/aix.c:114
 msgid "Support for writing AIX disk labels is is not implemented yet."
-msgstr "Подршка за писање натписа АИХ диска није још примењена."
+msgstr "Подршка за писање натписа АИКС диска није још примењена."
 
 #: libparted/labels/aix.c:127
-msgid ""
-"Support for adding partitions to AIX disk labels is not implemented yet."
-msgstr "Подршка за додавање партиција на натписе АИХ диска није још примењена."
+msgid "Support for adding partitions to AIX disk labels is not implemented yet."
+msgstr "Подршка за додавање партиција на натписе АИКС диска није још примењена."
 
 #: libparted/labels/aix.c:137
-msgid ""
-"Support for duplicating partitions in AIX disk labels is not implemented yet."
-msgstr ""
-"Подршка за дуплирање партиција у натписима АИХ диска није још примењена."
+msgid "Support for duplicating partitions in AIX disk labels is not implemented yet."
+msgstr "Подршка за дуплирање партиција у натписима АИКС диска није још примењена."
 
 #: libparted/labels/aix.c:155
-msgid ""
-"Support for setting system type of partitions in AIX disk labels is not "
-"implemented yet."
-msgstr ""
-"Подршка за подешавање врсте система партиција у натписима АИХ диска није још "
-"примењена."
+msgid "Support for setting system type of partitions in AIX disk labels is not implemented yet."
+msgstr "Подршка за подешавање врсте система партиција у натписима АИКС диска није још примењена."
 
 #: libparted/labels/aix.c:165
 msgid "Support for setting flags in AIX disk labels is not implemented yet."
-msgstr ""
-"Подршка за подешавање заставица у натписима АИХ диска није још примењена."
+msgstr "Подршка за подешавање заставица у натписима АИКС диска није још примењена."
 
 #: libparted/labels/bsd.c:571 libparted/labels/dasd.c:874
 #: libparted/labels/dos.c:2237 libparted/labels/dvh.c:769
@@ -1049,7 +972,7 @@ msgstr "Не могу да доделим бсд прикључак натпис
 
 #: libparted/labels/dasd.c:900
 msgid "Unable to allocate a dasd disklabel slot"
-msgstr "Не могу да доделим дасд прикључак натписа диска."
+msgstr "Не могу да доделим дасд прикључак натписа диска"
 
 #: libparted/labels/dos.c:1001
 #, c-format
@@ -1059,7 +982,7 @@ msgstr "Неисправна табела партиција на %s —— по
 #: libparted/labels/dos.c:1029
 #, c-format
 msgid "Invalid partition table - recursive partition on %s."
-msgstr "Неисправна табела партиција — рекурзивна партиција на %s."
+msgstr "Неисправна табела партиција — дубинска партиција на %s."
 
 #: libparted/labels/dos.c:1545
 msgid "Extended partitions cannot be hidden on msdos disk labels."
@@ -1067,9 +990,7 @@ msgstr "Проширене партиције не могу бити скрив�
 
 #: libparted/labels/dos.c:2219
 msgid "Parted can't resize partitions managed by Windows Dynamic Disk."
-msgstr ""
-"Партед не може да промени величину партиција којима управља Виндоузов "
-"динамички диск."
+msgstr "Партед не може да промени величину партиција којима управља Виндоузов динамички диск."
 
 #: libparted/labels/dos.c:2475
 msgid "cannot create any more partitions"
@@ -1123,7 +1044,7 @@ msgstr "грешка читања"
 
 #: libparted/labels/fdasd.c:154
 msgid "ioctl() error"
-msgstr "иоцтл() грешка"
+msgstr "„ioctl()“ грешка"
 
 #: libparted/labels/fdasd.c:158
 msgid "API version mismatch"
@@ -1187,11 +1108,8 @@ msgstr "Не могу да добавим издање АПИ-ја."
 
 #: libparted/labels/fdasd.c:941
 #, c-format
-msgid ""
-"The current API version '%d' doesn't match dasd driver API version '%d'!"
-msgstr ""
-"Тренутно издање АПИ-ја „%d“ се не подудара са издањем АПИ-ја „%d“ дасд "
-"управљачког програма!"
+msgid "The current API version '%d' doesn't match dasd driver API version '%d'!"
+msgstr "Тренутно издање АПИ-ја „%d“ се не подудара са издањем АПИ-ја „%d“ дасд управљачког програма!"
 
 #: libparted/labels/fdasd.c:984
 msgid "Could not retrieve disk geometry information."
@@ -1207,71 +1125,41 @@ msgstr "Не могу да добавим податке о диску."
 
 #: libparted/labels/gpt.c:532
 msgid "device is too small for GPT"
-msgstr ""
+msgstr "уређај је премали за ГПТ"
 
 #: libparted/labels/gpt.c:734
 #, c-format
-msgid ""
-"The format of the GPT partition table is version %x, which is newer than "
-"what Parted can recognise.  Please report this!"
-msgstr ""
-"Облик ГПТ табеле партиција је издања %x које је новије од оног које Партед "
-"може да препозна. Молим пријавите ово."
+msgid "The format of the GPT partition table is version %x, which is newer than what Parted can recognise.  Please report this!"
+msgstr "Облик ГПТ табеле партиција је издања %x које је новије од оног које Партед може да препозна. Молим пријавите ово!"
 
 #: libparted/labels/gpt.c:770
 #, c-format
-msgid ""
-"Not all of the space available to %s appears to be used, you can fix the GPT "
-"to use all of the space (an extra %llu blocks) or continue with the current "
-"setting? "
-msgstr ""
-"Сав простор који је доступан на %s није приказан као заузет, можете да "
-"исправите ГПТ да користи сав простор (додатних %llu блокова) или да "
-"наставите са тренутним подешавањем?"
+msgid "Not all of the space available to %s appears to be used, you can fix the GPT to use all of the space (an extra %llu blocks) or continue with the current setting? "
+msgstr "Сав простор који је доступан на %s није приказан као заузет, можете да исправите ГПТ да користи сав простор (додатних %llu блокова) или да наставите са тренутним подешавањем? "
 
 #: libparted/labels/gpt.c:1006
-#, fuzzy
-msgid ""
-"The backup GPT table is not at the end of the disk, as it should be.  Fix, "
-"by moving the backup to the end (and removing the old backup)?"
-msgstr ""
-"Резервна ГПТ табела није на крају диска, као што би требало. Ово може да "
-"значи да неки други оперативни систем верује да је диск мањи. Да исправим, "
-"премештајући резерву на крај (у уклањајући стару резерву)?"
+msgid "The backup GPT table is not at the end of the disk, as it should be.  Fix, by moving the backup to the end (and removing the old backup)?"
+msgstr "Резервна ГПТ табела није на крају диска, као што би требало. Да исправим, премештајући резерву на крај (и уклањајући стару резерву)?"
 
 #: libparted/labels/gpt.c:1024
-msgid ""
-"Both the primary and backup GPT tables are corrupt.  Try making a fresh "
-"table, and using Parted's rescue feature to recover partitions."
-msgstr ""
-"Обе ГПТ табеле, и примарна и резервна, су оштећене. Покушаћу да направим "
-"свежу табелу, и користићу Партедову функцију спашавања да бих опоравио "
-"партиције."
+msgid "Both the primary and backup GPT tables are corrupt.  Try making a fresh table, and using Parted's rescue feature to recover partitions."
+msgstr "Обе ГПТ табеле, и примарна и резервна, су оштећене. Покушаћу да направим свежу табелу, и користићу Партедову функцију спашавања да бих опоравио партиције."
 
 #: libparted/labels/gpt.c:1035
-msgid ""
-"The backup GPT table is corrupt, but the primary appears OK, so that will be "
-"used."
-msgstr ""
-"Резервна ГПТ табела је оштећена, али примарна изгледа у реду, тако да ће "
-"иста бити коришћена."
+msgid "The backup GPT table is corrupt, but the primary appears OK, so that will be used."
+msgstr "Резервна ГПТ табела је оштећена, али примарна изгледа у реду, тако да ће иста бити коришћена."
 
 #: libparted/labels/gpt.c:1047
-msgid ""
-"The primary GPT table is corrupt, but the backup appears OK, so that will be "
-"used."
-msgstr ""
-"Примарна ГПТ табела је оштећена, али резервна изгледа у реду, тако да ће "
-"иста бити коришћена."
+msgid "The primary GPT table is corrupt, but the backup appears OK, so that will be used."
+msgstr "Примарна ГПТ табела је оштећена, али резервна изгледа у реду, тако да ће иста бити коришћена."
 
 #: libparted/labels/gpt.c:1071
 msgid "primary partition table array CRC mismatch"
 msgstr "ЦРЦ низа табеле примарне партиције не одговара"
 
 #: libparted/labels/gpt.c:1901 libparted/labels/gpt.c:1928
-#, fuzzy
 msgid "failed to translate partition name"
-msgstr "Не могу да доделим број партиције."
+msgstr "нисам успео да преведем назив партиције"
 
 #: libparted/labels/mac.c:184
 #, c-format
@@ -1315,19 +1203,13 @@ msgstr "Област података партиције не заузима ц�
 
 #: libparted/labels/mac.c:648
 #, c-format
-msgid ""
-"Weird block size on device descriptor: %d bytes is not divisible by 512."
-msgstr ""
-"Необична величина блока на описнику уређаја: %d бајта није дељиво са 512."
+msgid "Weird block size on device descriptor: %d bytes is not divisible by 512."
+msgstr "Необична величина блока на описнику уређаја: %d бајта није дељиво са 512."
 
 #: libparted/labels/mac.c:661
 #, c-format
-msgid ""
-"The driver descriptor says the physical block size is %d bytes, but Linux "
-"says it is %d bytes."
-msgstr ""
-"Описник уређаја каже да је величина физичког блока %d бајта, али Линукс каже "
-"да је %d бајта."
+msgid "The driver descriptor says the physical block size is %d bytes, but Linux says it is %d bytes."
+msgstr "Описник уређаја каже да је величина физичког блока %d бајта, али Линукс каже да је %d бајта."
 
 #: libparted/labels/mac.c:714
 msgid "No valid partition map found."
@@ -1335,24 +1217,16 @@ msgstr "Нисам пронашао исправну мапу партиције
 
 #: libparted/labels/mac.c:787
 #, c-format
-msgid ""
-"Conflicting partition map entry sizes!  Entry 1 says it is %d, but entry %d "
-"says it is %d!"
-msgstr ""
-"Величине ставке мапе партиција су у сукобу! Ставка 1 каже да је %d, али "
-"ставка %d каже да је %d!"
+msgid "Conflicting partition map entry sizes!  Entry 1 says it is %d, but entry %d says it is %d!"
+msgstr "Величине ставке мапе партиција су у сукобу! Ставка 1 каже да је %d, али ставка %d каже да је %d!"
 
 #: libparted/labels/mac.c:818
 msgid "Weird!  There are 2 partitions map entries!"
 msgstr "Необично! Постоје 2 ставке мапе партиција!"
 
 #: libparted/labels/mac.c:1356
-msgid ""
-"Changing the name of a root or swap partition will prevent Linux from "
-"recognising it as such."
-msgstr ""
-"Измена назива корене или партиције помоћне меморије ће спречити Линукс да "
-"исту препозна као такву."
+msgid "Changing the name of a root or swap partition will prevent Linux from recognising it as such."
+msgstr "Измена назива корене или партиције помоћне меморије ће спречити Линукс да исту препозна као такву."
 
 #: libparted/labels/mac.c:1455
 msgid "Can't add another partition -- the partition map is too small!"
@@ -1365,11 +1239,8 @@ msgstr "Неисправна табела партиција на %s."
 
 #: libparted/labels/pc98.c:337 libparted/labels/pc98.c:415
 #, c-format
-msgid ""
-"Partition %d isn't aligned to cylinder boundaries.  This is still "
-"unsupported."
-msgstr ""
-"Партиција %d није поравната на границе цилиндра. Ово још увек није подржано."
+msgid "Partition %d isn't aligned to cylinder boundaries.  This is still unsupported."
+msgstr "Партиција %d није поравната на границе цилиндра. Ово још увек није подржано."
 
 #: libparted/labels/pc98.c:733
 msgid "Can't add another partition."
@@ -1377,21 +1248,13 @@ msgstr "Не могу да додам још једну партицију."
 
 #: libparted/labels/pt-tools.c:133
 #, c-format
-msgid ""
-"partition length of %jd sectors exceeds the %s-partition-table-imposed "
-"maximum of %jd"
-msgstr ""
-"дужина партиције од %jd сектора превазилази %s—табелом—партиција—постављени "
-"максимум од %jd"
+msgid "partition length of %jd sectors exceeds the %s-partition-table-imposed maximum of %jd"
+msgstr "дужина партиције од %jd сектора превазилази %s—табелом—партиција—постављени максимум од %jd"
 
 #: libparted/labels/pt-tools.c:146
 #, c-format
-msgid ""
-"starting sector number, %jd exceeds the %s-partition-table-imposed maximum "
-"of %jd"
-msgstr ""
-"број почетног сектора, %jd превазилази %s—табелом—партиција—постављени "
-"максимум од %jd"
+msgid "starting sector number, %jd exceeds the %s-partition-table-imposed maximum of %jd"
+msgstr "број почетног сектора, %jd превазилази %s—табелом—партиција—постављени максимум од %jd"
 
 #: libparted/labels/rdb.c:169
 #, c-format
@@ -1448,12 +1311,8 @@ msgstr "Откривен је оштећени натпис Сановог ди�
 
 #: libparted/labels/sun.c:276
 #, c-format
-msgid ""
-"The disk CHS geometry (%d,%d,%d) reported by the operating system does not "
-"match the geometry stored on the disk label (%d,%d,%d)."
-msgstr ""
-"ЦХС геометрија диска (%d,%d,%d) о којој извештава оперативни систем се не "
-"подудара са геометријом сачуваном на натпису диска (%d,%d,%d)."
+msgid "The disk CHS geometry (%d,%d,%d) reported by the operating system does not match the geometry stored on the disk label (%d,%d,%d)."
+msgstr "ЦХС геометрија диска (%d,%d,%d) о којој извештава оперативни систем се не подудара са геометријом сачуваном на натпису диска (%d,%d,%d)."
 
 #: libparted/labels/sun.c:298
 #, c-format
@@ -1466,16 +1325,8 @@ msgid "The disk has %d cylinders, which is greater than the maximum of 65536."
 msgstr "Диск има %d цилиндра, што је више од дозвољених 65536."
 
 #: libparted/labels/sun.c:812
-msgid ""
-"The Whole Disk partition is the only available one left.  Generally, it is "
-"not a good idea to overwrite this partition with a real one.  Solaris may "
-"not be able to boot without it, and SILO (the sparc boot loader) appreciates "
-"it as well."
-msgstr ""
-"Преостала је само једна доступна партиција целог диска. Уопштено, није добра "
-"идеја преписати ову партицију једном стварном. Соларис можда неће бити у "
-"стању да се покрене без ње, а и СИЛО (спарков покретачки програм) је такође "
-"користи."
+msgid "The Whole Disk partition is the only available one left.  Generally, it is not a good idea to overwrite this partition with a real one.  Solaris may not be able to boot without it, and SILO (the sparc boot loader) appreciates it as well."
+msgstr "Преостала је само једна доступна партиција целог диска. Уопштено, није добра идеја преписати ову партицију једном стварном. Соларис можда неће бити у стању да се покрене без ње, а и СИЛО (спарков покретачки програм) је такође користи."
 
 #: libparted/labels/sun.c:827
 msgid "Sun disk label is full."
@@ -1547,9 +1398,8 @@ msgid "Could not write VTOC FMT7 DSCB."
 msgstr "Не могу да запишем ВТОЦ ФМТ7 ДСЦБ."
 
 #: libparted/labels/vtoc.c:626
-#, fuzzy
 msgid "Could not write VTOC FMT9 DSCB."
-msgstr "Не могу да запишем ВТОЦ ФМТ1 ДСЦБ."
+msgstr "Не могу да запишем ВТОЦ ФМТ9 ДСЦБ."
 
 #: libparted/libparted.c:234
 msgid "Out of memory."
@@ -1646,12 +1496,8 @@ msgid "%s : Failed to read partition block %llu\n"
 msgstr "%s : Нисам успео да прочитам блок партиције %llu\n"
 
 #: libparted/fs/fat/fat.c:148 libparted/fs/r/fat/fat.c:811
-msgid ""
-"GNU Parted was miscompiled: the FAT boot sector should be 512 bytes.  FAT "
-"support will be disabled."
-msgstr ""
-"ГНУ Паретд је лоше преведен: ФАТ сектор учитавања треба да буде 512 бајта. "
-"Подршка за ФАТ ће бити искључена."
+msgid "GNU Parted was miscompiled: the FAT boot sector should be 512 bytes.  FAT support will be disabled."
+msgstr "ГНУ Паретд је лоше преведен: ФАТ сектор учитавања треба да буде 512 бајта. Подршка за ФАТ ће бити искључена."
 
 #: libparted/fs/fat/bootsector.c:50 libparted/fs/r/fat/bootsector.c:49
 msgid "File system has an invalid signature for a FAT file system."
@@ -1659,20 +1505,15 @@ msgstr "Систем датотека има неисправан потпис �
 
 #: libparted/fs/fat/bootsector.c:58 libparted/fs/r/fat/bootsector.c:57
 msgid "File system has an invalid sector size for a FAT file system."
-msgstr ""
-"Систем датотека има неисправну величину сектора за ФАТ систем датотека."
+msgstr "Систем датотека има неисправну величину сектора за ФАТ систем датотека."
 
 #: libparted/fs/fat/bootsector.c:65 libparted/fs/r/fat/bootsector.c:64
 msgid "File system has an invalid cluster size for a FAT file system."
-msgstr ""
-"Систем датотека има неисправну величину кластера за ФАТ систем датотека."
+msgstr "Систем датотека има неисправну величину кластера за ФАТ систем датотека."
 
 #: libparted/fs/fat/bootsector.c:72 libparted/fs/r/fat/bootsector.c:71
-msgid ""
-"File system has an invalid number of reserved sectors for a FAT file system."
-msgstr ""
-"Систем датотека има неисправан број резервисаних сектора за ФАТ систем "
-"датотека."
+msgid "File system has an invalid number of reserved sectors for a FAT file system."
+msgstr "Систем датотека има неисправан број резервисаних сектора за ФАТ систем датотека."
 
 #: libparted/fs/fat/bootsector.c:79 libparted/fs/r/fat/bootsector.c:78
 msgid "File system has an invalid number of FATs."
@@ -1680,25 +1521,20 @@ msgstr "Систем датотека има неисправан број ФА�
 
 #: libparted/fs/fat/bootsector.c:162
 #, c-format
-msgid ""
-"The file system's CHS geometry is (%d, %d, %d), which is invalid.  The "
-"partition table's CHS geometry is (%d, %d, %d)."
-msgstr ""
-"ЦХС геометрија система датотека је (%d, %d, %d), што је неисправно.  ЦХС "
-"геометрија партиционе табеле је (%d, %d, %d)."
+msgid "The file system's CHS geometry is (%d, %d, %d), which is invalid.  The partition table's CHS geometry is (%d, %d, %d)."
+msgstr "ЦХС геометрија система датотека је (%d, %d, %d), што је неисправно.  ЦХС геометрија партиционе табеле је (%d, %d, %d)."
 
 #: libparted/fs/fat/bootsector.c:197 libparted/fs/r/fat/bootsector.c:206
 msgid "FAT boot sector says logical sector size is 0.  This is weird. "
-msgstr ""
-"ФАТ сектор учитавања каже да је величина логичког сектора 0. То је чудно."
+msgstr "ФАТ сектор учитавања каже да је величина логичког сектора 0. То је чудно. "
 
 #: libparted/fs/fat/bootsector.c:203 libparted/fs/r/fat/bootsector.c:212
 msgid "FAT boot sector says there are no FAT tables.  This is weird. "
-msgstr "ФАТ сектор каже да не постоје ФАТ табеле. То је чудно."
+msgstr "ФАТ сектор каже да не постоје ФАТ табеле. То је чудно. "
 
 #: libparted/fs/fat/bootsector.c:209 libparted/fs/r/fat/bootsector.c:218
 msgid "FAT boot sector says clusters are 0 sectors.  This is weird. "
-msgstr "ФАТ сектор учитавања каже да су кластери 0 сектора. То је необично."
+msgstr "ФАТ сектор учитавања каже да су кластери 0 сектора. То је необично. "
 
 #: libparted/fs/fat/bootsector.c:219 libparted/fs/r/fat/bootsector.c:228
 msgid "File system is FAT12, which is unsupported."
@@ -1717,97 +1553,57 @@ msgstr "Непрепознатљиви нови стил потписа помо
 #: libparted/fs/linux_swap/linux_swap.c:308
 #, c-format
 msgid "Unrecognised swsusp linux swap signature '%9s'."
-msgstr "Непрепознатљиви свсусп потписа помоћне меморије линукса „%10s“."
+msgstr "Непознат потпис помоћне меморије свсусп линукса „%9s“."
 
 #: libparted/fs/hfs/probe.c:50 libparted/fs/r/hfs/probe.c:50
 #, c-format
-msgid ""
-"Parted can't use HFS file systems on disks with a sector size not equal to "
-"%d bytes."
-msgstr ""
-"Партед не може да користи ХФС систем датотека на дисковима на којима "
-"величина сектора се разликује од %d бајта."
+msgid "Parted can't use HFS file systems on disks with a sector size not equal to %d bytes."
+msgstr "Партед не може да користи ХФС систем датотека на дисковима на којима величина сектора се разликује од %d бајта."
 
 #: libparted/fs/r/fat/bootsector.c:132
 #, c-format
-msgid ""
-"This file system has a logical sector size of %d.  GNU Parted is known not "
-"to work properly with sector sizes other than 512 bytes."
-msgstr ""
-"Овај систем датотека има величину логичког сектора од %d. Познато је да ГНУ "
-"Партед не ради исправно са величинама сектора које нису 512 бајта."
+msgid "This file system has a logical sector size of %d.  GNU Parted is known not to work properly with sector sizes other than 512 bytes."
+msgstr "Овај систем датотека има величину логичког сектора од %d. Познато је да ГНУ Партед не ради исправно са величинама сектора које нису 512 бајта."
 
 #: libparted/fs/r/fat/bootsector.c:157
 #, c-format
-msgid ""
-"The file system's CHS geometry is (%d, %d, %d), which is invalid.  The "
-"partition table's CHS geometry is (%d, %d, %d).  If you select Ignore, the "
-"file system's CHS geometry will be left unchanged.  If you select Fix, the "
-"file system's CHS geometry will be set to match the partition table's CHS "
-"geometry."
-msgstr ""
-"ЦХС геометрија система датотека је (%d, %d, %d), која је неисправна. ЦХС "
-"геометрија табеле партиција је (%d, %d, %d). Ако изаберете „Занемари“, ЦХС "
-"геометрија система датотека ће бити остављена неизмењена. Ако изаберете "
-"„Поправи“, ЦХС геометрија система датотека ће бити подешена да одговара ЦХС "
-"геометрији табеле партиција."
+msgid "The file system's CHS geometry is (%d, %d, %d), which is invalid.  The partition table's CHS geometry is (%d, %d, %d).  If you select Ignore, the file system's CHS geometry will be left unchanged.  If you select Fix, the file system's CHS geometry will be set to match the partition table's CHS geometry."
+msgstr "ЦХС геометрија система датотека је (%d, %d, %d), која је неисправна. ЦХС геометрија табеле партиција је (%d, %d, %d). Ако изаберете „Занемари“, ЦХС геометрија система датотека ће бити остављена неизмењена. Ако изаберете „Поправи“, ЦХС геометрија система датотека ће бити подешена да одговара ЦХС геометрији табеле партиција."
 
 #: libparted/fs/r/fat/bootsector.c:406
 #, c-format
-msgid ""
-"The information sector has the wrong signature (%x).  Select cancel for now, "
-"and send in a bug report.  If you're desperate, it's probably safe to ignore."
-msgstr ""
-"Сектор података има погрешан потпис (%x). Изаберите откажи за сада, и "
-"пошаљите у извештају о грешци. Ако сте очајни, највероватније да је најбоље "
-"да занемарите."
+msgid "The information sector has the wrong signature (%x).  Select cancel for now, and send in a bug report.  If you're desperate, it's probably safe to ignore."
+msgstr "Сектор података има погрешан потпис (%x). Изаберите откажи за сада, и пошаљите у извештају о грешци. Ако сте очајни, највероватније да је најбоље да занемарите."
 
 #: libparted/fs/r/fat/calc.c:134
 #, c-format
-msgid ""
-"You need %s of free disk space to shrink this partition to this size.  "
-"Currently, only %s is free."
-msgstr ""
-"Потребно вам је %s слободног простора на диску да бисте скупили ову "
-"партицију на ову величину.  Тренутно, само %s је слободно."
+msgid "You need %s of free disk space to shrink this partition to this size.  Currently, only %s is free."
+msgstr "Потребно вам је %s слободног простора на диску да бисте скупили ову партицију на ову величину.  Тренутно, само %s је слободно."
 
 #: libparted/fs/r/fat/context.c:55
 #, c-format
-msgid ""
-"Cluster start delta = %d, which is not a multiple of the cluster size %d."
+msgid "Cluster start delta = %d, which is not a multiple of the cluster size %d."
 msgstr "Делта почетка кластера = %d, што није умножак величине кластера %d."
 
 #: libparted/fs/r/fat/count.c:143
 #, c-format
 msgid "Bad directory entry for %s: first cluster is the end of file marker."
-msgstr ""
-"Лош унос директоријума за %s: први кластер јесте крај означивача датотеке."
+msgstr "Лош унос директоријума за %s: први кластер јесте крај означивача датотеке."
 
 #: libparted/fs/r/fat/count.c:156
 #, c-format
-msgid ""
-"Bad FAT: unterminated chain for %s.  You should run dosfsck or scandisk."
-msgstr ""
-"Лош ФАТ: бесконачан ланац за %s.  Треба да покренете „dosfsck“ или "
-"„scandisk“."
+msgid "Bad FAT: unterminated chain for %s.  You should run dosfsck or scandisk."
+msgstr "Лош ФАТ: бесконачан ланац за %s.  Треба да покренете „dosfsck“ или „scandisk“."
 
 #: libparted/fs/r/fat/count.c:165
 #, c-format
-msgid ""
-"Bad FAT: cluster %d outside file system in chain for %s.  You should run "
-"dosfsck or scandisk."
-msgstr ""
-"Лош ФАТ: кластер %d је изван система датотека у ланцу за %s.  Треба да "
-"покренете „dosfsck“ или „scandisk“."
+msgid "Bad FAT: cluster %d outside file system in chain for %s.  You should run dosfsck or scandisk."
+msgstr "Лош ФАТ: кластер %d је изван система датотека у ланцу за %s.  Треба да покренете „dosfsck“ или „scandisk“."
 
 #: libparted/fs/r/fat/count.c:175
 #, c-format
-msgid ""
-"Bad FAT: cluster %d is cross-linked for %s.  You should run dosfsck or "
-"scandisk."
-msgstr ""
-"Лош ФАТ: кластер %d је унакрсно повезан за %s.  Треба да покренете „dosfsck“ "
-"или „scandisk“."
+msgid "Bad FAT: cluster %d is cross-linked for %s.  You should run dosfsck or scandisk."
+msgstr "Лош ФАТ: кластер %d је унакрсно повезан за %s.  Треба да покренете „dosfsck“ или „scandisk“."
 
 #: libparted/fs/r/fat/count.c:194
 #, c-format
@@ -1816,12 +1612,8 @@ msgstr "%s је %dk, али има %d кластера (%dk)."
 
 #: libparted/fs/r/fat/count.c:257
 #, c-format
-msgid ""
-"The file %s is marked as a system file.  This means moving it could cause "
-"some programs to stop working."
-msgstr ""
-"Датотека „%s“ је означена као систем датотека.  Ово значи да њено премештање "
-"може да изазове престанак рада неких програма."
+msgid "The file %s is marked as a system file.  This means moving it could cause some programs to stop working."
+msgstr "Датотека „%s“ је означена као систем датотека.  Ово значи да њено премештање може да изазове престанак рада неких програма."
 
 #: libparted/fs/r/fat/fat.c:243
 #, c-format
@@ -1829,13 +1621,8 @@ msgid "Partition too big/small for a %s file system."
 msgstr "Партиција је превелика/премала за „%s“ систем датотека."
 
 #: libparted/fs/r/fat/fat.c:409
-msgid ""
-"The FATs don't match.  If you don't know what this means, then select "
-"cancel, run scandisk on the file system, and then come back."
-msgstr ""
-"ФАТ-ови се не подударају.  Ако не знате шта значи ово, онда изаберите "
-"отказивање, покрените „scandisk“ на систему датотека, и након тога се "
-"вратите."
+msgid "The FATs don't match.  If you don't know what this means, then select cancel, run scandisk on the file system, and then come back."
+msgstr "ФАТ-ови се не подударају.  Ако не знате шта значи ово, онда изаберите отказивање, покрените „scandisk“ на систему датотека, и након тога се вратите."
 
 #: libparted/fs/r/fat/fat.c:449
 msgid "There are no possible configurations for this FAT type."
@@ -1843,29 +1630,17 @@ msgstr "Не постоје могућа подешавања за ову врс
 
 #: libparted/fs/r/fat/fat.c:461
 #, c-format
-msgid ""
-"File system doesn't have expected sizes for Windows to like it.  Cluster "
-"size is %dk (%dk expected); number of clusters is %d (%d expected); size of "
-"FATs is %d sectors (%d expected)."
-msgstr ""
-"Систем датотека нема очекиване величине које би одговарале Виндоузу.  "
-"Величина кластера је %dk (очекивано је %dk); број кластера је %d (очекивано "
-"је %d); величина ФАТ-ова је %d сектора (очекивано је %d)."
+msgid "File system doesn't have expected sizes for Windows to like it.  Cluster size is %dk (%dk expected); number of clusters is %d (%d expected); size of FATs is %d sectors (%d expected)."
+msgstr "Систем датотека нема очекиване величине које би одговарале Виндоузу.  Величина кластера је %dk (очекивано је %dk); број кластера је %d (очекивано је %d); величина ФАТ-ова је %d сектора (очекивано је %d)."
 
 #: libparted/fs/r/fat/fat.c:484
 #, c-format
-msgid ""
-"File system is reporting the free space as %d clusters, not %d clusters."
-msgstr ""
-"Систем датотека обавештава о слободном простору од %d кластера, а не %d."
+msgid "File system is reporting the free space as %d clusters, not %d clusters."
+msgstr "Систем датотека обавештава о слободном простору од %d кластера, а не %d."
 
 #: libparted/fs/r/fat/resize.c:158
-msgid ""
-"There's not enough room in the root directory for all of the files.  Either "
-"cancel, or ignore to lose the files."
-msgstr ""
-"Нема довољно простора у кореном директоријуму за све датотеке.  Или "
-"откажите, или занемарите да бисте изгубили датотеке."
+msgid "There's not enough room in the root directory for all of the files.  Either cancel, or ignore to lose the files."
+msgstr "Нема довољно простора у кореном директоријуму за све датотеке.  Или откажите, или занемарите да бисте изгубили датотеке."
 
 #: libparted/fs/r/fat/resize.c:299
 msgid "Error writing to the root directory."
@@ -1873,41 +1648,19 @@ msgstr "Грешка писања у корени директоријум."
 
 #: libparted/fs/r/fat/resize.c:488
 msgid "If you leave your file system as FAT16, then you will have no problems."
-msgstr ""
-"Ако оставите ваш систем датотека као ФАТ16, онда нећете имати проблема."
+msgstr "Ако оставите ваш систем датотека као ФАТ16, онда нећете имати проблема."
 
 #: libparted/fs/r/fat/resize.c:491
-msgid ""
-"If you convert to FAT16, and MS Windows is installed on this partition, then "
-"you must re-install the MS Windows boot loader.  If you want to do this, you "
-"should consult the Parted manual (or your distribution's manual)."
-msgstr ""
-"Ако претворите у ФАТ16, а МС Виндоуз је инсталиран на тој партицији, онда "
-"ћете морати поново да инсталирате покретачки програм МС Виндоуза.  Ако "
-"желите ово да урадите, требало би да прочитате упутство Партеда (или "
-"упутство ваше дистрибуције)."
+msgid "If you convert to FAT16, and MS Windows is installed on this partition, then you must re-install the MS Windows boot loader.  If you want to do this, you should consult the Parted manual (or your distribution's manual)."
+msgstr "Ако претворите у ФАТ16, а МС Виндоуз је инсталиран на тој партицији, онда ћете морати поново да инсталирате покретачки програм МС Виндоуза.  Ако желите ово да урадите, требало би да прочитате упутство Партеда (или упутство ваше дистрибуције)."
 
 #: libparted/fs/r/fat/resize.c:499
-msgid ""
-"If you leave your file system as FAT32, then you will not introduce any new "
-"problems."
-msgstr ""
-"Ако оставите ваш систем датотека као ФАТ32, онда нећете створити никаквих "
-"нових проблема."
+msgid "If you leave your file system as FAT32, then you will not introduce any new problems."
+msgstr "Ако оставите ваш систем датотека као ФАТ32, онда нећете створити никаквих нових проблема."
 
 #: libparted/fs/r/fat/resize.c:503
-msgid ""
-"If you convert to FAT32, and MS Windows is installed on this partition, then "
-"you must re-install the MS Windows boot loader.  If you want to do this, you "
-"should consult the Parted manual (or your distribution's manual).  Also, "
-"converting to FAT32 will make the file system unreadable by MS DOS, MS "
-"Windows 95a, and MS Windows NT."
-msgstr ""
-"Ако претворите у ФАТ16, а МС Виндоуз је инсталиран на тој партицији, онда "
-"ћете морати поново да инсталирате покретачки програм МС Виндоуза.  Ако "
-"желите ово да урадите, требало би да прочитате упутство Партеда (или "
-"упутство ваше дистрибуције).  Такође, претварање у ФАТ32 ће учинити систем "
-"датотека нечитљивим за МС ДОС, МС Виндоуз 95а, и МС Виндоуз НТ."
+msgid "If you convert to FAT32, and MS Windows is installed on this partition, then you must re-install the MS Windows boot loader.  If you want to do this, you should consult the Parted manual (or your distribution's manual).  Also, converting to FAT32 will make the file system unreadable by MS DOS, MS Windows 95a, and MS Windows NT."
+msgstr "Ако претворите у ФАТ32, а МС Виндоуз је инсталиран на тој партицији, онда ћете морати поново да инсталирате покретачки програм МС Виндоуза.  Ако желите ово да урадите, требало би да прочитате упутство Партеда (или упутство ваше дистрибуције).  Такође, претварање у ФАТ32 ће учинити систем датотека нечитљивим за МС ДОС, МС Виндоуз 95а, и МС Виндоуз НТ."
 
 #: libparted/fs/r/fat/resize.c:517
 #, c-format
@@ -1924,34 +1677,21 @@ msgid "%s  %s"
 msgstr "%s  %s"
 
 #: libparted/fs/r/fat/resize.c:550
-msgid ""
-"The file system can only be resized to this size by converting to FAT16."
-msgstr ""
-"Систему датотека може бити промењена величина само на ову величину "
-"претварањем у ФАТ16."
+msgid "The file system can only be resized to this size by converting to FAT16."
+msgstr "Систему датотека може бити промењена величина само на ову величину претварањем у ФАТ16."
 
 #: libparted/fs/r/fat/resize.c:566
-msgid ""
-"The file system can only be resized to this size by converting to FAT32."
-msgstr ""
-"Систему датотека може бити промењена величина само на ову величину "
-"претварањем у ФАТ32."
+msgid "The file system can only be resized to this size by converting to FAT32."
+msgstr "Систему датотека може бити промењена величина само на ову величину претварањем у ФАТ32."
 
 #: libparted/fs/r/fat/resize.c:579
-msgid ""
-"GNU Parted cannot resize this partition to this size.  We're working on it!"
-msgstr ""
-"ГНУ Партед не може да промени величину ове партиције на ову величину.  "
-"Радимо на томе! *_*"
+msgid "GNU Parted cannot resize this partition to this size.  We're working on it!"
+msgstr "ГНУ Партед не може да промени величину ове партиције на ову величину.  Радимо на томе! *_*"
 
 #: libparted/fs/r/fat/table.c:136
 #, c-format
-msgid ""
-"FAT %d media %x doesn't match the boot sector's media %x.  You should "
-"probably run scandisk."
-msgstr ""
-"ФАТ %d медиј %x не одговара медију сектора учитавања %x.  Вероватно треба да "
-"покренете „scandisk“."
+msgid "FAT %d media %x doesn't match the boot sector's media %x.  You should probably run scandisk."
+msgstr "ФАТ %d медиј %x не одговара медију сектора учитавања %x.  Вероватно треба да покренете „scandisk“."
 
 #: libparted/fs/r/fat/table.c:268
 #, c-format
@@ -1993,21 +1733,13 @@ msgstr "Лоши блокови не могу бити прочитани."
 
 #: libparted/fs/r/hfs/cache.c:136
 #, c-format
-msgid ""
-"Trying to register an extent starting at block 0x%X, but another one already "
-"exists at this position.  You should check the file system!"
-msgstr ""
-"Покушавам да забележим опсег почевши од блока 0x%X, али већ постоји један на "
-"том положају.  Треба да проверите систем датотека!"
+msgid "Trying to register an extent starting at block 0x%X, but another one already exists at this position.  You should check the file system!"
+msgstr "Покушавам да забележим опсег почевши од блока 0x%X, али већ постоји један на том положају.  Треба да проверите систем датотека!"
 
 #: libparted/fs/r/hfs/cache.c:213
 #, c-format
-msgid ""
-"Trying to move an extent from block Ox%X to block Ox%X, but another one "
-"already exists at this position.  This should not happen!"
-msgstr ""
-"Покушавам да преместим опсег са блока Ox%X на блок Ox%X, али већ постоји "
-"један на том положају.  Ово није требало да се деси!"
+msgid "Trying to move an extent from block Ox%X to block Ox%X, but another one already exists at this position.  This should not happen!"
+msgstr "Покушавам да преместим опсег са блока Ox%X на блок Ox%X, али већ постоји један на том положају.  Ово није требало да се деси!"
 
 #: libparted/fs/r/hfs/file.c:142
 #, c-format
@@ -2037,8 +1769,7 @@ msgstr "Не могу да освежим оставу опсега за ХФС+
 #: libparted/fs/r/hfs/file_plus.c:201
 #, c-format
 msgid "Trying to read HFS+ file with CNID %X behind EOF."
-msgstr ""
-"Покушавам да прочитам ХФС+ датотеку са ЦНИД-ом %X изван краја датотеке."
+msgstr "Покушавам да прочитам ХФС+ датотеку са ЦНИД-ом %X изван краја датотеке."
 
 #: libparted/fs/r/hfs/file_plus.c:212 libparted/fs/r/hfs/file_plus.c:255
 #, c-format
@@ -2105,17 +1836,12 @@ msgid "An error occurred while looking for the mandatory bad blocks file."
 msgstr "Дошло је до грешке приликом тражења обавезне датотеке лоших блокова."
 
 #: libparted/fs/r/hfs/hfs.c:904
-msgid ""
-"It seems there is an error in the HFS wrapper: the bad blocks file doesn't "
-"contain the embedded HFS+ volume."
-msgstr ""
-"Изгледа да постоји грешка у ХФС омотачу: датотека лоших блокова не садржи "
-"угнежђен ХФС+ волумен."
+msgid "It seems there is an error in the HFS wrapper: the bad blocks file doesn't contain the embedded HFS+ volume."
+msgstr "Изгледа да постоји грешка у ХФС омотачу: датотека лоших блокова не садржи угнежђен ХФС+ волумен."
 
 #: libparted/fs/r/hfs/hfs.c:940
 msgid "Sorry, HFS+ cannot be resized that way yet."
-msgstr ""
-"Извините, ХФС-у+ не може бити промењена величина на тај начин још увек."
+msgstr "Извините, ХФС-у+ не може бити промењена величина на тај начин још увек."
 
 #: libparted/fs/r/hfs/hfs.c:975
 msgid "shrinking embedded HFS+ volume"
@@ -2135,12 +1861,8 @@ msgstr "Освежавање ХФС омотача није успело."
 
 #: libparted/fs/r/hfs/hfs.c:1109 libparted/fs/r/hfs/hfs.c:1194
 #, c-format
-msgid ""
-"This is not a real %s check.  This is going to extract special low level "
-"files for debugging purposes."
-msgstr ""
-"Ово није стварна „%s“ провера.  Ово ће извући посебне датотеке ниског нивоа "
-"за сврхе уклањања грешака."
+msgid "This is not a real %s check.  This is going to extract special low level files for debugging purposes."
+msgstr "Ово није стварна „%s“ провера.  Ово ће извући посебне датотеке ниског нивоа за сврхе уклањања грешака."
 
 #: libparted/fs/r/hfs/journal.c:154
 msgid "Bad block list header checksum."
@@ -2148,18 +1870,12 @@ msgstr "Лоша сума провере заглавља списка блок�
 
 #: libparted/fs/r/hfs/journal.c:167
 #, c-format
-msgid ""
-"Invalid size of a transaction block while replaying the journal (%i bytes)."
-msgstr ""
-"Неисправна величина блока преноса приликом одговарања журнала (%i бајта)."
+msgid "Invalid size of a transaction block while replaying the journal (%i bytes)."
+msgstr "Неисправна величина блока преноса приликом одговарања журнала (%i бајта)."
 
 #: libparted/fs/r/hfs/journal.c:259
-msgid ""
-"Journal stored outside of the volume are not supported.  Try to desactivate "
-"the journal and run Parted again."
-msgstr ""
-"Журнал ускладиштен изван волумена није подржан.  Покушајте да искључите "
-"журнал и поново да покренете Партед."
+msgid "Journal stored outside of the volume are not supported.  Try to desactivate the journal and run Parted again."
+msgstr "Журнал ускладиштен изван волумена није подржан.  Покушајте да искључите журнал и поново да покренете Партед."
 
 #: libparted/fs/r/hfs/journal.c:270
 msgid "Journal offset or size is not multiple of the sector size."
@@ -2171,53 +1887,35 @@ msgstr "Неисправне вредности магије у заглављу
 
 #: libparted/fs/r/hfs/journal.c:301
 msgid "Journal size mismatch between journal info block and journal header."
-msgstr ""
-"Величина журнала се не поклапа између блока података журнала и заглавља "
-"журнала."
+msgstr "Величина журнала се не поклапа између блока података журнала и заглавља журнала."
 
 #: libparted/fs/r/hfs/journal.c:313
 msgid "Some header fields are not multiple of the sector size."
 msgstr "Нека поља заглавља нису умношци величине сектора."
 
 #: libparted/fs/r/hfs/journal.c:322
-msgid ""
-"The sector size stored in the journal is not 512 bytes.  Parted only "
-"supports 512 bytes length sectors."
-msgstr ""
-"Величина сектора смештена у журналу није 512 бајта.  Партед подржава само "
-"секторе дужине 512 бајта."
+msgid "The sector size stored in the journal is not 512 bytes.  Parted only supports 512 bytes length sectors."
+msgstr "Величина сектора смештена у журналу није 512 бајта.  Партед подржава само секторе дужине 512 бајта."
 
 #: libparted/fs/r/hfs/journal.c:334
 msgid "Bad journal checksum."
 msgstr "Лоша сума провере журнала."
 
 #: libparted/fs/r/hfs/journal.c:352
-msgid ""
-"The journal is not empty.  Parted must replay the transactions before "
-"opening the file system.  This will modify the file system."
-msgstr ""
-"Журнал није празан.  Партед мора да понови преносе пре отварања система "
-"датотека.  Ово ће изменити систем датотека."
+msgid "The journal is not empty.  Parted must replay the transactions before opening the file system.  This will modify the file system."
+msgstr "Журнал није празан.  Партед мора да понови преносе пре отварања система датотека.  Ово ће изменити систем датотека."
 
 #: libparted/fs/r/hfs/journal.c:380
-msgid ""
-"The volume header or the master directory block has changed while replaying "
-"the journal.  You should restart Parted."
-msgstr ""
-"Заглавље волумена или блок главног директоријума се изменио приликом "
-"понављања журнала.  Треба поново да покренете Партед."
+msgid "The volume header or the master directory block has changed while replaying the journal.  You should restart Parted."
+msgstr "Заглавље волумена или блок главног директоријума се изменио приликом понављања журнала.  Треба поново да покренете Партед."
 
 #: libparted/fs/r/hfs/reloc.c:150 libparted/fs/r/hfs/reloc_plus.c:154
 msgid "An extent has not been relocated."
 msgstr "Један опсег није премештен."
 
 #: libparted/fs/r/hfs/reloc.c:249 libparted/fs/r/hfs/reloc_plus.c:306
-msgid ""
-"A reference to an extent comes from a place it should not.  You should check "
-"the file system!"
-msgstr ""
-"Указивање на опсег долази са места које то није.  Треба да проверите систем "
-"датотека!"
+msgid "A reference to an extent comes from a place it should not.  You should check the file system!"
+msgstr "Указивање на опсег долази са места које то није.  Треба да проверите систем датотека!"
 
 #: libparted/fs/r/hfs/reloc.c:379
 msgid "This HFS volume has no catalog file.  This is very unusual!"
@@ -2225,17 +1923,11 @@ msgstr "Овај ХФС волумен нема датотеку каталог�
 
 #: libparted/fs/r/hfs/reloc.c:473
 msgid "This HFS volume has no extents overflow file.  This is quite unusual!"
-msgstr ""
-"Овај ХФС волумен нема датотеку прекорачења опсега.  Ово је поприлично "
-"необично!"
+msgstr "Овај ХФС волумен нема датотеку прекорачења опсега.  Ово је поприлично необично!"
 
 #: libparted/fs/r/hfs/reloc.c:515 libparted/fs/r/hfs/reloc_plus.c:665
-msgid ""
-"The extents overflow file should not contain its own extents!  You should "
-"check the file system."
-msgstr ""
-"Датотека прекорачења опсега не треба да садржи сопствене опсеге! Треба да "
-"проверите систем датотека."
+msgid "The extents overflow file should not contain its own extents!  You should check the file system."
+msgstr "Датотека прекорачења опсега не треба да садржи сопствене опсеге! Треба да проверите систем датотека."
 
 #: libparted/fs/r/hfs/reloc.c:572 libparted/fs/r/hfs/reloc_plus.c:843
 msgid "Could not cache the file system in memory."
@@ -2255,9 +1947,7 @@ msgstr "Овај ХФС+ волумен нема датотеку каталог
 
 #: libparted/fs/r/hfs/reloc_plus.c:616
 msgid "This HFS+ volume has no extents overflow file.  This is quite unusual!"
-msgstr ""
-"Овај ХФС+ волумен нема датотеку прекорачења опсега.  Ово је поприлично "
-"необично!"
+msgstr "Овај ХФС+ волумен нема датотеку прекорачења опсега.  Ово је поприлично необично!"
 
 #: parted/parted.c:125
 msgid "displays this help message"
@@ -2284,25 +1974,20 @@ msgid "alignment for new partitions"
 msgstr "поравнање за нове партиције"
 
 #: parted/parted.c:142
-msgid ""
-"NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the "
-"primary partitions number from 1 to 4, logical partitions from 5 onwards.\n"
-msgstr ""
-"БРОЈ је број партиције који користи Линукс. На натписима МС-ДОС диска, за "
-"примарне партиције се користе бројеви од 1 до 4, за логичке партиције од 5 "
-"на даље.\n"
+msgid "NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the primary partitions number from 1 to 4, logical partitions from 5 onwards.\n"
+msgstr "БРОЈ је број партиције који користи Линукс. На натписима МС-ДОС диска, за примарне партиције се користе бројеви од 1 до 4, за логичке партиције од 5 на даље.\n"
 
 #: parted/parted.c:145
 msgid "LABEL-TYPE is one of: "
-msgstr "ВРСТА—НАТПИСА може бити:"
+msgstr "ВРСТА—НАТПИСА може бити: "
 
 #: parted/parted.c:146 parted/parted.c:147
 msgid "FLAG is one of: "
-msgstr "ЗАСТАВИЦА може бити:"
+msgstr "ЗАСТАВИЦА може бити: "
 
 #: parted/parted.c:148
 msgid "UNIT is one of: "
-msgstr "ЈЕДИНИЦА може бити:"
+msgstr "ЈЕДИНИЦА може бити: "
 
 #: parted/parted.c:149
 msgid "desired alignment: minimum or optimal"
@@ -2310,31 +1995,19 @@ msgstr "жељено поравнање: најмање или одговара�
 
 #: parted/parted.c:150
 msgid "PART-TYPE is one of: primary, logical, extended\n"
-msgstr "ВРСТА—ПАРТИЦИЈЕ може бити: примарна, логичка, проширена:\n"
+msgstr "ВРСТА—ПАРТИЦИЈЕ може бити: примарна, логичка, проширена\n"
 
 #: parted/parted.c:152
 msgid "FS-TYPE is one of: "
-msgstr "ВРСТА—С.ДАТ. може бити:"
+msgstr "ВРСТА—С.ДАТ. може бити: "
 
 #: parted/parted.c:153
-msgid ""
-"START and END are disk locations, such as 4GB or 10%.  Negative values count "
-"from the end of the disk.  For example, -1s specifies exactly the last "
-"sector.\n"
-msgstr ""
-"ПОЧЕТАК и КРАЈ су места на диску, као што је 4GB или 10%. Негативне "
-"вредности почињу од краја диска. На пример, -1 означава тачно последњи "
-"сектор.\n"
+msgid "START and END are disk locations, such as 4GB or 10%.  Negative values count from the end of the disk.  For example, -1s specifies exactly the last sector.\n"
+msgstr "ПОЧЕТАК и КРАЈ су места на диску, као што је 4GB или 10%. Негативне вредности почињу од краја диска. На пример, -1 означава тачно последњи сектор.\n"
 
 #: parted/parted.c:156
-#, fuzzy
-msgid ""
-"END is disk location, such as 4GB or 10%.  Negative value counts from the "
-"end of the disk.  For example, -1s specifies exactly the last sector.\n"
-msgstr ""
-"ПОЧЕТАК и КРАЈ су места на диску, као што је 4GB или 10%. Негативне "
-"вредности почињу од краја диска. На пример, -1 означава тачно последњи "
-"сектор.\n"
+msgid "END is disk location, such as 4GB or 10%.  Negative value counts from the end of the disk.  For example, -1s specifies exactly the last sector.\n"
+msgstr "КРАЈ је место на диску, као што је 4GB или 10%. Негативне вредности почињу од краја диска. На пример, -1 означава тачно последњи сектор.\n"
 
 #: parted/parted.c:159
 msgid "STATE is one of: on, off\n"
@@ -2360,12 +2033,12 @@ msgid ""
 "\n"
 msgstr ""
 "Ауторска права (C) 1998-2006 Задужбина слободног софтвера, Инц.\n"
-"Овај програм је слободан софтвер, заштићен ГНУ Општом јавном лиценцом.\n"
+"Овај програм је слободан софтвер, заштићен Гнуовом општом јавном лиценцом.\n"
 "\n"
 "Овај програм се расподељује у нади да ће бити користан,\n"
 "али БЕЗ ИКАКВЕ ГАРАНЦИЈЕ; чак и без примењене гаранције\n"
 "ТРЖИШНЕ ВРЕДНОСТИ или ПРИЛАГОЂЕНОСТИ ОДРЕЂЕНОЈ НАМЕНИ.\n"
-"Погледајте ГНУ Општу јавну лиценцу за више детаља.\n"
+"Погледајте Гнуову општу јавну лиценцу за више детаља.\n"
 "\n"
 
 #: parted/parted.c:211
@@ -2374,25 +2047,19 @@ msgid "%0.f%%\t(time left %.2d:%.2d)"
 msgstr "%0.f%%\t(преостало време %.2d:%.2d)"
 
 #: parted/parted.c:230
-#, fuzzy, c-format
+#, c-format
 msgid "Partition %s is being used. Are you sure you want to continue?"
-msgstr ""
-"Партиција %s је била коришћена. Морате да је демонтирате пре него што је "
-"измените Партедом."
+msgstr "Партиција „%s“ је била коришћена. Да ли сте сигурни да желите да наставите?"
 
 #: parted/parted.c:251
 #, c-format
 msgid "Partition(s) on %s are being used."
-msgstr "Партиције %s су биле коришћене."
+msgstr "Партиције на „%s“ су биле коришћене."
 
 #: parted/parted.c:263
 #, c-format
-msgid ""
-"The existing disk label on %s will be destroyed and all data on this disk "
-"will be lost. Do you want to continue?"
-msgstr ""
-"Постојећи натпис диска на %s ће бити уништен и сви подаци на диску ће бити "
-"изгубљени. Да ли желите да наставите?"
+msgid "The existing disk label on %s will be destroyed and all data on this disk will be lost. Do you want to continue?"
+msgstr "Постојећи натпис диска на %s ће бити уништен и сви подаци на диску ће бити изгубљени. Да ли желите да наставите?"
 
 #: parted/parted.c:524
 msgid "New disk label type?"
@@ -2425,8 +2092,7 @@ msgid ""
 "The closest location we can manage is %s to %s (sectors %llu..%llu).%s"
 msgstr ""
 "Затражили сте партицију од %s до %s (сектори %llu..%llu).\n"
-"Најближе место којим можемо да управљамо је од %s до %s (сектори %llu..%llu)."
-"%s"
+"Најближе место којим можемо да управљамо је од %s до %s (сектори %llu..%llu).%s"
 
 #: parted/parted.c:773
 msgid ""
@@ -2448,8 +2114,7 @@ msgstr "Број партиције?"
 #: parted/parted.c:960
 #, c-format
 msgid "BIOS cylinder,head,sector geometry: %d,%d,%d.  Each cylinder is %s.\n"
-msgstr ""
-"БИОС цилиндар, глава, геометрија сектора: %d,%d,%d. Сваки цилиндар је %s.\n"
+msgstr "БИОС геометрија цилиндара,главе,сектора: %d,%d,%d.  Сваки цилиндар је %s.\n"
 
 #: parted/parted.c:1001
 #, c-format
@@ -2514,12 +2179,8 @@ msgstr "Слободан простор"
 
 #: parted/parted.c:1371
 #, c-format
-msgid ""
-"A %s %s partition was found at %s -> %s.  Do you want to add it to the "
-"partition table?"
-msgstr ""
-"%s %s партиција је пронађена на %s —> %s. Да ли желите да је додате у табелу "
-"партиција?"
+msgid "A %s %s partition was found at %s -> %s.  Do you want to add it to the partition table?"
+msgstr "%s %s партиција је пронађена на %s —> %s.  Да ли желите да је додате у табелу партиција?"
 
 #: parted/parted.c:1410
 msgid "searching for file systems"
@@ -2527,12 +2188,11 @@ msgstr "тражим системе датотека"
 
 #: parted/parted.c:1513
 msgid "The resize command has been removed in parted 3.0"
-msgstr ""
+msgstr "Наредба промене величине је уклоњена у партеду 3.0"
 
 #: parted/parted.c:1558
-msgid ""
-"Shrinking a partition can cause data loss, are you sure you want to continue?"
-msgstr ""
+msgid "Shrinking a partition can cause data loss, are you sure you want to continue?"
+msgstr "Скупљање партиције може да доведе до губитка података, да ли сте сигурни да желите да наставите?"
 
 #: parted/parted.c:1609
 msgid "New device?"
@@ -2569,24 +2229,16 @@ msgid "align-check"
 msgstr "align-check"
 
 #: parted/parted.c:1916
-msgid ""
-"align-check TYPE N                        check partition N for TYPE(min|"
-"opt) alignment"
-msgstr ""
-"align-check ВРСТА N                 врши проверу партиције N за ВРСТОМ(min|"
-"opt) поравнања"
+msgid "align-check TYPE N                        check partition N for TYPE(min|opt) alignment"
+msgstr "align-check ВРСТА N                             врши проверу партиције N за ВРСТОМ(min|opt) поравнања"
 
 #: parted/parted.c:1924
 msgid "help"
 msgstr "help"
 
 #: parted/parted.c:1927
-msgid ""
-"help [COMMAND]                           print general help, or help on "
-"COMMAND"
-msgstr ""
-"help [НАРЕДБА]                          штампа општу помоћ, или помоћ при "
-"НАРЕДБИ"
+msgid "help [COMMAND]                           print general help, or help on COMMAND"
+msgstr "help [НАРЕДБА]                           штампа општу помоћ, или помоћ при НАРЕДБИ"
 
 #: parted/parted.c:1933
 msgid "mklabel"
@@ -2597,12 +2249,8 @@ msgid "mktable"
 msgstr "mktable"
 
 #: parted/parted.c:1936
-msgid ""
-"mklabel,mktable LABEL-TYPE               create a new disklabel (partition "
-"table)"
-msgstr ""
-"mklabel,mktable ВРСТА-НАТПИСА               ствара нови натпис диска (табелу "
-"партиција)"
+msgid "mklabel,mktable LABEL-TYPE               create a new disklabel (partition table)"
+msgstr "mklabel,mktable ВРСТА-НАТПИСА            ствара нови натпис диска (табелу партиција)"
 
 #: parted/parted.c:1942
 msgid "mkpart"
@@ -2613,13 +2261,8 @@ msgid "mkpart PART-TYPE [FS-TYPE] START END     make a partition"
 msgstr "mkpart ВРСТА-ПАРТИЦ [ВРСТА-СИС.ДАТ.] ПОЧЕТАК КРАЈ     ствара партицију"
 
 #: parted/parted.c:1951
-msgid ""
-"'mkpart' makes a partition without creating a new file system on the "
-"partition.  FS-TYPE may be specified to set an appropriate partition ID.\n"
-msgstr ""
-"„mkpart“ прави партицију без стварања новог система датотека на партицији. "
-"ВРСТА—СИС.ДАТ. може бити наведена за подешавање одговарајућег ИБ-а "
-"партиције.\n"
+msgid "'mkpart' makes a partition without creating a new file system on the partition.  FS-TYPE may be specified to set an appropriate partition ID.\n"
+msgstr "„mkpart“ прави партицију без стварања новог система датотека на партицији.  ВРСТА—СИС.ДАТ. може бити наведена за подешавање одговарајућег ИБ-а партиције.\n"
 
 #: parted/parted.c:1956
 msgid "name"
@@ -2627,53 +2270,35 @@ msgstr "name"
 
 #: parted/parted.c:1959
 msgid "name NUMBER NAME                         name partition NUMBER as NAME"
-msgstr ""
-"name БРОЈ НАЗИВ                          именује партицију БРОЈ као НАЗИВ"
+msgstr "name БРОЈ НАЗИВ                                 именује партицију БРОЈ као НАЗИВ"
 
 #: parted/parted.c:1964
 msgid "print"
 msgstr "print"
 
 #: parted/parted.c:1967
-msgid ""
-"print [devices|free|list,all|NUMBER]     display the partition table, "
-"available devices, free space, all found partitions, or a particular "
-"partition"
-msgstr ""
-"print [уређаји|слободно|списак,све|БРОЈ]     приказује табелу партиција, "
-"доступне уређаје, слободан простор, све пронађене партиције, или посебну "
-"партицију"
+msgid "print [devices|free|list,all|NUMBER]     display the partition table, available devices, free space, all found partitions, or a particular partition"
+msgstr "print [уређаји|слободно|списак,све|БРОЈ] приказује табелу партиција, доступне уређаје, слободан простор, све пронађене партиције, или посебну партицију"
 
 #: parted/parted.c:1972
-msgid ""
-"Without arguments, 'print' displays the entire partition table. However with "
-"the following arguments it performs various other actions.\n"
-msgstr ""
-"Без аргумената, „print“ приказује читаву табелу партиција. Међутим са "
-"следећим аргументима обавља различите друге радње.\n"
+msgid "Without arguments, 'print' displays the entire partition table. However with the following arguments it performs various other actions.\n"
+msgstr "Без аргумената, „print“ приказује читаву табелу партиција. Међутим са следећим аргументима обавља различите друге радње.\n"
 
 #: parted/parted.c:1974
 msgid "  devices   : display all active block devices\n"
-msgstr "  devices   : приказује све активне блок уређаје\n"
+msgstr "  devices   :   приказује све активне блок уређаје\n"
 
 #: parted/parted.c:1975
-msgid ""
-"  free      : display information about free unpartitioned space on the "
-"current block device\n"
-msgstr ""
-"  free      : приказује податке о слободном непартиционисаном простору на "
-"текућем блок уређају\n"
+msgid "  free      : display information about free unpartitioned space on the current block device\n"
+msgstr "  free      :   приказује податке о слободном непартиционисаном простору на текућем блок уређају\n"
 
 #: parted/parted.c:1977
-msgid ""
-"  list, all : display the partition tables of all active block devices\n"
-msgstr "  list, all : приказује табеле партиција свих активних блок уређаја\n"
+msgid "  list, all : display the partition tables of all active block devices\n"
+msgstr "  list, all :   приказује табеле партиција свих активних блок уређаја\n"
 
 #: parted/parted.c:1978
-msgid ""
-"  NUMBER    : display more detailed information about this particular "
-"partition\n"
-msgstr "  БРОЈ    : приказује детаљније податке о тој посебној партицији\n"
+msgid "  NUMBER    : display more detailed information about this particular partition\n"
+msgstr "  БРОЈ    :     приказује детаљније податке о тој посебној партицији\n"
 
 #: parted/parted.c:1983
 msgid "quit"
@@ -2688,29 +2313,24 @@ msgid "rescue"
 msgstr "rescue"
 
 #: parted/parted.c:1994
-msgid ""
-"rescue START END                         rescue a lost partition near START "
-"and END"
-msgstr ""
-"rescue ПОЧЕТАК КРАЈ                         спашава изгубљену партицију "
-"близу ПОЧЕТКА и КРАЈА"
+msgid "rescue START END                         rescue a lost partition near START and END"
+msgstr "rescue ПОЧЕТАК КРАЈ                      спашава изгубљену партицију близу ПОЧЕТКА и КРАЈА"
 
 #: parted/parted.c:2000
 msgid "resize"
-msgstr ""
+msgstr "resize"
 
 #: parted/parted.c:2003
 msgid "The resize command was removed in parted 3.0\n"
-msgstr ""
+msgstr "Наредба промене величине је уклоњена у партеду 3.0\n"
 
 #: parted/parted.c:2006
 msgid "resizepart"
-msgstr ""
+msgstr "resizepart"
 
 #: parted/parted.c:2009
-#, fuzzy
 msgid "resizepart NUMBER END                    resize partition NUMBER"
-msgstr "rm БРОЈ                                брише партицију БРОЈ"
+msgstr "resizepart БРОЈ КРАЈ                     мења величину партиције БРОЈ"
 
 #: parted/parted.c:2014
 msgid "rm"
@@ -2718,7 +2338,7 @@ msgstr "rm"
 
 #: parted/parted.c:2017
 msgid "rm NUMBER                                delete partition NUMBER"
-msgstr "rm БРОЈ                                брише партицију БРОЈ"
+msgstr "rm БРОЈ                                  брише партицију БРОЈ"
 
 #: parted/parted.c:2022
 msgid "select"
@@ -2733,44 +2353,32 @@ msgid "disk_set"
 msgstr "disk_set"
 
 #: parted/parted.c:2033
-msgid ""
-"disk_set FLAG STATE                      change the FLAG on selected device"
-msgstr ""
-"disk_set СТАЊЕ ОПЦИЈЕ                    мења ОПЦИЈУ на изабраном уређају"
+msgid "disk_set FLAG STATE                      change the FLAG on selected device"
+msgstr "disk_set СТАЊЕ ОПЦИЈЕ                           мења ОПЦИЈУ на изабраном уређају"
 
 #: parted/parted.c:2038
 msgid "disk_toggle"
 msgstr "disk_toggle"
 
 #: parted/parted.c:2041
-msgid ""
-"disk_toggle [FLAG]                       toggle the state of FLAG on "
-"selected device"
-msgstr ""
-"disk_toggle [ОПЦИЈА]                     пребацује стање ОПЦИЈЕ на изабраном "
-"уређају"
+msgid "disk_toggle [FLAG]                       toggle the state of FLAG on selected device"
+msgstr "disk_toggle [ОПЦИЈА]                            пребацује стање ОПЦИЈЕ на изабраном уређају"
 
 #: parted/parted.c:2047
 msgid "set"
 msgstr "set"
 
 #: parted/parted.c:2050
-msgid ""
-"set NUMBER FLAG STATE                    change the FLAG on partition NUMBER"
-msgstr ""
-"set БРОЈ ЗАСТАВИЦА СТАЊЕ                    мења ЗАСТАВИЦУ на партицији БРОЈ"
+msgid "set NUMBER FLAG STATE                    change the FLAG on partition NUMBER"
+msgstr "set БРОЈ ЗАСТАВИЦА СТАЊЕ                 мења ЗАСТАВИЦУ на партицији БРОЈ"
 
 #: parted/parted.c:2056
 msgid "toggle"
 msgstr "toggle"
 
 #: parted/parted.c:2059
-msgid ""
-"toggle [NUMBER [FLAG]]                   toggle the state of FLAG on "
-"partition NUMBER"
-msgstr ""
-"toggle [БРОЈ [ЗАСТАВИЦА]]                   пребацује стање ЗАСТАВИЦЕ на "
-"партицији БРОЈ"
+msgid "toggle [NUMBER [FLAG]]                   toggle the state of FLAG on partition NUMBER"
+msgstr "toggle [БРОЈ [ЗАСТАВИЦА]]                пребацује стање ЗАСТАВИЦЕ на партицији БРОЈ"
 
 #: parted/parted.c:2065
 msgid "unit"
@@ -2778,29 +2386,19 @@ msgstr "unit"
 
 #: parted/parted.c:2068
 msgid "unit UNIT                                set the default unit to UNIT"
-msgstr ""
-"unit ЈЕДИНИЦА                                поставља основну јединицу на "
-"ЈЕДИНИЦУ"
+msgstr "unit ЈЕДИНИЦА                            поставља основну јединицу на ЈЕДИНИЦУ"
 
 #: parted/parted.c:2073
 msgid "version"
 msgstr "version"
 
 #: parted/parted.c:2076
-msgid ""
-"version                                  display the version number and "
-"copyright information of GNU Parted"
-msgstr ""
-"version                                  приказује број издања и податке о "
-"ауторским правима ГНУ Партеда"
+msgid "version                                  display the version number and copyright information of GNU Parted"
+msgstr "version                                  приказује број издања и податке о ауторским правима ГНУ Партеда"
 
 #: parted/parted.c:2080
-msgid ""
-"'version' displays copyright and version information corresponding to this "
-"copy of GNU Parted\n"
-msgstr ""
-"„version“ приказује ауторска права и податке о издању које одговара овом "
-"примерку ГНУ Партеда\n"
+msgid "'version' displays copyright and version information corresponding to this copy of GNU Parted\n"
+msgstr "„version“ приказује ауторска права и податке о издању које одговара овом примерку ГНУ Партеда\n"
 
 #: parted/parted.c:2148
 #, c-format
@@ -2813,7 +2411,7 @@ msgstr "Нисам пронашао уређај"
 
 #: parted/parted.c:2229
 msgid "WARNING: You are not superuser.  Watch out for permissions.\n"
-msgstr "УПОЗОРЕЊЕ: Ви нисте администратор. Затражите овлашћења.\n"
+msgstr "УПОЗОРЕЊЕ: Ви нисте администратор.  Затражите овлашћења.\n"
 
 #: parted/parted.c:2269
 msgid "You may need to update /etc/fstab.\n"
@@ -2826,13 +2424,11 @@ msgstr "Добродошли у ГНУ Партед! Упишите „help“ �
 #: parted/ui.c:165
 msgid ""
 "Usage: parted [OPTION]... [DEVICE [COMMAND [PARAMETERS]...]...]\n"
-"Apply COMMANDs with PARAMETERS to DEVICE.  If no COMMAND(s) are given, run "
-"in\n"
+"Apply COMMANDs with PARAMETERS to DEVICE.  If no COMMAND(s) are given, run in\n"
 "interactive mode.\n"
 msgstr ""
 "Коришћење: parted [ОПЦИЈА]... [УРЕЂАЈ [НАРЕДБА [ПАРАМЕТРИ]...]...]\n"
-"Примењује НАРЕДБУ/е са ПАРАМЕТРИИМА на УРЕЂАЈ. Ако није дата НАРЕДБА, ради "
-"у\n"
+"Примењује НАРЕДБУ/е са ПАРАМЕТРИМА над УРЕЂАЈЕМ. Ако није дата НАРЕДБА, ради у\n"
 "режиму међудејства.\n"
 
 #: parted/ui.c:170
@@ -2976,7 +2572,7 @@ msgid ""
 "Error: FPE_FLTRES (Float: inexact result)"
 msgstr ""
 "\n"
-"Грешка: FPE_FLTRES (Децимални број: inexact result)"
+"Грешка: FPE_FLTRES (Децимални број: нетачан резултат)"
 
 #: parted/ui.c:419
 msgid ""
@@ -3148,27 +2744,13 @@ msgstr "Користим %s\n"
 
 #: parted/ui.c:1630
 msgid "This command does not make sense in non-interactive mode.\n"
-msgstr "Ова наредба нема смиса у немеђудејственом режиму\n"
+msgstr "Ова наредба нема смисла у немеђудејственом режиму.\n"
 
 #~ msgid "Failed to add partition %d (%s)"
 #~ msgstr "Нисам успео да додам партицију %d (%s)"
 
-#~ msgid ""
-#~ "parted was unable to re-read the partition table on %s (%s).  This means "
-#~ "Linux won't know anything about the modifications you made. "
-#~ msgstr ""
-#~ "партед није могао поново да прочита табелу партиција на %s (%s). Ово "
-#~ "значи да Линукс неће знати ништа о изменама које сте начинили."
+#~ msgid "parted was unable to re-read the partition table on %s (%s).  This means Linux won't know anything about the modifications you made. "
+#~ msgstr "партед није могао поново да прочита табелу партиција на %s (%s). Ово значи да Линукс неће знати ништа о изменама које сте начинили."
 
-#~ msgid ""
-#~ "%s contains GPT signatures, indicating that it has a GPT table.  However, "
-#~ "it does not have a valid fake msdos partition table, as it should.  "
-#~ "Perhaps it was corrupted -- possibly by a program that doesn't understand "
-#~ "GPT partition tables.  Or perhaps you deleted the GPT table, and are now "
-#~ "using an msdos partition table.  Is this a GPT partition table?"
-#~ msgstr ""
-#~ "%s садржи ГПТ потписе, који указују да има ГПТ табелу. Међутим, нема "
-#~ "исправну лажну мсдос табелу партиција, као што би требало. Можда је "
-#~ "оштећена —— вероватно програмом који не разуме ГПТ табеле партиција. Или "
-#~ "сте можда ви обрисали ГПТ табелу, и сада користите мсдос табелу "
-#~ "партиција. Да ли је ово ГПТ табела партиција?"
+#~ msgid "%s contains GPT signatures, indicating that it has a GPT table.  However, it does not have a valid fake msdos partition table, as it should.  Perhaps it was corrupted -- possibly by a program that doesn't understand GPT partition tables.  Or perhaps you deleted the GPT table, and are now using an msdos partition table.  Is this a GPT partition table?"
+#~ msgstr "%s садржи ГПТ потписе, који указују да има ГПТ табелу. Међутим, нема исправну лажну мсдос табелу партиција, као што би требало. Можда је оштећена —— вероватно програмом који не разуме ГПТ табеле партиција. Или сте можда ви обрисали ГПТ табелу, и сада користите мсдос табелу партиција. Да ли је ово ГПТ табела партиција?"

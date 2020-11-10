@@ -1,9 +1,8 @@
 # This file is part of GNU Parted
-# Copyright (C) 1999-2001, 2007, 2009-2014 Free Software Foundation, Inc.
+# Copyright (C) 1999-2001, 2007, 2009-2014, 2019 Free Software Foundation, Inc.
 #
 # This file may be modified and/or distributed without restriction.
 
-AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS_CHECK =
 if HAVE_CHECK
 SUBDIRS_CHECK += tests
@@ -24,7 +23,7 @@ lib_LTLIBRARIES	= libparted.la
 # For details, see the "Updating library version information" section of
 # "info libtool".
 CURRENT = 2
-REVISION = 1
+REVISION = 2
 AGE = 0
 
 libparted_la_LDFLAGS  = -version-info $(CURRENT):$(REVISION):$(AGE)
@@ -48,18 +47,17 @@ libparted_la_SOURCES  = debug.c			\
 EXTRA_libparted_la_SOURCES    = arch/linux.c	\
 				arch/linux.h	\
 				arch/gnu.c	\
-				arch/beos.c	\
-				arch/freebsd.c
+				arch/beos.c
 
 libparted_la_LIBADD =	\
   fs/libfs.la		\
   labels/liblabels.la	\
   $(top_builddir)/lib/libgnulib.la \
   $(OS_LIBS)		\
-  $(DL_LIBS)		\
   $(DM_LIBS)		\
   $(SELINUX_LIBS)	\
   $(LIB_BLKID)		\
+  $(UUID_LIBS)		\
   $(INTLLIBS)
 
 EXTRA_DIST	      = mbr.s

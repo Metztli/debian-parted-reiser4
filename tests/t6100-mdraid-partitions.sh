@@ -1,7 +1,7 @@
 #!/bin/sh
 # verify that new kernel is informed about partitions on mdraid devices
 
-# Copyright (C) 2011-2014 Free Software Foundation, Inc.
+# Copyright (C) 2011-2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,14 +38,16 @@ parted -s "$scsi_dev" mklabel gpt \
     mkpart p1 ext2 1M 4M \
     mkpart p2 ext2 5M 8M > out 2>&1 || fail=1
 compare /dev/null out || fail=1
+wait_for_dev_to_appear_ ${scsi_dev}2 || { fail=1; cat /proc/partitions; }
 
 cleanup_fn_() {
   # stop mdraid array
   mdadm -S $md_dev || warn_ "Failed to stop MD array, $md_dev"
 }
 
-# create mdraid on top of both partitions
-mdadm -C $md_dev --force -R -l1 -n2 "${scsi_dev}1" "${scsi_dev}2"
+# create mdraid on top of both partitions with v0.90 metadata
+mdadm -C $md_dev -e0 --force -R -l1 -n2 "${scsi_dev}1" "${scsi_dev}2"
+wait_for_dev_to_appear_ ${md_dev} || { fail=1; cat /proc/partitions; }
 
 # create gpt and two partitions on the raid device
 parted -s $md_dev mklabel gpt \
@@ -54,13 +56,14 @@ parted -s $md_dev mklabel gpt \
 compare /dev/null out || fail=1
 
 # Verify that kernel has been informed about the second device.
-grep "${md_name}p2" /proc/partitions || { fail=1; cat /proc/partitions; }
+wait_for_dev_to_appear_ ${md_dev}p2 || { fail=1; cat /proc/partitions; }
 
 # Remove partitions from the raid device.
 parted -s $md_dev rm 2 rm 1 > out 2>&1 || fail=1
 compare /dev/null out || fail=1
 
 # Verify that kernel has been informed about those removals.
-grep "${md_name}p[12]" /proc/partitions && { fail=1; cat /proc/partitions; }
+wait_for_dev_to_disappear_ ${md_dev}p1 2 || { fail=1; cat /proc/partitions; }
+wait_for_dev_to_disappear_ ${md_dev}p2 2 || { fail=1; cat /proc/partitions; }
 
 Exit $fail

@@ -1,4 +1,4 @@
-From 93439ddb8bc1814d8b7ee96d1fa9c7a849a784aa Mon Sep 17 00:00:00 2001
+From 04a41cf2dac4e5dc7743127b9f1cd1519725afc0 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Wed, 6 Aug 2014 16:07:28 +0200
 Subject: Align new partitions created on fresh disks
@@ -23,10 +23,10 @@ Patch-Name: align-new-partitions-on-fresh-disks.patch
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/libparted/disk.c b/libparted/disk.c
-index fe82f449..60e9c440 100644
+index 5aaac5a4..2b35648e 100644
 --- a/libparted/disk.c
 +++ b/libparted/disk.c
-@@ -195,6 +195,7 @@ ped_disk_new (PedDevice* dev)
+@@ -196,6 +196,7 @@ ped_disk_new (PedDevice* dev)
  		goto error_close_dev;
  	}
  	disk = ped_disk_new_fresh (dev, type);
@@ -34,7 +34,7 @@ index fe82f449..60e9c440 100644
  	if (!disk)
  		goto error_close_dev;
  	if (!type->ops->read (disk))
-@@ -919,7 +920,7 @@ _partition_align (PedPartition* part, const PedConstraint* constraint)
+@@ -920,7 +921,7 @@ _partition_align (PedPartition* part, const PedConstraint* constraint)
  	PED_ASSERT (disk_type->ops->partition_align != NULL);
  	PED_ASSERT (part->disk->update_mode);
  

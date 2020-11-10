@@ -2,7 +2,7 @@
 # device-mapper: preserve uuid
 # The dm's partitions uuid would be removed when creating new partitions
 
-# Copyright (C) 2012, 2014 Free Software Foundation, Inc.
+# Copyright (C) 2012, 2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 . "${srcdir=.}/init.sh"; path_prepend_ ../parted
 
 require_root_
+require_udevadm_settle_
 (dmsetup --help) > /dev/null 2>&1 || skip_test_ "No dmsetup installed"
 
 ss=$sector_size_
@@ -46,6 +47,7 @@ for ((i=1; i<=$n_partitions; i+=1)); do
   cmd="$cmd mkpart p$i ${s}s ${s}s"
 done
 parted -m -a min -s /dev/mapper/$dm_name mklabel gpt $cmd > /dev/null 2>&1 || fail=1
+wait_for_dev_to_appear_ /dev/mapper/${dm_name}p${n_partitions} || fail=1
 
 # Make sure all the partitions have UUIDs
 for ((i=1; i<=$n_partitions; i+=1)); do

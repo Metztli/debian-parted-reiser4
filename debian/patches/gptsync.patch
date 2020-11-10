@@ -1,4 +1,4 @@
-From bcfb507bd10fc853daa37ba7d9ea9279cf94b68e Mon Sep 17 00:00:00 2001
+From 992df2bd0138ac23eb822a5d096dd511bd30be06 Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg59@srcf.ucam.org>
 Date: Fri, 28 Mar 2014 17:10:01 +0000
 Subject: GPT syncing for Intel Macs
@@ -7,7 +7,7 @@ On Intel Mac systems, write a synced MBR rather than a protective MBR.
 
 From: Colin Watson <cjwatson@ubuntu.com>
 Forwarded: no
-Last-Update: 2018-04-09
+Last-Update: 2020-02-08
 
 Patch-Name: gptsync.patch
 ---
@@ -18,10 +18,10 @@ Patch-Name: gptsync.patch
  create mode 100644 tests/t0290-gptsync.sh
 
 diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
-index fbb57c38..fd2f60f0 100644
+index 9446d5a9..dc9fa967 100644
 --- a/libparted/labels/gpt.c
 +++ b/libparted/labels/gpt.c
-@@ -310,6 +310,40 @@ typedef struct _GPTPartitionData
+@@ -311,6 +311,40 @@ typedef struct _GPTPartitionData
  
  static PedDiskType gpt_disk_type;
  
@@ -42,7 +42,7 @@ index fbb57c38..fd2f60f0 100644
 +  char *manufacturer = NULL;
 +  size_t manufacturer_len = 0;
 +
-+  dmidecode = popen ("dmidecode -s system-manufacturer", "r");
++  dmidecode = popen ("dmidecode -s system-manufacturer 2>/dev/null", "r");
 +  if (getline (&manufacturer, &manufacturer_len, dmidecode) < 0) {
 +    /* ignore; will return NULL */
 +  }
@@ -62,7 +62,7 @@ index fbb57c38..fd2f60f0 100644
  static inline uint32_t
  pth_get_size (const PedDevice *dev)
  {
-@@ -487,16 +521,19 @@ gpt_probe (const PedDevice *dev)
+@@ -486,16 +520,19 @@ gpt_probe (const PedDevice *dev)
    if (dev->length <= 1)
      return 0;
  
@@ -89,7 +89,7 @@ index fbb57c38..fd2f60f0 100644
  
    void *pth_raw = ped_malloc (pth_get_size (dev));
    if (ped_device_read (dev, pth_raw, 1, GPT_HEADER_SECTORS)
-@@ -953,6 +990,10 @@ gpt_read_headers (PedDisk const *disk,
+@@ -955,6 +992,10 @@ gpt_read_headers (PedDisk const *disk,
   *  warn if it's not there, and treat the disk as MSDOS, with a note
   *  for users to use Parted to "fix up" their disk if they
   *  really want it to be considered GPT.
@@ -100,7 +100,7 @@ index fbb57c38..fd2f60f0 100644
   ************************************************************/
  static int
  gpt_read (PedDisk *disk)
-@@ -1161,6 +1202,129 @@ _write_pmbr (PedDevice *dev, bool pmbr_boot)
+@@ -1163,6 +1204,129 @@ _write_pmbr (PedDevice *dev, bool pmbr_boot)
    return write_ok;
  }
  
@@ -230,7 +230,7 @@ index fbb57c38..fd2f60f0 100644
  static int
  _generate_header (const PedDisk *disk, int alternate, uint32_t ptes_crc,
                    GuidPartitionTableHeader_t **gpt_p)
-@@ -1272,9 +1436,15 @@ gpt_write (const PedDisk *disk)
+@@ -1274,9 +1438,15 @@ gpt_write (const PedDisk *disk)
  
    ptes_crc = efi_crc32 (ptes, ptes_bytes);
  
@@ -249,7 +249,7 @@ index fbb57c38..fd2f60f0 100644
  
    /* Write PTH and PTEs */
    /* FIXME: Caution: this code is nearly identical to what's just below. */
-@@ -2055,6 +2225,21 @@ void
+@@ -2090,6 +2260,21 @@ void
  ped_disk_gpt_init ()
  {
    ped_disk_type_register (&gpt_disk_type);
@@ -272,10 +272,10 @@ index fbb57c38..fd2f60f0 100644
  
  void
 diff --git a/tests/Makefile.am b/tests/Makefile.am
-index f9ec6a5a..e14610b8 100644
+index 4112ac1f..02eafdb5 100644
 --- a/tests/Makefile.am
 +++ b/tests/Makefile.am
-@@ -32,6 +32,7 @@ TESTS = \
+@@ -33,6 +33,7 @@ TESTS = \
    t0281-gpt-grow.sh \
    t0282-gpt-move-backup.sh \
    t0283-overlap-partitions.sh \

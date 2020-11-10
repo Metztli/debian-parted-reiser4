@@ -1,7 +1,7 @@
 #!/bin/sh
 # corrupt a GPT table; ensure parted takes notice
 
-# Copyright (C) 2009-2014 Free Software Foundation, Inc.
+# Copyright (C) 2009-2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ compare exp err || fail=1
 parted -m -s $dev u s print > out 2>&1 || fail=1
 
 # check for expected output
-printf "BYT;\nfile\n1:2048s:4095s:2048s::foo:;\n" > exp || fail=1
+printf "BYT;\nfile\n1:2048s:4095s:2048s::foo:swap;\n" > exp || fail=1
 sed "s/.*gpt::;/file/" out > k && mv k out || fail=1
 compare exp out || fail=1
 

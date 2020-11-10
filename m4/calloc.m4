@@ -1,6 +1,6 @@
-# calloc.m4 serial 15
+# calloc.m4 serial 19
 
-# Copyright (C) 2004-2014 Free Software Foundation, Inc.
+# Copyright (C) 2004-2019 Free Software Foundation, Inc.
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -25,19 +25,27 @@ AC_DEFUN([_AC_FUNC_CALLOC_IF],
        [AC_LANG_PROGRAM(
           [AC_INCLUDES_DEFAULT],
           [[int result = 0;
-            if (!calloc (0, 0))
+            char *p = calloc (0, 0);
+            if (!p)
               result |= 1;
-            if (calloc ((size_t) -1 / 8 + 1, 8))
+            free (p);
+            p = calloc ((size_t) -1 / 8 + 1, 8);
+            if (p)
               result |= 2;
+            free (p);
             return result;
           ]])],
        [ac_cv_func_calloc_0_nonnull=yes],
        [ac_cv_func_calloc_0_nonnull=no],
        [case "$host_os" in
-                  # Guess yes on glibc systems.
-          *-gnu*) ac_cv_func_calloc_0_nonnull="guessing yes" ;;
-                  # If we don't know, assume the worst.
-          *)      ac_cv_func_calloc_0_nonnull="guessing no" ;;
+                         # Guess yes on glibc systems.
+          *-gnu* | gnu*) ac_cv_func_calloc_0_nonnull="guessing yes" ;;
+                         # Guess yes on musl systems.
+          *-musl*)       ac_cv_func_calloc_0_nonnull="guessing yes" ;;
+                         # Guess yes on native Windows.
+          mingw*)        ac_cv_func_calloc_0_nonnull="guessing yes" ;;
+                         # If we don't know, assume the worst.
+          *)             ac_cv_func_calloc_0_nonnull="guessing no" ;;
         esac
        ])])
   case "$ac_cv_func_calloc_0_nonnull" in

@@ -3,19 +3,21 @@
 # Copyright (C) 2011 Free Software Foundation, Inc.
 # parted-3.1.po'nun Türkçe çevirisi
 # Eyüp Hakan Duran <hakan_duran@hotmail.com>, 2010, 2011, 2012.
+# Volkan Gezer <volkangezer@gmail.com>, 2017.
 msgid ""
 msgstr ""
-"Project-Id-Version: parted-3.1\n"
+"Project-Id-Version: parted-3.1.90\n"
 "Report-Msgid-Bugs-To: bug-parted@gnu.org\n"
-"POT-Creation-Date: 2014-07-28 23:04-0400\n"
-"PO-Revision-Date: 2012-03-06 13:41-0600\n"
-"Last-Translator: Eyüp Hakan Duran <hakan_duran@hotmail.com>\n"
+"POT-Creation-Date: 2014-06-21 14:00-0400\n"
+"PO-Revision-Date: 2017-04-03 15:08+0100\n"
+"Last-Translator: Volkan Gezer <volkangezer@gmail.com>\n"
 "Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+"X-Generator: Lokalize 2.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: lib/argmatch.c:133
@@ -236,15 +238,13 @@ msgstr "(C)"
 #: lib/version-etc.c:86
 msgid ""
 "\n"
-"License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl."
-"html>.\n"
+"License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n"
 "This is free software: you are free to change and redistribute it.\n"
 "There is NO WARRANTY, to the extent permitted by law.\n"
 "\n"
 msgstr ""
 "\n"
-"Lisans GPLv3+: GNU GPL sürüm 3 ya da sonrası <http://gnu.org/licenses/gpl."
-"html>\n"
+"Lisans GPLv3+: GNU GPL sürüm 3 ya da sonrası <http://gnu.org/licenses/gpl.html>\n"
 "Bu özgür yazılımdır: değiştirmek ve yeniden dağıtmakta özgürsünüz.\n"
 "Yasal olarak izin verildiği ölçüde GARANTİ YOKTUR.\n"
 "\n"
@@ -422,8 +422,7 @@ msgstr "%1$s açarken hata: %2$s"
 #: libparted/arch/linux.c:1650
 #, c-format
 msgid "Unable to open %s read-write (%s).  %s has been opened read-only."
-msgstr ""
-"%1$s oku-yaz şeklinde açılamıyor (%2$s).  %3$s salt-okunur olarak açıldı."
+msgstr "%1$s oku-yaz şeklinde açılamıyor (%2$s).  %3$s salt-okunur olarak açıldı."
 
 #: libparted/arch/beos.c:419 libparted/arch/linux.c:1806
 #, c-format
@@ -508,40 +507,17 @@ msgid "Unable to probe store."
 msgstr "Depo sondalanamadı."
 
 #: libparted/arch/gnu.c:368
-msgid ""
-"The partition table cannot be re-read.  This means you need to reboot before "
-"mounting any modified partitions.  You also need to reinstall your boot "
-"loader before you reboot (which may require mounting modified partitions).  "
-"It is impossible do both things!  So you'll need to boot off a rescue disk, "
-"and reinstall your boot loader from the rescue disk.  Read section 4 of the "
-"Parted User documentation for more information."
-msgstr ""
-"Disk bölümleme tablosu yeniden okunamadı, bu nedenle değiştirilmiş herhangi "
-"bir disk bölümünü bağlamadan (bilgisayarı) yeniden açmalısınız.  Yeniden "
-"açmadan önce önyükleyicinizi de yeniden kurmalısınız (ki bu değiştirilmiş "
-"disk bölümlerini bağlamayı gerektirebilir).  İki şeyi birden yapmak "
-"olanaksız!  Dolayısıyla, bir kurtarma diskiyle açmanız ve önyükleyicinizi bu "
-"diskten yeniden kurmanız gerekecek.  Daha fazla bilgi için Parted Kullanıcı "
-"belgesinin 4. bölümünü okuyunuz."
+msgid "The partition table cannot be re-read.  This means you need to reboot before mounting any modified partitions.  You also need to reinstall your boot loader before you reboot (which may require mounting modified partitions).  It is impossible do both things!  So you'll need to boot off a rescue disk, and reinstall your boot loader from the rescue disk.  Read section 4 of the Parted User documentation for more information."
+msgstr "Disk bölümleme tablosu yeniden okunamadı, bu nedenle değiştirilmiş herhangi bir disk bölümünü bağlamadan (bilgisayarı) yeniden açmalısınız.  Yeniden açmadan önce önyükleyicinizi de yeniden kurmalısınız (ki bu değiştirilmiş disk bölümlerini bağlamayı gerektirebilir).  İki şeyi birden yapmak olanaksız!  Dolayısıyla, bir kurtarma diskiyle açmanız ve önyükleyicinizi bu diskten yeniden kurmanız gerekecek.  Daha fazla bilgi için Parted Kullanıcı belgesinin 4. bölümünü okuyunuz."
 
 #: libparted/arch/gnu.c:385
 #, c-format
-msgid ""
-"The partition table on %s cannot be re-read (%s).  This means the Hurd knows "
-"nothing about any modifications you made.  You should reboot your computer "
-"before doing anything with %s."
-msgstr ""
-"%1$s (%2$s) üzerindeki disk bölümleme tablosu.  Bu, sizin yaptığınız "
-"değişiklikleri Hurd bilmiyor anlamına gelir.  %3$s ile ilgili hiçbir şey "
-"yapmadan önce bilgisayarınızı yeniden açmalısınız."
+msgid "The partition table on %s cannot be re-read (%s).  This means the Hurd knows nothing about any modifications you made.  You should reboot your computer before doing anything with %s."
+msgstr "%1$s (%2$s) üzerindeki disk bölümleme tablosu.  Bu, sizin yaptığınız değişiklikleri Hurd bilmiyor anlamına gelir.  %3$s ile ilgili hiçbir şey yapmadan önce bilgisayarınızı yeniden açmalısınız."
 
 #: libparted/arch/gnu.c:396 parted/parted.c:2262
-msgid ""
-"You should reinstall your boot loader before rebooting.  Read section 4 of "
-"the Parted User documentation for more information."
-msgstr ""
-"Yeniden açmadan önce önyükleyicinizi yeniden kurmalısınız.  Daha fazla bilgi "
-"için Parted Kullanıcı belgesinin 4. bölümünü okuyunuz."
+msgid "You should reinstall your boot loader before rebooting.  Read section 4 of the Parted User documentation for more information."
+msgstr "Yeniden açmadan önce önyükleyicinizi yeniden kurmalısınız.  Daha fazla bilgi için Parted Kullanıcı belgesinin 4. bölümünü okuyunuz."
 
 #: libparted/arch/gnu.c:788
 #, c-format
@@ -594,13 +570,11 @@ msgstr "Genel IDE"
 #, c-format
 msgid ""
 "Device %s has multiple (%d) logical sectors per physical sector.\n"
-"GNU Parted supports this EXPERIMENTALLY for some special disk label/file "
-"system combinations, e.g. GPT and ext2/3.\n"
+"GNU Parted supports this EXPERIMENTALLY for some special disk label/file system combinations, e.g. GPT and ext2/3.\n"
 "Please consult the web site for up-to-date information."
 msgstr ""
 "Aygıt %s fiziksel sektör başına çok sayıda (%d) mantıksal sektör içeriyor.\n"
-"GNU Parted bunu DENEYSEL olarak bazı disk etiketi/dosya sistemi "
-"kombinasyonları için destekliyor, örneğin GPT ve ext2/3.\n"
+"GNU Parted bunu DENEYSEL olarak bazı disk etiketi/dosya sistemi kombinasyonları için destekliyor, örneğin GPT ve ext2/3.\n"
 "Lütfen güncel bilgi için web sitesine başvurun."
 
 #: libparted/arch/linux.c:1127
@@ -610,21 +584,13 @@ msgstr "%s - %s SCSI aygıtını ilklendirmede hata"
 
 #: libparted/arch/linux.c:1191
 #, c-format
-msgid ""
-"The device %s is so small that it cannot possibly store a file system or "
-"partition table.  Perhaps you selected the wrong device?"
-msgstr ""
-"%s aygıtı.çok küçük olduğundan muhtemelen bir dosya sistemi ya da bölümleme "
-"tablosu depolayamıyor.  Yanlış aygıtı seçmiş olmayasınız?"
+msgid "The device %s is so small that it cannot possibly store a file system or partition table.  Perhaps you selected the wrong device?"
+msgstr "%s aygıtı.çok küçük olduğundan muhtemelen bir dosya sistemi ya da bölümleme tablosu depolayamıyor.  Yanlış aygıtı seçmiş olmayasınız?"
 
 #: libparted/arch/linux.c:1304
 #, c-format
-msgid ""
-"Unable to determine geometry of file/device %s.  You should not use Parted "
-"unless you REALLY know what you're doing!"
-msgstr ""
-"%s Dosya/aygıtının geometrisi belirlenemedi.  CİDDEN ne yaptığınızı "
-"bilmiyorsanız Parted kullanmamalısınız!"
+msgid "Unable to determine geometry of file/device %s.  You should not use Parted unless you REALLY know what you're doing!"
+msgstr "%s Dosya/aygıtının geometrisi belirlenemedi.  CİDDEN ne yaptığınızı bilmiyorsanız Parted kullanmamalısınız!"
 
 #: libparted/arch/linux.c:1364
 msgid "Generic SD/MMC Storage Card"
@@ -707,15 +673,8 @@ msgstr "%s okunurken %0.0s dosya sonu"
 
 #: libparted/arch/linux.c:2564
 #, c-format
-msgid ""
-"Error informing the kernel about modifications to partition %s -- %s.  This "
-"means Linux won't know about any changes you made to %s until you reboot -- "
-"so you shouldn't mount it or use it in any way before rebooting."
-msgstr ""
-"Kernel'i %1$s -- %2$s disk bölümü değişikliklerinden haberdar etmede hata.  "
-"Bu, siz (bilgisayarı) yeniden açana dek %3$s'de yaptığınız değişiklikleri "
-"Linux'un bilmemesi demek -- dolayısıyla bilgisayarınızı yeniden açmadan "
-"diski bağlamak dahil hiçbir şekilde kullanmamalısınız."
+msgid "Error informing the kernel about modifications to partition %s -- %s.  This means Linux won't know about any changes you made to %s until you reboot -- so you shouldn't mount it or use it in any way before rebooting."
+msgstr "Kernel'i %1$s -- %2$s disk bölümü değişikliklerinden haberdar etmede hata.  Bu, siz (bilgisayarı) yeniden açana dek %3$s'de yaptığınız değişiklikleri Linux'un bilmemesi demek -- dolayısıyla bilgisayarınızı yeniden açmadan diski bağlamak dahil hiçbir şekilde kullanmamalısınız."
 
 #: libparted/arch/linux.c:2683
 #, c-format
@@ -724,16 +683,8 @@ msgstr "%s'nin başlangıç ve uzunluğu belirlenemedi."
 
 #: libparted/arch/linux.c:3080
 #, c-format
-msgid ""
-"Partition(s) %s on %s have been written, but we have been unable to inform "
-"the kernel of the change, probably because it/they are in use.  As a result, "
-"the old partition(s) will remain in use.  You should reboot now before "
-"making further changes."
-msgstr ""
-"%2$s üzerindeki %1$s bölüm(ler)ü yazıldı, fakat muhtemelen kullanılmakta "
-"olduğundan kernel değişiklikten haberdar edilemedi. Sonuç olarak, eski "
-"bölüm(ler) kullanımda kalacak. Daha fazla değişiklik yapmadan "
-"bilgisayarınızı şimdi yeniden başlatmalısınız."
+msgid "Partition(s) %s on %s have been written, but we have been unable to inform the kernel of the change, probably because it/they are in use.  As a result, the old partition(s) will remain in use.  You should reboot now before making further changes."
+msgstr "%2$s üzerindeki %1$s bölüm(ler)ü yazıldı, fakat muhtemelen kullanılmakta olduğundan kernel değişiklikten haberdar edilemedi. Sonuç olarak, eski bölüm(ler) kullanımda kalacak. Daha fazla değişiklik yapmadan bilgisayarınızı şimdi yeniden başlatmalısınız."
 
 #: libparted/cs/geom.c:162
 #, c-format
@@ -743,9 +694,7 @@ msgstr "Başlangıçtan önce son gelemez! (başlangıç sektörü=%jd uzunluk=%
 #: libparted/cs/geom.c:378
 #, c-format
 msgid "Attempt to write sectors %ld-%ld outside of partition on %s."
-msgstr ""
-"%3$s üzerindeki disk bölümünün dışında yeralan %1$ld-%2$ld sektörlere "
-"yazmaya çalışılıyor."
+msgstr "%3$s üzerindeki disk bölümünün dışında yeralan %1$ld-%2$ld sektörlere yazmaya çalışılıyor."
 
 #: libparted/cs/geom.c:418
 msgid "checking for bad blocks"
@@ -768,12 +717,8 @@ msgstr "%s: tanınmayan disk etiketi"
 
 #: libparted/disk.c:486
 #, c-format
-msgid ""
-"This libparted doesn't have write support for %s.  Perhaps it was compiled "
-"read-only."
-msgstr ""
-"Bu libparted'in %s için yazma desteği yok.  Belki de salt-okunur olarak "
-"derlenmiştir."
+msgid "This libparted doesn't have write support for %s.  Perhaps it was compiled read-only."
+msgstr "Bu libparted'in %s için yazma desteği yok.  Belki de salt-okunur olarak derlenmiştir."
 
 #: libparted/disk.c:631
 #, c-format
@@ -809,8 +754,7 @@ msgstr "Çok fazla birincil disk bölümü"
 
 #: libparted/disk.c:1842
 #, c-format
-msgid ""
-"Can't add a logical partition to %s, because there is no extended partition."
+msgid "Can't add a logical partition to %s, because there is no extended partition."
 msgstr "%s'e mantıksal disk bölümü eklenemez, çünkü ek disk bölümü yok."
 
 #: libparted/disk.c:1866
@@ -908,9 +852,8 @@ msgid "msftres"
 msgstr "msftres"
 
 #: libparted/disk.c:2398
-#, fuzzy
 msgid "msftdata"
-msgstr "metaverisi"
+msgstr "msftdata"
 
 #: libparted/disk.c:2400
 msgid "atvrecv"
@@ -926,12 +869,11 @@ msgstr "kalıtılmış yeniden başlatma"
 
 #: libparted/disk.c:2406
 msgid "irst"
-msgstr ""
+msgstr "irst"
 
 #: libparted/disk.c:2408
-#, fuzzy
 msgid "esp"
-msgstr "Evet"
+msgstr "esp"
 
 #: libparted/disk.c:2414
 #, c-format
@@ -992,16 +934,8 @@ msgstr "Vazgeç"
 
 #: libparted/exception.c:133
 #, c-format
-msgid ""
-"A bug has been detected in GNU Parted.  Refer to the web site of parted "
-"http://www.gnu.org/software/parted/parted.html for more information of what "
-"could be useful for bug submitting!  Please email a bug report to %s "
-"containing at least the version (%s) and the following message:  "
-msgstr ""
-"GNU parted'da bir yazılım hatası saptandı.  Hata bildirmek için daha fazla "
-"bilgiye ulaşmak üzere parted'ın web sitesine başvurun: http://www.gnu.org/"
-"software/parted/parted.html!  Lütfen %s'e en azından sürüm (%s) ve aşağıdaki "
-"mesajı içeren bir yazılım hatası raporu gönderin:  "
+msgid "A bug has been detected in GNU Parted.  Refer to the web site of parted http://www.gnu.org/software/parted/parted.html for more information of what could be useful for bug submitting!  Please email a bug report to %s containing at least the version (%s) and the following message:  "
+msgstr "GNU parted'da bir yazılım hatası saptandı.  Hata bildirmek için daha fazla bilgiye ulaşmak üzere parted'ın web sitesine başvurun: http://www.gnu.org/software/parted/parted.html!  Lütfen %s'e en azından sürüm (%s) ve aşağıdaki mesajı içeren bir yazılım hatası raporu gönderin:  "
 
 #: libparted/labels/aix.c:103
 msgid "Support for reading AIX disk labels is is not implemented yet."
@@ -1012,23 +946,16 @@ msgid "Support for writing AIX disk labels is is not implemented yet."
 msgstr "AIX disk etiketlerini yazma desteği henüz sağlanmamıştır."
 
 #: libparted/labels/aix.c:127
-msgid ""
-"Support for adding partitions to AIX disk labels is not implemented yet."
+msgid "Support for adding partitions to AIX disk labels is not implemented yet."
 msgstr "AIX disk etiketlerine disk bölümü ekleme desteği henüz sağlanmamıştır."
 
 #: libparted/labels/aix.c:137
-msgid ""
-"Support for duplicating partitions in AIX disk labels is not implemented yet."
-msgstr ""
-"AIX disk etiketlerinde disk bölümü çoğaltma desteği henüz sağlanmamıştır."
+msgid "Support for duplicating partitions in AIX disk labels is not implemented yet."
+msgstr "AIX disk etiketlerinde disk bölümü çoğaltma desteği henüz sağlanmamıştır."
 
 #: libparted/labels/aix.c:155
-msgid ""
-"Support for setting system type of partitions in AIX disk labels is not "
-"implemented yet."
-msgstr ""
-"AIX disk etiketlerinde sistem türü disk bölümü kurma desteği henüz "
-"sağlanmamıştır."
+msgid "Support for setting system type of partitions in AIX disk labels is not implemented yet."
+msgstr "AIX disk etiketlerinde sistem türü disk bölümü kurma desteği henüz sağlanmamıştır."
 
 #: libparted/labels/aix.c:165
 msgid "Support for setting flags in AIX disk labels is not implemented yet."
@@ -1058,8 +985,7 @@ msgstr "%1$s üzerinde geçersiz disk bölümleme tablosu - yanlış imza %2$x"
 #: libparted/labels/dos.c:1029
 #, c-format
 msgid "Invalid partition table - recursive partition on %s."
-msgstr ""
-"Geçersiz disk bölümleme tablosu - %s üzerinde özyinelemeli disk bölümü."
+msgstr "Geçersiz disk bölümleme tablosu - %s üzerinde özyinelemeli disk bölümü."
 
 #: libparted/labels/dos.c:1545
 msgid "Extended partitions cannot be hidden on msdos disk labels."
@@ -1067,9 +993,7 @@ msgstr "Msdos disk etiketlerinde ek disk bölümleri gizli olamaz."
 
 #: libparted/labels/dos.c:2219
 msgid "Parted can't resize partitions managed by Windows Dynamic Disk."
-msgstr ""
-"Parted, Windows Dinamik Disk tarafından yönetilen bölümleri yeniden "
-"boyutlayamaz."
+msgstr "Parted, Windows Dinamik Disk tarafından yönetilen bölümleri yeniden boyutlayamaz."
 
 #: libparted/labels/dos.c:2475
 msgid "cannot create any more partitions"
@@ -1082,9 +1006,7 @@ msgstr "%s'in ek disk bölümü (oylum başlığı disk bölümü) yok."
 
 #: libparted/labels/dvh.c:308
 msgid "Checksum is wrong, indicating the partition table is corrupt."
-msgstr ""
-"Sağlama toplamı, disk bölümleme tablosunun bozuk olduğunu belirtir şekilde "
-"yanlış."
+msgstr "Sağlama toplamı, disk bölümleme tablosunun bozuk olduğunu belirtir şekilde yanlış."
 
 #: libparted/labels/dvh.c:613
 msgid "Only primary partitions can be root partitions."
@@ -1189,8 +1111,7 @@ msgstr "API sürümü belirlenemiyor."
 
 #: libparted/labels/fdasd.c:941
 #, c-format
-msgid ""
-"The current API version '%d' doesn't match dasd driver API version '%d'!"
+msgid "The current API version '%d' doesn't match dasd driver API version '%d'!"
 msgstr "Mevcut API sürümü '%d' dasd sürücüsü API sürümüyle '%d' uyuşmuyor!"
 
 #: libparted/labels/fdasd.c:984
@@ -1206,72 +1127,42 @@ msgid "Could not retrieve disk information."
 msgstr "Disk bilgisi alınamıyor."
 
 #: libparted/labels/gpt.c:532
-#, fuzzy
 msgid "device is too small for GPT"
-msgstr "%lu blok için aygıt çok küçük."
+msgstr "GPT için aygıt çok küçük."
 
 #: libparted/labels/gpt.c:734
 #, c-format
-msgid ""
-"The format of the GPT partition table is version %x, which is newer than "
-"what Parted can recognise.  Please report this!"
-msgstr ""
-"GPT disk bölümleme tablosu biçemi sürüm %x olup, Parted'ın "
-"tanıyabileceğinden daha yenidir.  Lütfen bize bildirin!"
+msgid "The format of the GPT partition table is version %x, which is newer than what Parted can recognise.  Please report this!"
+msgstr "GPT disk bölümleme tablosu biçemi sürüm %x olup, Parted'ın tanıyabileceğinden daha yenidir.  Lütfen bize bildirin!"
 
 #: libparted/labels/gpt.c:770
 #, c-format
-msgid ""
-"Not all of the space available to %s appears to be used, you can fix the GPT "
-"to use all of the space (an extra %llu blocks) or continue with the current "
-"setting? "
-msgstr ""
-"%s için kullanılabilir boşluğun tamamı kullanılmamış görünüyor, GPT'yi "
-"ayarlayıp tüm mevcut boşluğu (%llu ek blok) kullanabilir ya da mevcut ayarla "
-"devam edebilirsiniz?"
+msgid "Not all of the space available to %s appears to be used, you can fix the GPT to use all of the space (an extra %llu blocks) or continue with the current setting? "
+msgstr "%s için kullanılabilir boşluğun tamamı kullanılmamış görünüyor, GPT'yi ayarlayıp tüm mevcut boşluğu (%llu ek blok) kullanabilir ya da mevcut ayarla devam edebilirsiniz?"
 
 #: libparted/labels/gpt.c:1006
-#, fuzzy
-msgid ""
-"The backup GPT table is not at the end of the disk, as it should be.  Fix, "
-"by moving the backup to the end (and removing the old backup)?"
-msgstr ""
-"GPT tablosunun yedeği, olması gerektiği gibi diskin sonunda değil.  Bu, bir "
-"başka işletim sisteminin diski olduğundan küçük sanması anlamına gelebilir.  "
-"Yedeği sona taşıyarak (ve eski yedeği silerek) onarınız?"
+msgid "The backup GPT table is not at the end of the disk, as it should be.  Fix, by moving the backup to the end (and removing the old backup)?"
+msgstr "GPT tablosunun yedeği, olması gerektiği gibi diskin sonunda değil.  Yedeği sona taşıyarak (ve eski yedeği silerek) onar?"
 
 #: libparted/labels/gpt.c:1024
-msgid ""
-"Both the primary and backup GPT tables are corrupt.  Try making a fresh "
-"table, and using Parted's rescue feature to recover partitions."
-msgstr ""
-"Hem birincil, hem de yedek GPT tablosu bozuk.  Yeni bir tablo oluşturmayı ve "
-"Parted'ın kurtarma özelliğini kullanarak disk bölümlerini kurtarmayı deneyin."
+msgid "Both the primary and backup GPT tables are corrupt.  Try making a fresh table, and using Parted's rescue feature to recover partitions."
+msgstr "Hem birincil, hem de yedek GPT tablosu bozuk.  Yeni bir tablo oluşturmayı ve Parted'ın kurtarma özelliğini kullanarak disk bölümlerini kurtarmayı deneyin."
 
 #: libparted/labels/gpt.c:1035
-msgid ""
-"The backup GPT table is corrupt, but the primary appears OK, so that will be "
-"used."
-msgstr ""
-"Yedek GPT tablosu bozuk, ama birincil tamam görünüyor, dolayısıyla o "
-"kullanılacak."
+msgid "The backup GPT table is corrupt, but the primary appears OK, so that will be used."
+msgstr "Yedek GPT tablosu bozuk, ama birincil tamam görünüyor, dolayısıyla o kullanılacak."
 
 #: libparted/labels/gpt.c:1047
-msgid ""
-"The primary GPT table is corrupt, but the backup appears OK, so that will be "
-"used."
-msgstr ""
-"Birincil GPT tablosu bozuk, ama yedek tamam görünüyor, dolayısıyla yedek "
-"kullanılacak."
+msgid "The primary GPT table is corrupt, but the backup appears OK, so that will be used."
+msgstr "Birincil GPT tablosu bozuk, ama yedek tamam görünüyor, dolayısıyla yedek kullanılacak."
 
 #: libparted/labels/gpt.c:1071
 msgid "primary partition table array CRC mismatch"
 msgstr "birincil bölümleme tablosu dizisi CRC uyumsuzluğu"
 
 #: libparted/labels/gpt.c:1901 libparted/labels/gpt.c:1928
-#, fuzzy
 msgid "failed to translate partition name"
-msgstr "Bir disk bölümü numarası atanamadı."
+msgstr "disk bölümü adı çevrilemedi"
 
 #: libparted/labels/mac.c:184
 #, c-format
@@ -1315,18 +1206,13 @@ msgstr "Disk bölümünün veri bölgesi tüm disk bölümünü kaplamıyor."
 
 #: libparted/labels/mac.c:648
 #, c-format
-msgid ""
-"Weird block size on device descriptor: %d bytes is not divisible by 512."
+msgid "Weird block size on device descriptor: %d bytes is not divisible by 512."
 msgstr "Aygıt tanımlayıcısında tuhaf blok boyutu: %d bayt, 512'ye bölünemiyor."
 
 #: libparted/labels/mac.c:661
 #, c-format
-msgid ""
-"The driver descriptor says the physical block size is %d bytes, but Linux "
-"says it is %d bytes."
-msgstr ""
-"Sürücü tanımlayıcısı fiziksel blok boyutunun %d bayt olduğunu, Linux %d bayt "
-"olduğunu bildiriyor.."
+msgid "The driver descriptor says the physical block size is %d bytes, but Linux says it is %d bytes."
+msgstr "Sürücü tanımlayıcısı fiziksel blok boyutunun %d bayt olduğunu, Linux %d bayt olduğunu bildiriyor.."
 
 #: libparted/labels/mac.c:714
 msgid "No valid partition map found."
@@ -1334,24 +1220,16 @@ msgstr "Geçerli disk bölümü eşlemi bulunamadı."
 
 #: libparted/labels/mac.c:787
 #, c-format
-msgid ""
-"Conflicting partition map entry sizes!  Entry 1 says it is %d, but entry %d "
-"says it is %d!"
-msgstr ""
-"Çelişen disk bölümü eşlem girdi boyutları!  1. Girdi %1$d olduğunu, ancak "
-"%2$d. girdi %3$d olduğunu bildiriyor!"
+msgid "Conflicting partition map entry sizes!  Entry 1 says it is %d, but entry %d says it is %d!"
+msgstr "Çelişen disk bölümü eşlem girdi boyutları!  1. Girdi %1$d olduğunu, ancak %2$d. girdi %3$d olduğunu bildiriyor!"
 
 #: libparted/labels/mac.c:818
 msgid "Weird!  There are 2 partitions map entries!"
 msgstr "Tuhaf!-  2 disk bölümü eşlem girdisi mevcut!"
 
 #: libparted/labels/mac.c:1356
-msgid ""
-"Changing the name of a root or swap partition will prevent Linux from "
-"recognising it as such."
-msgstr ""
-"Bir kök ya da takas disk bölümünün adını değiştirmek, Linux'un onu olduğu "
-"gibi tanımasını engelleyecek."
+msgid "Changing the name of a root or swap partition will prevent Linux from recognising it as such."
+msgstr "Bir kök ya da takas disk bölümünün adını değiştirmek, Linux'un onu olduğu gibi tanımasını engelleyecek."
 
 #: libparted/labels/mac.c:1455
 msgid "Can't add another partition -- the partition map is too small!"
@@ -1364,11 +1242,8 @@ msgstr "%s üzerinde geçersiz disk bölümleme tablosu."
 
 #: libparted/labels/pc98.c:337 libparted/labels/pc98.c:415
 #, c-format
-msgid ""
-"Partition %d isn't aligned to cylinder boundaries.  This is still "
-"unsupported."
-msgstr ""
-"%d disk bölümü silindir sınırlarına hizalanmamış.  Bu hala desteklenmiyor."
+msgid "Partition %d isn't aligned to cylinder boundaries.  This is still unsupported."
+msgstr "%d disk bölümü silindir sınırlarına hizalanmamış.  Bu hala desteklenmiyor."
 
 #: libparted/labels/pc98.c:733
 msgid "Can't add another partition."
@@ -1376,21 +1251,13 @@ msgstr "Bir başka disk bölümü eklenemiyor."
 
 #: libparted/labels/pt-tools.c:133
 #, c-format
-msgid ""
-"partition length of %jd sectors exceeds the %s-partition-table-imposed "
-"maximum of %jd"
-msgstr ""
-"%jd sektörün bölümleme uzunluğu %s bölümleme tablosunca zorlanan maksimum "
-"%jd'i aşıyor"
+msgid "partition length of %jd sectors exceeds the %s-partition-table-imposed maximum of %jd"
+msgstr "%jd sektörün bölümleme uzunluğu %s bölümleme tablosunca zorlanan maksimum %jd'i aşıyor"
 
 #: libparted/labels/pt-tools.c:146
 #, c-format
-msgid ""
-"starting sector number, %jd exceeds the %s-partition-table-imposed maximum "
-"of %jd"
-msgstr ""
-"başlangıç sektör numarası %jd,%s bölümleme tablosunca zorlanan maksimum "
-"%jd'i aşıyor"
+msgid "starting sector number, %jd exceeds the %s-partition-table-imposed maximum of %jd"
+msgstr "başlangıç sektör numarası %jd,%s bölümleme tablosunca zorlanan maksimum %jd'i aşıyor"
 
 #: libparted/labels/rdb.c:169
 #, c-format
@@ -1447,12 +1314,8 @@ msgstr "Bozuk Sun disk etiketi saptandı."
 
 #: libparted/labels/sun.c:276
 #, c-format
-msgid ""
-"The disk CHS geometry (%d,%d,%d) reported by the operating system does not "
-"match the geometry stored on the disk label (%d,%d,%d)."
-msgstr ""
-"Disk CHS geometrisi (%d,%d,%d), disk etiketinde saklanan geometriye (%d,%d,"
-"%d).uymuyor."
+msgid "The disk CHS geometry (%d,%d,%d) reported by the operating system does not match the geometry stored on the disk label (%d,%d,%d)."
+msgstr "Disk CHS geometrisi (%d,%d,%d), disk etiketinde saklanan geometriye (%d,%d,%d).uymuyor."
 
 #: libparted/labels/sun.c:298
 #, c-format
@@ -1465,15 +1328,8 @@ msgid "The disk has %d cylinders, which is greater than the maximum of 65536."
 msgstr "Disk %d silindire sahip ki bu maksimum 65536'dan daha çok."
 
 #: libparted/labels/sun.c:812
-msgid ""
-"The Whole Disk partition is the only available one left.  Generally, it is "
-"not a good idea to overwrite this partition with a real one.  Solaris may "
-"not be able to boot without it, and SILO (the sparc boot loader) appreciates "
-"it as well."
-msgstr ""
-"Geride yalnızca Tüm Disk disk bölümü kaldı.  Genellikle, bu disk bölümünün "
-"üzerine bir gerçeğini yazmak iyi bir fikir değildir.  Solaris onsuz "
-"açılmayabilir, ve SILO da (sparc önyükleyicisi) ona değer verir."
+msgid "The Whole Disk partition is the only available one left.  Generally, it is not a good idea to overwrite this partition with a real one.  Solaris may not be able to boot without it, and SILO (the sparc boot loader) appreciates it as well."
+msgstr "Geride yalnızca Tüm Disk disk bölümü kaldı.  Genellikle, bu disk bölümünün üzerine bir gerçeğini yazmak iyi bir fikir değildir.  Solaris onsuz açılmayabilir, ve SILO da (sparc önyükleyicisi) ona değer verir."
 
 #: libparted/labels/sun.c:827
 msgid "Sun disk label is full."
@@ -1545,9 +1401,8 @@ msgid "Could not write VTOC FMT7 DSCB."
 msgstr "VTOC FMT7 DSCB yazılamıyor."
 
 #: libparted/labels/vtoc.c:626
-#, fuzzy
 msgid "Could not write VTOC FMT9 DSCB."
-msgstr "VTOC FMT1 DSCB yazılamıyor."
+msgstr "VTOC FMT9 DSCB yazılamadı."
 
 #: libparted/libparted.c:234
 msgid "Out of memory."
@@ -1644,12 +1499,8 @@ msgid "%s : Failed to read partition block %llu\n"
 msgstr "%s : %llu bölümleme bloğunu okuma başarısız\n"
 
 #: libparted/fs/fat/fat.c:148 libparted/fs/r/fat/fat.c:811
-msgid ""
-"GNU Parted was miscompiled: the FAT boot sector should be 512 bytes.  FAT "
-"support will be disabled."
-msgstr ""
-"GNU parted yanlış derlenmiş: FAT önyükleme sektörü 512 bayt olmalı.  FAT "
-"desteği devre dışı bırakılacak."
+msgid "GNU Parted was miscompiled: the FAT boot sector should be 512 bytes.  FAT support will be disabled."
+msgstr "GNU parted yanlış derlenmiş: FAT önyükleme sektörü 512 bayt olmalı.  FAT desteği devre dışı bırakılacak."
 
 #: libparted/fs/fat/bootsector.c:50 libparted/fs/r/fat/bootsector.c:49
 msgid "File system has an invalid signature for a FAT file system."
@@ -1657,20 +1508,15 @@ msgstr "Dosya sistemi, FAT dosya sistemi için geçersiz bir imzaya sahip.."
 
 #: libparted/fs/fat/bootsector.c:58 libparted/fs/r/fat/bootsector.c:57
 msgid "File system has an invalid sector size for a FAT file system."
-msgstr ""
-"Dosya sistemi, FAT dosya sistemi için geçersiz bir sektör boyutuna sahip."
+msgstr "Dosya sistemi, FAT dosya sistemi için geçersiz bir sektör boyutuna sahip."
 
 #: libparted/fs/fat/bootsector.c:65 libparted/fs/r/fat/bootsector.c:64
 msgid "File system has an invalid cluster size for a FAT file system."
-msgstr ""
-"Dosya sistemi, FAT dosya sistemi için geçersiz bir küme boyutuna sahip."
+msgstr "Dosya sistemi, FAT dosya sistemi için geçersiz bir küme boyutuna sahip."
 
 #: libparted/fs/fat/bootsector.c:72 libparted/fs/r/fat/bootsector.c:71
-msgid ""
-"File system has an invalid number of reserved sectors for a FAT file system."
-msgstr ""
-"Dosya sistemi, FAT dosya sistemi için geçersiz bir ayrılmış sektör sayısına "
-"sahip."
+msgid "File system has an invalid number of reserved sectors for a FAT file system."
+msgstr "Dosya sistemi, FAT dosya sistemi için geçersiz bir ayrılmış sektör sayısına sahip."
 
 #: libparted/fs/fat/bootsector.c:79 libparted/fs/r/fat/bootsector.c:78
 msgid "File system has an invalid number of FATs."
@@ -1678,18 +1524,12 @@ msgstr "Dosya sistemi, geçersiz FATS sayısına sahip."
 
 #: libparted/fs/fat/bootsector.c:162
 #, c-format
-msgid ""
-"The file system's CHS geometry is (%d, %d, %d), which is invalid.  The "
-"partition table's CHS geometry is (%d, %d, %d)."
-msgstr ""
-"Dosya sisteminin CHS geometrisi (%d, %d, %d) olup, bu geçersizdir. Bölümleme "
-"tablosunun CHS geometrisi (%d, %d, %d)'dir."
+msgid "The file system's CHS geometry is (%d, %d, %d), which is invalid.  The partition table's CHS geometry is (%d, %d, %d)."
+msgstr "Dosya sisteminin CHS geometrisi (%d, %d, %d) olup, bu geçersizdir. Bölümleme tablosunun CHS geometrisi (%d, %d, %d)'dir."
 
 #: libparted/fs/fat/bootsector.c:197 libparted/fs/r/fat/bootsector.c:206
 msgid "FAT boot sector says logical sector size is 0.  This is weird. "
-msgstr ""
-"FAT önyükleme sektörü mantıksal sektör boyutunun 0 olduğunu söylüyor.  Bu "
-"tuhaf. "
+msgstr "FAT önyükleme sektörü mantıksal sektör boyutunun 0 olduğunu söylüyor.  Bu tuhaf. "
 
 #: libparted/fs/fat/bootsector.c:203 libparted/fs/r/fat/bootsector.c:212
 msgid "FAT boot sector says there are no FAT tables.  This is weird. "
@@ -1697,8 +1537,7 @@ msgstr "FAT önyükleme sektörü FAT tablosunun olmadığını söylüyor.  Bu 
 
 #: libparted/fs/fat/bootsector.c:209 libparted/fs/r/fat/bootsector.c:218
 msgid "FAT boot sector says clusters are 0 sectors.  This is weird. "
-msgstr ""
-"FAT önyükleme sektörü kümelerin 0 sektör olduğunu söylüyor.  Bu tuhaf. "
+msgstr "FAT önyükleme sektörü kümelerin 0 sektör olduğunu söylüyor.  Bu tuhaf. "
 
 #: libparted/fs/fat/bootsector.c:219 libparted/fs/r/fat/bootsector.c:228
 msgid "File system is FAT12, which is unsupported."
@@ -1721,59 +1560,32 @@ msgstr "Tanınmayan swsusp linux takas imzası '%9s'."
 
 #: libparted/fs/hfs/probe.c:50 libparted/fs/r/hfs/probe.c:50
 #, c-format
-msgid ""
-"Parted can't use HFS file systems on disks with a sector size not equal to "
-"%d bytes."
-msgstr ""
-"Parted sektör boyutu %d bayta eşit olmayan disklerde HFS dosya sistemi "
-"kullanamaz."
+msgid "Parted can't use HFS file systems on disks with a sector size not equal to %d bytes."
+msgstr "Parted sektör boyutu %d bayta eşit olmayan disklerde HFS dosya sistemi kullanamaz."
 
 #: libparted/fs/r/fat/bootsector.c:132
 #, c-format
-msgid ""
-"This file system has a logical sector size of %d.  GNU Parted is known not "
-"to work properly with sector sizes other than 512 bytes."
-msgstr ""
-"Bu dosya sistemi %d mantıksal sektör boyutuna sahip.  GNU Parted'in 512 "
-"bayttan farklı sektör boyutlarıyla düzgün çalışmadığı bilinmektedir."
+msgid "This file system has a logical sector size of %d.  GNU Parted is known not to work properly with sector sizes other than 512 bytes."
+msgstr "Bu dosya sistemi %d mantıksal sektör boyutuna sahip.  GNU Parted'in 512 bayttan farklı sektör boyutlarıyla düzgün çalışmadığı bilinmektedir."
 
 #: libparted/fs/r/fat/bootsector.c:157
 #, c-format
-msgid ""
-"The file system's CHS geometry is (%d, %d, %d), which is invalid.  The "
-"partition table's CHS geometry is (%d, %d, %d).  If you select Ignore, the "
-"file system's CHS geometry will be left unchanged.  If you select Fix, the "
-"file system's CHS geometry will be set to match the partition table's CHS "
-"geometry."
-msgstr ""
-"Dosya sisteminin CHS geometrisi (%d, %d, %d), ki bu geçersiz.  Bölümleme "
-"tablosunun CHS geometrisi (%d ,%d ,%d).  Yoksay'ı seçerseniz dosya "
-"sisteminin CHS geometrisi değiştirilmeyecek.   Onar'ı seçerseniz dosya "
-"sisteminin CHS geometrisi, bölümleme tablosunun CHS geometrisiyle uyuşacak "
-"şekilde ayarlanacak."
+msgid "The file system's CHS geometry is (%d, %d, %d), which is invalid.  The partition table's CHS geometry is (%d, %d, %d).  If you select Ignore, the file system's CHS geometry will be left unchanged.  If you select Fix, the file system's CHS geometry will be set to match the partition table's CHS geometry."
+msgstr "Dosya sisteminin CHS geometrisi (%d, %d, %d), ki bu geçersiz.  Bölümleme tablosunun CHS geometrisi (%d ,%d ,%d).  Yoksay'ı seçerseniz dosya sisteminin CHS geometrisi değiştirilmeyecek.   Onar'ı seçerseniz dosya sisteminin CHS geometrisi, bölümleme tablosunun CHS geometrisiyle uyuşacak şekilde ayarlanacak."
 
 #: libparted/fs/r/fat/bootsector.c:406
 #, c-format
-msgid ""
-"The information sector has the wrong signature (%x).  Select cancel for now, "
-"and send in a bug report.  If you're desperate, it's probably safe to ignore."
-msgstr ""
-"Bilgi sektörü yanlış imzaya sahip. (%x).  Şimdilik vazgeçi seçin ve bir "
-"yazılım hatası raporu gönderin.  Çaresizseniz, yoksaymak muhtemelen güvenli."
+msgid "The information sector has the wrong signature (%x).  Select cancel for now, and send in a bug report.  If you're desperate, it's probably safe to ignore."
+msgstr "Bilgi sektörü yanlış imzaya sahip. (%x).  Şimdilik vazgeçi seçin ve bir yazılım hatası raporu gönderin.  Çaresizseniz, yoksaymak muhtemelen güvenli."
 
 #: libparted/fs/r/fat/calc.c:134
 #, c-format
-msgid ""
-"You need %s of free disk space to shrink this partition to this size.  "
-"Currently, only %s is free."
-msgstr ""
-"Bu disk bölümünü bu boyuta küçültmek için %1$s'lik boş yere gereksiniminiz "
-"var.  Halen yalnızca %2$s kadarı boş."
+msgid "You need %s of free disk space to shrink this partition to this size.  Currently, only %s is free."
+msgstr "Bu disk bölümünü bu boyuta küçültmek için %1$s'lik boş yere gereksiniminiz var.  Halen yalnızca %2$s kadarı boş."
 
 #: libparted/fs/r/fat/context.c:55
 #, c-format
-msgid ""
-"Cluster start delta = %d, which is not a multiple of the cluster size %d."
+msgid "Cluster start delta = %d, which is not a multiple of the cluster size %d."
 msgstr "Küme başlangıcı delta = %d, küme boyutu olan %d'nin katsayısı değil."
 
 #: libparted/fs/r/fat/count.c:143
@@ -1783,29 +1595,18 @@ msgstr "%s için bozuk dizin girişi: ilk küme dosya belirtecinin sonunda."
 
 #: libparted/fs/r/fat/count.c:156
 #, c-format
-msgid ""
-"Bad FAT: unterminated chain for %s.  You should run dosfsck or scandisk."
-msgstr ""
-"Bozuk FAT: %s için sonlandırılmamış zincir.  dosfsck ya da scandisk "
-"yürütmelisiniz."
+msgid "Bad FAT: unterminated chain for %s.  You should run dosfsck or scandisk."
+msgstr "Bozuk FAT: %s için sonlandırılmamış zincir.  dosfsck ya da scandisk yürütmelisiniz."
 
 #: libparted/fs/r/fat/count.c:165
 #, c-format
-msgid ""
-"Bad FAT: cluster %d outside file system in chain for %s.  You should run "
-"dosfsck or scandisk."
-msgstr ""
-"Bozuk FAT: %d kümesi %s için dosya sistemi zincirinin dışında.  dosfsck ya "
-"da scandisk yürütmelisiniz."
+msgid "Bad FAT: cluster %d outside file system in chain for %s.  You should run dosfsck or scandisk."
+msgstr "Bozuk FAT: %d kümesi %s için dosya sistemi zincirinin dışında.  dosfsck ya da scandisk yürütmelisiniz."
 
 #: libparted/fs/r/fat/count.c:175
 #, c-format
-msgid ""
-"Bad FAT: cluster %d is cross-linked for %s.  You should run dosfsck or "
-"scandisk."
-msgstr ""
-"Bozuk FAT: %d kümesi %s için çapraz bağlı.  dosfsck ya da scandisk "
-"yürütmelisiniz."
+msgid "Bad FAT: cluster %d is cross-linked for %s.  You should run dosfsck or scandisk."
+msgstr "Bozuk FAT: %d kümesi %s için çapraz bağlı.  dosfsck ya da scandisk yürütmelisiniz."
 
 #: libparted/fs/r/fat/count.c:194
 #, c-format
@@ -1814,12 +1615,8 @@ msgstr "%s %dkdır, fakat %d kümeye (%dk) sahip."
 
 #: libparted/fs/r/fat/count.c:257
 #, c-format
-msgid ""
-"The file %s is marked as a system file.  This means moving it could cause "
-"some programs to stop working."
-msgstr ""
-"%s dosyası bir sistem dosyası olarak işaretlenmiş.  Bu, onu taşımanın bazı "
-"programların çalışmasını durdurmaya yolaçacağı anlamına gelir."
+msgid "The file %s is marked as a system file.  This means moving it could cause some programs to stop working."
+msgstr "%s dosyası bir sistem dosyası olarak işaretlenmiş.  Bu, onu taşımanın bazı programların çalışmasını durdurmaya yolaçacağı anlamına gelir."
 
 #: libparted/fs/r/fat/fat.c:243
 #, c-format
@@ -1827,12 +1624,8 @@ msgid "Partition too big/small for a %s file system."
 msgstr "Disk bölümü, bir %s dosya sistemi için çok büyük/küçük"
 
 #: libparted/fs/r/fat/fat.c:409
-msgid ""
-"The FATs don't match.  If you don't know what this means, then select "
-"cancel, run scandisk on the file system, and then come back."
-msgstr ""
-"FAT'lar uyuşmuyor.  Eğer bunun ne demek olduğunu bilmiyorsanız, Vazgeç'i "
-"seçin, dosya sisteminde scandisk'i yürütün, ve buraya dönün."
+msgid "The FATs don't match.  If you don't know what this means, then select cancel, run scandisk on the file system, and then come back."
+msgstr "FAT'lar uyuşmuyor.  Eğer bunun ne demek olduğunu bilmiyorsanız, Vazgeç'i seçin, dosya sisteminde scandisk'i yürütün, ve buraya dönün."
 
 #: libparted/fs/r/fat/fat.c:449
 msgid "There are no possible configurations for this FAT type."
@@ -1840,28 +1633,17 @@ msgstr "Bu FAT türü için olası yapılandırma yok."
 
 #: libparted/fs/r/fat/fat.c:461
 #, c-format
-msgid ""
-"File system doesn't have expected sizes for Windows to like it.  Cluster "
-"size is %dk (%dk expected); number of clusters is %d (%d expected); size of "
-"FATs is %d sectors (%d expected)."
-msgstr ""
-"Dosya sistemi, Windows'un hoşlanması beklenen boyutlara sahip değil.  Küme "
-"boyutu %dk (%dk beklenirdi); küme sayısı %d (%d beklenirdi); FAT boyutları "
-"%d sektördür (%d beklenirdi)."
+msgid "File system doesn't have expected sizes for Windows to like it.  Cluster size is %dk (%dk expected); number of clusters is %d (%d expected); size of FATs is %d sectors (%d expected)."
+msgstr "Dosya sistemi, Windows'un hoşlanması beklenen boyutlara sahip değil.  Küme boyutu %dk (%dk beklenirdi); küme sayısı %d (%d beklenirdi); FAT boyutları %d sektördür (%d beklenirdi)."
 
 #: libparted/fs/r/fat/fat.c:484
 #, c-format
-msgid ""
-"File system is reporting the free space as %d clusters, not %d clusters."
+msgid "File system is reporting the free space as %d clusters, not %d clusters."
 msgstr "Dosya sistemi boşluğun %d küme olduğunu bildiriyor, %d küme değil."
 
 #: libparted/fs/r/fat/resize.c:158
-msgid ""
-"There's not enough room in the root directory for all of the files.  Either "
-"cancel, or ignore to lose the files."
-msgstr ""
-"Kök dizininde tüm dosyalara yetecek yer yok.  Ya iptal edin, ya da dosyaları "
-"yitirmek için yoksayın."
+msgid "There's not enough room in the root directory for all of the files.  Either cancel, or ignore to lose the files."
+msgstr "Kök dizininde tüm dosyalara yetecek yer yok.  Ya iptal edin, ya da dosyaları yitirmek için yoksayın."
 
 #: libparted/fs/r/fat/resize.c:299
 msgid "Error writing to the root directory."
@@ -1872,37 +1654,16 @@ msgid "If you leave your file system as FAT16, then you will have no problems."
 msgstr "Eğer dosya sisteminizi FAT16 olarak bırakırsanız sorununuz olmaz."
 
 #: libparted/fs/r/fat/resize.c:491
-msgid ""
-"If you convert to FAT16, and MS Windows is installed on this partition, then "
-"you must re-install the MS Windows boot loader.  If you want to do this, you "
-"should consult the Parted manual (or your distribution's manual)."
-msgstr ""
-"Eğer FAT16'ya dönüştürürseniz ve bu disk bölümüne MS Windows yüklenmişse, MS "
-"Windows önyükleyicisini yeniden yüklemelisiniz.  Eğer bunu yapmak "
-"isterseniz, Parted el kitabına (ya da dağıtımınızın el kitabına) "
-"başvurmalısınız."
+msgid "If you convert to FAT16, and MS Windows is installed on this partition, then you must re-install the MS Windows boot loader.  If you want to do this, you should consult the Parted manual (or your distribution's manual)."
+msgstr "Eğer FAT16'ya dönüştürürseniz ve bu disk bölümüne MS Windows yüklenmişse, MS Windows önyükleyicisini yeniden yüklemelisiniz.  Eğer bunu yapmak isterseniz, Parted el kitabına (ya da dağıtımınızın el kitabına) başvurmalısınız."
 
 #: libparted/fs/r/fat/resize.c:499
-msgid ""
-"If you leave your file system as FAT32, then you will not introduce any new "
-"problems."
-msgstr ""
-"Eğer dosya sisteminizi FAT32 olarak bırakırsanız yeni bir sorunla "
-"karşılaşmayacaksınız."
+msgid "If you leave your file system as FAT32, then you will not introduce any new problems."
+msgstr "Eğer dosya sisteminizi FAT32 olarak bırakırsanız yeni bir sorunla karşılaşmayacaksınız."
 
 #: libparted/fs/r/fat/resize.c:503
-msgid ""
-"If you convert to FAT32, and MS Windows is installed on this partition, then "
-"you must re-install the MS Windows boot loader.  If you want to do this, you "
-"should consult the Parted manual (or your distribution's manual).  Also, "
-"converting to FAT32 will make the file system unreadable by MS DOS, MS "
-"Windows 95a, and MS Windows NT."
-msgstr ""
-"Eğer FAT32'ye dönüştürürseniz ve bu disk bölümüne MS Windows yüklenmişse, MS "
-"Windows önyükleyicisini yeniden yüklemelisiniz.  Eğer bunu yapmak "
-"isterseniz, Parted el kitabına (ya da dağıtımınızın el kitabına) "
-"başvurmalısınız.  Ayrıca FAT32'ye dönüşüm, dosya sisteminin MS DOS, MS "
-"Windows 95a ve MS Windows NT tarafından okunamaz olmasına yol açacaktır."
+msgid "If you convert to FAT32, and MS Windows is installed on this partition, then you must re-install the MS Windows boot loader.  If you want to do this, you should consult the Parted manual (or your distribution's manual).  Also, converting to FAT32 will make the file system unreadable by MS DOS, MS Windows 95a, and MS Windows NT."
+msgstr "Eğer FAT32'ye dönüştürürseniz ve bu disk bölümüne MS Windows yüklenmişse, MS Windows önyükleyicisini yeniden yüklemelisiniz.  Eğer bunu yapmak isterseniz, Parted el kitabına (ya da dağıtımınızın el kitabına) başvurmalısınız.  Ayrıca FAT32'ye dönüşüm, dosya sisteminin MS DOS, MS Windows 95a ve MS Windows NT tarafından okunamaz olmasına yol açacaktır."
 
 #: libparted/fs/r/fat/resize.c:517
 #, c-format
@@ -1919,34 +1680,21 @@ msgid "%s  %s"
 msgstr "%s  %s"
 
 #: libparted/fs/r/fat/resize.c:550
-msgid ""
-"The file system can only be resized to this size by converting to FAT16."
-msgstr ""
-"Dosya sistemi, yalnızca FAT16'ya dönüştürülerek bu boyuta yeniden "
-"boyutlandırılabilir."
+msgid "The file system can only be resized to this size by converting to FAT16."
+msgstr "Dosya sistemi, yalnızca FAT16'ya dönüştürülerek bu boyuta yeniden boyutlandırılabilir."
 
 #: libparted/fs/r/fat/resize.c:566
-msgid ""
-"The file system can only be resized to this size by converting to FAT32."
-msgstr ""
-"Dosya sistemi, yalnızca FAT32'ye dönüştürülerek bu boyuta yeniden "
-"boyutlandırılabilir."
+msgid "The file system can only be resized to this size by converting to FAT32."
+msgstr "Dosya sistemi, yalnızca FAT32'ye dönüştürülerek bu boyuta yeniden boyutlandırılabilir."
 
 #: libparted/fs/r/fat/resize.c:579
-msgid ""
-"GNU Parted cannot resize this partition to this size.  We're working on it!"
-msgstr ""
-"GNU Parted bu disk bölümünü bu boyuta yeniden boyutlandıramaz.  Üzerinde "
-"çalışıyoruz!"
+msgid "GNU Parted cannot resize this partition to this size.  We're working on it!"
+msgstr "GNU Parted bu disk bölümünü bu boyuta yeniden boyutlandıramaz.  Üzerinde çalışıyoruz!"
 
 #: libparted/fs/r/fat/table.c:136
 #, c-format
-msgid ""
-"FAT %d media %x doesn't match the boot sector's media %x.  You should "
-"probably run scandisk."
-msgstr ""
-"FAT %d ortam %x önyükleme sektörünün ortamı %x'le uyuşmamakta.  Muhtemelen "
-"scandisk yürütmelisiniz."
+msgid "FAT %d media %x doesn't match the boot sector's media %x.  You should probably run scandisk."
+msgstr "FAT %d ortam %x önyükleme sektörünün ortamı %x'le uyuşmamakta.  Muhtemelen scandisk yürütmelisiniz."
 
 #: libparted/fs/r/fat/table.c:268
 #, c-format
@@ -1988,21 +1736,13 @@ msgstr "Hatalı bloklar okunamıyor."
 
 #: libparted/fs/r/hfs/cache.c:136
 #, c-format
-msgid ""
-"Trying to register an extent starting at block 0x%X, but another one already "
-"exists at this position.  You should check the file system!"
-msgstr ""
-"Blok 0x%X'den başlayacak şekilde bir aralık kaydedilmeye çalışılıyor, fakat "
-"bu konumda bir başkası zaten mevcut.  Dosya sistemini kontrol etmelisiniz!"
+msgid "Trying to register an extent starting at block 0x%X, but another one already exists at this position.  You should check the file system!"
+msgstr "Blok 0x%X'den başlayacak şekilde bir aralık kaydedilmeye çalışılıyor, fakat bu konumda bir başkası zaten mevcut.  Dosya sistemini kontrol etmelisiniz!"
 
 #: libparted/fs/r/hfs/cache.c:213
 #, c-format
-msgid ""
-"Trying to move an extent from block Ox%X to block Ox%X, but another one "
-"already exists at this position.  This should not happen!"
-msgstr ""
-"Blok Ox%X'den Ox%X'e bir aralık taşınmaya çalışılıyor, fakat bu konumda bir "
-"başkası zaten mevcut.  Bu olmamalı!"
+msgid "Trying to move an extent from block Ox%X to block Ox%X, but another one already exists at this position.  This should not happen!"
+msgstr "Blok Ox%X'den Ox%X'e bir aralık taşınmaya çalışılıyor, fakat bu konumda bir başkası zaten mevcut.  Bu olmamalı!"
 
 #: libparted/fs/r/hfs/file.c:142
 #, c-format
@@ -2099,12 +1839,8 @@ msgid "An error occurred while looking for the mandatory bad blocks file."
 msgstr "Zorunlu hatalı bloklar dosyası aranırken bir hata oluştu."
 
 #: libparted/fs/r/hfs/hfs.c:904
-msgid ""
-"It seems there is an error in the HFS wrapper: the bad blocks file doesn't "
-"contain the embedded HFS+ volume."
-msgstr ""
-"HFS sarmalayıcısında hata var gibi görünüyor: hatalı blok dosyası, gömülü HFS"
-"+ oylumunu içermiyor."
+msgid "It seems there is an error in the HFS wrapper: the bad blocks file doesn't contain the embedded HFS+ volume."
+msgstr "HFS sarmalayıcısında hata var gibi görünüyor: hatalı blok dosyası, gömülü HFS+ oylumunu içermiyor."
 
 #: libparted/fs/r/hfs/hfs.c:940
 msgid "Sorry, HFS+ cannot be resized that way yet."
@@ -2128,12 +1864,8 @@ msgstr "HFS sarmalayıcısının göncellenmesi başarısız."
 
 #: libparted/fs/r/hfs/hfs.c:1109 libparted/fs/r/hfs/hfs.c:1194
 #, c-format
-msgid ""
-"This is not a real %s check.  This is going to extract special low level "
-"files for debugging purposes."
-msgstr ""
-"Bu geçek bir %s kontrolü değil.  Hata ayıklama amacıyla düşük düzey dosyalar "
-"özütlenecek."
+msgid "This is not a real %s check.  This is going to extract special low level files for debugging purposes."
+msgstr "Bu geçek bir %s kontrolü değil.  Hata ayıklama amacıyla düşük düzey dosyalar özütlenecek."
 
 #: libparted/fs/r/hfs/journal.c:154
 msgid "Bad block list header checksum."
@@ -2141,17 +1873,12 @@ msgstr "Hatalı blok liste başlığı sağlama toplamı"
 
 #: libparted/fs/r/hfs/journal.c:167
 #, c-format
-msgid ""
-"Invalid size of a transaction block while replaying the journal (%i bytes)."
+msgid "Invalid size of a transaction block while replaying the journal (%i bytes)."
 msgstr "Günlük tekrar okunurken geçersiz bir işlem boyut bloğu (%i bayt)."
 
 #: libparted/fs/r/hfs/journal.c:259
-msgid ""
-"Journal stored outside of the volume are not supported.  Try to desactivate "
-"the journal and run Parted again."
-msgstr ""
-"Oylum dışında depolanan günlükler desteklenmiyor.  Günlüğü etkisiz kılmayı "
-"ve Parted'ı yeniden çalıştırmayı deneyin."
+msgid "Journal stored outside of the volume are not supported.  Try to desactivate the journal and run Parted again."
+msgstr "Oylum dışında depolanan günlükler desteklenmiyor.  Günlüğü etkisiz kılmayı ve Parted'ı yeniden çalıştırmayı deneyin."
 
 #: libparted/fs/r/hfs/journal.c:270
 msgid "Journal offset or size is not multiple of the sector size."
@@ -2170,44 +1897,28 @@ msgid "Some header fields are not multiple of the sector size."
 msgstr "Bazı başlık alanları sektör boyutunun katı değil."
 
 #: libparted/fs/r/hfs/journal.c:322
-msgid ""
-"The sector size stored in the journal is not 512 bytes.  Parted only "
-"supports 512 bytes length sectors."
-msgstr ""
-"Günlükte kayıtlı sektör boyutu 512 bayt değil. Parted yalnızca 512 bayt "
-"uzunluktaki sektörleri destekler."
+msgid "The sector size stored in the journal is not 512 bytes.  Parted only supports 512 bytes length sectors."
+msgstr "Günlükte kayıtlı sektör boyutu 512 bayt değil. Parted yalnızca 512 bayt uzunluktaki sektörleri destekler."
 
 #: libparted/fs/r/hfs/journal.c:334
 msgid "Bad journal checksum."
 msgstr "Bozuk günlük sağlama toplamı."
 
 #: libparted/fs/r/hfs/journal.c:352
-msgid ""
-"The journal is not empty.  Parted must replay the transactions before "
-"opening the file system.  This will modify the file system."
-msgstr ""
-"Günlük boş.  Parted, dosya sistemini açmadan işlemleri yinelemeli.  Bu, "
-"dosya sistemini değiştirecek."
+msgid "The journal is not empty.  Parted must replay the transactions before opening the file system.  This will modify the file system."
+msgstr "Günlük boş.  Parted, dosya sistemini açmadan işlemleri yinelemeli.  Bu, dosya sistemini değiştirecek."
 
 #: libparted/fs/r/hfs/journal.c:380
-msgid ""
-"The volume header or the master directory block has changed while replaying "
-"the journal.  You should restart Parted."
-msgstr ""
-"Günlük yinelenirken ana dizin bloğunun oylum başlığı değişti.  Parted'ı "
-"yeniden başlatmalısınız."
+msgid "The volume header or the master directory block has changed while replaying the journal.  You should restart Parted."
+msgstr "Günlük yinelenirken ana dizin bloğunun oylum başlığı değişti.  Parted'ı yeniden başlatmalısınız."
 
 #: libparted/fs/r/hfs/reloc.c:150 libparted/fs/r/hfs/reloc_plus.c:154
 msgid "An extent has not been relocated."
 msgstr "Bir aralık yeniden konumlanmadı."
 
 #: libparted/fs/r/hfs/reloc.c:249 libparted/fs/r/hfs/reloc_plus.c:306
-msgid ""
-"A reference to an extent comes from a place it should not.  You should check "
-"the file system!"
-msgstr ""
-"Bir aralığın başvurusu gelmemesi gereken bir yerden geliyor.  Dosya "
-"sistemini kontrol etmelisiniz!"
+msgid "A reference to an extent comes from a place it should not.  You should check the file system!"
+msgstr "Bir aralığın başvurusu gelmemesi gereken bir yerden geliyor.  Dosya sistemini kontrol etmelisiniz!"
 
 #: libparted/fs/r/hfs/reloc.c:379
 msgid "This HFS volume has no catalog file.  This is very unusual!"
@@ -2218,12 +1929,8 @@ msgid "This HFS volume has no extents overflow file.  This is quite unusual!"
 msgstr "Bu HFS oylumunun aralık taşması dosyası yok.  Bu oldukça sıradışı!"
 
 #: libparted/fs/r/hfs/reloc.c:515 libparted/fs/r/hfs/reloc_plus.c:665
-msgid ""
-"The extents overflow file should not contain its own extents!  You should "
-"check the file system."
-msgstr ""
-"Aralık taşması dosyası, kendi aralıklarını içermemeli!  Dosya sistemini "
-"kontrol etmelisiniz."
+msgid "The extents overflow file should not contain its own extents!  You should check the file system."
+msgstr "Aralık taşması dosyası, kendi aralıklarını içermemeli!  Dosya sistemini kontrol etmelisiniz."
 
 #: libparted/fs/r/hfs/reloc.c:572 libparted/fs/r/hfs/reloc_plus.c:843
 msgid "Could not cache the file system in memory."
@@ -2270,13 +1977,8 @@ msgid "alignment for new partitions"
 msgstr "yeni disk bölümleri için hizalama"
 
 #: parted/parted.c:142
-msgid ""
-"NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the "
-"primary partitions number from 1 to 4, logical partitions from 5 onwards.\n"
-msgstr ""
-"NUMBER, Linux tarafından kullanılan disk bölümü numarasıdır.  Msdos disk "
-"etiketlerinde birincil disk bölümü numarası 1-4 arası, mantıksal disk "
-"bölümleri de 5 ve üstüdür.\n"
+msgid "NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the primary partitions number from 1 to 4, logical partitions from 5 onwards.\n"
+msgstr "NUMBER, Linux tarafından kullanılan disk bölümü numarasıdır.  Msdos disk etiketlerinde birincil disk bölümü numarası 1-4 arası, mantıksal disk bölümleri de 5 ve üstüdür.\n"
 
 #: parted/parted.c:145
 msgid "LABEL-TYPE is one of: "
@@ -2303,22 +2005,12 @@ msgid "FS-TYPE is one of: "
 msgstr "FS-TYPE şunlardan biridir: "
 
 #: parted/parted.c:153
-msgid ""
-"START and END are disk locations, such as 4GB or 10%.  Negative values count "
-"from the end of the disk.  For example, -1s specifies exactly the last "
-"sector.\n"
-msgstr ""
-"START ve END disk konumlarıdır, 4GB ya da %10 gibi.  Eksi değerler, diskin "
-"sonuna uzaklığı belirtir.  Örneğin -1s tam olarak son sektörü belirtir.\n"
+msgid "START and END are disk locations, such as 4GB or 10%.  Negative values count from the end of the disk.  For example, -1s specifies exactly the last sector.\n"
+msgstr "START ve END disk konumlarıdır, 4GB ya da %10 gibi.  Eksi değerler, diskin sonuna uzaklığı belirtir.  Örneğin -1s tam olarak son sektörü belirtir.\n"
 
 #: parted/parted.c:156
-#, fuzzy
-msgid ""
-"END is disk location, such as 4GB or 10%.  Negative value counts from the "
-"end of the disk.  For example, -1s specifies exactly the last sector.\n"
-msgstr ""
-"START ve END disk konumlarıdır, 4GB ya da %10 gibi.  Eksi değerler, diskin "
-"sonuna uzaklığı belirtir.  Örneğin -1s tam olarak son sektörü belirtir.\n"
+msgid "END is disk location, such as 4GB or 10%.  Negative value counts from the end of the disk.  For example, -1s specifies exactly the last sector.\n"
+msgstr "SON disk konumudur, 4GB ya da %10 gibi.  Eksi değerler, diskin sonuna uzaklığı belirtir.  Örneğin -1s tam olarak son sektörü belirtir.\n"
 
 #: parted/parted.c:159
 msgid "STATE is one of: on, off\n"
@@ -2358,10 +2050,9 @@ msgid "%0.f%%\t(time left %.2d:%.2d)"
 msgstr "%0.f%%\t(kalan süre %.2d:%.2d)"
 
 #: parted/parted.c:230
-#, fuzzy, c-format
+#, c-format
 msgid "Partition %s is being used. Are you sure you want to continue?"
-msgstr ""
-"%s disk bölümü kullanılıyor.  Parted'la değiştirmeden önce ayırmalısınız."
+msgstr "%s disk bölümü kullanılıyor.  Devam etmek istediğinizden emin misiniz?"
 
 #: parted/parted.c:251
 #, c-format
@@ -2370,12 +2061,8 @@ msgstr "%s üzerindeki disk bölümü(leri) kullanılıyor."
 
 #: parted/parted.c:263
 #, c-format
-msgid ""
-"The existing disk label on %s will be destroyed and all data on this disk "
-"will be lost. Do you want to continue?"
-msgstr ""
-"%s üzerindeki mevcut disk etiketi silinecek ve bu disk üzerindeki tüm veri "
-"kaybolacak. Devam etmek istiyor musunuz?"
+msgid "The existing disk label on %s will be destroyed and all data on this disk will be lost. Do you want to continue?"
+msgstr "%s üzerindeki mevcut disk etiketi silinecek ve bu disk üzerindeki tüm veri kaybolacak. Devam etmek istiyor musunuz?"
 
 #: parted/parted.c:524
 msgid "New disk label type?"
@@ -2408,8 +2095,7 @@ msgid ""
 "The closest location we can manage is %s to %s (sectors %llu..%llu).%s"
 msgstr ""
 "%1$s'den %2$s'e bir bölüm istediniz (sektör %3$llu..%4$llu).\n"
-"Becerebildiğimiz buna en yakın konum %5$s'den %6$s'e (sektör %7$llu..%8$llu)."
-"%9$s"
+"Becerebildiğimiz buna en yakın konum %5$s'den %6$s'e (sektör %7$llu..%8$llu).%9$s"
 
 #: parted/parted.c:773
 msgid ""
@@ -2421,8 +2107,7 @@ msgstr ""
 
 #: parted/parted.c:795
 msgid "The resulting partition is not properly aligned for best performance."
-msgstr ""
-"Ortaya çıkan disk bölümü en iyi performansı elde etmek için ayarlanmamış."
+msgstr "Ortaya çıkan disk bölümü en iyi performansı elde etmek için ayarlanmamış."
 
 #: parted/parted.c:866 parted/parted.c:1539 parted/parted.c:1587
 #: parted/parted.c:1661 parted/parted.c:1725
@@ -2432,8 +2117,7 @@ msgstr "Disk bölümü numarası?"
 #: parted/parted.c:960
 #, c-format
 msgid "BIOS cylinder,head,sector geometry: %d,%d,%d.  Each cylinder is %s.\n"
-msgstr ""
-"BIOS silindiri, kafa, sektör geometrisi: %d,%d,%d.  Herbir silindir %s'tir.\n"
+msgstr "BIOS silindiri, kafa, sektör geometrisi: %d,%d,%d.  Herbir silindir %s'tir.\n"
 
 #: parted/parted.c:1001
 #, c-format
@@ -2498,12 +2182,8 @@ msgstr "Boş Alan"
 
 #: parted/parted.c:1371
 #, c-format
-msgid ""
-"A %s %s partition was found at %s -> %s.  Do you want to add it to the "
-"partition table?"
-msgstr ""
-"%3$s -> %4$s'de bir %1$s %2$s disk bölümü bulundu.  Bunu disk bölümü "
-"tablosuna eklemeyi ister misiniz?"
+msgid "A %s %s partition was found at %s -> %s.  Do you want to add it to the partition table?"
+msgstr "%3$s -> %4$s'de bir %1$s %2$s disk bölümü bulundu.  Bunu disk bölümü tablosuna eklemeyi ister misiniz?"
 
 #: parted/parted.c:1410
 msgid "searching for file systems"
@@ -2511,12 +2191,11 @@ msgstr "dosya"
 
 #: parted/parted.c:1513
 msgid "The resize command has been removed in parted 3.0"
-msgstr ""
+msgstr "resize komutu parted 3.0'da kaldırıldı"
 
 #: parted/parted.c:1558
-msgid ""
-"Shrinking a partition can cause data loss, are you sure you want to continue?"
-msgstr ""
+msgid "Shrinking a partition can cause data loss, are you sure you want to continue?"
+msgstr "Bir birimi sıkıştırmak veri kaybına yol açabilir, devam etmek istiyor musunuz?"
 
 #: parted/parted.c:1609
 msgid "New device?"
@@ -2553,24 +2232,16 @@ msgid "align-check"
 msgstr "align-check"
 
 #: parted/parted.c:1916
-msgid ""
-"align-check TYPE N                        check partition N for TYPE(min|"
-"opt) alignment"
-msgstr ""
-"align-check TÜR N                        disk bölümü N'yi hiza TÜRü(min|opt) "
-"için kontrol et"
+msgid "align-check TYPE N                        check partition N for TYPE(min|opt) alignment"
+msgstr "align-check TÜR N                        disk bölümü N'yi hiza TÜRü(min|opt) için kontrol et"
 
 #: parted/parted.c:1924
 msgid "help"
 msgstr "help"
 
 #: parted/parted.c:1927
-msgid ""
-"help [COMMAND]                           print general help, or help on "
-"COMMAND"
-msgstr ""
-"help [COMMAND]                           genel yardımı ya da KOMUT yardımını "
-"yazdırır"
+msgid "help [COMMAND]                           print general help, or help on COMMAND"
+msgstr "help [COMMAND]                           genel yardımı ya da KOMUT yardımını yazdırır"
 
 #: parted/parted.c:1933
 msgid "mklabel"
@@ -2581,12 +2252,8 @@ msgid "mktable"
 msgstr "mktable"
 
 #: parted/parted.c:1936
-msgid ""
-"mklabel,mktable LABEL-TYPE               create a new disklabel (partition "
-"table)"
-msgstr ""
-"mklabel,mktable LABEL-TYPE             yeni bir disk etiketi (disk bölümü "
-"tablosu) oluştur"
+msgid "mklabel,mktable LABEL-TYPE               create a new disklabel (partition table)"
+msgstr "mklabel,mktable LABEL-TYPE             yeni bir disk etiketi (disk bölümü tablosu) oluştur"
 
 #: parted/parted.c:1942
 msgid "mkpart"
@@ -2597,13 +2264,9 @@ msgid "mkpart PART-TYPE [FS-TYPE] START END     make a partition"
 msgstr "mkpart PART-TYPE [FS-TYPE] START END          bir disk bölümü yap"
 
 #: parted/parted.c:1951
-msgid ""
-"'mkpart' makes a partition without creating a new file system on the "
-"partition.  FS-TYPE may be specified to set an appropriate partition ID.\n"
+msgid "'mkpart' makes a partition without creating a new file system on the partition.  FS-TYPE may be specified to set an appropriate partition ID.\n"
 msgstr ""
-"mkpart, disk bölümü üzerinde yeni bir dosya sistemi oluşturmadan bir disk "
-"bölümü yapar.  DS-TÜRÜ, uygun bir disk bölümü ID atamak için "
-"belirtilebilir.\n"
+"mkpart, disk bölümü üzerinde yeni bir dosya sistemi oluşturmadan bir disk bölümü yapar.  DS-TÜRÜ, uygun bir disk bölümü ID atamak için belirtilebilir.\n"
 "\n"
 
 #: parted/parted.c:1956
@@ -2612,54 +2275,35 @@ msgstr "name"
 
 #: parted/parted.c:1959
 msgid "name NUMBER NAME                         name partition NUMBER as NAME"
-msgstr ""
-"name NUMBER NAME                     NUMBER. disk bölümünü NAME'le adlandır"
+msgstr "name NUMBER NAME                     NUMBER. disk bölümünü NAME'le adlandır"
 
 #: parted/parted.c:1964
 msgid "print"
 msgstr "print"
 
 #: parted/parted.c:1967
-msgid ""
-"print [devices|free|list,all|NUMBER]     display the partition table, "
-"available devices, free space, all found partitions, or a particular "
-"partition"
-msgstr ""
-"print [aygıtlar|boşluk|liste,tümü|NUMARA]     bölümleme tablosu, mevcut "
-"aygıtlar, boşluk, tüm bulunan bölümler ya da belli bir bölümü gösterir"
+msgid "print [devices|free|list,all|NUMBER]     display the partition table, available devices, free space, all found partitions, or a particular partition"
+msgstr "print [aygıtlar|boşluk|liste,tümü|NUMARA]     bölümleme tablosu, mevcut aygıtlar, boşluk, tüm bulunan bölümler ya da belli bir bölümü gösterir"
 
 #: parted/parted.c:1972
-msgid ""
-"Without arguments, 'print' displays the entire partition table. However with "
-"the following arguments it performs various other actions.\n"
-msgstr ""
-"Argümansız olduğunda print tüm bölümleme tablosunnu gösterir. Aşağıdaki "
-"argümanlarla kullanıldığında diğer çeşitli eylemleri uygular.\n"
+msgid "Without arguments, 'print' displays the entire partition table. However with the following arguments it performs various other actions.\n"
+msgstr "Argümansız olduğunda print tüm bölümleme tablosunnu gösterir. Aşağıdaki argümanlarla kullanıldığında diğer çeşitli eylemleri uygular.\n"
 
 #: parted/parted.c:1974
 msgid "  devices   : display all active block devices\n"
 msgstr "  devices   : tüm aktif blok aygıtları gösterir\n"
 
 #: parted/parted.c:1975
-msgid ""
-"  free      : display information about free unpartitioned space on the "
-"current block device\n"
-msgstr ""
-"  free      : mevcut blok aygıt üzerindeki boş bölümlenmemiş alan bilgisini "
-"gösterir\n"
+msgid "  free      : display information about free unpartitioned space on the current block device\n"
+msgstr "  free      : mevcut blok aygıt üzerindeki boş bölümlenmemiş alan bilgisini gösterir\n"
 
 #: parted/parted.c:1977
-msgid ""
-"  list, all : display the partition tables of all active block devices\n"
-msgstr ""
-"  list, all : tüm aktif blok aygıtların bölümleme tablolarını gösterir\n"
+msgid "  list, all : display the partition tables of all active block devices\n"
+msgstr "  list, all : tüm aktif blok aygıtların bölümleme tablolarını gösterir\n"
 
 #: parted/parted.c:1978
-msgid ""
-"  NUMBER    : display more detailed information about this particular "
-"partition\n"
-msgstr ""
-"  NUMBER    : bu belirtilmiş bölüm hakkında daha ayrıntılı bilgi gösterir\n"
+msgid "  NUMBER    : display more detailed information about this particular partition\n"
+msgstr "  NUMBER    : bu belirtilmiş bölüm hakkında daha ayrıntılı bilgi gösterir\n"
 
 #: parted/parted.c:1983
 msgid "quit"
@@ -2674,12 +2318,8 @@ msgid "rescue"
 msgstr "rescue"
 
 #: parted/parted.c:1994
-msgid ""
-"rescue START END                         rescue a lost partition near START "
-"and END"
-msgstr ""
-"rescue START END                 START ve END arasındaki kayıp disk "
-"bölümlerini kurtar"
+msgid "rescue START END                         rescue a lost partition near START and END"
+msgstr "rescue START END                 START ve END arasındaki kayıp disk bölümlerini kurtar"
 
 #: parted/parted.c:2000
 msgid "resize"
@@ -2687,17 +2327,15 @@ msgstr "resize"
 
 #: parted/parted.c:2003
 msgid "The resize command was removed in parted 3.0\n"
-msgstr ""
+msgstr "resize komutu parted 3.0'da kaldırıldı\n"
 
 #: parted/parted.c:2006
-#, fuzzy
 msgid "resizepart"
-msgstr "resize"
+msgstr "resizepart"
 
 #: parted/parted.c:2009
-#, fuzzy
 msgid "resizepart NUMBER END                    resize partition NUMBER"
-msgstr "move NUMBER START END           NUMBER. disk bölümünü taşı"
+msgstr "resizepart SAYI SON                    SAYI disk bölümünü taşı"
 
 #: parted/parted.c:2014
 msgid "rm"
@@ -2720,46 +2358,32 @@ msgid "disk_set"
 msgstr "disk_set"
 
 #: parted/parted.c:2033
-msgid ""
-"disk_set FLAG STATE                      change the FLAG on selected device"
-msgstr ""
-"disk_set FLAG STATE                     seçili aygıt üzerindeki bayrağı "
-"değiştir"
+msgid "disk_set FLAG STATE                      change the FLAG on selected device"
+msgstr "disk_set FLAG STATE                     seçili aygıt üzerindeki bayrağı değiştir"
 
 #: parted/parted.c:2038
 msgid "disk_toggle"
 msgstr "disk_toggle"
 
 #: parted/parted.c:2041
-msgid ""
-"disk_toggle [FLAG]                       toggle the state of FLAG on "
-"selected device"
-msgstr ""
-"disk_toggle [FLAG]                       seçili aygıt üzerindeki BAYRAK "
-"durumunu değiştir"
+msgid "disk_toggle [FLAG]                       toggle the state of FLAG on selected device"
+msgstr "disk_toggle [FLAG]                       seçili aygıt üzerindeki BAYRAK durumunu değiştir"
 
 #: parted/parted.c:2047
 msgid "set"
 msgstr "set"
 
 #: parted/parted.c:2050
-msgid ""
-"set NUMBER FLAG STATE                    change the FLAG on partition NUMBER"
-msgstr ""
-"set NUMBER FLAG STATE             NUMBER. disk bölümü üzerindeki bayrağı "
-"değiştir"
+msgid "set NUMBER FLAG STATE                    change the FLAG on partition NUMBER"
+msgstr "set NUMBER FLAG STATE             NUMBER. disk bölümü üzerindeki bayrağı değiştir"
 
 #: parted/parted.c:2056
 msgid "toggle"
 msgstr "seçmece / değiştir"
 
 #: parted/parted.c:2059
-msgid ""
-"toggle [NUMBER [FLAG]]                   toggle the state of FLAG on "
-"partition NUMBER"
-msgstr ""
-"toggle [NUMBER [FLAG]                       NUMBER. disk bölümü üzerindeki "
-"BAYRAK durumunu değiştir"
+msgid "toggle [NUMBER [FLAG]]                   toggle the state of FLAG on partition NUMBER"
+msgstr "toggle [NUMBER [FLAG]                       NUMBER. disk bölümü üzerindeki BAYRAK durumunu değiştir"
 
 #: parted/parted.c:2065
 msgid "unit"
@@ -2774,20 +2398,12 @@ msgid "version"
 msgstr "sürüm"
 
 #: parted/parted.c:2076
-msgid ""
-"version                                  display the version number and "
-"copyright information of GNU Parted"
-msgstr ""
-"version                               GNU Parted'in sürüm numarasını ve "
-"telif hakkı bilgisini görüntüler"
+msgid "version                                  display the version number and copyright information of GNU Parted"
+msgstr "version                               GNU Parted'in sürüm numarasını ve telif hakkı bilgisini görüntüler"
 
 #: parted/parted.c:2080
-msgid ""
-"'version' displays copyright and version information corresponding to this "
-"copy of GNU Parted\n"
-msgstr ""
-"sürüm, GNU Parted'in bu kopyasının telif hakkı ve sürüm bilgisini "
-"görüntüler\n"
+msgid "'version' displays copyright and version information corresponding to this copy of GNU Parted\n"
+msgstr "sürüm, GNU Parted'in bu kopyasının telif hakkı ve sürüm bilgisini görüntüler\n"
 
 #: parted/parted.c:2148
 #, c-format
@@ -2808,15 +2424,12 @@ msgstr "/etc/fstab'i güncellemeniz gerekebilir.\n"
 
 #: parted/ui.c:162
 msgid "Welcome to GNU Parted! Type 'help' to view a list of commands.\n"
-msgstr ""
-"GNU Parted'a hoşgeldiniz! Komutların bir listesini görmek için 'help' "
-"yazınız.\n"
+msgstr "GNU Parted'a hoşgeldiniz! Komutların bir listesini görmek için 'help' yazınız.\n"
 
 #: parted/ui.c:165
 msgid ""
 "Usage: parted [OPTION]... [DEVICE [COMMAND [PARAMETERS]...]...]\n"
-"Apply COMMANDs with PARAMETERS to DEVICE.  If no COMMAND(s) are given, run "
-"in\n"
+"Apply COMMANDs with PARAMETERS to DEVICE.  If no COMMAND(s) are given, run in\n"
 "interactive mode.\n"
 msgstr ""
 "Kullanım: parted [SEÇENEK]... [AYGIT [KOMUT [PARAMETRELER]...]...]\n"
@@ -3139,27 +2752,11 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgid "Failed to add partition %d (%s)"
 #~ msgstr "%d (%s) disk bölümü eklenemedi"
 
-#~ msgid ""
-#~ "parted was unable to re-read the partition table on %s (%s).  This means "
-#~ "Linux won't know anything about the modifications you made. "
-#~ msgstr ""
-#~ "parted, %1$s (%2$s) üzerindeki disk bölümleme tablosunu yeniden "
-#~ "okuyamadı.  Bu, siz (bilgisayarı) yeniden açana dek yaptığınız "
-#~ "değişiklikleri Linux'un bilmemesi demek. "
+#~ msgid "parted was unable to re-read the partition table on %s (%s).  This means Linux won't know anything about the modifications you made. "
+#~ msgstr "parted, %1$s (%2$s) üzerindeki disk bölümleme tablosunu yeniden okuyamadı.  Bu, siz (bilgisayarı) yeniden açana dek yaptığınız değişiklikleri Linux'un bilmemesi demek. "
 
-#~ msgid ""
-#~ "%s contains GPT signatures, indicating that it has a GPT table.  However, "
-#~ "it does not have a valid fake msdos partition table, as it should.  "
-#~ "Perhaps it was corrupted -- possibly by a program that doesn't understand "
-#~ "GPT partition tables.  Or perhaps you deleted the GPT table, and are now "
-#~ "using an msdos partition table.  Is this a GPT partition table?"
-#~ msgstr ""
-#~ "%s, GPT tablosu içerdiğini belirten GPT imzalarına sahip.  Ayrıca, olması "
-#~ "gerekenin aksine, geçerli sahte msdos disk bölümleme tablosu yok.  Belki "
-#~ "GPT disk bölümleme tablolarından anlamayan bir program tarafından "
-#~ "bozulmuştur.  Ya da belki siz GPT tablosunu sildiniz ve şimdi bir msdos "
-#~ "disk bölümleme tablosu kullanmaktasınız.  Bu bir GPT disk bölümleme "
-#~ "tablosu mu?"
+#~ msgid "%s contains GPT signatures, indicating that it has a GPT table.  However, it does not have a valid fake msdos partition table, as it should.  Perhaps it was corrupted -- possibly by a program that doesn't understand GPT partition tables.  Or perhaps you deleted the GPT table, and are now using an msdos partition table.  Is this a GPT partition table?"
+#~ msgstr "%s, GPT tablosu içerdiğini belirten GPT imzalarına sahip.  Ayrıca, olması gerekenin aksine, geçerli sahte msdos disk bölümleme tablosu yok.  Belki GPT disk bölümleme tablolarından anlamayan bir program tarafından bozulmuştur.  Ya da belki siz GPT tablosunu sildiniz ve şimdi bir msdos disk bölümleme tablosu kullanmaktasınız.  Bu bir GPT disk bölümleme tablosu mu?"
 
 #~ msgid ""
 #~ "Usage: %s [OPTION]\n"
@@ -3172,8 +2769,7 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ "Clear unused space on a FAT partition (a GNU Parted testing tool).\n"
 #~ "\n"
 #~ msgstr ""
-#~ "Bir FAT disk bölümündeki kullanılmayan boşluğu silin (bir GNU Parted "
-#~ "deneme aracı).\n"
+#~ "Bir FAT disk bölümündeki kullanılmayan boşluğu silin (bir GNU Parted deneme aracı).\n"
 #~ "\n"
 
 #~ msgid "      --help     display this help and exit\n"
@@ -3198,8 +2794,7 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgstr "%s dosya sistemlerini oluşturmak için destek henüz sağlanmamıştır."
 
 #~ msgid "Support for checking %s file systems is not implemented yet."
-#~ msgstr ""
-#~ "%s dosya sistemlerini kontrol etmek için destek henüz sağlanmamıştır."
+#~ msgstr "%s dosya sistemlerini kontrol etmek için destek henüz sağlanmamıştır."
 
 #~ msgid "raw block copying"
 #~ msgstr "ham blok kopyalama"
@@ -3210,18 +2805,8 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgid "Can't copy onto an overlapping partition."
 #~ msgstr "Çakışan disk bölümlerinin üzerine kopyalanamıyor."
 
-#~ msgid ""
-#~ "Direct support for copying file systems is not yet implemented for %s.  "
-#~ "However, support for resizing is implemented.  Therefore, the file system "
-#~ "can be copied if the new partition is at least as big as the old one.  "
-#~ "So, either shrink the partition you are trying to copy, or copy to a "
-#~ "bigger partition."
-#~ msgstr ""
-#~ "%s için dosya sistemlerini kopyalamaya direkt destek henüz "
-#~ "sağlanmamıştır.  Ancak yeniden boyutlandırma desteği mevcut.  Bu nedenle, "
-#~ "eğer yeni disk bölümü en az eskisi kadar büyükse, dosya sistemi "
-#~ "kopyalanabilir.  Dolayısıyla, ya kopyalamaya çalıştığınız disk bölümünü "
-#~ "küçültün, ya da daha büyük bir disk bölümüne kopyalayın."
+#~ msgid "Direct support for copying file systems is not yet implemented for %s.  However, support for resizing is implemented.  Therefore, the file system can be copied if the new partition is at least as big as the old one.  So, either shrink the partition you are trying to copy, or copy to a bigger partition."
+#~ msgstr "%s için dosya sistemlerini kopyalamaya direkt destek henüz sağlanmamıştır.  Ancak yeniden boyutlandırma desteği mevcut.  Bu nedenle, eğer yeni disk bölümü en az eskisi kadar büyükse, dosya sistemi kopyalanabilir.  Dolayısıyla, ya kopyalamaya çalıştığınız disk bölümünü küçültün, ya da daha büyük bir disk bölümüne kopyalayın."
 
 #~ msgid "Support for copying %s file systems is not implemented yet."
 #~ msgstr "%s dosya sistemlerini kopyalamak için destek henüz sağlanmamıştır."
@@ -3244,12 +2829,8 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgid "Reiserfs tree seems to be corrupted.  Run reiserfsck --check first."
 #~ msgstr "Reiserfs ağacı bozuk görünüyor.  Önce reiserfsck --check yürütün."
 
-#~ msgid ""
-#~ "The reiserfs file system passed a basic check.  For a more comprehensive "
-#~ "check, run reiserfsck --check."
-#~ msgstr ""
-#~ "reiserfs dosya sistemi temel bir kontrolü geçti.  Daha kapsamlı bir "
-#~ "kontrol için reiserfsck --check yürütünüz."
+#~ msgid "The reiserfs file system passed a basic check.  For a more comprehensive check, run reiserfsck --check."
+#~ msgstr "reiserfs dosya sistemi temel bir kontrolü geçti.  Daha kapsamlı bir kontrol için reiserfsck --check yürütünüz."
 
 #~ msgid "Sorry, can't move the start of reiserfs partitions yet."
 #~ msgstr "Üzgünüm, henüz reiserfs disk bölümlerinin başlangıcı taşınamıyor."
@@ -3272,12 +2853,8 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgid "GNU Parted found an invalid libreiserfs library."
 #~ msgstr "GNU Parted geçersiz bir libreiserfs kütüphanesi buldu."
 
-#~ msgid ""
-#~ "GNU Parted has detected libreiserfs interface version mismatch.  Found %d-"
-#~ "%d, required %d. ReiserFS support will be disabled."
-#~ msgstr ""
-#~ "GNU Parted libreiserfs arayüz sürüm uyumsuzluğu tespit etti.  %d-%d "
-#~ "buldu, %d gerekiyordu. ReiserFS desteği etkisizleştirilecek."
+#~ msgid "GNU Parted has detected libreiserfs interface version mismatch.  Found %d-%d, required %d. ReiserFS support will be disabled."
+#~ msgstr "GNU Parted libreiserfs arayüz sürüm uyumsuzluğu tespit etti.  %d-%d buldu, %d gerekiyordu. ReiserFS desteği etkisizleştirilecek."
 
 #~ msgid "Inconsistent group descriptors!"
 #~ msgstr "Tutarsız grup tanımlayıcıları!"
@@ -3286,36 +2863,22 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgstr "Dosya sistemi dolu!"
 
 #~ msgid "Invalid superblock.  Are you sure this is an ext2 file system?"
-#~ msgstr ""
-#~ "Geçersiz süperblok.  Bunun bir ext2 dosya sistemi olduğundan emin misiniz?"
+#~ msgstr "Geçersiz süperblok.  Bunun bir ext2 dosya sistemi olduğundan emin misiniz?"
 
 #~ msgid "File system has errors!  You should run e2fsck."
 #~ msgstr "Dosya sisteminde hatalar var!  e2fsck'yi yürütün."
 
-#~ msgid ""
-#~ "File system was not cleanly unmounted!  You should run e2fsck.  Modifying "
-#~ "an unclean file system could cause severe corruption."
-#~ msgstr ""
-#~ "Dosya sistemi temizce ayrılmadı!  e2fsck'lamalısınız.  Temiz olmayan "
-#~ "dosya sistemini değiştirmek ciddi sorunlara yol açabilir."
+#~ msgid "File system was not cleanly unmounted!  You should run e2fsck.  Modifying an unclean file system could cause severe corruption."
+#~ msgstr "Dosya sistemi temizce ayrılmadı!  e2fsck'lamalısınız.  Temiz olmayan dosya sistemini değiştirmek ciddi sorunlara yol açabilir."
 
-#~ msgid ""
-#~ "File system has an incompatible feature enabled.  Compatible features are "
-#~ "has_journal, dir_index, filetype, sparse_super and large_file.  Use "
-#~ "tune2fs or debugfs to remove features."
-#~ msgstr ""
-#~ "Dosya sisteminin uyumsuz bir özelliği etkin durumda.  Uyumlu özellikler "
-#~ "has_journal, dir_index, filetype, sparse_super ve lrage_file'dır.  "
-#~ "Özellikleri silmek için tune2fs ya da debugfs kullanın."
+#~ msgid "File system has an incompatible feature enabled.  Compatible features are has_journal, dir_index, filetype, sparse_super and large_file.  Use tune2fs or debugfs to remove features."
+#~ msgstr "Dosya sisteminin uyumsuz bir özelliği etkin durumda.  Uyumlu özellikler has_journal, dir_index, filetype, sparse_super ve lrage_file'dır.  Özellikleri silmek için tune2fs ya da debugfs kullanın."
 
 #~ msgid "Error allocating buffer cache."
 #~ msgstr "Tampon önbellek atamada hata."
 
-#~ msgid ""
-#~ "Found an inode with a incorrect link count.  Better go run e2fsck first!"
-#~ msgstr ""
-#~ "Yanlış link sayısına sahip bir dosya indeksi bulundu.  İyisi mi önce bir "
-#~ "e2fsck yürütün."
+#~ msgid "Found an inode with a incorrect link count.  Better go run e2fsck first!"
+#~ msgstr "Yanlış link sayısına sahip bir dosya indeksi bulundu.  İyisi mi önce bir e2fsck yürütün."
 
 #~ msgid "Not enough free inodes!"
 #~ msgstr "Yeterli serbest dosya indeksi yok!"
@@ -3324,47 +2887,30 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgstr "Dosya sistemi bir grubu silmek için çok dolu!"
 
 #~ msgid "File system has too many allocated inodes to remove a group!"
-#~ msgstr ""
-#~ "Dosya sistemi bir grubu silmek için çok sayıda dosya indeksine sahip!"
+#~ msgstr "Dosya sistemi bir grubu silmek için çok sayıda dosya indeksine sahip!"
 
 #~ msgid "adding groups"
 #~ msgstr "gruplar ekleniyor"
 
 #~ msgid "Your file system is too full to resize it to %i blocks.  Sorry."
-#~ msgstr ""
-#~ "Dosya sisteminiz %i bloğa yeniden boyutlandırılmak için çok dolul.  "
-#~ "Üzgünüm."
+#~ msgstr "Dosya sisteminiz %i bloğa yeniden boyutlandırılmak için çok dolul.  Üzgünüm."
 
-#~ msgid ""
-#~ "Your file system has too many occupied inodes to resize it to %i blocks.  "
-#~ "Sorry."
-#~ msgstr ""
-#~ "Dosya sisteminiz %i bloğa yeniden boyutlandırmak için çok sayıda dolu "
-#~ "dosya indeksine sahip.  Üzgünüm."
+#~ msgid "Your file system has too many occupied inodes to resize it to %i blocks.  Sorry."
+#~ msgstr "Dosya sisteminiz %i bloğa yeniden boyutlandırmak için çok sayıda dolu dosya indeksine sahip.  Üzgünüm."
 
 #~ msgid "File system was not cleanly unmounted!  You should run e2fsck."
 #~ msgstr "Dosya sistemi temizce ayrılmadı!  e2fsck çalıştırmalısınız."
 
-#~ msgid ""
-#~ "The file system has the 'dir_index' feature enabled.  Parted can only "
-#~ "resize the file system if it disables this feature.  You can enable it "
-#~ "later by running 'tune2fs -O dir_index DEVICE' and then 'e2fsck -fD "
-#~ "DEVICE'."
-#~ msgstr ""
-#~ "Dosya sisteminin 'dir_index' özelliği etkin halde...  Parted, dosya "
-#~ "sistemini ancak bu özelliği devre dışı bırakarak yeniden "
-#~ "boyutlandırabilir.  Daha sonra 'tune2fs -O dir_index' ve sonrasında "
-#~ "'e2fsck -fD AYGIT' komutlarıyla yeniden etkinleştirebilirsiniz."
+#~ msgid "The file system has the 'dir_index' feature enabled.  Parted can only resize the file system if it disables this feature.  You can enable it later by running 'tune2fs -O dir_index DEVICE' and then 'e2fsck -fD DEVICE'."
+#~ msgstr "Dosya sisteminin 'dir_index' özelliği etkin halde...  Parted, dosya sistemini ancak bu özelliği devre dışı bırakarak yeniden boyutlandırabilir.  Daha sonra 'tune2fs -O dir_index' ve sonrasında 'e2fsck -fD AYGIT' komutlarıyla yeniden etkinleştirebilirsiniz."
 
 #~ msgid ""
 #~ "A resize operation on this file system will use EXPERIMENTAL code\n"
 #~ "that MAY CORRUPT it (although no one has reported any such damage yet).\n"
-#~ "You should at least backup your data first, and run 'e2fsck -f' "
-#~ "afterwards."
+#~ "You should at least backup your data first, and run 'e2fsck -f' afterwards."
 #~ msgstr ""
 #~ "Bu dosya sistemindeki yeniden boyutlama işlemi DENEYSEL kod kullanacak\n"
-#~ "bu, dosya sisteminde BOZULMAYA YOL AÇABİLİR (şimdiye dek kimse bunu rapor "
-#~ "etmediyse de).\n"
+#~ "bu, dosya sisteminde BOZULMAYA YOL AÇABİLİR (şimdiye dek kimse bunu rapor etmediyse de).\n"
 #~ "En azından önce verinizi yedeklemeli, sonra da 'e2fsck -f' yürütmelisiniz."
 
 #~ msgid "Cross-linked blocks found!  Better go run e2fsck first!"
@@ -3376,12 +2922,8 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgid "Block %i shouldn't have been marked (%d, %d)!"
 #~ msgstr "%i bloğu işaretlenmemiş olmalıydı (%d, %d)!"
 
-#~ msgid ""
-#~ "The ext2 file system passed a basic check.  For a more comprehensive "
-#~ "check, use the e2fsck program."
-#~ msgstr ""
-#~ "ext2 dosya sistemi temel bir kontrolü geçti.  Daha kapsamlı bir kontrol "
-#~ "için e2fsck programını kullanınız."
+#~ msgid "The ext2 file system passed a basic check.  For a more comprehensive check, use the e2fsck program."
+#~ msgstr "ext2 dosya sistemi temel bir kontrolü geçti.  Daha kapsamlı bir kontrol için e2fsck programını kullanınız."
 
 #~ msgid "Sorry, can't move the start of ext2 partitions yet!"
 #~ msgstr "Üzgünüm, henüz ext2 disk bölümlerinin başlangıcı taşınamıyor!"
@@ -3401,31 +2943,22 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgid "The partition must have one of the following FS-TYPEs: "
 #~ msgstr "Disk bölümü aşağıdaki FS-TYPE'larından birine sahip olmalıdır: "
 
-#~ msgid ""
-#~ "The existing file system will be destroyed and all data on the partition "
-#~ "will be lost. Do you want to continue?"
-#~ msgstr ""
-#~ "Mevcut dosya sistemi silinecek ve disk bölümündeki tüm veri kaybolacak. "
-#~ "Devam etmek istiyor musunuz?"
+#~ msgid "The existing file system will be destroyed and all data on the partition will be lost. Do you want to continue?"
+#~ msgstr "Mevcut dosya sistemi silinecek ve disk bölümündeki tüm veri kaybolacak. Devam etmek istiyor musunuz?"
 
 #~ msgid ""
 #~ "WARNING: you are attempting to use %s to operate on (%s) a file system.\n"
-#~ "%s's file system manipulation code is not as robust as what you'll find "
-#~ "in\n"
+#~ "%s's file system manipulation code is not as robust as what you'll find in\n"
 #~ "dedicated, file-system-specific packages like e2fsprogs.  We recommend\n"
 #~ "you use %s only to manipulate partition tables, whenever possible.\n"
 #~ "Support for performing most operations on most types of file systems\n"
 #~ "will be removed in an upcoming release.\n"
 #~ msgstr ""
-#~ "UYARI: (%s) dosya sistemi üzerinde işlem yapmak üzere %s kullanma "
-#~ "girişiminde bulunuyorsunuz.\n"
-#~ "%s'nin dosya sistemi işleme kodu, e2fsprogs gibi adanmış, dosya sistemine "
-#~ "özgün\n"
-#~ "paketlerde bulabileceğiniz kadar sağlam değildir.  Biz, %s 'i mümkünse "
-#~ "yalnızca\n"
+#~ "UYARI: (%s) dosya sistemi üzerinde işlem yapmak üzere %s kullanma girişiminde bulunuyorsunuz.\n"
+#~ "%s'nin dosya sistemi işleme kodu, e2fsprogs gibi adanmış, dosya sistemine özgün\n"
+#~ "paketlerde bulabileceğiniz kadar sağlam değildir.  Biz, %s 'i mümkünse yalnızca\n"
 #~ "bölümleme tablolarını işlemek için kullanmanızı öneririz.\n"
-#~ "Gelecek bir sürümde dosya sistemleri üzerinde yapılabilen işlemler ve "
-#~ "türlerine\n"
+#~ "Gelecek bir sürümde dosya sistemleri üzerinde yapılabilen işlemler ve türlerine\n"
 #~ "verilen destek kaldırılacaktır.\n"
 
 #~ msgid "Source partition number?"
@@ -3437,17 +2970,14 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgid "Destination partition number?"
 #~ msgstr "Hedef disk bölümü numarası?"
 
-#~ msgid ""
-#~ "An extended partition cannot hold a file system.  Did you want mkpart?"
+#~ msgid "An extended partition cannot hold a file system.  Did you want mkpart?"
 #~ msgstr "Bir ek disk bölümünün dosya sistemi olamaz.  mkpart mı istediniz?"
 
 #~ msgid "Can't move an extended partition."
 #~ msgstr "Bir ek disk bölümü taşınamaz."
 
 #~ msgid "Can't move a partition onto itself.  Try using resize, perhaps?"
-#~ msgstr ""
-#~ "Bir disk bölümü kendi üzerine taşınamaz.  Belki yeniden boyutlandırmayı "
-#~ "dener misiniz?"
+#~ msgstr "Bir disk bölümü kendi üzerine taşınamaz.  Belki yeniden boyutlandırmayı dener misiniz?"
 
 #~ msgid "Minor: %d\n"
 #~ msgstr "Minor: %d\n"
@@ -3470,70 +3000,41 @@ msgstr "Bu komut etkileşimsiz kipte anlamsız.\n"
 #~ msgid "check"
 #~ msgstr "check"
 
-#~ msgid ""
-#~ "check NUMBER                             do a simple check on the file "
-#~ "system"
-#~ msgstr ""
-#~ "check NUMBER                  dosya sistemi üzerinde basit bir kontrol yap"
+#~ msgid "check NUMBER                             do a simple check on the file system"
+#~ msgstr "check NUMBER                  dosya sistemi üzerinde basit bir kontrol yap"
 
 #~ msgid "cp"
 #~ msgstr "cp"
 
-#~ msgid ""
-#~ "cp [FROM-DEVICE] FROM-NUMBER TO-NUMBER   copy file system to another "
-#~ "partition"
-#~ msgstr ""
-#~ "cp [FROM-DEVICE] FROM-NUMBER TO-NUMBER   dosya sistemini bir başka disk "
-#~ "bölümüne kopyala"
+#~ msgid "cp [FROM-DEVICE] FROM-NUMBER TO-NUMBER   copy file system to another partition"
+#~ msgstr "cp [FROM-DEVICE] FROM-NUMBER TO-NUMBER   dosya sistemini bir başka disk bölümüne kopyala"
 
 #~ msgid "mkfs"
 #~ msgstr "mkfs"
 
-#~ msgid ""
-#~ "mkfs NUMBER FS-TYPE                      make a FS-TYPE file system on "
-#~ "partition NUMBER"
-#~ msgstr ""
-#~ "mkfs NUMBER FS-TYPE             NUMBER disk bölümü üzerinde FS-TYPE dosya "
-#~ "sistemini yap"
+#~ msgid "mkfs NUMBER FS-TYPE                      make a FS-TYPE file system on partition NUMBER"
+#~ msgstr "mkfs NUMBER FS-TYPE             NUMBER disk bölümü üzerinde FS-TYPE dosya sistemini yap"
 
 #~ msgid "mkpartfs"
 #~ msgstr "mkpartfs"
 
-#~ msgid ""
-#~ "mkpartfs PART-TYPE FS-TYPE START END     make a partition with a file "
-#~ "system"
-#~ msgstr ""
-#~ "mkpartfs PART-TYPE FS-TYPE START END      dosya sistemi olan bir disk "
-#~ "bölümü yap"
+#~ msgid "mkpartfs PART-TYPE FS-TYPE START END     make a partition with a file system"
+#~ msgstr "mkpartfs PART-TYPE FS-TYPE START END      dosya sistemi olan bir disk bölümü yap"
 
 #~ msgid "move"
 #~ msgstr "move"
 
-#~ msgid ""
-#~ "resize NUMBER START END                  resize partition NUMBER and its "
-#~ "file system"
-#~ msgstr ""
-#~ "resize NUMBER START END          NUMBER. disk bölümünü ve üzerindeki "
-#~ "dosya sistemini yeniden boyutlandır"
+#~ msgid "resize NUMBER START END                  resize partition NUMBER and its file system"
+#~ msgstr "resize NUMBER START END          NUMBER. disk bölümünü ve üzerindeki dosya sistemini yeniden boyutlandır"
 
 #~ msgid "This is not an ECKD disk!  This disk type is not supported!"
 #~ msgstr "Bu bir ECKD diski değil!  Bu disk türü desteklenmiyor!"
 
-#~ msgid ""
-#~ "Device %s has a logical sector size of %lld.  Not all parts of GNU Parted "
-#~ "support this at the moment, and the working code is HIGHLY EXPERIMENTAL.\n"
-#~ msgstr ""
-#~ "%s aygıtının mantıksal sektör boyutu %lld'dir. GNU parted'in tüm "
-#~ "bölümleri bunu henüz desteklememekte olup çalışan kod OLDUKÇA "
-#~ "DENEYSELDİR.\n"
+#~ msgid "Device %s has a logical sector size of %lld.  Not all parts of GNU Parted support this at the moment, and the working code is HIGHLY EXPERIMENTAL.\n"
+#~ msgstr "%s aygıtının mantıksal sektör boyutu %lld'dir. GNU parted'in tüm bölümleri bunu henüz desteklememekte olup çalışan kod OLDUKÇA DENEYSELDİR.\n"
 
-#~ msgid ""
-#~ "WARNING: the kernel failed to re-read the partition table on %s (%s).  As "
-#~ "a result, it may not reflect all of your changes until after reboot."
-#~ msgstr ""
-#~ "UYARI: Çekirdek %1$s (%2$s) üzerindeki bölümleme tablosunu yeniden "
-#~ "okuyamadı. Bunun sonucu olarak, bilgisayarı yeniden başlatmadan tüm "
-#~ "değişikliklerinizi yansıtmayabilir."
+#~ msgid "WARNING: the kernel failed to re-read the partition table on %s (%s).  As a result, it may not reflect all of your changes until after reboot."
+#~ msgstr "UYARI: Çekirdek %1$s (%2$s) üzerindeki bölümleme tablosunu yeniden okuyamadı. Bunun sonucu olarak, bilgisayarı yeniden başlatmadan tüm değişikliklerinizi yansıtmayabilir."
 
 #~ msgid "%s: illegal option -- %c\n"
 #~ msgstr "%s: kuraldışı seçenek -- %c\n"

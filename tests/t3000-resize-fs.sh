@@ -1,7 +1,7 @@
 #!/bin/sh
 # exercise the resize library; FAT and HFS+ only
 
-# Copyright (C) 2009-2014 Free Software Foundation, Inc.
+# Copyright (C) 2009-2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 . "${srcdir=.}/init.sh"; path_prepend_ ../parted .
 require_hfs_
-
+require_fat_
 require_root_
 require_scsi_debug_module_
 require_512_byte_sector_size_
@@ -31,7 +31,7 @@ default_end=546147s
 
 # create memory-backed device
 scsi_debug_setup_ dev_size_mb=550 > dev-name ||
-  skip_test_ 'failed to create scsi_debug device'
+  skip_ 'failed to create scsi_debug device'
 dev=$(cat dev-name)
 
 fail=0
@@ -46,7 +46,15 @@ device_sectors_required=$(echo $default_end | sed 's/s$//')
 # Ensure that $dev is large enough for this test
 test $device_sectors_required -le $dev_n_sectors || fail=1
 
-for fs_type in hfs+ fat32; do
+# create mount point dir
+mount_point="`pwd`/mnt"
+mkdir "$mount_point" || fail=1
+
+# be sure to unmount upon interrupt, failure, etc.
+cleanup_fn_() { umount "${dev}1" > /dev/null 2>&1; }
+
+for fs_type in hfs+ fat32 fat16; do
+  echo "fs_type=$fs_type"
 
   # create an empty $fs_type partition, cylinder aligned, size > 256 MB
   parted -a min -s $dev mkpart p1 $start $default_end > out 2>&1 || fail=1
@@ -59,6 +67,7 @@ for fs_type in hfs+ fat32; do
   wait_for_dev_to_appear_ ${dev}1
 
   case $fs_type in
+    fat16) mkfs_cmd='mkfs.vfat -F 16'; fsck='fsck.vfat -v';;
     fat32) mkfs_cmd='mkfs.vfat -F 32'; fsck='fsck.vfat -v';;
     hfs*) mkfs_cmd='mkfs.hfs';         fsck=fsck.hfs;;
     *) error "internal error: unhandled fs type: $fs_type";;
@@ -67,11 +76,29 @@ for fs_type in hfs+ fat32; do
   # create the file system
   $mkfs_cmd ${dev}1 || fail=1
 
+  # create 500 deep directory tree with longest name 4000 characters
+  # to catch core dump in libparted/fs/r/fat/count.c flag_traverse_dir()
+  # overflowing 512 byte file_name local buffer.
+  mount "${dev}1" "$mount_point" || fail=1
+  cat /dev/null > exp
+  ( cd "$mount_point"; for d in `seq 500`; do mkdir TESTDIR; cd TESTDIR; done ) > out
+  compare exp out || fail=1   # Ensure no errors creating directory tree
+  umount "${dev}1" || fail=1
+
   # NOTE: shrinking is the only type of resizing that works.
   # resize that file system to be one cylinder (8MiB) smaller
   fs-resize ${dev}1 0 $new_end > out 2>&1 || fail=1
-  # expect no output
-  compare /dev/null out || fail=1
+
+  # check for expected output
+  case $fs_type in
+    fat16) cat << EOF > exp || framework_failure
+Information: Would you like to use FAT32?  If you leave your file system as FAT16, then you will have no problems.  If you convert to FAT32, and MS Windows is installed on this partition, then you must re-install the MS Windows boot loader.  If you want to do this, you should consult the Parted manual (or your distribution's manual).  Also, converting to FAT32 will make the file system unreadable by MS DOS, MS Windows 95a, and MS Windows NT.
+EOF
+      ;;
+    fat32) cat /dev/null > exp || framework_failure;;     # expect no output
+    hfs*)  cat /dev/null > exp || framework_failure;;     # expect no output
+  esac
+  compare exp out || fail=1
 
   # This is known to segfault with fsck.hfs from
   # Fedora 16's hfsplus-tools-332.14-12.fc15.x86_64.

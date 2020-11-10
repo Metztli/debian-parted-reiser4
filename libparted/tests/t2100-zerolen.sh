@@ -1,7 +1,7 @@
 #!/bin/sh
 # run the zerolen unit tests in a directory supporting O_DIRECT
 
-# Copyright (C) 2007-2014 Free Software Foundation, Inc.
+# Copyright (C) 2007-2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,9 +27,6 @@ init_root_dir_
 # This test only makes sense on Linux.
 test "$(uname -s)" = Linux \
   || skip_ "not on Linux"
-
-test "x$DYNAMIC_LOADING" = xyes \
-  || skip_ "no dynamic loading support"
 
 test "x$ENABLE_DEVICE_MAPPER" = xyes \
   || skip_ "no device-mapper support"

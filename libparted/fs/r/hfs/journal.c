@@ -1,6 +1,7 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 2004-2005, 2007, 2009-2014 Free Software Foundation, Inc.
+    Copyright (C) 2004-2005, 2007, 2009-2014, 2019 Free Software Foundation,
+    Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -257,7 +258,7 @@ hfsj_replay_journal(PedFileSystem* fs)
 			PED_EXCEPTION_NO_FEATURE,
 			PED_EXCEPTION_CANCEL,
 			_("Journal stored outside of the volume are "
-			  "not supported.  Try to desactivate the "
+			  "not supported.  Try to deactivate the "
 			  "journal and run Parted again."));
 		return 0;
 	}

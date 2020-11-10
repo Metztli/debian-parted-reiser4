@@ -1,7 +1,7 @@
 #!/bin/sh
 # Ensure that parted knows when N'th (N>=16) partition is mounted
 
-# Copyright (C) 2010-2014 Free Software Foundation, Inc.
+# Copyright (C) 2010-2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ wait_for_dev_to_appear_ ${scsi_dev}16 || fail_ ${scsi_dev}16 did not appear
 
 partitions="${scsi_dev}14 ${scsi_dev}15 ${scsi_dev}16"
 for i in $partitions; do
-  mkfs.ext3 $i || skip_ mkfs.ext3 $i failed
+  mkfs.ext3 $i || fail=1
 done
 
 # be sure to unmount upon interrupt, failure, etc.

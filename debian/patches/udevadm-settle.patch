@@ -1,4 +1,4 @@
-From a1a11cde9b08ed4398bba366cdeb7962c3105d8d Mon Sep 17 00:00:00 2001
+From 0002018ed01111bc0a03e17f1dcd117d6dfaf686 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:10:16 +0000
 Subject: udev handling
@@ -9,7 +9,7 @@ This should be replaced by a proper completion-notification mechanism
 between the kernel and udev.
 
 Forwarded: no
-Last-Update: 2014-08-05
+Last-Update: 2019-10-11
 
 Patch-Name: udevadm-settle.patch
 ---
@@ -17,7 +17,7 @@ Patch-Name: udevadm-settle.patch
  1 file changed, 54 insertions(+), 2 deletions(-)
 
 diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
-index 0f18904d..703294e3 100644
+index 09ec781d..1bfc9f3c 100644
 --- a/libparted/arch/linux.c
 +++ b/libparted/arch/linux.c
 @@ -26,6 +26,7 @@
@@ -28,7 +28,7 @@ index 0f18904d..703294e3 100644
  #include <ctype.h>
  #include <errno.h>
  #include <fcntl.h>
-@@ -3105,10 +3106,52 @@ _have_blkpg ()
+@@ -3245,10 +3246,52 @@ _have_blkpg ()
          return have_blkpg = kver >= KERNEL_VERSION (2,4,0) ? 1 : 0;
  }
  
@@ -80,13 +80,13 @@ index 0f18904d..703294e3 100644
 +
          if (disk->dev->type != PED_DEVICE_FILE) {
  
- 		/* We now require BLKPG support.  If this assertion fails,
-@@ -3118,10 +3161,19 @@ linux_disk_commit (PedDisk* disk)
- 		assert (_have_blkpg ());
+                 /* We now require BLKPG support.  If this assertion fails,
+@@ -3258,10 +3301,19 @@ linux_disk_commit (PedDisk* disk)
+                 assert (_have_blkpg ());
  
- 		if (!_disk_sync_part_table (disk))
--			return 0;
-+			ret = 0;
+                 if (!_disk_sync_part_table (disk))
+-                        return 0;
++                        ret = 0;
          }
  
 -        return 1;

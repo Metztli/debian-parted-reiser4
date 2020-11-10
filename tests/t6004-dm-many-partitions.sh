@@ -2,7 +2,7 @@
 # device-mapper: create many partitions
 # This would not create partitions > 16 when using device-mapper
 
-# Copyright (C) 2012, 2014 Free Software Foundation, Inc.
+# Copyright (C) 2012, 2014, 2019 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 . "${srcdir=.}/init.sh"; path_prepend_ ../parted
 
 require_root_
+require_udevadm_settle_
 (dmsetup --help) > /dev/null 2>&1 || skip_test_ "No dmsetup installed"
 
 ss=$sector_size_
@@ -49,10 +50,8 @@ parted -m -a min -s /dev/mapper/$dm_name mklabel gpt $cmd > /dev/null 2>&1 || fa
 
 # Make sure all the partitions appeared under /dev/mapper/
 for ((i=1; i<=$n_partitions; i+=1)); do
-    if [ ! -e "/dev/mapper/${dm_name}p$i" ]; then
-        fail=1
-        break
-    fi
+    wait_for_dev_to_appear_ "/dev/mapper/${dm_name}p$i" || { fail=1; break; }
+
     # remove the partitions as we go, otherwise cleanup won't work.
     dmsetup remove /dev/mapper/${dm_name}p$i
 done

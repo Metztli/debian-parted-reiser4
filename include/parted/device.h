@@ -1,6 +1,6 @@
 /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 1998-2001, 2005, 2007-2008, 2011-2014 Free Software
+    Copyright (C) 1998-2001, 2005, 2007-2008, 2011-2014, 2019 Free Software
     Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
@@ -50,7 +50,9 @@ typedef enum {
         PED_DEVICE_AOE          = 16,
         PED_DEVICE_MD           = 17,
         PED_DEVICE_LOOP         = 18,
-        PED_DEVICE_NVME         = 19
+        PED_DEVICE_NVME         = 19,
+        PED_DEVICE_RAM          = 20,
+        PED_DEVICE_PMEM         = 21
 } PedDeviceType;
 
 typedef struct _PedDevice PedDevice;

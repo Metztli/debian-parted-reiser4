@@ -1,4 +1,4 @@
-From 6ea0e57f5adb906b27af877c2533bb41c64dc3db Mon Sep 17 00:00:00 2001
+From 58b99de36f8bab8d01d722eb0ac527a01b8b3957 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Fri, 28 Mar 2014 17:09:54 +0000
 Subject: Implement partition table rereading on GNU/Hurd
@@ -9,7 +9,7 @@ Patch-Name: hurd-reread.patch
  1 file changed, 78 insertions(+), 6 deletions(-)
 
 diff --git a/libparted/arch/gnu.c b/libparted/arch/gnu.c
-index 5a1c73e9..ba384fbc 100644
+index f475c4ce..68ba2dff 100644
 --- a/libparted/arch/gnu.c
 +++ b/libparted/arch/gnu.c
 @@ -185,7 +185,7 @@ _init_device (const char *path)

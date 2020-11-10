@@ -1,6 +1,6 @@
 /*
     partprobe - informs the OS kernel of partition layout
-    Copyright (C) 2001-2002, 2007-2014 Free Software Foundation, Inc.
+    Copyright (C) 2001-2002, 2007-2014, 2019 Free Software Foundation, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -105,6 +105,9 @@ process_dev (PedDevice* dev)
 	PedDiskType*	disk_type;
 	PedDisk*	disk;
 
+	if (!ped_device_open (dev))
+		return 0;
+
 	disk_type = ped_disk_probe (dev);
 	if (!disk_type) {
 		/* Partition table not found, so create dummy,
@@ -128,11 +131,13 @@ process_dev (PedDevice* dev)
 	if (opt_summary)
 		summary (disk);
 	ped_disk_destroy (disk);
+	ped_device_close (dev);
 	return 1;
 
 error_destroy_disk:
 	ped_disk_destroy (disk);
 error:
+	ped_device_close (dev);
 	return 0;
 }
 

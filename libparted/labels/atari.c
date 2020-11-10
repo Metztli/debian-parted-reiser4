@@ -2,7 +2,8 @@
 
     libparted - a library for manipulating disk partitions
     atari.c - libparted module to manipulate Atari partition tables.
-    Copyright (C) 2000-2001, 2004, 2007-2014 Free Software Foundation, Inc.
+    Copyright (C) 2000-2001, 2004, 2007-2014, 2019 Free Software Foundation,
+    Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -142,7 +143,7 @@ struct __attribute__ ((packed)) _AtariRawPartition {
 };
 typedef struct _AtariRawPartition AtariRawPartition;
 
-struct __attribute__ ((packed)) _AtariRawTable {
+struct __attribute__ ((packed,aligned(2))) _AtariRawTable {
 	uint8_t		  boot_code[0x156]; /* room for boot code */
 	AtariRawPartition icd_part[N_ICD];  /* info for ICD-partitions 5..12 */
 	uint8_t		  unused[0xc];
@@ -304,6 +305,7 @@ atari_probe (const PedDevice *dev)
 	int		num_sign, total_count = 0;
 
 	PED_ASSERT (dev != NULL);
+	PED_ASSERT (sizeof(table) == 512);
 
 	/* Device Spec ok for Atari label? */
 	if (!atr_can_use_dev (dev))
@@ -676,9 +678,9 @@ atari_read (PedDisk* disk)
 			if (!atr_parse_add_rawpart(disk, PED_PARTITION_EXTENDED,
 						   0, 0, &table.part[i] )
 			    || !atr_read_logicals (
-			    		disk,
-			    		PED_BE32_TO_CPU (table.part[i].start),
-			    		&pnum ) )
+					disk,
+					PED_BE32_TO_CPU (table.part[i].start),
+					&pnum ) )
 				goto error;
 
 		} else {
@@ -1426,7 +1428,7 @@ atr_log_constraint (const PedPartition* part)
 		&& (   walk->geom.start - (walk->num != first_log)
 						< geom->start - not_first
 		    || walk->geom.start - (walk->num != first_log)
-		    				< min_start ) ) {
+						< min_start ) ) {
 		if (walk != part && ped_partition_is_active (walk))
 			min_start = walk->geom.end + 1 + not_first;
 		walk = walk->next;
@@ -1687,7 +1689,7 @@ art_room_for_logic (PedDisk* disk)
 		part = ped_disk_get_partition (disk, num);
 		if (part && ped_partition_is_active (part)
 		         && !(part->type & ( PED_PARTITION_LOGICAL
-			 		   | PED_PARTITION_EXTENDED))
+					   | PED_PARTITION_EXTENDED))
 			 && part->num > 0 )
 			part->num++;
 	}

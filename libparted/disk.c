@@ -1,6 +1,7 @@
  /*
     libparted - a library for manipulating disk partitions
-    Copyright (C) 1999-2003, 2005, 2007-2014 Free Software Foundation, Inc.
+    Copyright (C) 1999-2003, 2005, 2007-2014, 2019 Free Software Foundation,
+    Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -195,7 +196,6 @@ ped_disk_new (PedDevice* dev)
 		goto error_close_dev;
 	}
 	disk = ped_disk_new_fresh (dev, type);
-	disk->needs_clobber |= 2;
 	if (!disk)
 		goto error_close_dev;
 	if (!type->ops->read (disk))
@@ -616,7 +616,7 @@ ped_disk_check (const PedDisk* disk)
 		if (!geom)
 			continue;
 
-		length_error = abs (walk->geom.length - geom->length);
+		length_error = llabs (walk->geom.length - geom->length);
 		max_length_error = PED_MAX (4096, walk->geom.length / 100);
                 bool ok = (ped_geometry_test_inside (&walk->geom, geom)
                            && length_error <= max_length_error);
@@ -920,7 +920,7 @@ _partition_align (PedPartition* part, const PedConstraint* constraint)
 	PED_ASSERT (disk_type->ops->partition_align != NULL);
 	PED_ASSERT (part->disk->update_mode);
 
-	if ((part->disk->needs_clobber & 2) != 0)
+	if (part->disk->needs_clobber)
 		return 1; /* do not attempt to align partitions while reading them */
 	return disk_type->ops->partition_align (part, constraint);
 }
